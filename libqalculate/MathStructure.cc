@@ -62,9 +62,6 @@ size_t MathStructure::refcount() const {
 
 
 inline void MathStructure::init() {
-#ifdef HAVE_GIAC
-	giac_unknown = NULL;
-#endif
 	m_type = STRUCT_NUMBER;
 	b_approx = false;
 	i_precision = -1;
@@ -135,11 +132,6 @@ MathStructure::MathStructure(const Number &o) {
 }
 MathStructure::~MathStructure() {
 	clear();
-#ifdef HAVE_GIAC	
-	if(giac_unknown) {
-		delete giac_unknown;
-	}
-#endif
 }
 
 void MathStructure::set(const MathStructure &o, bool merge_precision) {
@@ -149,12 +141,6 @@ void MathStructure::set(const MathStructure &o, bool merge_precision) {
 			o_number.set(o.number());
 			break;
 		}
-#ifdef HAVE_GIAC		
-		case STRUCT_UNKNOWN: {
-			giac_unknown = new giac::gen(*o.unknown());
-			break;
-		}
-#endif		
 		case STRUCT_SYMBOLIC: {
 			s_sym = o.symbol();
 			break;
@@ -198,12 +184,6 @@ void MathStructure::set_nocopy(MathStructure &o, bool merge_precision) {
 			o_number.set(o.number());
 			break;
 		}
-#ifdef HAVE_GIAC		
-		case STRUCT_UNKNOWN: {
-			giac_unknown = new giac::gen(*o.unknown());
-			break;
-		}
-#endif		
 		case STRUCT_SYMBOLIC: {
 			s_sym = o.symbol();
 			break;
@@ -370,12 +350,12 @@ MathStructure MathStructure::operator ^ (const MathStructure &o) const {
 }
 MathStructure MathStructure::operator && (const MathStructure &o) const {
 	MathStructure o2(*this);
-	o2.add(o, OPERATION_AND);
+	o2.add(o, OPERATION_LOGICAL_AND);
 	return o2;
 }
 MathStructure MathStructure::operator || (const MathStructure &o) const {
 	MathStructure o2(*this);
-	o2.add(o, OPERATION_OR);
+	o2.add(o, OPERATION_LOGICAL_OR);
 	return o2;
 }
 MathStructure MathStructure::operator ! () const {
@@ -435,12 +415,6 @@ MathStructure &MathStructure::operator [] (size_t index) {return CHILD(index);}
 void MathStructure::clear(bool preserve_precision) {
 	m_type = STRUCT_NUMBER;
 	o_number.clear();
-#ifdef HAVE_GIAC	
-	if(giac_unknown) {
-		delete giac_unknown;
-		giac_unknown = NULL;
-	}
-#endif
 	if(function_value) {
 		function_value->unref();
 		function_value = NULL;
@@ -492,11 +466,6 @@ void MathStructure::childrenUpdated(bool recursive) {
 		MERGE_APPROX_AND_PREC(CHILD(i))
 	}
 }
-#ifdef HAVE_GIAC
-const giac::gen *MathStructure::unknown() const {
-	return giac_unknown;
-}
-#endif
 const string &MathStructure::symbol() const {
 	return s_sym;
 }
@@ -559,9 +528,12 @@ bool MathStructure::isUnit_exp() const {return m_type == STRUCT_UNIT || (m_type 
 bool MathStructure::isNumber_exp() const {return m_type == STRUCT_NUMBER || (m_type == STRUCT_POWER && CHILD(0).isNumber());}
 bool MathStructure::isVariable() const {return m_type == STRUCT_VARIABLE;}
 bool MathStructure::isComparison() const {return m_type == STRUCT_COMPARISON;}
-bool MathStructure::isAND() const {return m_type == STRUCT_AND;}
-bool MathStructure::isOR() const {return m_type == STRUCT_OR;}
-bool MathStructure::isXOR() const {return m_type == STRUCT_XOR;}
+bool MathStructure::isLogicalAnd() const {return m_type == STRUCT_LOGICAL_AND;}
+bool MathStructure::isLogicalOr() const {return m_type == STRUCT_LOGICAL_OR;}
+bool MathStructure::isLogicalXor() const {return m_type == STRUCT_LOGICAL_XOR;}
+bool MathStructure::isBitwiseAnd() const {return m_type == STRUCT_BITWISE_AND;}
+bool MathStructure::isBitwiseOr() const {return m_type == STRUCT_BITWISE_OR;}
+bool MathStructure::isBitwiseXor() const {return m_type == STRUCT_BITWISE_XOR;}
 bool MathStructure::isNOT() const {return m_type == STRUCT_NOT;}
 bool MathStructure::isInverse() const {return m_type == STRUCT_INVERSE;}
 bool MathStructure::isDivision() const {return m_type == STRUCT_DIVISION;}
@@ -1008,27 +980,51 @@ void MathStructure::add(const MathStructure &o, MathOperation op, bool append) {
 			multiply_nocopy(mstruct, append);
 			break;
 		}
-		case OPERATION_AND: {
-			if(m_type == STRUCT_AND && append) {
+		case OPERATION_LOGICAL_AND: {
+			if(m_type == STRUCT_LOGICAL_AND && append) {
 				APPEND(o);
 			} else {
-				transform(STRUCT_AND, o);
+				transform(STRUCT_LOGICAL_AND, o);
 			}
 			break;
 		}
-		case OPERATION_OR: {
-			if(m_type == STRUCT_OR && append) {
+		case OPERATION_LOGICAL_OR: {
+			if(m_type == STRUCT_LOGICAL_OR && append) {
 				APPEND(o);
 			} else {
-				transform(STRUCT_OR, o);
+				transform(STRUCT_LOGICAL_OR, o);
 			}
 			break;
 		}
-		case OPERATION_XOR: {
-			if(m_type == STRUCT_XOR && append) {
+		case OPERATION_LOGICAL_XOR: {
+			if(m_type == STRUCT_LOGICAL_XOR && append) {
 				APPEND(o);
 			} else {
-				transform(STRUCT_XOR, o);
+				transform(STRUCT_LOGICAL_XOR, o);
+			}
+			break;
+		}
+		case OPERATION_BITWISE_AND: {
+			if(m_type == STRUCT_BITWISE_AND && append) {
+				APPEND(o);
+			} else {
+				transform(STRUCT_BITWISE_AND, o);
+			}
+			break;
+		}
+		case OPERATION_BITWISE_OR: {
+			if(m_type == STRUCT_BITWISE_OR && append) {
+				APPEND(o);
+			} else {
+				transform(STRUCT_BITWISE_OR, o);
+			}
+			break;
+		}
+		case OPERATION_BITWISE_XOR: {
+			if(m_type == STRUCT_BITWISE_XOR && append) {
+				APPEND(o);
+			} else {
+				transform(STRUCT_BITWISE_XOR, o);
 			}
 			break;
 		}
@@ -1041,8 +1037,8 @@ void MathStructure::add(const MathStructure &o, MathOperation op, bool append) {
 			if(append && m_type == STRUCT_COMPARISON && append) {
 				MathStructure *o2 = new MathStructure(CHILD(1));
 				o2->add(o, op);
-				transform_nocopy(STRUCT_AND, o2);
-			} else if(append && m_type == STRUCT_AND && LAST.type() == STRUCT_COMPARISON) {
+				transform_nocopy(STRUCT_LOGICAL_AND, o2);
+			} else if(append && m_type == STRUCT_LOGICAL_AND && LAST.type() == STRUCT_COMPARISON) {
 				MathStructure *o2 = new MathStructure(LAST[1]);
 				o2->add(o, op);
 				APPEND_POINTER(o2);
@@ -1255,27 +1251,51 @@ void MathStructure::add_nocopy(MathStructure *o, MathOperation op, bool append) 
 			multiply_nocopy(mstruct, append);
 			break;
 		}
-		case OPERATION_AND: {
-			if(m_type == STRUCT_AND && append) {
+		case OPERATION_LOGICAL_AND: {
+			if(m_type == STRUCT_LOGICAL_AND && append) {
 				APPEND_POINTER(o);
 			} else {
-				transform_nocopy(STRUCT_AND, o);
+				transform_nocopy(STRUCT_LOGICAL_AND, o);
 			}
 			break;
 		}
-		case OPERATION_OR: {
-			if(m_type == STRUCT_OR && append) {
+		case OPERATION_LOGICAL_OR: {
+			if(m_type == STRUCT_LOGICAL_OR && append) {
 				APPEND_POINTER(o);
 			} else {
-				transform_nocopy(STRUCT_OR, o);
+				transform_nocopy(STRUCT_LOGICAL_OR, o);
 			}
 			break;
 		}
-		case OPERATION_XOR: {
-			if(m_type == STRUCT_XOR && append) {
+		case OPERATION_LOGICAL_XOR: {
+			if(m_type == STRUCT_LOGICAL_XOR && append) {
 				APPEND_POINTER(o);
 			} else {
-				transform_nocopy(STRUCT_XOR, o);
+				transform_nocopy(STRUCT_LOGICAL_XOR, o);
+			}
+			break;
+		}
+		case OPERATION_BITWISE_AND: {
+			if(m_type == STRUCT_BITWISE_AND && append) {
+				APPEND_POINTER(o);
+			} else {
+				transform_nocopy(STRUCT_BITWISE_AND, o);
+			}
+			break;
+		}
+		case OPERATION_BITWISE_OR: {
+			if(m_type == STRUCT_BITWISE_OR && append) {
+				APPEND_POINTER(o);
+			} else {
+				transform_nocopy(STRUCT_BITWISE_OR, o);
+			}
+			break;
+		}
+		case OPERATION_BITWISE_XOR: {
+			if(m_type == STRUCT_BITWISE_XOR && append) {
+				APPEND_POINTER(o);
+			} else {
+				transform_nocopy(STRUCT_BITWISE_XOR, o);
 			}
 			break;
 		}
@@ -1288,8 +1308,8 @@ void MathStructure::add_nocopy(MathStructure *o, MathOperation op, bool append) 
 			if(append && m_type == STRUCT_COMPARISON && append) {
 				MathStructure *o2 = new MathStructure(CHILD(1));
 				o2->add_nocopy(o, op);
-				transform_nocopy(STRUCT_AND, o2);
-			} else if(append && m_type == STRUCT_AND && LAST.type() == STRUCT_COMPARISON) {
+				transform_nocopy(STRUCT_LOGICAL_AND, o2);
+			} else if(append && m_type == STRUCT_LOGICAL_AND && LAST.type() == STRUCT_COMPARISON) {
 				MathStructure *o2 = new MathStructure(LAST[1]);
 				o2->add_nocopy(o, op);
 				APPEND_POINTER(o2);
@@ -2992,6 +3012,178 @@ int MathStructure::merge_power(MathStructure &mstruct, const EvaluationOptions &
 	return -1;
 }
 
+int MathStructure::merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo) {
+	if(mstruct.type() == STRUCT_NUMBER && m_type == STRUCT_NUMBER) {
+		Number nr(o_number);
+		if(nr.bitAnd(mstruct.number()) && (eo.approximation == APPROXIMATION_APPROXIMATE || !nr.isApproximate() || o_number.isApproximate() || mstruct.number().isApproximate()) && (eo.allow_complex || !nr.isComplex() || o_number.isComplex() || mstruct.number().isComplex()) && (eo.allow_infinite || !nr.isInfinite() || o_number.isInfinite() || mstruct.number().isInfinite())) {
+			o_number = nr;
+			numberUpdated();
+			return 1;
+		}
+		return -1;
+	}
+	switch(m_type) {
+		case STRUCT_VECTOR: {
+			switch(mstruct.type()) {
+				case STRUCT_VECTOR: {
+					if(SIZE < mstruct.size()) return 0;
+					for(size_t i = 0; i < mstruct.size(); i++) {
+						CHILD(i).add(mstruct[i], OPERATION_LOGICAL_AND);
+					}
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+				default: {
+					return -1;
+				}
+			}
+			return -1;
+		}
+		case STRUCT_BITWISE_AND: {
+			switch(mstruct.type()) {
+				case STRUCT_VECTOR: {
+					return -1;
+				}
+				case STRUCT_BITWISE_AND: {
+					for(size_t i = 0; i < mstruct.size(); i++) {
+						APPEND(mstruct[i]);
+					}
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+				default: {
+					APPEND_REF(&mstruct);
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+			}
+			break;
+		}
+		default: {
+			switch(mstruct.type()) {
+				case STRUCT_BITWISE_AND: {
+					return 0;
+				}
+			}	
+		}
+	}
+	return -1;
+}
+int MathStructure::merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo) {
+	if(mstruct.type() == STRUCT_NUMBER && m_type == STRUCT_NUMBER) {
+		Number nr(o_number);
+		if(nr.bitOr(mstruct.number()) && (eo.approximation == APPROXIMATION_APPROXIMATE || !nr.isApproximate() || o_number.isApproximate() || mstruct.number().isApproximate()) && (eo.allow_complex || !nr.isComplex() || o_number.isComplex() || mstruct.number().isComplex()) && (eo.allow_infinite || !nr.isInfinite() || o_number.isInfinite() || mstruct.number().isInfinite())) {
+			o_number = nr;
+			numberUpdated();
+			return 1;
+		}
+		return -1;
+	}
+	switch(m_type) {
+		case STRUCT_VECTOR: {
+			switch(mstruct.type()) {
+				case STRUCT_VECTOR: {
+					if(SIZE < mstruct.size()) return 0;
+					for(size_t i = 0; i < mstruct.size(); i++) {
+						CHILD(i).add(mstruct[i], OPERATION_LOGICAL_OR);
+					}
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+				default: {
+					return -1;
+				}
+			}
+			return -1;
+		}
+		case STRUCT_BITWISE_OR: {
+			switch(mstruct.type()) {
+				case STRUCT_VECTOR: {
+					return -1;
+				}
+				case STRUCT_BITWISE_OR: {
+					for(size_t i = 0; i < mstruct.size(); i++) {
+						APPEND(mstruct[i]);
+					}
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+				default: {
+					APPEND_REF(&mstruct);
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+			}
+			break;
+		}
+		default: {
+			switch(mstruct.type()) {
+				case STRUCT_BITWISE_OR: {
+					return 0;
+				}
+			}	
+		}
+	}
+	return -1;
+}
+int MathStructure::merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo) {
+	if(mstruct.type() == STRUCT_NUMBER && m_type == STRUCT_NUMBER) {
+		Number nr(o_number);
+		if(nr.bitXor(mstruct.number()) && (eo.approximation == APPROXIMATION_APPROXIMATE || !nr.isApproximate() || o_number.isApproximate() || mstruct.number().isApproximate()) && (eo.allow_complex || !nr.isComplex() || o_number.isComplex() || mstruct.number().isComplex()) && (eo.allow_infinite || !nr.isInfinite() || o_number.isInfinite() || mstruct.number().isInfinite())) {
+			o_number = nr;
+			numberUpdated();
+			return 1;
+		}
+		return -1;
+	}
+	switch(m_type) {
+		case STRUCT_VECTOR: {
+			switch(mstruct.type()) {
+				case STRUCT_VECTOR: {
+					if(SIZE < mstruct.size()) return 0;
+					for(size_t i = 0; i < mstruct.size(); i++) {
+						CHILD(i).add(mstruct[i], OPERATION_LOGICAL_XOR);
+					}
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+				default: {
+					return -1;
+				}
+			}
+			return -1;
+		}
+		case STRUCT_BITWISE_XOR: {
+			switch(mstruct.type()) {
+				case STRUCT_VECTOR: {
+					return -1;
+				}
+				case STRUCT_BITWISE_XOR: {
+					for(size_t i = 0; i < mstruct.size(); i++) {
+						APPEND(mstruct[i]);
+					}
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+				default: {
+					APPEND_REF(&mstruct);
+					MERGE_APPROX_AND_PREC(mstruct)
+					return 1;
+				}
+			}
+			break;
+		}
+		default: {
+			switch(mstruct.type()) {
+				case STRUCT_BITWISE_XOR: {
+					return 0;
+				}
+			}	
+		}
+	}
+	return -1;
+}
+
 bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo) {
 	bool b = true;
 	bool c = false;
@@ -3084,7 +3276,100 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 				}
 				break;
 			}
-			case STRUCT_AND: {
+			case STRUCT_BITWISE_AND: {
+				for(size_t i = 0; i < SIZE; i++) {
+					CHILD(i).calculatesub(eo, feo);
+				}				
+				CHILDREN_UPDATED;
+				evalSort();
+				for(size_t i = 0; i < SIZE - 1; i++) {					
+					for(size_t i2 = i + 1; i2 < SIZE;) {
+						int r = CHILD(i).merge_bitwise_and(CHILD(i2), eo);
+						if(r == 0) {
+							SWAP_CHILDS(i, i2);
+							r = CHILD(i).merge_bitwise_and(CHILD(i2), eo);
+							if(r != 1) {
+								SWAP_CHILDS(i, i2);
+							}
+						}
+						if(r == 1) {
+							ERASE(i2);
+							b = true;
+						} else {
+							i2++;
+						}
+					}
+				}
+				if(SIZE == 1) {
+					set_nocopy(CHILD(0));
+				} else if(SIZE == 0) {
+					clear(true);
+				}
+				break;
+			}
+			case STRUCT_BITWISE_OR: {
+				for(size_t i = 0; i < SIZE; i++) {
+					CHILD(i).calculatesub(eo, feo);
+				}				
+				CHILDREN_UPDATED;
+				evalSort();
+				for(size_t i = 0; i < SIZE - 1; i++) {					
+					for(size_t i2 = i + 1; i2 < SIZE;) {
+						int r = CHILD(i).merge_bitwise_or(CHILD(i2), eo);
+						if(r == 0) {
+							SWAP_CHILDS(i, i2);
+							r = CHILD(i).merge_bitwise_or(CHILD(i2), eo);
+							if(r != 1) {
+								SWAP_CHILDS(i, i2);
+							}
+						}
+						if(r == 1) {
+							ERASE(i2);
+							b = true;
+						} else {
+							i2++;
+						}
+					}
+				}
+				if(SIZE == 1) {
+					set_nocopy(CHILD(0));
+				} else if(SIZE == 0) {
+					clear(true);
+				}
+				break;
+			}
+			case STRUCT_BITWISE_XOR: {
+				for(size_t i = 0; i < SIZE; i++) {
+					CHILD(i).calculatesub(eo, feo);
+				}				
+				CHILDREN_UPDATED;
+				evalSort();
+				for(size_t i = 0; i < SIZE - 1; i++) {					
+					for(size_t i2 = i + 1; i2 < SIZE;) {
+						int r = CHILD(i).merge_bitwise_xor(CHILD(i2), eo);
+						if(r == 0) {
+							SWAP_CHILDS(i, i2);
+							r = CHILD(i).merge_bitwise_xor(CHILD(i2), eo);
+							if(r != 1) {
+								SWAP_CHILDS(i, i2);
+							}
+						}
+						if(r == 1) {
+							ERASE(i2);
+							b = true;
+						} else {
+							i2++;
+						}
+					}
+				}
+				if(SIZE == 1) {
+					set_nocopy(CHILD(0));
+				} else if(SIZE == 0) {
+					clear(true);
+				}
+				break;
+			}
+			case STRUCT_LOGICAL_AND: {
 				for(size_t i = 0; i < SIZE; i++) {
 					CHILD(i).calculatesub(eo, feo);
 				}
@@ -3107,14 +3392,14 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 				}
 				if(is_true) {
 					set(m_one);
-				} else if(m_type == STRUCT_AND && SIZE == 1) {
+				} else if(m_type == STRUCT_LOGICAL_AND && SIZE == 1) {
 					APPEND(m_zero);
 					m_type = STRUCT_COMPARISON;
 					ct_comp = COMPARISON_GREATER;
 				}
 				break;
 			}
-			case STRUCT_OR: {
+			case STRUCT_LOGICAL_OR: {
 				for(size_t i = 0; i < SIZE; i++) {
 					CHILD(i).calculatesub(eo, feo);
 				}
@@ -3136,14 +3421,14 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 				}
 				if(is_false) {
 					clear(true);
-				} else if(m_type == STRUCT_OR && SIZE == 1) {
+				} else if(m_type == STRUCT_LOGICAL_OR && SIZE == 1) {
 					APPEND(m_zero);
 					m_type = STRUCT_COMPARISON;
 					ct_comp = COMPARISON_GREATER;
 				}
 				break;
 			}
-			case STRUCT_XOR: {
+			case STRUCT_LOGICAL_XOR: {
 				for(size_t i = 0; i < SIZE; i++) {
 					CHILD(i).calculatesub(eo, feo);
 				}
@@ -3186,7 +3471,7 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 						}
 					} else {
 						if(had_true) {
-							m_type = STRUCT_AND;
+							m_type = STRUCT_LOGICAL_AND;
 							setNOT();
 						}
 					}
@@ -3507,27 +3792,31 @@ int evalSortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2
 			}
 		}
 		if(mstruct2.isInverse()) return -1;
-		if(mstruct2.isInverse()) return 1;
+		if(mstruct1.isInverse()) return 1;
 		if(mstruct2.isDivision()) return -1;
-		if(mstruct2.isDivision()) return 1;
+		if(mstruct1.isDivision()) return 1;
 		if(mstruct2.isNegate()) return -1;
-		if(mstruct2.isNegate()) return 1;
+		if(mstruct1.isNegate()) return 1;
 		if(mstruct2.type() == STRUCT_ALTERNATIVES) return -1;
-		if(mstruct2.type() == STRUCT_ALTERNATIVES) return 1;
-		if(mstruct2.isAND()) return -1;
-		if(mstruct2.isAND()) return 1;
-		if(mstruct2.isOR()) return -1;
-		if(mstruct2.isOR()) return 1;
-		if(mstruct2.isXOR()) return -1;
-		if(mstruct2.isXOR()) return 1;
+		if(mstruct1.type() == STRUCT_ALTERNATIVES) return 1;
+		if(mstruct2.isLogicalAnd()) return -1;
+		if(mstruct1.isLogicalAnd()) return 1;
+		if(mstruct2.isLogicalOr()) return -1;
+		if(mstruct1.isLogicalOr()) return 1;
+		if(mstruct2.isLogicalXor()) return -1;
+		if(mstruct1.isLogicalXor()) return 1;
 		if(mstruct2.isNOT()) return -1;
-		if(mstruct2.isNOT()) return 1;
+		if(mstruct1.isNOT()) return 1;
 		if(mstruct2.isComparison()) return -1;
-		if(mstruct2.isComparison()) return 1;
-		if(mstruct2.type() == STRUCT_UNKNOWN) return -1;
-		if(mstruct2.type() == STRUCT_UNKNOWN) return 1;
+		if(mstruct1.isComparison()) return 1;
+		if(mstruct2.isBitwiseOr()) return -1;
+		if(mstruct1.isBitwiseOr()) return 1;
+		if(mstruct2.isBitwiseXor()) return -1;
+		if(mstruct1.isBitwiseXor()) return 1;
+		if(mstruct2.isBitwiseAnd()) return -1;
+		if(mstruct1.isBitwiseAnd()) return 1;
 		if(mstruct2.isUndefined()) return -1;
-		if(mstruct2.isUndefined()) return 1;
+		if(mstruct1.isUndefined()) return 1;
 		if(mstruct2.isFunction()) return -1;
 		if(mstruct1.isFunction()) return 1;
 		if(mstruct2.isAddition()) return -1;
@@ -3636,7 +3925,7 @@ void MathStructure::evalSort(bool recursive) {
 			CHILD(i).evalSort(true);
 		}
 	}
-	if(m_type != STRUCT_ADDITION && m_type != STRUCT_MULTIPLICATION && m_type != STRUCT_AND && m_type != STRUCT_OR && m_type != STRUCT_XOR) return;
+	if(m_type != STRUCT_ADDITION && m_type != STRUCT_MULTIPLICATION && m_type != STRUCT_LOGICAL_AND && m_type != STRUCT_LOGICAL_OR && m_type != STRUCT_LOGICAL_XOR && m_type != STRUCT_BITWISE_AND && m_type != STRUCT_BITWISE_OR && m_type != STRUCT_BITWISE_XOR) return;
 	vector<size_t> sorted;
 	bool b;
 	for(size_t i = 0; i < SIZE; i++) {
@@ -3767,27 +4056,31 @@ int sortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2, co
 			if(mstruct1.isUnit()) return 1;
 		}
 		if(mstruct2.isInverse()) return -1;
-		if(mstruct2.isInverse()) return 1;
+		if(mstruct1.isInverse()) return 1;
 		if(mstruct2.isDivision()) return -1;
-		if(mstruct2.isDivision()) return 1;
+		if(mstruct1.isDivision()) return 1;
 		if(mstruct2.isNegate()) return -1;
-		if(mstruct2.isNegate()) return 1;
+		if(mstruct1.isNegate()) return 1;
 		if(mstruct2.type() == STRUCT_ALTERNATIVES) return -1;
-		if(mstruct2.type() == STRUCT_ALTERNATIVES) return 1;
-		if(mstruct2.isAND()) return -1;
-		if(mstruct2.isAND()) return 1;
-		if(mstruct2.isOR()) return -1;
-		if(mstruct2.isOR()) return 1;
-		if(mstruct2.isXOR()) return -1;
-		if(mstruct2.isXOR()) return 1;
+		if(mstruct1.type() == STRUCT_ALTERNATIVES) return 1;
+		if(mstruct2.isLogicalAnd()) return -1;
+		if(mstruct1.isLogicalAnd()) return 1;
+		if(mstruct2.isLogicalOr()) return -1;
+		if(mstruct1.isLogicalOr()) return 1;
+		if(mstruct2.isLogicalXor()) return -1;
+		if(mstruct1.isLogicalXor()) return 1;
 		if(mstruct2.isNOT()) return -1;
-		if(mstruct2.isNOT()) return 1;
+		if(mstruct1.isNOT()) return 1;
 		if(mstruct2.isComparison()) return -1;
-		if(mstruct2.isComparison()) return 1;
-		if(mstruct2.type() == STRUCT_UNKNOWN) return -1;
-		if(mstruct2.type() == STRUCT_UNKNOWN) return 1;
+		if(mstruct1.isComparison()) return 1;
+		if(mstruct2.isBitwiseOr()) return -1;
+		if(mstruct1.isBitwiseOr()) return 1;
+		if(mstruct2.isBitwiseXor()) return -1;
+		if(mstruct1.isBitwiseXor()) return 1;
+		if(mstruct2.isBitwiseAnd()) return -1;
+		if(mstruct1.isBitwiseAnd()) return 1;
 		if(mstruct2.isUndefined()) return -1;
-		if(mstruct2.isUndefined()) return 1;
+		if(mstruct1.isUndefined()) return 1;
 		if(mstruct2.isFunction()) return -1;
 		if(mstruct1.isFunction()) return 1;
 		if(mstruct2.isAddition()) return -1;
@@ -3913,7 +4206,7 @@ void MathStructure::sort(const PrintOptions &po, bool recursive) {
 			CHILD(i).sort(po);
 		}
 	}
-	if(m_type != STRUCT_ADDITION && m_type != STRUCT_MULTIPLICATION && m_type != STRUCT_AND && m_type != STRUCT_OR && m_type != STRUCT_XOR) return;
+	if(m_type != STRUCT_ADDITION && m_type != STRUCT_MULTIPLICATION && m_type != STRUCT_LOGICAL_AND && m_type != STRUCT_LOGICAL_OR && m_type != STRUCT_LOGICAL_XOR && m_type != STRUCT_BITWISE_AND && m_type != STRUCT_BITWISE_OR && m_type != STRUCT_BITWISE_XOR) return;
 	vector<size_t> sorted;
 	bool b;
 	PrintOptions po2 = po;
@@ -4815,390 +5108,6 @@ bool MathStructure::factorize(const EvaluationOptions &eo) {
 	}
 	return false;
 }
-
-
-#ifdef HAVE_GIAC
-giac::gen MathStructure::toGiac() const {
-	switch(type()) {
-		case STRUCT_NUMBER: {
-			return o_number.internalNumber();
-		} 
-		case STRUCT_SYMBOLIC: {
-			string id = "!";
-			id += s_sym;
-			return giac::identificateur(id);
-		}
-		case STRUCT_INVERSE: {
-			return giac::symbolic(giac::at_inv, CHILD(0).toGiac());
-		} 
-		case STRUCT_NEGATE: {
-			return giac::symbolic(giac::at_neg, CHILD(0).toGiac());
-		} 
-		case STRUCT_NOT: {
-			return giac::symbolic(giac::at_not, CHILD(0).toGiac());
-		} 
-		case STRUCT_AND: {}
-		case STRUCT_OR: {}
-		case STRUCT_XOR: {}
-		case STRUCT_COMPARISON: {}
-		case STRUCT_POWER: {}
-		case STRUCT_MULTIPLICATION: {} 
-		case STRUCT_ADDITION: {}
-		case STRUCT_VECTOR: {
-			giac::gen v_g;
-			giac::vecteur v;
-			for(size_t i = 0; i < SIZE; i++) {
-				giac::gen f = CHILD(i).toGiac();
-				v.push_back(f);
-			}
-			v_g = v;
-			switch(m_type) {
-				case STRUCT_POWER: return giac::symbolic(giac::at_pow, v_g);
-				case STRUCT_ADDITION: return giac::symbolic(giac::at_plus, v_g);
-				case STRUCT_MULTIPLICATION: return giac::symbolic(giac::at_prod, v_g);
-				case STRUCT_AND: return giac::symbolic(giac::at_and, v_g);
-				case STRUCT_OR: return giac::symbolic(giac::at_ou, v_g);
-				case STRUCT_XOR: return giac::symbolic(giac::at_xor, v_g);
-				case STRUCT_COMPARISON: {
-					switch(ct_comp) {
-						case COMPARISON_EQUALS: return giac::symbolic(giac::at_equal, v_g);
-						case COMPARISON_NOT_EQUALS: return giac::symbolic(giac::at_different, v_g);
-						case COMPARISON_LESS: return giac::symbolic(giac::at_inferieur_strict, v_g);
-						case COMPARISON_GREATER: return giac::symbolic(giac::at_superieur_strict, v_g);
-						case COMPARISON_EQUALS_LESS: return giac::symbolic(giac::at_inferieur_egal, v_g);
-						case COMPARISON_EQUALS_GREATER: return giac::symbolic(giac::at_superieur_egal, v_g);
-					}
-				}
-				case STRUCT_VECTOR: {
-					return v_g;
-				}
-			}
-		}
-		case STRUCT_FUNCTION: {
-			return o_function->toGiac(*this);
-		}
-		case STRUCT_VARIABLE: {
-			if(variable() == CALCULATOR->getPI()) {
-				return giac::_IDNT_pi;
-			} else if(variable() == CALCULATOR->getE()) {
-				return giac::e__IDNT;
-			} else {
-				string id = "v!";
-				id += o_variable->name();
-				return giac::identificateur(id, o_variable->get().toGiac());
-			}
-		}
-		case STRUCT_UNIT: {
-			string id = "u!";
-			id += unit()->name();
-			giac::identificateur ident(id);
-			return ident;
-		}
-		case STRUCT_UNKNOWN: {
-			return *giac_unknown;
-		}
-		case STRUCT_UNDEFINED: {
-			return giac::_IDNT_undef;
-		}
-		default: {
-			giac::gen g;
-			return g;
-		}
-	}
-}
-void MathStructure::set(const giac::gen &giac_gen, bool in_retry) {
-	clear();
-	printf("%i %i\n", giac_gen.type, giac_gen.subtype);
-	switch(giac_gen.type) {
-		case giac::_INT_: {}
-		case giac::_DOUBLE_: {}
-		case giac::_ZINT: {}
-		case giac::_REAL: {}
-		case giac::_CPLX: {
-			m_type = STRUCT_NUMBER;
-			o_number.setInternal(giac_gen);
-			setApproximate(o_number.isApproximate());
-			setPrecision(o_number.precision());
-			break;
-		}
-		case giac::_POLY: {
-			clear();
-			giac_unknown = new giac::gen(giac_gen);
-			m_type = STRUCT_UNKNOWN;
-			break;
-		}
-		case giac::_IDNT: {
-			if(*giac_gen._IDNTptr == giac::_IDNT_pi) {
-				set(CALCULATOR->getPI());
-			} else if(*giac_gen._IDNTptr == giac::e__IDNT) {
-				set(CALCULATOR->getE());
-			} else if(*giac_gen._IDNTptr == giac::_IDNT_undef) {
-				setUndefined();
-			} else if(*giac_gen._IDNTptr == giac::_IDNT_infinity) {
-				setInfinity();
-			} else {
-				if(giac_gen._IDNTptr->name->length() > 0 && (*giac_gen._IDNTptr->name)[0] == '!') {
-					set(giac_gen._IDNTptr->name->substr(1, giac_gen._IDNTptr->name->length() - 1));
-				} else if(giac_gen._IDNTptr->name->length() > 1 && (*giac_gen._IDNTptr->name)[1] == '!') {
-					if((*giac_gen._IDNTptr->name)[0] == 'v') {
-						set(CALCULATOR->getActiveVariable(giac_gen._IDNTptr->name->substr(2, giac_gen._IDNTptr->name->length() - 2)));
-					} else if((*giac_gen._IDNTptr->name)[0] == 'u') {
-						set(CALCULATOR->getActiveUnit(giac_gen._IDNTptr->name->substr(2, giac_gen._IDNTptr->name->length() - 2)));
-					}
-				} else {
-					set(*giac_gen._IDNTptr->name);
-				}
-			}
-			break;
-		}
-		case giac::_SYMB: {
-			bool b_two = false;
-			bool qf = false;
-			MathFunction *f = NULL;
-			int t = -1;
-			if(giac_gen._SYMBptr->sommet == giac::at_prod) {
-				b_two = true;
-				t = STRUCT_MULTIPLICATION;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_pow) {
-				if(giac_gen._SYMBptr->feuille.type == giac::_VECT  && !ckmatrix(giac_gen._SYMBptr->feuille) && giac_gen._SYMBptr->feuille._VECTptr->size() == 2) {
-					m_type = STRUCT_POWER;
-					APPEND_NEW((*giac_gen._SYMBptr->feuille._VECTptr)[0]);
-					APPEND_NEW((*giac_gen._SYMBptr->feuille._VECTptr)[1]);
-				} else {
-					set(giac_gen._SYMBptr->feuille);
-				}
-			} else if(giac_gen._SYMBptr->sommet == giac::at_plus) {
-				b_two = true;
-				t = STRUCT_ADDITION;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_division) {
-				if(giac_gen._SYMBptr->feuille.type == giac::_VECT  && !ckmatrix(giac_gen._SYMBptr->feuille) && giac_gen._SYMBptr->feuille._VECTptr->size() == 2) {
-					t = STRUCT_DIVISION;
-				} else {
-					set(giac_gen._SYMBptr->feuille);
-				}
-			} else if(giac_gen._SYMBptr->sommet == giac::at_neg) {
-				m_type = STRUCT_NEGATE;
-				APPEND(MathStructure(giac_gen._SYMBptr->feuille));
-			} else if(giac_gen._SYMBptr->sommet == giac::at_inv) {
-				m_type = STRUCT_INVERSE;
-				APPEND(MathStructure(giac_gen._SYMBptr->feuille));
-			} else if(giac_gen._SYMBptr->sommet == giac::at_not) {
-				m_type = STRUCT_NOT;
-				APPEND(MathStructure(giac_gen._SYMBptr->feuille));
-			} else if(giac_gen._SYMBptr->sommet == giac::at_and) {
-				b_two = true;
-				t = STRUCT_AND;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_ou) {
-				b_two = true;
-				t = STRUCT_OR;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_xor) {
-				b_two = true;
-				t = STRUCT_XOR;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_equal) {
-				ct_comp = COMPARISON_EQUALS;
-				b_two = true;
-				t = STRUCT_COMPARISON;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_different) {
-				ct_comp = COMPARISON_NOT_EQUALS;
-				b_two = true;
-				t = STRUCT_COMPARISON;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_inferieur_strict) {
-				ct_comp = COMPARISON_LESS;
-				b_two = true;
-				t = STRUCT_COMPARISON;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_superieur_strict) {
-				ct_comp = COMPARISON_GREATER;
-				b_two = true;
-				t = STRUCT_COMPARISON;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_superieur_egal) {
-				ct_comp = COMPARISON_EQUALS_GREATER;
-				b_two = true;
-				t = STRUCT_COMPARISON;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_inferieur_egal) {
-				ct_comp = COMPARISON_EQUALS_LESS;
-				b_two = true;
-				t = STRUCT_COMPARISON;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_not) {
-				m_type = STRUCT_NOT;
-				APPEND(MathStructure(giac_gen._SYMBptr->feuille));
-			} else if(giac_gen._SYMBptr->sommet == giac::at_factorial) {
-				f = CALCULATOR->f_factorial;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_abs) {
-				f = CALCULATOR->f_abs;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_round) {
-				f = CALCULATOR->f_round;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_floor) {
-				f = CALCULATOR->f_floor;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_ceil) {
-				f = CALCULATOR->f_ceil;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_rem) {
-				f = CALCULATOR->f_rem;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_re) {
-				f = CALCULATOR->f_re;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_im) {
-				f = CALCULATOR->f_im;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_arg) {
-				f = CALCULATOR->f_arg;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_sqrt) {
-				f = CALCULATOR->f_sqrt;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_sq) {
-				f = CALCULATOR->f_sq;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_exp) {
-				f = CALCULATOR->f_exp;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_ln) {
-				f = CALCULATOR->f_ln;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_log10) {
-				f = CALCULATOR->f_log10;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_alog10) {
-				f = CALCULATOR->f_alog10;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_sin) {
-				f = CALCULATOR->f_sin;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_cos) {
-				f = CALCULATOR->f_cos;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_tan) {
-				f = CALCULATOR->f_tan;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_asin) {
-				f = CALCULATOR->f_asin;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_acos) {
-				f = CALCULATOR->f_acos;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_atan) {
-				f = CALCULATOR->f_atan;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_sinh) {
-				f = CALCULATOR->f_sinh;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_cosh) {
-				f = CALCULATOR->f_cosh;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_tanh) {
-				f = CALCULATOR->f_tanh;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_asinh) {
-				f = CALCULATOR->f_asinh;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_acosh) {
-				f = CALCULATOR->f_acosh;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_atanh) {
-				f = CALCULATOR->f_atanh;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_zeta) {
-				f = CALCULATOR->f_zeta;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_gamma) {
-				f = CALCULATOR->f_gamma;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_beta) {
-				f = CALCULATOR->f_beta;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_psi) {
-				f = CALCULATOR->f_psi;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_solve) {
-				f = CALCULATOR->f_solve;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_derive) {
-				f = CALCULATOR->f_diff;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_integrate) {
-				f = CALCULATOR->f_integrate;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_limit) {
-				f = CALCULATOR->f_limit;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_bernoulli) {
-				f = CALCULATOR->f_bernoulli;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_romberg) {
-				f = CALCULATOR->f_romberg;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_fourier_an) {
-				f = CALCULATOR->f_fourier_an;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_fourier_bn) {
-				f = CALCULATOR->f_fourier_bn;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_fourier_cn) {
-				f = CALCULATOR->f_fourier_cn;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_rand) {
-				f = CALCULATOR->f_rand;
-			} else if(giac_gen._SYMBptr->sommet == giac::at_qalculate_function) {
-				qf = true;
-				t = STRUCT_FUNCTION;
-			} else {
-				giac_unknown = new giac::gen(giac_gen);
-				m_type = STRUCT_UNKNOWN;
-			}
-			if(t >= 0 || f) {
-				if(f) {
-					m_type = STRUCT_FUNCTION;
-					o_function = f;
-				} else {
-					m_type = t;
-				}
-				if(giac_gen._SYMBptr->feuille.type == giac::_VECT && !ckmatrix(giac_gen._SYMBptr->feuille)) {
-					if(giac_gen._SYMBptr->feuille._VECTptr->size() == 1 && b_two) {
-						set((*giac_gen._SYMBptr->feuille._VECTptr)[0]);
-					} else {
-						for(size_t i = 0; i < giac_gen._SYMBptr->feuille._VECTptr->size(); i++) {
-							if(i == 0 && qf) {
-								if((*giac_gen._SYMBptr->feuille._VECTptr)[i].type == giac::_IDNT) {
-									o_function = (MathFunction*) s2p(*(*giac_gen._SYMBptr->feuille._VECTptr)[i]._IDNTptr->name);
-								} else {
-									giac_unknown = new giac::gen(giac_gen);
-									m_type = STRUCT_UNKNOWN;
-									break;
-								}
-							} else {
-								APPEND(MathStructure((*giac_gen._SYMBptr->feuille._VECTptr)[i]));
-							}
-						}
-					}
-				} else {
-					if(b_two) {
-						set(giac_gen._SYMBptr->feuille);
-					} else if(qf) {
-						if(giac_gen.type == giac::_POINTER_) {
-							o_function = (MathFunction*) giac_gen._POINTER_val;
-						} else {
-							giac_unknown = new giac::gen(giac_gen);
-							m_type = STRUCT_UNKNOWN;
-							break;
-						}
-					} else {
-						APPEND(MathStructure(giac_gen._SYMBptr->feuille));
-					}
-				}
-			}
-			break;
-		}
-		case giac::_FRAC: {
-			set(giac_gen._FRACptr->num);
-			MathStructure mstruct(giac_gen._FRACptr->den);
-			if(isNumber() && mstruct.isNumber()) {
-				o_number.setInternal(giac_gen);
-				setApproximate(o_number.isApproximate());
-				setPrecision(o_number.precision());
-			} else {
-				add(mstruct, OPERATION_DIVIDE);
-			}
-			break;
-		}
-		case giac::_STRNG: {
-			set(*giac_gen._STRNGptr);
-			break;
-		}
-		case giac::_VECT: {
-			if(giac_gen._VECTptr->size() == 1) {
-				set((*giac_gen._VECTptr)[0]);
-				break;
-			}
-			m_type = STRUCT_VECTOR;
-			for(size_t i = 0; i < giac_gen._VECTptr->size(); i++) {
-				APPEND(MathStructure((*giac_gen._VECTptr)[i]));
-			}
-			break;
-		}
-		case giac::_USER: {}
-		case giac::_EXT: {}
-		case giac::_FUNC: {}
-		case giac::_ROOT: {}
-		case giac::_MOD: {}
-		case giac::_SPOL1: {}
-		default: {
-			clear();
-			giac_unknown = new giac::gen(giac_gen);
-			m_type = STRUCT_UNKNOWN;
-			break;
-		}
-	}	
-}
-MathStructure::MathStructure(const giac::gen &giac_gen) {
-	init();
-	set(giac_gen, false);
-}
-#endif
 
 void MathStructure::addChild(const MathStructure &o) {
 	APPEND(o);
@@ -6391,9 +6300,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_ADDITION: {return true;}
 				case STRUCT_POWER: {return po.excessive_parenthesis;}
 				case STRUCT_NEGATE: {return po.excessive_parenthesis;}
-				case STRUCT_AND: {return true;}
-				case STRUCT_OR: {return true;}
-				case STRUCT_XOR: {return true;}
+				case STRUCT_BITWISE_AND: {return true;}
+				case STRUCT_BITWISE_OR: {return true;}
+				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_LOGICAL_AND: {return true;}
+				case STRUCT_LOGICAL_OR: {return true;}
+				case STRUCT_LOGICAL_XOR: {return true;}
 				case STRUCT_COMPARISON: {return true;}
 				case STRUCT_NOT: {return po.excessive_parenthesis;}
 				case STRUCT_FUNCTION: {return false;}
@@ -6415,9 +6327,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_ADDITION: {return flat_division || po.excessive_parenthesis;}
 				case STRUCT_POWER: {return flat_division && po.excessive_parenthesis;}
 				case STRUCT_NEGATE: {return flat_division && po.excessive_parenthesis;}
-				case STRUCT_AND: {return flat_division || po.excessive_parenthesis;}
-				case STRUCT_OR: {return flat_division || po.excessive_parenthesis;}
-				case STRUCT_XOR: {return flat_division || po.excessive_parenthesis;}
+				case STRUCT_BITWISE_AND: {return flat_division || po.excessive_parenthesis;}
+				case STRUCT_BITWISE_OR: {return flat_division || po.excessive_parenthesis;}
+				case STRUCT_BITWISE_XOR: {return flat_division || po.excessive_parenthesis;}
+				case STRUCT_LOGICAL_AND: {return flat_division || po.excessive_parenthesis;}
+				case STRUCT_LOGICAL_OR: {return flat_division || po.excessive_parenthesis;}
+				case STRUCT_LOGICAL_XOR: {return flat_division || po.excessive_parenthesis;}
 				case STRUCT_COMPARISON: {return flat_division || po.excessive_parenthesis;}
 				case STRUCT_NOT: {return flat_division && po.excessive_parenthesis;}
 				case STRUCT_FUNCTION: {return false;}
@@ -6438,9 +6353,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_ADDITION: {return true;}
 				case STRUCT_POWER: {return po.excessive_parenthesis;}
 				case STRUCT_NEGATE: {return index > 1;}
-				case STRUCT_AND: {return true;}
-				case STRUCT_OR: {return true;}
-				case STRUCT_XOR: {return true;}
+				case STRUCT_BITWISE_AND: {return true;}
+				case STRUCT_BITWISE_OR: {return true;}
+				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_LOGICAL_AND: {return true;}
+				case STRUCT_LOGICAL_OR: {return true;}
+				case STRUCT_LOGICAL_XOR: {return true;}
 				case STRUCT_COMPARISON: {return true;}
 				case STRUCT_NOT: {return false;}
 				case STRUCT_FUNCTION: {return false;}
@@ -6461,9 +6379,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_ADDITION: {return true;}
 				case STRUCT_POWER: {return true;}
 				case STRUCT_NEGATE: {return index == 1 || po.excessive_parenthesis;}
-				case STRUCT_AND: {return true;}
-				case STRUCT_OR: {return true;}
-				case STRUCT_XOR: {return true;}
+				case STRUCT_BITWISE_AND: {return true;}
+				case STRUCT_BITWISE_OR: {return true;}
+				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_LOGICAL_AND: {return true;}
+				case STRUCT_LOGICAL_OR: {return true;}
+				case STRUCT_LOGICAL_XOR: {return true;}
 				case STRUCT_COMPARISON: {return true;}
 				case STRUCT_NOT: {return index == 1 || po.excessive_parenthesis;}
 				case STRUCT_FUNCTION: {return false;}
@@ -6484,9 +6405,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_ADDITION: {return true;}
 				case STRUCT_POWER: {return true;}
 				case STRUCT_NEGATE: {return true;}
-				case STRUCT_AND: {return true;}
-				case STRUCT_OR: {return true;}
-				case STRUCT_XOR: {return true;}
+				case STRUCT_BITWISE_AND: {return true;}
+				case STRUCT_BITWISE_OR: {return true;}
+				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_LOGICAL_AND: {return true;}
+				case STRUCT_LOGICAL_OR: {return true;}
+				case STRUCT_LOGICAL_XOR: {return true;}
 				case STRUCT_COMPARISON: {return true;}
 				case STRUCT_NOT: {return po.excessive_parenthesis;}
 				case STRUCT_FUNCTION: {return false;}
@@ -6499,9 +6423,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				default: {return true;}
 			}
 		}
-		case STRUCT_AND: {}
-		case STRUCT_OR: {}
-		case STRUCT_XOR: {}
+		case STRUCT_BITWISE_AND: {}
+		case STRUCT_BITWISE_OR: {}
+		case STRUCT_BITWISE_XOR: {}
+		case STRUCT_LOGICAL_AND: {}
+		case STRUCT_LOGICAL_OR: {}
+		case STRUCT_LOGICAL_XOR: {}
 		case STRUCT_COMPARISON: {
 			switch(m_type) {
 				case STRUCT_MULTIPLICATION: {return true;}
@@ -6510,9 +6437,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_ADDITION: {return true;}
 				case STRUCT_POWER: {return po.excessive_parenthesis;}
 				case STRUCT_NEGATE: {return po.excessive_parenthesis;}
-				case STRUCT_AND: {return true;}
-				case STRUCT_OR: {return true;}
-				case STRUCT_XOR: {return true;}
+				case STRUCT_BITWISE_AND: {return true;}
+				case STRUCT_BITWISE_OR: {return true;}
+				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_LOGICAL_AND: {return true;}
+				case STRUCT_LOGICAL_OR: {return true;}
+				case STRUCT_LOGICAL_XOR: {return true;}
 				case STRUCT_COMPARISON: {return true;}
 				case STRUCT_NOT: {return false;}
 				case STRUCT_FUNCTION: {return false;}
@@ -6533,9 +6463,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_ADDITION: {return true;}
 				case STRUCT_POWER: {return po.excessive_parenthesis;}
 				case STRUCT_NEGATE: {return po.excessive_parenthesis;}
-				case STRUCT_AND: {return true;}
-				case STRUCT_OR: {return true;}
-				case STRUCT_XOR: {return true;}
+				case STRUCT_BITWISE_AND: {return true;}
+				case STRUCT_BITWISE_OR: {return true;}
+				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_LOGICAL_AND: {return true;}
+				case STRUCT_LOGICAL_OR: {return true;}
+				case STRUCT_LOGICAL_XOR: {return true;}
 				case STRUCT_COMPARISON: {return true;}
 				case STRUCT_NOT: {return true;}
 				case STRUCT_FUNCTION: {return po.excessive_parenthesis;}
@@ -6577,9 +6510,12 @@ int MathStructure::neededMultiplicationSign(const PrintOptions &po, const Intern
 		case STRUCT_ADDITION: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_POWER: {if(flat_power) return MULTIPLICATION_SIGN_OPERATOR; break;}
 		case STRUCT_NEGATE: {break;}
-		case STRUCT_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_BITWISE_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_BITWISE_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_BITWISE_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_LOGICAL_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_LOGICAL_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_LOGICAL_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_COMPARISON: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_NOT: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_FUNCTION: {return MULTIPLICATION_SIGN_OPERATOR;}
@@ -6618,9 +6554,12 @@ int MathStructure::neededMultiplicationSign(const PrintOptions &po, const Intern
 		case STRUCT_ADDITION: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_POWER: {return CHILD(0).neededMultiplicationSign(po, ips, parent, index, par, par_prev, flat_division, flat_power);}
 		case STRUCT_NEGATE: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_BITWISE_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_BITWISE_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_BITWISE_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_LOGICAL_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_LOGICAL_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_LOGICAL_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_COMPARISON: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_NOT: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_FUNCTION: {return MULTIPLICATION_SIGN_OPERATOR;}
@@ -6665,12 +6604,6 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 			}
 			break;
 		}
-#ifdef HAVE_GIAC		
-		case STRUCT_UNKNOWN: {
-			print_str = giac_unknown->print();
-			break;
-		}
-#endif
 		case STRUCT_ADDITION: {
 			ips_n.depth++;
 			for(size_t i = 0; i < SIZE; i++) {
@@ -6811,7 +6744,46 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 			print_str += CHILD(1).print(po, ips_n);
 			break;
 		}
-		case STRUCT_AND: {
+		case STRUCT_BITWISE_AND: {
+			ips_n.depth++;
+			for(size_t i = 0; i < SIZE; i++) {
+				if(i > 0) {
+					if(po.spacious) print_str += " ";
+					print_str += "&";
+					if(po.spacious) print_str += " ";
+				}
+				ips_n.wrap = CHILD(i).needsParenthesis(po, ips_n, *this, i + 1, true, true);
+				print_str += CHILD(i).print(po, ips_n);
+			}
+			break;
+		}
+		case STRUCT_BITWISE_OR: {
+			ips_n.depth++;
+			for(size_t i = 0; i < SIZE; i++) {
+				if(i > 0) {
+					if(po.spacious) print_str += " ";
+					print_str += "|";
+					if(po.spacious) print_str += " ";
+				}
+				ips_n.wrap = CHILD(i).needsParenthesis(po, ips_n, *this, i + 1, true, true);
+				print_str += CHILD(i).print(po, ips_n);
+			}
+			break;
+		}
+		case STRUCT_BITWISE_XOR: {
+			ips_n.depth++;
+			for(size_t i = 0; i < SIZE; i++) {
+				if(i > 0) {
+					if(po.spacious) print_str += " ";
+					print_str += "XOR";
+					if(po.spacious) print_str += " ";
+				}
+				ips_n.wrap = CHILD(i).needsParenthesis(po, ips_n, *this, i + 1, true, true);
+				print_str += CHILD(i).print(po, ips_n);
+			}
+			break;
+		}
+		case STRUCT_LOGICAL_AND: {
 			ips_n.depth++;
 			for(size_t i = 0; i < SIZE; i++) {
 				if(i > 0) {
@@ -6824,7 +6796,7 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 			}
 			break;
 		}
-		case STRUCT_OR: {
+		case STRUCT_LOGICAL_OR: {
 			ips_n.depth++;
 			for(size_t i = 0; i < SIZE; i++) {
 				if(i > 0) {
@@ -6837,7 +6809,7 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 			}
 			break;
 		}
-		case STRUCT_XOR: {
+		case STRUCT_LOGICAL_XOR: {
 			ips_n.depth++;
 			for(size_t i = 0; i < SIZE; i++) {
 				if(i > 0) {
@@ -8027,9 +7999,12 @@ bool MathStructure::differentiate(const MathStructure &x_var, const EvaluationOp
 			}
 			break;
 		}
-		case STRUCT_AND: {}
-		case STRUCT_OR: {}
-		case STRUCT_XOR: {}
+		case STRUCT_BITWISE_AND: {}
+		case STRUCT_BITWISE_OR: {}
+		case STRUCT_BITWISE_XOR: {}
+		case STRUCT_LOGICAL_AND: {}
+		case STRUCT_LOGICAL_OR: {}
+		case STRUCT_LOGICAL_XOR: {}
 		case STRUCT_COMPARISON: {}
 		case STRUCT_UNIT: {}
 		case STRUCT_NUMBER: {
@@ -8206,9 +8181,12 @@ bool MathStructure::integrate(const MathStructure &x_var, const EvaluationOption
 			}
 			break;
 		}
-		case STRUCT_AND: {}
-		case STRUCT_OR: {}
-		case STRUCT_XOR: {}
+		case STRUCT_BITWISE_AND: {}
+		case STRUCT_BITWISE_OR: {}
+		case STRUCT_BITWISE_XOR: {}
+		case STRUCT_LOGICAL_AND: {}
+		case STRUCT_LOGICAL_OR: {}
+		case STRUCT_LOGICAL_XOR: {}
 		case STRUCT_COMPARISON: {}
 		case STRUCT_UNIT: {}
 		case STRUCT_NUMBER: {

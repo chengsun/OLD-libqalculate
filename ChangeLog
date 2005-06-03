@@ -1,6 +1,8 @@
 2005-06-02 Niklas Knutsson  <nq@altern.org>
 
 	* Bitwise operations functions
+	* Bitwise AND (&), OR (|), XOR
+	* Remove old giac stuff
 
 2005-06-01 Niklas Knutsson  <nq@altern.org>
 

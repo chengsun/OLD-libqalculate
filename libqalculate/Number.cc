@@ -680,8 +680,8 @@ Number Number::operator / (const Number &o) const {Number o2(*this); o2.divide(o
 Number Number::operator + (const Number &o) const {Number o2(*this); o2.add(o); return o2;}
 Number Number::operator - (const Number &o) const {Number o2(*this); o2.subtract(o); return o2;}
 Number Number::operator ^ (const Number &o) const {Number o2(*this); o2.raise(o); return o2;}
-Number Number::operator && (const Number &o) const {Number o2(*this); o2.add(o, OPERATION_AND); return o2;}
-Number Number::operator || (const Number &o) const {Number o2(*this); o2.add(o, OPERATION_OR); return o2;}
+Number Number::operator && (const Number &o) const {Number o2(*this); o2.add(o, OPERATION_LOGICAL_AND); return o2;}
+Number Number::operator || (const Number &o) const {Number o2(*this); o2.add(o, OPERATION_LOGICAL_OR); return o2;}
 Number Number::operator ! () const {Number o(*this); o.setNOT(); return o;}
 		
 void Number::operator *= (const Number &o) {multiply(o);}
@@ -1805,7 +1805,16 @@ bool Number::add(const Number &o, MathOperation op) {
 		case OPERATION_EXP10: {
 			return exp10(o);
 		}
-		case OPERATION_OR: {
+		case OPERATION_BITWISE_AND: {
+			return bitAnd(o);
+		}
+		case OPERATION_BITWISE_OR: {
+			return bitOr(o);
+		}
+		case OPERATION_BITWISE_XOR: {
+			return bitXor(o);
+		}
+		case OPERATION_LOGICAL_OR: {
 			Number nr;
 			ComparisonResult i1 = compare(nr);
 			ComparisonResult i2 = o.compare(nr);
@@ -1816,7 +1825,7 @@ bool Number::add(const Number &o, MathOperation op) {
 			setTrue(i1 == COMPARISON_RESULT_LESS || i2 == COMPARISON_RESULT_LESS);
 			return true;
 		}
-		case OPERATION_XOR: {
+		case OPERATION_LOGICAL_XOR: {
 			Number nr;
 			ComparisonResult i1 = compare(nr);
 			ComparisonResult i2 = o.compare(nr);
@@ -1826,7 +1835,7 @@ bool Number::add(const Number &o, MathOperation op) {
 			else setTrue(i2 == COMPARISON_RESULT_LESS);
 			return true;
 		}
-		case OPERATION_AND: {
+		case OPERATION_LOGICAL_AND: {
 			Number nr;
 			ComparisonResult i1 = compare(nr);
 			ComparisonResult i2 = o.compare(nr);

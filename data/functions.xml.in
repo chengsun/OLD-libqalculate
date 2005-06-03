@@ -2167,59 +2167,6 @@
     </builtin_function>
   </category>
   <category>
-    <_title>Bitwise Operations</_title>
-    <builtin_function name="bitand">
-      <_title>Bitwise AND</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>bitand</_name>
-      </name>
-      <argument index="1">
-        <_title>Numbers</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="bitor">
-      <_title>Bitwise OR</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>bitor</_name>
-      </name>
-      <argument index="1">
-        <_title>Numbers</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="bitxor">
-      <_title>Bitwise XOR</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>bitxor</_name>
-      </name>
-      <argument index="1">
-        <_title>Numbers</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="biteqv">
-      <_title>Bitwise Equivalence</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>biteqv</_name>
-      </name>
-      <argument index="1">
-        <_title>Numbers</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="bitnot">
-      <_title>Bitwise NOT</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>bitnot</_name>
-      </name>
-      <argument index="1">
-        <_title>Number</_title>
-      </argument>
-    </builtin_function>
-  </category>
-  <category>
     <_title>Algebra</_title>
     <builtin_function name="sum">
       <_title>Sum</_title>

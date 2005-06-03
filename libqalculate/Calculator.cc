@@ -979,12 +979,6 @@ void Calculator::addBuiltinFunctions() {
 	f_multifactorial = addFunction(new MultiFactorialFunction());
 	f_binomial = addFunction(new BinomialFunction());
 	
-	f_bitand = addFunction(new BitAndFunction());
-	f_bitor = addFunction(new BitOrFunction());
-	f_bitxor = addFunction(new BitXorFunction());
-	f_biteqv = addFunction(new BitEqvFunction());
-	f_bitnot = addFunction(new BitNotFunction());
-
 	f_abs = addFunction(new AbsFunction());
 	f_signum = addFunction(new SignumFunction());
 	f_gcd = addFunction(new GcdFunction());
@@ -1801,9 +1795,13 @@ MathStructure Calculator::convertToBestUnit(const MathStructure &mstruct, const 
 	eo2.calculate_functions = false;
 	eo2.sync_units = false;
 	switch(mstruct.type()) {
+		case STRUCT_BITWISE_XOR: {}
+		case STRUCT_BITWISE_OR: {}
+		case STRUCT_BITWISE_AND: {}
+		case STRUCT_LOGICAL_XOR: {}
+		case STRUCT_LOGICAL_OR: {}
+		case STRUCT_LOGICAL_AND: {}
 		case STRUCT_NOT: {}
-		case STRUCT_OR: {}
-		case STRUCT_AND: {}
 		case STRUCT_COMPARISON: {}
 		case STRUCT_ALTERNATIVES: {}
 		case STRUCT_FUNCTION: {}
@@ -2671,16 +2669,16 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 					str.replace(str_index + 1, i, MINUS);
 					str_index++;
 				} else if(i == and_str_len && compare_name_no_case(and_str, str, and_str_len, str_index + 1)) {
-					str.replace(str_index + 1, i, AND);
+					str.replace(str_index + 1, i, LOGICAL_AND);
 					str_index++;
 				} else if(i == AND_str_len && compare_name_no_case(AND_str, str, AND_str_len, str_index + 1)) {
-					str.replace(str_index + 1, i, AND);
+					str.replace(str_index + 1, i, LOGICAL_AND);
 					str_index++;
 				} else if(i == or_str_len && compare_name_no_case(or_str, str, or_str_len, str_index + 1)) {
-					str.replace(str_index + 1, i, OR);
+					str.replace(str_index + 1, i, LOGICAL_OR);
 					str_index++;
 				} else if(i == OR_str_len && compare_name_no_case(OR_str, str, OR_str_len, str_index + 1)) {
-					str.replace(str_index + 1, i, OR);
+					str.replace(str_index + 1, i, LOGICAL_OR);
 					str_index++;
 //				} else if(compare_name_no_case(XOR_str, str, XOR_str_len, str_index + 1)) {
 				}
@@ -3355,49 +3353,41 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		str.replace(i, i2 - i + 1, str2);
 		mstruct->clear();
 	}
-	if((i = str.find(AND, 1)) != string::npos && i + 1 != str.length()) {
+	if((i = str.find(LOGICAL_AND, 1)) != string::npos && i + 2 != str.length()) {
 		bool b = false;
-		while(i != string::npos && i + 1 != str.length()) {
+		while(i != string::npos && i + 2 != str.length()) {
 			str2 = str.substr(0, i);
-			if(str[i + 1] == AND_CH) {
-				i++;
-				if(i + 1 == str.length()) break;
-			}
-			str = str.substr(i + 1, str.length() - (i + 1));
+			str = str.substr(i + 2, str.length() - (i + 2));
 			if(b) {
-				parseAdd(str2, mstruct, po, OPERATION_AND);
+				parseAdd(str2, mstruct, po, OPERATION_LOGICAL_AND);
 			} else {
 				parseAdd(str2, mstruct, po);
 				b = true;
 			}
-			i = str.find(AND, 1);
+			i = str.find(LOGICAL_AND, 1);
 		}
 		if(b) {
-			parseAdd(str, mstruct, po, OPERATION_AND);
+			parseAdd(str, mstruct, po, OPERATION_LOGICAL_AND);
 		} else {
 			parseAdd(str, mstruct, po);
 		}
 		return;
 	}
-	if((i = str.find(OR, 1)) != string::npos && i + 1 != str.length()) {
+	if((i = str.find(LOGICAL_OR, 1)) != string::npos && i + 2 != str.length()) {
 		bool b = false;
-		while(i != string::npos && i + 1 != str.length()) {
+		while(i != string::npos && i + 2 != str.length()) {
 			str2 = str.substr(0, i);
-			if(str[i + 1] == OR_CH) {
-				i++;
-				if(i + 1 == str.length()) break;
-			}
-			str = str.substr(i + 1, str.length() - (i + 1));
+			str = str.substr(i + 2, str.length() - (i + 2));
 			if(b) {
-				parseAdd(str2, mstruct, po, OPERATION_OR);
+				parseAdd(str2, mstruct, po, OPERATION_LOGICAL_OR);
 			} else {
 				parseAdd(str2, mstruct, po);
 				b = true;
 			}
-			i = str.find(OR, 1);
+			i = str.find(LOGICAL_OR, 1);
 		}
 		if(b) {
-			parseAdd(str, mstruct, po, OPERATION_OR);
+			parseAdd(str, mstruct, po, OPERATION_LOGICAL_OR);
 		} else {
 			parseAdd(str, mstruct, po);
 		}
@@ -3469,7 +3459,49 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 				}
 			}
 		}
-	}		
+	}
+	
+	if((i = str.find(BITWISE_OR, 1)) != string::npos && i + 1 != str.length()) {
+		bool b = false;
+		while(i != string::npos && i + 1 != str.length()) {
+			str2 = str.substr(0, i);
+			str = str.substr(i + 1, str.length() - (i + 1));
+			if(b) {
+				parseAdd(str2, mstruct, po, OPERATION_BITWISE_OR);
+			} else {
+				parseAdd(str2, mstruct, po);
+				b = true;
+			}
+			i = str.find(BITWISE_OR, 1);
+		}
+		if(b) {
+			parseAdd(str, mstruct, po, OPERATION_BITWISE_OR);
+		} else {
+			parseAdd(str, mstruct, po);
+		}
+		return;
+	}
+	if((i = str.find(BITWISE_AND, 1)) != string::npos && i + 1 != str.length()) {
+		bool b = false;
+		while(i != string::npos && i + 1 != str.length()) {
+			str2 = str.substr(0, i);
+			str = str.substr(i + 1, str.length() - (i + 1));
+			if(b) {
+				parseAdd(str2, mstruct, po, OPERATION_BITWISE_AND);
+			} else {
+				parseAdd(str2, mstruct, po);
+				b = true;
+			}
+			i = str.find(BITWISE_AND, 1);
+		}
+		if(b) {
+			parseAdd(str, mstruct, po, OPERATION_BITWISE_AND);
+		} else {
+			parseAdd(str, mstruct, po);
+		}
+		return;
+	}
+			
 	i = 0;
 	i3 = 0;	
 	if(po.rpn) {
@@ -4248,8 +4280,6 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							arg = new DataObjectArgument(NULL, "");
 						} else if(type == "data-property") {
 							arg = new DataPropertyArgument(NULL, "");
-/*						} else if(type == "giac") {
-							arg = new GiacArgument();*/
 						} else {
 							arg = new Argument();
 						}
@@ -5536,7 +5566,6 @@ int Calculator::saveFunctions(const char* file_name, bool save_global) {
 								case ARGUMENT_TYPE_ANGLE: {xmlNewProp(newnode, (xmlChar*) "type", (xmlChar*) "angle"); break;}
 								case ARGUMENT_TYPE_DATA_OBJECT: {xmlNewProp(newnode, (xmlChar*) "type", (xmlChar*) "data-object"); break;}
 								case ARGUMENT_TYPE_DATA_PROPERTY: {xmlNewProp(newnode, (xmlChar*) "type", (xmlChar*) "data-property"); break;}
-//								case ARGUMENT_TYPE_GIAC: {xmlNewProp(newnode, (xmlChar*) "type", (xmlChar*) "giac"); break;}
 								default: {xmlNewProp(newnode, (xmlChar*) "type", (xmlChar*) "free");}
 							}
 							xmlNewProp(newnode, (xmlChar*) "index", (xmlChar*) i2s(i2).c_str());

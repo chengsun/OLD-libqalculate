@@ -1630,20 +1630,6 @@ string IntegerArgument::subprintlong() const {
 	return str;
 }
 
-GiacArgument::GiacArgument(string name_, bool does_test, bool does_error) : Argument(name_, does_test, does_error) {}
-GiacArgument::GiacArgument(const GiacArgument *arg) {set(arg);}
-GiacArgument::~GiacArgument() {}
-int GiacArgument::type() const {return ARGUMENT_TYPE_GIAC;}
-Argument *GiacArgument::copy() const {return new GiacArgument(this);}
-string GiacArgument::subprintlong() const {return _("a free value (giac adjusted)");}
-/*MathStructure GiacArgument::evaluate(const string &str, bool keep_exact) const {
-	MathStructure mstruct = CALCULATOR->parse(str);
-	return mstruct;
-}*/
-void GiacArgument::parse(MathStructure *mstruct, const string &str, const ParseOptions &po) const {
-	CALCULATOR->parse(mstruct, str, po);
-}
-
 SymbolicArgument::SymbolicArgument(string name_, bool does_test, bool does_error) : Argument(name_, does_test, does_error) {}
 SymbolicArgument::SymbolicArgument(const SymbolicArgument *arg) {set(arg);}
 SymbolicArgument::~SymbolicArgument() {}

@@ -190,9 +190,12 @@ typedef enum {
 	OPERATION_SUBTRACT,
 	OPERATION_RAISE,
 	OPERATION_EXP10,
-	OPERATION_AND,
-	OPERATION_OR,
-	OPERATION_XOR,
+	OPERATION_LOGICAL_AND,
+	OPERATION_LOGICAL_OR,
+	OPERATION_LOGICAL_XOR,
+	OPERATION_BITWISE_AND,
+	OPERATION_BITWISE_OR,
+	OPERATION_BITWISE_XOR,
 	OPERATION_LESS,
 	OPERATION_GREATER,
 	OPERATION_EQUALS_LESS,
@@ -470,8 +473,10 @@ extern Calculator *calculator;
 #define EXP			"E"
 #define EXPS			"Ee"
 #define	POWER			"^"
-#define	AND			"&"
-#define	OR			"|"
+#define	LOGICAL_AND		"&&"
+#define	LOGICAL_OR		"||"
+#define	BITWISE_AND		"&"
+#define	BITWISE_OR		"|"
 #define	LESS			"<"
 #define	GREATER			">"
 #define	NOT			"!"

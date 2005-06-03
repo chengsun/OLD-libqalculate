@@ -89,19 +89,6 @@ dnl  --------------------------------
 
 AC_CHECK_LIB(pthread, pthread_create, [LIBS="$LIBS -lpthread"])
 
-PKG_CHECK_MODULES(GLIB, [
-	glib-2.0 >= 2.4
-	libxml-2.0
-	])
-AC_SUBST(GLIB_CFLAGS)
-AC_SUBST(GLIB_LIBS)
-
-dnl  --------------------------------
-dnl | check for GMP and GIAC        |-----------------------------------------
-dnl  --------------------------------
-
-dnl AC_CHECK_LIB(gmp, __gmpz_init, , [AC_MSG_ERROR([GNU MP not found, see http://swox.com/gmp])])
-
 AC_LANG([C++])
 
 AC_PATH_CLN(1.1.0, [
@@ -110,11 +97,13 @@ AC_PATH_CLN(1.1.0, [
   	AC_DEFINE(HAVE_LIBCLN,1,[If CLN can be used])
 ], AC_MSG_ERROR([No suitable installed version of CLN could be found.]))
 
-dnl AC_CHECK_LIB(giac, main, [
-dnl	LIBS="$LIBS -lgiac"
-dnl	AC_DEFINE(HAVE_GIAC,1,[If giac can be used])
-dnl], AC_MSG_ERROR([No suitable installed version of giac could be found.]))
 
+PKG_CHECK_MODULES(GLIB, [
+	glib-2.0 >= 2.4
+	libxml-2.0
+	])
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBS)
 
 dnl  --------------------------------
 dnl | check for readline            |-----------------------------------------

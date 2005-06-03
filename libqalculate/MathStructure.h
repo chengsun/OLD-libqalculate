@@ -29,12 +29,14 @@ enum {
 	STRUCT_VARIABLE,
 	STRUCT_VECTOR,
 	STRUCT_ALTERNATIVES,
-	STRUCT_AND,
-	STRUCT_OR,
-	STRUCT_XOR,
+	STRUCT_BITWISE_AND,
+	STRUCT_BITWISE_OR,
+	STRUCT_BITWISE_XOR,
+	STRUCT_LOGICAL_AND,
+	STRUCT_LOGICAL_OR,
+	STRUCT_LOGICAL_XOR,
 	STRUCT_NOT,
 	STRUCT_COMPARISON,
-	STRUCT_UNKNOWN,
 	STRUCT_UNDEFINED
 };
 
@@ -68,9 +70,6 @@ class MathStructure {
 		MathFunction *o_function;
 		MathStructure *function_value;
 		
-#ifdef HAVE_GIAC		
-		giac::gen *giac_unknown;
-#endif
 		ComparisonType ct_comp;
 	
 	public:
@@ -181,9 +180,7 @@ class MathStructure {
 		void childUpdated(size_t index, bool recursive = false);
 		void childrenUpdated(bool recursive = false);
 		const string &symbol() const;
-#ifdef HAVE_GIAC
-		const giac::gen *unknown() const;
-#endif
+
 		ComparisonType comparisonType() const;
 		void setComparisonType(ComparisonType comparison_type);
 		//dangerous
@@ -212,9 +209,12 @@ class MathStructure {
 		bool isNumber_exp() const;
 		bool isVariable() const;
 		bool isComparison() const;
-		bool isAND() const;
-		bool isOR() const;
-		bool isXOR() const;
+		bool isBitwiseAnd() const;
+		bool isBitwiseOr() const;
+		bool isBitwiseXor() const;
+		bool isLogicalAnd() const;
+		bool isLogicalOr() const;
+		bool isLogicalXor() const;
 		bool isNOT() const;
 		bool isInverse() const;
 		bool isDivision() const;
@@ -313,16 +313,13 @@ class MathStructure {
 		int merge_addition(MathStructure &mstruct, const EvaluationOptions &eo);
 		int merge_multiplication(MathStructure &mstruct, const EvaluationOptions &eo, bool do_append = true);
 		int merge_power(MathStructure &mstruct, const EvaluationOptions &eo);
+		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo);
+		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo);
+		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo);
 		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo);
 		bool calculateFunctions(const EvaluationOptions &eo, bool recursive = true);
 		MathStructure &eval(const EvaluationOptions &eo = default_evaluation_options);
 		bool factorize(const EvaluationOptions &eo = default_evaluation_options);
-
-#ifdef HAVE_GIAC		
-		giac::gen toGiac() const;
-		void set(const giac::gen &giac_gen, bool in_retry = false);
-		MathStructure(const giac::gen &giac_gen);
-#endif
 		
 		void addChild(const MathStructure &o);
 		void addChild_nocopy(MathStructure *o);

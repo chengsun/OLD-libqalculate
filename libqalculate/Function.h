@@ -31,7 +31,6 @@ enum {
 	ARGUMENT_TYPE_BOOLEAN,
 	ARGUMENT_TYPE_VARIABLE,
 	ARGUMENT_TYPE_ANGLE,
-	ARGUMENT_TYPE_GIAC,
 	ARGUMENT_TYPE_SET,
 	ARGUMENT_TYPE_DATA_OBJECT,
 	ARGUMENT_TYPE_DATA_PROPERTY
@@ -301,23 +300,6 @@ class TextArgument : public Argument {
 	virtual Argument *copy() const;
 	virtual string print() const;
 	virtual bool suggestsQuotes() const;
-};
-
-class GiacArgument : public Argument {
-
-  protected:
-  
-	virtual string subprintlong() const;
-
-  public:
-  
-  	GiacArgument(string name_ = "", bool does_test = true, bool does_error = true);
-	GiacArgument(const GiacArgument *arg);
-	virtual ~GiacArgument();
-	virtual int type() const;
-	virtual Argument *copy() const;
-	//virtual MathStructure evaluate(const string &str, bool keep_exact = true) const;
-	virtual void parse(MathStructure *mstruct, const string &str, const ParseOptions &po = default_parse_options) const;
 };
 
 class DateArgument : public Argument {

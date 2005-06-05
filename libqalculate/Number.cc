@@ -682,7 +682,7 @@ Number Number::operator - (const Number &o) const {Number o2(*this); o2.subtract
 Number Number::operator ^ (const Number &o) const {Number o2(*this); o2.raise(o); return o2;}
 Number Number::operator && (const Number &o) const {Number o2(*this); o2.add(o, OPERATION_LOGICAL_AND); return o2;}
 Number Number::operator || (const Number &o) const {Number o2(*this); o2.add(o, OPERATION_LOGICAL_OR); return o2;}
-Number Number::operator ! () const {Number o(*this); o.setNOT(); return o;}
+Number Number::operator ! () const {Number o(*this); o.setLogicalNot(); return o;}
 		
 void Number::operator *= (const Number &o) {multiply(o);}
 void Number::operator /= (const Number &o) {divide(o);}
@@ -1434,7 +1434,7 @@ void Number::setTrue(bool is_true) {
 void Number::setFalse() {
 	setTrue(false);
 }
-void Number::setNOT() {
+void Number::setLogicalNot() {
 	setTrue(!isPositive());
 }
 

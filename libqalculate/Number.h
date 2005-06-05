@@ -180,7 +180,7 @@ class Number {
 		void toBoolean();
 		void setTrue(bool is_true = true);
 		void setFalse();
-		void setNOT();
+		void setLogicalNot();
 		
 		void e();
 		void pi();

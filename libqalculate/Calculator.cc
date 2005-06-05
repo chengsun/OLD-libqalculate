@@ -246,7 +246,7 @@ Calculator::Calculator() {
 	}	
 	setlocale(LC_NUMERIC, "C");
 
-	NAME_NUMBER_PRE_S = "_~#";
+	NAME_NUMBER_PRE_S = "_#";
 	NAME_NUMBER_PRE_STR = "_";
 	
 	string str = _(" to ");
@@ -978,6 +978,9 @@ void Calculator::addBuiltinFunctions() {
 	f_factorial2 = addFunction(new DoubleFactorialFunction());
 	f_multifactorial = addFunction(new MultiFactorialFunction());
 	f_binomial = addFunction(new BinomialFunction());
+	
+	f_xor = addFunction(new XorFunction());
+	f_bitxor = addFunction(new BitXorFunction());
 	
 	f_abs = addFunction(new AbsFunction());
 	f_signum = addFunction(new SignumFunction());
@@ -1798,10 +1801,11 @@ MathStructure Calculator::convertToBestUnit(const MathStructure &mstruct, const 
 		case STRUCT_BITWISE_XOR: {}
 		case STRUCT_BITWISE_OR: {}
 		case STRUCT_BITWISE_AND: {}
+		case STRUCT_BITWISE_NOT: {}
 		case STRUCT_LOGICAL_XOR: {}
 		case STRUCT_LOGICAL_OR: {}
 		case STRUCT_LOGICAL_AND: {}
-		case STRUCT_NOT: {}
+		case STRUCT_LOGICAL_NOT: {}
 		case STRUCT_COMPARISON: {}
 		case STRUCT_ALTERNATIVES: {}
 		case STRUCT_FUNCTION: {}
@@ -2324,6 +2328,66 @@ bool Calculator::functionNameIsValid(const char *name_) {
 bool Calculator::unitNameIsValid(const char *name_) {
 	for(size_t i = 0; name_[i] != '\0'; i++) {
 		if(is_in(ILLEGAL_IN_UNITNAMES, name_[i])) return false;
+	}
+	return true;
+}
+#define VERSION_BEFORE(i1, i2, i3) (version_numbers[0] < i1 || (version_numbers[0] == i1 && (version_numbers[1] < i2 || (version_numbers[1] == i2 && version_numbers[2] < i3))))
+bool Calculator::variableNameIsValid(const string &name_, int version_numbers[3], bool is_user_defs) {
+	return variableNameIsValid(name_.c_str(), version_numbers, is_user_defs);
+}
+bool Calculator::functionNameIsValid(const string &name_, int version_numbers[3], bool is_user_defs) {
+	return functionNameIsValid(name_.c_str(), version_numbers, is_user_defs);
+}
+bool Calculator::unitNameIsValid(const string &name_, int version_numbers[3], bool is_user_defs) {
+	return unitNameIsValid(name_.c_str(), version_numbers, is_user_defs);
+}
+bool Calculator::variableNameIsValid(const char *name_, int version_numbers[3], bool is_user_defs) {
+	if(is_in(NUMBERS, name_[0])) return false;
+	bool b = false;
+	for(size_t i = 0; name_[i] != '\0'; i++) {
+		if(is_in(ILLEGAL_IN_NAMES, name_[i])) {
+			if(is_user_defs && VERSION_BEFORE(0, 8, 1) && name_[i] == BITWISE_NOT_CH) {
+				b = true;	
+			} else {
+				return false;
+			}
+		}
+	}
+	if(b) {
+		error(true, _("\"%s\" is not allowed in names anymore. Please change the name of \"%s\", or the variable will be lost."), BITWISE_NOT, name_, NULL);
+	}
+	return true;
+}
+bool Calculator::functionNameIsValid(const char *name_, int version_numbers[3], bool is_user_defs) {
+	if(is_in(NUMBERS, name_[0])) return false;
+	bool b = false;
+	for(size_t i = 0; name_[i] != '\0'; i++) {
+		if(is_in(ILLEGAL_IN_NAMES, name_[i])) {
+			if(is_user_defs && VERSION_BEFORE(0, 8, 1) && name_[i] == BITWISE_NOT_CH) {
+				b = true;	
+			} else {
+				return false;
+			}
+		}
+	}
+	if(b) {
+		error(true, _("\"%s\" is not allowed in names anymore. Please change the name \"%s\", or the function will be lost."), BITWISE_NOT, name_, NULL);
+	}
+	return true;
+}
+bool Calculator::unitNameIsValid(const char *name_, int version_numbers[3], bool is_user_defs) {
+	bool b = false;
+	for(size_t i = 0; name_[i] != '\0'; i++) {
+		if(is_in(ILLEGAL_IN_UNITNAMES, name_[i])) {
+			if(is_user_defs && VERSION_BEFORE(0, 8, 1) && name_[i] == BITWISE_NOT_CH) {
+				b = true;	
+			} else {
+				return false;
+			}
+		}
+	}
+	if(b) {
+		error(true, _("\"%s\" is not allowed in names anymore. Please change the name \"%s\", or the unit will be lost."), BITWISE_NOT, name_, NULL);
 	}
 	return true;
 }
@@ -3240,7 +3304,7 @@ void Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOption
 		} else {
 			i = str.find_first_of(SPACE MULTIPLICATION_2 OPERATORS PARENTHESISS ID_WRAP_LEFT, 1);
 		}
-		if(i == string::npos && str[0] != NOT_CH && !(str[0] == ID_WRAP_LEFT_CH && str.find(ID_WRAP_RIGHT) < str.length() - 1)) {
+		if(i == string::npos && str[0] != LOGICAL_NOT_CH && str[0] != BITWISE_NOT_CH && !(str[0] == ID_WRAP_LEFT_CH && str.find(ID_WRAP_RIGHT) < str.length() - 1)) {
 			parseNumber(mstruct, str, po);
 		} else {
 			parseOperators(mstruct, str, po);
@@ -3255,7 +3319,7 @@ void Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOption
 		} else {
 			i = str.find_first_of(SPACE MULTIPLICATION_2 OPERATORS PARENTHESISS ID_WRAP_LEFT, 1);
 		}
-		if(i == string::npos && str[0] != NOT_CH && !(str[0] == ID_WRAP_LEFT_CH && str.find(ID_WRAP_RIGHT) < str.length() - 1)) {
+		if(i == string::npos && str[0] != LOGICAL_NOT_CH && str[0] != BITWISE_NOT_CH && !(str[0] == ID_WRAP_LEFT_CH && str.find(ID_WRAP_RIGHT) < str.length() - 1)) {
 			if(s == OPERATION_EXP10 && po.read_precision == ALWAYS_READ_PRECISION) {
 				ParseOptions po2 = po;
 				po2.read_precision = READ_PRECISION_WHEN_DECIMALS;
@@ -3393,10 +3457,10 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		}
 		return;
 	}	
-	if(str[0] == NOT_CH) {
+	if(str[0] == LOGICAL_NOT_CH) {
 		str.erase(str.begin());
 		parseAdd(str, mstruct, po);
-		mstruct->setNOT();
+		mstruct->setLogicalNot();
 		return;
 	}
 	if((i = str.find_first_of(LESS GREATER EQUALS NOT, 0)) != string::npos) {
@@ -3499,6 +3563,12 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		} else {
 			parseAdd(str, mstruct, po);
 		}
+		return;
+	}
+	if(str[0] == BITWISE_NOT_CH) {
+		str.erase(str.begin());
+		parseAdd(str, mstruct, po);
+		mstruct->setBitwiseNot();
 		return;
 	}
 			
@@ -3792,30 +3862,31 @@ bool Calculator::loadGlobalDefinitions() {
 	dir += "/qalculate/";
 	filename = dir;
 	filename += "prefixes.xml";
+	bool b = true;
 	if(!loadDefinitions(filename.c_str(), false)) {
-		return false;
+		b = false;
 	}	
 	filename = dir;
 	filename += "units.xml";
 	if(!loadDefinitions(filename.c_str(), false)) {
-		return false;
+		b = false;
 	}
 	filename = dir;
 	filename += "functions.xml";	
 	if(!loadDefinitions(filename.c_str(), false)) {
-		return false;
+		b = false;
 	}
 	filename = dir;
 	filename += "datasets.xml";	
 	if(!loadDefinitions(filename.c_str(), false)) {
-		return false;
+		b = false;
 	}
 	filename = dir;
 	filename += "variables.xml";
 	if(!loadDefinitions(filename.c_str(), false)) {
-		return false;
+		b = false;
 	}
-	return true;
+	return b;
 }
 bool Calculator::loadLocalDefinitions() {
 	string filename;
@@ -3870,7 +3941,7 @@ bool Calculator::loadLocalDefinitions() {
 									lang = xmlNodeGetLang(child2);\
 									if(!lang) {\
 										value2 = xmlNodeListGetString(doc, child2->xmlChildrenNode, 1);\
-										if(!value2 || validation((char*) value2)) {\
+										if(!value2 || validation((char*) value2, version_numbers, is_user_defs)) {\
 											if(locale.empty()) {\
 												best_name[name_index] = true;\
 												if(value2) names[name_index].name = (char*) value2;\
@@ -3887,14 +3958,14 @@ bool Calculator::loadLocalDefinitions() {
 									} else if(!best_name[name_index] && !locale.empty()) {\
 										if(locale == (char*) lang) {\
 											value2 = xmlNodeListGetString(doc, child2->xmlChildrenNode, 1);\
-											if(!value2 || validation((char*) value2)) {\
+											if(!value2 || validation((char*) value2, version_numbers, is_user_defs)) {\
 												best_name[name_index] = true;\
 												if(value2) names[name_index].name = (char*) value2;\
 												else names[name_index].name = "";\
 											}\
 										} else if(!nextbest_name[name_index] && strlen((char*) lang) >= 2 && lang[0] == localebase[0] && lang[1] == localebase[1]) {\
 											value2 = xmlNodeListGetString(doc, child2->xmlChildrenNode, 1);\
-											if(!value2 || validation((char*) value2)) {\
+											if(!value2 || validation((char*) value2, version_numbers, is_user_defs)) {\
 												nextbest_name[name_index] = true; \
 												if(value2) names[name_index].name = (char*) value2;\
 												else names[name_index].name = "";\
@@ -3964,7 +4035,7 @@ bool Calculator::loadLocalDefinitions() {
 						nextbest_name[i] = false;\
 					}
 					
-#define ITEM_SET_NAME_1(validation)	if(!name.empty() && validation(name)) {\
+#define ITEM_SET_NAME_1(validation)	if(!name.empty() && validation(name, version_numbers, is_user_defs)) {\
 						ename.name = name;\
 						ename.unicode = false;\
 						ename.abbreviation = false;\
@@ -3997,7 +4068,7 @@ bool Calculator::loadLocalDefinitions() {
 					item->setTitle(title);\
 					item->setHidden(hidden);
 
-#define ITEM_SET_SHORT_NAME		if(!name.empty() && unitNameIsValid(name)) {\
+#define ITEM_SET_SHORT_NAME		if(!name.empty() && unitNameIsValid(name, version_numbers, is_user_defs)) {\
 						ename.name = name;\
 						ename.unicode = false;\
 						ename.abbreviation = true;\
@@ -4166,7 +4237,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 		xmlFreeDoc(doc);
 		return false;
 	}
-	int version_numbers[] = {0, 8, 0};
+	int version_numbers[] = {0, 8, 1};
 	parse_qalculate_version(version, version_numbers);
 	
 	ParseOptions po;
@@ -4342,8 +4413,13 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 				ITEM_SET_NAME_2
 				ITEM_SET_NAME_3
 				ITEM_SET_DTH
-				f->setChanged(false);
-				addFunction(f, true, is_user_defs);
+				if(f->countNames() == 0) {
+					f->destroy();
+					f = NULL;
+				} else {
+					f->setChanged(false);
+					addFunction(f, true, is_user_defs);
+				}
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "dataset") || !xmlStrcmp(cur->name, (const xmlChar*) "builtin_dataset")) {
 				bool builtin = !xmlStrcmp(cur->name, (const xmlChar*) "builtin_dataset");
 				XML_GET_FALSE_FROM_PROP(cur, "active", active)
@@ -4541,8 +4617,13 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 				if(builtin) {
 					BUILTIN_NAMES_2
 				}
-				dc->setChanged(builtin && is_user_defs);
-				if(!builtin) addDataSet(dc, true, is_user_defs);
+				if(!builtin && dc->countNames() == 0) {
+					dc->destroy();
+					dc = NULL;
+				} else {
+					dc->setChanged(builtin && is_user_defs);
+					if(!builtin) addDataSet(dc, true, is_user_defs);
+				}
 				done_something = true;
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "builtin_function")) {
 				XML_GET_STRING_FROM_PROP(cur, "name", name)
@@ -4631,8 +4712,13 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					if(v->getName(i).name == "y") {v_y->destroy(); v_y = (UnknownVariable*) v; break;}
 					if(v->getName(i).name == "z") {v_z->destroy(); v_z = (UnknownVariable*) v; break;}
 				}
-				addVariable(v, true, is_user_defs);
-				v->setChanged(false);
+				if(v->countNames() == 0) {
+					v->destroy();
+					v = NULL;
+				} else {
+					addVariable(v, true, is_user_defs);
+					v->setChanged(false);
+				}
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "variable")) {
 				if(version_numbers[1] < 6 || version_numbers[2] < 3) {
 					XML_GET_STRING_FROM_PROP(cur, "name", name)
@@ -4663,8 +4749,13 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 				ITEM_SET_NAME_2
 				ITEM_SET_NAME_3
 				ITEM_SET_DTH
-				addVariable(v, true, is_user_defs);
-				item->setChanged(false);
+				if(v->countNames() == 0) {
+					v->destroy();
+					v = NULL;
+				} else {
+					addVariable(v, true, is_user_defs);
+					item->setChanged(false);
+				}
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "builtin_variable")) {
 				XML_GET_STRING_FROM_PROP(cur, "name", name)
 				v = getVariable(name);
@@ -4710,12 +4801,12 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							XML_DO_FROM_TEXT(child, u->setSystem)
 						} else if((version_numbers[1] < 6 || version_numbers[2] < 3) && !xmlStrcmp(child->name, (const xmlChar*) "singular")) {
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, singular, best_singular, next_best_singular)
-							if(!unitNameIsValid(singular)) {
+							if(!unitNameIsValid(singular, version_numbers, is_user_defs)) {
 								singular = "";
 							}
 						} else if((version_numbers[1] < 6 || version_numbers[2] < 3) && !xmlStrcmp(child->name, (const xmlChar*) "plural") && !xmlGetProp(child, (xmlChar*) "index")) {
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, plural, best_plural, next_best_plural)
-							if(!unitNameIsValid(plural)) {
+							if(!unitNameIsValid(plural, version_numbers, is_user_defs)) {
 								plural = "";
 							}
 						} else ITEM_READ_NAME(unitNameIsValid)
@@ -4728,8 +4819,13 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					ITEM_SET_NAME_2
 					ITEM_SET_NAME_3
 					ITEM_SET_DTH
-					addUnit(u, true, is_user_defs);
-					u->setChanged(false);
+					if(u->countNames() == 0) {
+						u->destroy();
+						u = NULL;
+					} else {
+						addUnit(u, true, is_user_defs);
+						u->setChanged(false);
+					}
 					done_something = true;
 				} else if(type == "alias") {	
 					if(version_numbers[1] < 6 || version_numbers[2] < 3) {
@@ -4780,12 +4876,12 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							XML_GET_STRING_FROM_TEXT(child, usystem);
 						} else if((version_numbers[1] < 6 || version_numbers[2] < 3) && !xmlStrcmp(child->name, (const xmlChar*) "singular")) {	
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, singular, best_singular, next_best_singular)
-							if(!unitNameIsValid(singular)) {
+							if(!unitNameIsValid(singular, version_numbers, is_user_defs)) {
 								singular = "";
 							}
 						} else if((version_numbers[1] < 6 || version_numbers[2] < 3) && !xmlStrcmp(child->name, (const xmlChar*) "plural") && !xmlGetProp(child, (xmlChar*) "index")) {	
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, plural, best_plural, next_best_plural)
-							if(!unitNameIsValid(plural)) {
+							if(!unitNameIsValid(plural, version_numbers, is_user_defs)) {
 								plural = "";
 							}
 						} else ITEM_READ_NAME(unitNameIsValid)
@@ -4808,8 +4904,13 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 						item = au;						
 						ITEM_SET_NAME_2
 						ITEM_SET_NAME_3
-						addUnit(au, true, is_user_defs);
-						au->setChanged(false);
+						if(au->countNames() == 0) {
+							au->destroy();
+							au = NULL;
+						} else {
+							addUnit(au, true, is_user_defs);
+							au->setChanged(false);
+						}
 						done_something = true;	
 					}
 				} else if(type == "composite") {
@@ -4890,8 +4991,13 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 						ITEM_SET_NAME_2
 						ITEM_SET_NAME_3
 						ITEM_SET_DTH
-						addUnit(cu, true, is_user_defs);
-						cu->setChanged(false);
+						if(cu->countNames() == 0) {
+							cu->destroy();
+							cu = NULL;
+						} else {
+							addUnit(cu, true, is_user_defs);
+							cu->setChanged(false);
+						}
 						done_something = true;
 					} else {
 						ITEM_CLEAR_NAMES
@@ -4916,12 +5022,12 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					while(child != NULL) {
 						if(!xmlStrcmp(child->name, (const xmlChar*) "singular")) {	
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, singular, best_singular, next_best_singular)
-							if(!unitNameIsValid(singular)) {
+							if(!unitNameIsValid(singular, version_numbers, is_user_defs)) {
 								singular = "";
 							}
 						} else if(!xmlStrcmp(child->name, (const xmlChar*) "plural") && !xmlGetProp(child, (xmlChar*) "index")) {	
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, plural, best_plural, next_best_plural)
-							if(!unitNameIsValid(plural)) {
+							if(!unitNameIsValid(plural, version_numbers, is_user_defs)) {
 								plural = "";
 							}
 						} else ITEM_READ_NAME(unitNameIsValid)
@@ -5011,6 +5117,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 	return true;
 }
 bool Calculator::saveDefinitions() {
+
 	string filename;
 	string homedir = getLocalDir();
 	mkdir(homedir.c_str(), S_IRWXU);	
@@ -5018,28 +5125,29 @@ bool Calculator::saveDefinitions() {
 	mkdir(homedir.c_str(), S_IRWXU);
 	filename = homedir;
 	filename += "functions.xml";
+	bool b = true;
 	if(!saveFunctions(filename.c_str())) {
-		return false;
+		b = false;
 	}
 	filename = homedir;
 	filename += "units.xml";
 	if(!saveUnits(filename.c_str())) {
-		return false;
+		b = false;
 	}
 	filename = homedir;
 	filename += "variables.xml";
 	if(!saveVariables(filename.c_str())) {
-		return false;
+		b = false;
 	}
 	filename = homedir;
 	filename += "datasets.xml";
 	if(!saveDataSets(filename.c_str())) {
-		return false;
+		b = false;
 	}
 	if(!saveDataObjects()) {
-		return false;
+		b = false;
 	}
-	return true;
+	return b;
 }
 
 struct node_tree_item {
@@ -5650,7 +5758,7 @@ int Calculator::saveDataSets(const char* file_name, bool save_global) {
 			ds = (DataSet*) functions[i];
 			if(!ds->category().empty()) {
 				cat = ds->category();
-				size_t cat_i = cat.find("/"); size_t cat_i_prev;
+				size_t cat_i = cat.find("/"); size_t cat_i_prev = 0;
 				bool b = false;
 				while(true) {
 					if(cat_i == string::npos) {

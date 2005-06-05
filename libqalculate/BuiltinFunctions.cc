@@ -433,6 +433,97 @@ int BinomialFunction::calculate(MathStructure &mstruct, const MathStructure &var
 	return 1;
 }
 
+BitXorFunction::BitXorFunction() : MathFunction("bitxor", 2) {
+	ArgumentSet *arg = new ArgumentSet();
+	arg->addArgument(new IntegerArgument("", ARGUMENT_MIN_MAX_NONE));
+	arg->addArgument(new VectorArgument);
+	setArgumentDefinition(1, arg);
+	arg = new ArgumentSet();
+	arg->addArgument(new IntegerArgument("", ARGUMENT_MIN_MAX_NONE));
+	arg->addArgument(new VectorArgument);
+	setArgumentDefinition(2, arg);
+}
+int BitXorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	mstruct = vargs[0];
+	mstruct.add(vargs[1], OPERATION_BITWISE_XOR);
+	if(vargs[0].isNumber() && vargs[1].isNumber()) {
+		Number nr(vargs[0].number());
+		if(nr.bitXor(vargs[1].number()) && (eo.approximation == APPROXIMATION_APPROXIMATE || !nr.isApproximate() || vargs[0].number().isApproximate() || vargs[1].number().isApproximate()) && (eo.allow_complex || !nr.isComplex() || vargs[0].number().isComplex() || vargs[1].number().isComplex()) && (eo.allow_infinite || !nr.isInfinite() || vargs[0].number().isInfinite() || vargs[1].number().isInfinite())) {
+			mstruct.set(nr, true);
+			return 1;
+		}
+		return 0;
+	} else if(vargs[0].isVector() && vargs[1].isVector()) {
+		int i1 = 0, i2 = 1;
+		if(vargs[0].size() < vargs[1].size()) {
+			i1 = 1;
+			i2 = 0;
+		}
+		mstruct.clearVector();
+		mstruct.resizeVector(vargs[i1].size(), m_undefined);
+		size_t i = 0;
+		for(; i < vargs[i2].size(); i++) {
+			mstruct[i].set(CALCULATOR->f_xor, &vargs[i1][i], &vargs[i2][0], NULL);
+		}
+		for(; i < vargs[i1].size(); i++) {
+			mstruct[i] = vargs[i1][i];
+			mstruct[i].add(m_zero, OPERATION_GREATER);
+		}
+		return 1;
+	}
+	return 0;
+}
+XorFunction::XorFunction() : MathFunction("xor", 2) {
+}
+int XorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	int b0, b1;
+	if(vargs[0].representsNonPositive(true)) {
+		b0 = 0;
+	} else if(vargs[0].representsPositive(true)) {
+		b0 = 1;
+	} else {
+		b0 = -1;
+	}
+	if(vargs[1].representsNonPositive(true)) {
+		b1 = 0;
+	} else if(vargs[1].representsPositive(true)) {
+		b1 = 1;
+	} else {
+		b1 = -1;
+	}
+	if((b0 == 1 && b1 == 0) || (b0 == 0 && b1 == 1)) {
+		mstruct = m_one;
+		return 1;
+	} else if(b0 >= 0 && b1 >= 0) {
+		return 1;
+	} else if(b0 == 0) {
+		mstruct = vargs[1];
+		mstruct.add(m_zero, OPERATION_GREATER);
+		return 1;
+	} else if(b0 == 1) {
+		mstruct = vargs[1];
+		mstruct.add(m_zero, OPERATION_EQUALS_LESS);
+		return 1;
+	} else if(b1 == 0) {
+		mstruct = vargs[0];
+		mstruct.add(m_zero, OPERATION_GREATER);
+		return 1;
+	} else if(b1 == 1) {
+		mstruct = vargs[0];
+		mstruct.add(m_zero, OPERATION_EQUALS_LESS);
+		return 1;
+	}
+	mstruct = vargs[1];
+	mstruct.setLogicalNot();
+	mstruct.add(vargs[0], OPERATION_LOGICAL_AND);
+	MathStructure mstruct2(vargs[0]);
+	mstruct2.setLogicalNot();
+	mstruct2.add(vargs[1], OPERATION_LOGICAL_AND);
+	mstruct.add(mstruct2, OPERATION_LOGICAL_OR);
+	return 1;
+}
+
+
 AbsFunction::AbsFunction() : MathFunction("abs", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
 }

@@ -1,6 +1,18 @@
+2005-06-05 Niklas Knutsson  <nq@altern.org>
+
+	* Reminder => Remainder
+	* Reminder (mod) => Modulus
+	* Bitwise NOT (~)
+	* xor() and bitXor()
+	* Clean up expression such (x && y) > 0
+	* Update currencies (more added)
+	* Warn the use that objects with '~' in name will be lost
+	* Keep loading/saving after error
+	* Do not crash when saving data sets (initialize cat_i_prev)
+	* Do not load nameless objects
+
 2005-06-02 Niklas Knutsson  <nq@altern.org>
 
-	* Bitwise operations functions
 	* Bitwise AND (&), OR (|), XOR
 	* Remove old giac stuff
 

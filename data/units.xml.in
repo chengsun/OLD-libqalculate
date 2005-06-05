@@ -67,6 +67,13 @@
         <_name>&#xA3;</_name>
       </abbreviation>
     </builtin_unit>
+    <builtin_unit name="THB">
+      <_title>Thai Bat</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>THB</_name>
+      </abbreviation>
+    </builtin_unit>
     <builtin_unit name="SEK">
       <_title>Swedish Krona</_title>
       <abbreviation index="1">
@@ -103,6 +110,51 @@
       <abbreviation index="2">
         <reference>true</reference>
         <_name>BGN</_name>
+      </abbreviation>
+    </builtin_unit>
+    <builtin_unit name="RUB">
+      <_title>Russian Ruble</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>RUB</_name>
+      </abbreviation>
+      <name index="2">
+        <_name>ruble</_name>
+      </name>
+    </builtin_unit>
+    <builtin_unit name="PHP">
+      <_title>Phillipine Peso</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>PHP</_name>
+      </abbreviation>
+    </builtin_unit>
+    <builtin_unit name="MYR">
+      <_title>Malaysian Ringgit</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>MYR</_name>
+      </abbreviation>
+    </builtin_unit>
+    <builtin_unit name="HRK">
+      <_title>Croatian Kuna</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>HRK</_name>
+      </abbreviation>
+    </builtin_unit>
+    <builtin_unit name="CNY">
+      <_title>Yuan Renmimbi (PR China)</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>CNY</_name>
+      </abbreviation>
+    </builtin_unit>
+    <builtin_unit name="IDR">
+      <_title>Indonesian Rupiah</_title>
+      <abbreviation index="1">
+        <reference>IDR</reference>
+        <_name>CYP</_name>
       </abbreviation>
     </builtin_unit>
     <builtin_unit name="CYP">
@@ -200,11 +252,11 @@
         <_name>SKK</_name>
       </abbreviation>
     </builtin_unit>
-    <builtin_unit name="TRL">
-      <_title>Turkish Lira</_title>
+    <builtin_unit name="TRY">
+      <_title>Turkish Lira (new)</_title>
       <abbreviation index="1">
         <reference>true</reference>
-        <_name>TRL</_name>
+        <_name>TRY</_name>
       </abbreviation>
     </builtin_unit>
     <builtin_unit name="AUD">

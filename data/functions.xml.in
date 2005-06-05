@@ -524,7 +524,7 @@
         </argument>
       </builtin_function>
       <builtin_function name="rem">
-        <_title>Reminder (rem)</_title>
+        <_title>Remainder</_title>
         <name index="1">
           <reference>true</reference>
           <_name>rem</_name>
@@ -537,7 +537,7 @@
         </argument>
       </builtin_function>
       <builtin_function name="mod">
-        <_title>Reminder (mod)</_title>
+        <_title>Modulus</_title>
         <name index="1">
           <reference>true</reference>
           <_name>mod</_name>
@@ -2240,6 +2240,32 @@
       </argument>
       <argument index="2">
         <_title>With respect to</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="xor">
+      <_title>Logical Exclusive OR</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>xor</_name>
+      </name>
+      <argument index="1">
+        <_title>Value 1</_title>
+      </argument>
+      <argument index="2">
+        <_title>Value 2</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="xor">
+      <_title>Bitwise Exclusive OR</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>bitxor</_name>
+      </name>
+      <argument index="1">
+        <_title>Value 1</_title>
+      </argument>
+      <argument index="2">
+        <_title>Value 2</_title>
       </argument>
     </builtin_function>
     <function>

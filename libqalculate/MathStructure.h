@@ -32,10 +32,11 @@ enum {
 	STRUCT_BITWISE_AND,
 	STRUCT_BITWISE_OR,
 	STRUCT_BITWISE_XOR,
+	STRUCT_BITWISE_NOT,
 	STRUCT_LOGICAL_AND,
 	STRUCT_LOGICAL_OR,
 	STRUCT_LOGICAL_XOR,
-	STRUCT_NOT,
+	STRUCT_LOGICAL_NOT,
 	STRUCT_COMPARISON,
 	STRUCT_UNDEFINED
 };
@@ -212,10 +213,11 @@ class MathStructure {
 		bool isBitwiseAnd() const;
 		bool isBitwiseOr() const;
 		bool isBitwiseXor() const;
+		bool isBitwiseNot() const;
 		bool isLogicalAnd() const;
 		bool isLogicalOr() const;
 		bool isLogicalXor() const;
-		bool isNOT() const;
+		bool isLogicalNot() const;
 		bool isInverse() const;
 		bool isDivision() const;
 		bool isNegate() const;
@@ -297,7 +299,8 @@ class MathStructure {
 		void raise_nocopy(MathStructure *o);
 		void inverse();
 		void negate();
-		void setNOT();
+		void setLogicalNot();
+		void setBitwiseNot();
 		
 		bool equals(const MathStructure &o) const;
 		bool equals(const Number &o) const;

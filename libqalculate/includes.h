@@ -442,6 +442,8 @@ extern Calculator *calculator;
 #define	OR_CH			'|'
 #define	LESS_CH			'<'
 #define	GREATER_CH		'>'
+#define	BITWISE_NOT_CH		'~'
+#define	LOGICAL_NOT_CH		'!'
 #define	NOT_CH			'!'
 #define EQUALS_CH		'='
 
@@ -455,7 +457,7 @@ extern Calculator *calculator;
 #define NUMBERS			"0123456789"
 #define NUMBER_ELEMENTS		"0123456789.:"
 #define SIGNS			"+-*/^"
-#define OPERATORS		"+-*/^&|!<>="
+#define OPERATORS		"~+-*/^&|!<>="
 #define	PARENTHESISS		"()"
 #define LEFT_PARENTHESIS	"("
 #define	RIGHT_PARENTHESIS	")"
@@ -475,8 +477,10 @@ extern Calculator *calculator;
 #define	POWER			"^"
 #define	LOGICAL_AND		"&&"
 #define	LOGICAL_OR		"||"
+#define	LOGICAL_NOT		"!"
 #define	BITWISE_AND		"&"
 #define	BITWISE_OR		"|"
+#define	BITWISE_NOT		"~"
 #define	LESS			"<"
 #define	GREATER			">"
 #define	NOT			"!"

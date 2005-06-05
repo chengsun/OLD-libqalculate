@@ -360,7 +360,7 @@ MathStructure MathStructure::operator || (const MathStructure &o) const {
 }
 MathStructure MathStructure::operator ! () const {
 	MathStructure o2(*this);
-	o2.setNOT();
+	o2.setLogicalNot();
 	return o2;
 }
 
@@ -531,10 +531,11 @@ bool MathStructure::isComparison() const {return m_type == STRUCT_COMPARISON;}
 bool MathStructure::isLogicalAnd() const {return m_type == STRUCT_LOGICAL_AND;}
 bool MathStructure::isLogicalOr() const {return m_type == STRUCT_LOGICAL_OR;}
 bool MathStructure::isLogicalXor() const {return m_type == STRUCT_LOGICAL_XOR;}
+bool MathStructure::isLogicalNot() const {return m_type == STRUCT_LOGICAL_NOT;}
 bool MathStructure::isBitwiseAnd() const {return m_type == STRUCT_BITWISE_AND;}
 bool MathStructure::isBitwiseOr() const {return m_type == STRUCT_BITWISE_OR;}
 bool MathStructure::isBitwiseXor() const {return m_type == STRUCT_BITWISE_XOR;}
-bool MathStructure::isNOT() const {return m_type == STRUCT_NOT;}
+bool MathStructure::isBitwiseNot() const {return m_type == STRUCT_BITWISE_NOT;}
 bool MathStructure::isInverse() const {return m_type == STRUCT_INVERSE;}
 bool MathStructure::isDivision() const {return m_type == STRUCT_DIVISION;}
 bool MathStructure::isNegate() const {return m_type == STRUCT_NEGATE;}
@@ -997,11 +998,7 @@ void MathStructure::add(const MathStructure &o, MathOperation op, bool append) {
 			break;
 		}
 		case OPERATION_LOGICAL_XOR: {
-			if(m_type == STRUCT_LOGICAL_XOR && append) {
-				APPEND(o);
-			} else {
-				transform(STRUCT_LOGICAL_XOR, o);
-			}
+			transform(STRUCT_LOGICAL_XOR, o);
 			break;
 		}
 		case OPERATION_BITWISE_AND: {
@@ -1021,11 +1018,7 @@ void MathStructure::add(const MathStructure &o, MathOperation op, bool append) {
 			break;
 		}
 		case OPERATION_BITWISE_XOR: {
-			if(m_type == STRUCT_BITWISE_XOR && append) {
-				APPEND(o);
-			} else {
-				transform(STRUCT_BITWISE_XOR, o);
-			}
+			transform(STRUCT_BITWISE_XOR, o);
 			break;
 		}
 		case OPERATION_EQUALS: {}
@@ -1268,11 +1261,7 @@ void MathStructure::add_nocopy(MathStructure *o, MathOperation op, bool append) 
 			break;
 		}
 		case OPERATION_LOGICAL_XOR: {
-			if(m_type == STRUCT_LOGICAL_XOR && append) {
-				APPEND_POINTER(o);
-			} else {
-				transform_nocopy(STRUCT_LOGICAL_XOR, o);
-			}
+			transform_nocopy(STRUCT_LOGICAL_XOR, o);
 			break;
 		}
 		case OPERATION_BITWISE_AND: {
@@ -1292,11 +1281,7 @@ void MathStructure::add_nocopy(MathStructure *o, MathOperation op, bool append) 
 			break;
 		}
 		case OPERATION_BITWISE_XOR: {
-			if(m_type == STRUCT_BITWISE_XOR && append) {
-				APPEND_POINTER(o);
-			} else {
-				transform_nocopy(STRUCT_BITWISE_XOR, o);
-			}
+			transform_nocopy(STRUCT_BITWISE_XOR, o);
 			break;
 		}
 		case OPERATION_EQUALS: {}
@@ -1369,8 +1354,11 @@ void MathStructure::inverse() {
 	//transform(STRUCT_INVERSE);
 	raise(m_minus_one);
 }
-void MathStructure::setNOT() {
-	transform(STRUCT_NOT);
+void MathStructure::setLogicalNot() {
+	transform(STRUCT_LOGICAL_NOT);
+}		
+void MathStructure::setBitwiseNot() {
+	transform(STRUCT_BITWISE_NOT);
 }		
 
 bool MathStructure::equals(const MathStructure &o) const {
@@ -3153,33 +3141,6 @@ int MathStructure::merge_bitwise_xor(MathStructure &mstruct, const EvaluationOpt
 			}
 			return -1;
 		}
-		case STRUCT_BITWISE_XOR: {
-			switch(mstruct.type()) {
-				case STRUCT_VECTOR: {
-					return -1;
-				}
-				case STRUCT_BITWISE_XOR: {
-					for(size_t i = 0; i < mstruct.size(); i++) {
-						APPEND(mstruct[i]);
-					}
-					MERGE_APPROX_AND_PREC(mstruct)
-					return 1;
-				}
-				default: {
-					APPEND_REF(&mstruct);
-					MERGE_APPROX_AND_PREC(mstruct)
-					return 1;
-				}
-			}
-			break;
-		}
-		default: {
-			switch(mstruct.type()) {
-				case STRUCT_BITWISE_XOR: {
-					return 0;
-				}
-			}	
-		}
 	}
 	return -1;
 }
@@ -3369,6 +3330,32 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 				}
 				break;
 			}
+			case STRUCT_BITWISE_NOT: {
+				CHILD(0).calculatesub(eo, feo);
+				CHILDREN_UPDATED;
+				switch(CHILD(0).type()) {
+					case STRUCT_NUMBER: {
+						Number nr(CHILD(0).number());
+						if(nr.bitNot() && (eo.approximation == APPROXIMATION_APPROXIMATE || !nr.isApproximate() || CHILD(0).number().isApproximate()) && (eo.allow_complex || !nr.isComplex() || CHILD(0).number().isComplex()) && (eo.allow_infinite || !nr.isInfinite() || CHILD(0).number().isInfinite())) {
+							set(nr, true);
+						}
+						break;
+					}
+					case STRUCT_VECTOR: {
+						SET_CHILD_MAP(0);
+						for(size_t i = 0; i < SIZE; i++) {
+							CHILD(i).setLogicalNot();
+						}
+						break;
+					}
+					case STRUCT_BITWISE_NOT: {
+						set_nocopy(CHILD(0));
+						set_nocopy(CHILD(0));
+						break;
+					}
+				}
+				break;
+			}
 			case STRUCT_LOGICAL_AND: {
 				for(size_t i = 0; i < SIZE; i++) {
 					CHILD(i).calculatesub(eo, feo);
@@ -3433,52 +3420,30 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 					CHILD(i).calculatesub(eo, feo);
 				}
 				CHILDREN_UPDATED;
-				bool is_false = true;
-				bool had_true = false;
-				for(size_t i = 0; i < SIZE;) {
-					if(CHILD(i).representsNonPositive(true)) {
-						b = true;
-						ERASE(i);
-					} else if(CHILD(i).representsPositive(true)) {
-						if(had_true) {
-							clear(true);
-							b = true;
-							break;
-						}
-						b = true;
-						is_false = false;
-						had_true = true;
-						i++;
-					} else {
-						is_false = false;
-						i++;
-					}
+				bool b0, b1;
+				if(CHILD(0).representsNonPositive(true)) {
+					b0 = false;
+				} else if(CHILD(0).representsPositive(true)) {
+					b0 = true;
+				} else {
+					break;
 				}
-				if(is_false) {
-					clear(true);
-				} else if(had_true && SIZE == 0) {
+				if(CHILD(1).representsNonPositive(true)) {
+					b1 = false;
+				} else if(CHILD(1).representsPositive(true)) {
+					b1 = true;
+				} else {
+					break;
+				}
+				b = true;
+				if((b0 && !b1) || (!b0 && b1)) {
 					set(m_one, true);
 				} else {
-					if(SIZE == 1) {
-						if(had_true) {
-							APPEND(m_zero);
-							m_type = STRUCT_COMPARISON;
-							ct_comp = COMPARISON_EQUALS_LESS;
-						} else {
-							APPEND(m_zero);
-							m_type = STRUCT_COMPARISON;
-							ct_comp = COMPARISON_GREATER;
-						}
-					} else {
-						if(had_true) {
-							m_type = STRUCT_LOGICAL_AND;
-							setNOT();
-						}
-					}
+					clear(true);
 				}
 				break;
 			}
-			case STRUCT_NOT: {
+			case STRUCT_LOGICAL_NOT: {
 				CHILD(0).calculatesub(eo, feo);
 				CHILDREN_UPDATED;
 				if(CHILD(0).representsPositive(true)) {
@@ -3486,6 +3451,13 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 					b = true;
 				} else if(CHILD(0).representsNonPositive(true)) {
 					set(m_one, true);
+					b = true;
+				} else if(CHILD(0).isLogicalNot()) {
+					set_nocopy(CHILD(0));
+					set_nocopy(CHILD(0));
+					if(m_type != STRUCT_LOGICAL_NOT && m_type != STRUCT_LOGICAL_AND && m_type != STRUCT_LOGICAL_OR && m_type != STRUCT_LOGICAL_XOR && m_type != STRUCT_COMPARISON) {
+						add(m_zero, OPERATION_GREATER);
+					}
 					b = true;
 				}
 				break;
@@ -3498,6 +3470,28 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 					b = false;
 					break;
 				}
+				if((ct_comp == COMPARISON_EQUALS_LESS || ct_comp == COMPARISON_GREATER) && CHILD(1).isZero()) {
+					if(CHILD(0).isLogicalNot() || CHILD(0).isLogicalAnd() || CHILD(0).isLogicalOr() || CHILD(0).isLogicalXor() || CHILD(0).isComparison()) {
+						if(ct_comp == COMPARISON_EQUALS_LESS) {
+							ERASE(1);
+							m_type = STRUCT_LOGICAL_NOT;
+						} else {
+							set_nocopy(CHILD(0));
+						}
+						b = true;
+					}
+				} else if((ct_comp == COMPARISON_EQUALS_GREATER || ct_comp == COMPARISON_LESS) && CHILD(0).isZero()) {
+					if(CHILD(0).isLogicalNot() || CHILD(1).isLogicalAnd() || CHILD(1).isLogicalOr() || CHILD(1).isLogicalXor() || CHILD(1).isComparison()) {
+						if(ct_comp == COMPARISON_EQUALS_GREATER) {
+							ERASE(0);
+							m_type = STRUCT_LOGICAL_NOT;
+						} else {
+							set_nocopy(CHILD(1));
+						}
+						b = true;
+					}
+				}
+				if(b) break;
 				if(ct_comp == COMPARISON_EQUALS || ct_comp == COMPARISON_NOT_EQUALS) {
 					if((CHILD(0).representsReal(false) && CHILD(1).representsComplex(false)) || (CHILD(1).representsReal(false) && CHILD(0).representsComplex(false))) {
 						if(ct_comp == COMPARISON_EQUALS) {
@@ -3805,8 +3799,8 @@ int evalSortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2
 		if(mstruct1.isLogicalOr()) return 1;
 		if(mstruct2.isLogicalXor()) return -1;
 		if(mstruct1.isLogicalXor()) return 1;
-		if(mstruct2.isNOT()) return -1;
-		if(mstruct1.isNOT()) return 1;
+		if(mstruct2.isLogicalNot()) return -1;
+		if(mstruct1.isLogicalNot()) return 1;
 		if(mstruct2.isComparison()) return -1;
 		if(mstruct1.isComparison()) return 1;
 		if(mstruct2.isBitwiseOr()) return -1;
@@ -3815,6 +3809,8 @@ int evalSortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2
 		if(mstruct1.isBitwiseXor()) return 1;
 		if(mstruct2.isBitwiseAnd()) return -1;
 		if(mstruct1.isBitwiseAnd()) return 1;
+		if(mstruct2.isBitwiseNot()) return -1;
+		if(mstruct1.isBitwiseNot()) return 1;
 		if(mstruct2.isUndefined()) return -1;
 		if(mstruct1.isUndefined()) return 1;
 		if(mstruct2.isFunction()) return -1;
@@ -4069,8 +4065,8 @@ int sortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2, co
 		if(mstruct1.isLogicalOr()) return 1;
 		if(mstruct2.isLogicalXor()) return -1;
 		if(mstruct1.isLogicalXor()) return 1;
-		if(mstruct2.isNOT()) return -1;
-		if(mstruct1.isNOT()) return 1;
+		if(mstruct2.isLogicalNot()) return -1;
+		if(mstruct1.isLogicalNot()) return 1;
 		if(mstruct2.isComparison()) return -1;
 		if(mstruct1.isComparison()) return 1;
 		if(mstruct2.isBitwiseOr()) return -1;
@@ -4079,6 +4075,8 @@ int sortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2, co
 		if(mstruct1.isBitwiseXor()) return 1;
 		if(mstruct2.isBitwiseAnd()) return -1;
 		if(mstruct1.isBitwiseAnd()) return 1;
+		if(mstruct2.isBitwiseNot()) return -1;
+		if(mstruct1.isBitwiseNot()) return 1;
 		if(mstruct2.isUndefined()) return -1;
 		if(mstruct1.isUndefined()) return 1;
 		if(mstruct2.isFunction()) return -1;
@@ -6303,11 +6301,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_BITWISE_AND: {return true;}
 				case STRUCT_BITWISE_OR: {return true;}
 				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_BITWISE_NOT: {return po.excessive_parenthesis;}
 				case STRUCT_LOGICAL_AND: {return true;}
 				case STRUCT_LOGICAL_OR: {return true;}
 				case STRUCT_LOGICAL_XOR: {return true;}
-				case STRUCT_COMPARISON: {return true;}
-				case STRUCT_NOT: {return po.excessive_parenthesis;}
+				case STRUCT_LOGICAL_NOT: {return po.excessive_parenthesis;}
+				case STRUCT_COMPARISON: {return true;}				
 				case STRUCT_FUNCTION: {return false;}
 				case STRUCT_VECTOR: {return false;}
 				case STRUCT_NUMBER: {return false;}
@@ -6330,11 +6329,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_BITWISE_AND: {return flat_division || po.excessive_parenthesis;}
 				case STRUCT_BITWISE_OR: {return flat_division || po.excessive_parenthesis;}
 				case STRUCT_BITWISE_XOR: {return flat_division || po.excessive_parenthesis;}
+				case STRUCT_BITWISE_NOT: {return flat_division && po.excessive_parenthesis;}
 				case STRUCT_LOGICAL_AND: {return flat_division || po.excessive_parenthesis;}
 				case STRUCT_LOGICAL_OR: {return flat_division || po.excessive_parenthesis;}
 				case STRUCT_LOGICAL_XOR: {return flat_division || po.excessive_parenthesis;}
-				case STRUCT_COMPARISON: {return flat_division || po.excessive_parenthesis;}
-				case STRUCT_NOT: {return flat_division && po.excessive_parenthesis;}
+				case STRUCT_LOGICAL_NOT: {return flat_division && po.excessive_parenthesis;}
+				case STRUCT_COMPARISON: {return flat_division || po.excessive_parenthesis;}				
 				case STRUCT_FUNCTION: {return false;}
 				case STRUCT_VECTOR: {return false;}
 				case STRUCT_NUMBER: {return false;}
@@ -6356,11 +6356,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_BITWISE_AND: {return true;}
 				case STRUCT_BITWISE_OR: {return true;}
 				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_BITWISE_NOT: {return false;}
 				case STRUCT_LOGICAL_AND: {return true;}
 				case STRUCT_LOGICAL_OR: {return true;}
 				case STRUCT_LOGICAL_XOR: {return true;}
-				case STRUCT_COMPARISON: {return true;}
-				case STRUCT_NOT: {return false;}
+				case STRUCT_LOGICAL_NOT: {return false;}
+				case STRUCT_COMPARISON: {return true;}				
 				case STRUCT_FUNCTION: {return false;}
 				case STRUCT_VECTOR: {return false;}
 				case STRUCT_NUMBER: {return false;}
@@ -6382,11 +6383,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_BITWISE_AND: {return true;}
 				case STRUCT_BITWISE_OR: {return true;}
 				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_BITWISE_NOT: {return index == 1 || po.excessive_parenthesis;}
 				case STRUCT_LOGICAL_AND: {return true;}
 				case STRUCT_LOGICAL_OR: {return true;}
 				case STRUCT_LOGICAL_XOR: {return true;}
-				case STRUCT_COMPARISON: {return true;}
-				case STRUCT_NOT: {return index == 1 || po.excessive_parenthesis;}
+				case STRUCT_LOGICAL_NOT: {return index == 1 || po.excessive_parenthesis;}
+				case STRUCT_COMPARISON: {return true;}				
 				case STRUCT_FUNCTION: {return false;}
 				case STRUCT_VECTOR: {return false;}
 				case STRUCT_NUMBER: {return false;}
@@ -6408,11 +6410,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_BITWISE_AND: {return true;}
 				case STRUCT_BITWISE_OR: {return true;}
 				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_BITWISE_NOT: {return po.excessive_parenthesis;}
 				case STRUCT_LOGICAL_AND: {return true;}
 				case STRUCT_LOGICAL_OR: {return true;}
 				case STRUCT_LOGICAL_XOR: {return true;}
-				case STRUCT_COMPARISON: {return true;}
-				case STRUCT_NOT: {return po.excessive_parenthesis;}
+				case STRUCT_LOGICAL_NOT: {return po.excessive_parenthesis;}
+				case STRUCT_COMPARISON: {return true;}				
 				case STRUCT_FUNCTION: {return false;}
 				case STRUCT_VECTOR: {return false;}
 				case STRUCT_NUMBER: {return false;}
@@ -6440,11 +6443,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_BITWISE_AND: {return true;}
 				case STRUCT_BITWISE_OR: {return true;}
 				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_BITWISE_NOT: {return false;}
 				case STRUCT_LOGICAL_AND: {return true;}
 				case STRUCT_LOGICAL_OR: {return true;}
 				case STRUCT_LOGICAL_XOR: {return true;}
-				case STRUCT_COMPARISON: {return true;}
-				case STRUCT_NOT: {return false;}
+				case STRUCT_LOGICAL_NOT: {return false;}
+				case STRUCT_COMPARISON: {return true;}				
 				case STRUCT_FUNCTION: {return false;}
 				case STRUCT_VECTOR: {return false;}
 				case STRUCT_NUMBER: {return false;}
@@ -6455,7 +6459,8 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				default: {return true;}
 			}
 		}
-		case STRUCT_NOT: {
+		case STRUCT_LOGICAL_NOT: {}
+		case STRUCT_BITWISE_NOT: {
 			switch(m_type) {
 				case STRUCT_MULTIPLICATION: {return true;}
 				case STRUCT_DIVISION: {return true;}
@@ -6466,11 +6471,12 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_BITWISE_AND: {return true;}
 				case STRUCT_BITWISE_OR: {return true;}
 				case STRUCT_BITWISE_XOR: {return true;}
+				case STRUCT_BITWISE_NOT: {return true;}
 				case STRUCT_LOGICAL_AND: {return true;}
 				case STRUCT_LOGICAL_OR: {return true;}
 				case STRUCT_LOGICAL_XOR: {return true;}
-				case STRUCT_COMPARISON: {return true;}
-				case STRUCT_NOT: {return true;}
+				case STRUCT_LOGICAL_NOT: {return true;}
+				case STRUCT_COMPARISON: {return true;}				
 				case STRUCT_FUNCTION: {return po.excessive_parenthesis;}
 				case STRUCT_VECTOR: {return po.excessive_parenthesis;}
 				case STRUCT_NUMBER: {return po.excessive_parenthesis;}
@@ -6513,11 +6519,12 @@ int MathStructure::neededMultiplicationSign(const PrintOptions &po, const Intern
 		case STRUCT_BITWISE_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_BITWISE_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_BITWISE_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_BITWISE_NOT: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_LOGICAL_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_LOGICAL_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_LOGICAL_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_COMPARISON: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_NOT: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_LOGICAL_NOT: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_COMPARISON: {return MULTIPLICATION_SIGN_OPERATOR;}		
 		case STRUCT_FUNCTION: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_VECTOR: {break;}
 		case STRUCT_NUMBER: {break;}
@@ -6557,11 +6564,12 @@ int MathStructure::neededMultiplicationSign(const PrintOptions &po, const Intern
 		case STRUCT_BITWISE_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_BITWISE_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_BITWISE_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_BITWISE_NOT: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_LOGICAL_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_LOGICAL_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_LOGICAL_XOR: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_COMPARISON: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_NOT: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_LOGICAL_NOT: {return MULTIPLICATION_SIGN_OPERATOR;}
+		case STRUCT_COMPARISON: {return MULTIPLICATION_SIGN_OPERATOR;}		
 		case STRUCT_FUNCTION: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_VECTOR: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_NUMBER: {return MULTIPLICATION_SIGN_OPERATOR;}
@@ -6783,6 +6791,13 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 			}
 			break;
 		}
+		case STRUCT_BITWISE_NOT: {
+			print_str = "~";
+			ips_n.depth++;
+			ips_n.wrap = CHILD(0).needsParenthesis(po, ips_n, *this, 1, true, true);
+			print_str += CHILD(0).print(po, ips_n);
+			break;
+		}
 		case STRUCT_LOGICAL_AND: {
 			ips_n.depth++;
 			for(size_t i = 0; i < SIZE; i++) {
@@ -6822,7 +6837,7 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 			}
 			break;
 		}
-		case STRUCT_NOT: {
+		case STRUCT_LOGICAL_NOT: {
 			print_str = "!";
 			ips_n.depth++;
 			ips_n.wrap = CHILD(0).needsParenthesis(po, ips_n, *this, 1, true, true);

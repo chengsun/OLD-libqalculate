@@ -188,9 +188,9 @@ Calculator::Calculator() {
 
 	setPrecision(DEFAULT_PRECISION);
 
-	addStringAlternative(SIGN_POWER_1, "^1");
-	addStringAlternative(SIGN_POWER_2, "^2");
-	addStringAlternative(SIGN_POWER_3, "^3");
+	addStringAlternative(SIGN_POWER_1, "^(1)");
+	addStringAlternative(SIGN_POWER_2, "^(2)");
+	addStringAlternative(SIGN_POWER_3, "^(3)");
 	addStringAlternative(SIGN_INFINITY, "infinity");
 	addStringAlternative(SIGN_DIVISION, DIVISION);	
 	addStringAlternative(SIGN_DIVISION_SLASH, DIVISION);	

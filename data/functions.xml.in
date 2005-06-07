@@ -2255,7 +2255,7 @@
         <_title>Value 2</_title>
       </argument>
     </builtin_function>
-    <builtin_function name="xor">
+    <builtin_function name="bitxor">
       <_title>Bitwise Exclusive OR</_title>
       <name index="1">
         <reference>true</reference>

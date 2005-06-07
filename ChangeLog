@@ -1,3 +1,11 @@
+2005-06-07 Niklas Knutsson  <nq@altern.org>
+
+	* SIGN_POWER_1, ... => "^(1)", ... instead of "^1", ...
+
+2005-06-06 Niklas Knutsson  <nq@altern.org>
+
+	* Update Swedish translation
+
 2005-06-05 Niklas Knutsson  <nq@altern.org>
 
 	* Reminder => Remainder

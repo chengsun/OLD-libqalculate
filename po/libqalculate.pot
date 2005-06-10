@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-06 00:42+0200\n"
+"POT-Creation-Date: 2005-06-09 21:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -833,14 +833,14 @@ msgstr ""
 msgid "Calculating (press Enter to abort)"
 msgstr ""
 
-#: src/qalc.cc:1973
+#: src/qalc.cc:1976
 #, c-format
 msgid ""
 "Couldn't write preferences to\n"
 "%s"
 msgstr ""
 
-#: src/qalc.cc:2041
+#: src/qalc.cc:2045
 msgid "Couldn't write definitions"
 msgstr ""
 
@@ -1192,25 +1192,25 @@ msgid ""
 "(was %s) for matrix multiplication."
 msgstr ""
 
-#: libqalculate/MathStructure.cc:6887
+#: libqalculate/MathStructure.cc:6895
 msgid "undefined"
 msgstr ""
 
-#: libqalculate/MathStructure.cc:6926
+#: libqalculate/MathStructure.cc:6934
 #, c-format
 msgid "Unsolvable comparison at component %s when trying to rank vector."
 msgstr ""
 
-#: libqalculate/MathStructure.cc:6974
+#: libqalculate/MathStructure.cc:6982
 #, c-format
 msgid "Unsolvable comparison at component %s when trying to sort vector."
 msgstr ""
 
-#: libqalculate/MathStructure.cc:7151
+#: libqalculate/MathStructure.cc:7159
 msgid "The determinant can only be calculated for symmetric matrices."
 msgstr ""
 
-#: libqalculate/MathStructure.cc:7205
+#: libqalculate/MathStructure.cc:7213
 msgid "The permanent can only be calculated for symmetric matrices."
 msgstr ""
 
@@ -1436,8 +1436,8 @@ msgstr ""
 msgid "Integral point for Riemann's zeta is too large."
 msgstr ""
 
-#: libqalculate/Number.cc:2254 libqalculate/Number.cc:2262
-#: libqalculate/Number.cc:2271
+#: libqalculate/Number.cc:2255 libqalculate/Number.cc:2263
+#: libqalculate/Number.cc:2272
 msgid "infinity"
 msgstr ""
 

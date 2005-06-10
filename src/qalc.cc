@@ -1782,6 +1782,7 @@ void load_preferences() {
 	printops.excessive_parenthesis = false;
 	printops.allow_non_usable = false;
 	printops.lower_case_numbers = false;
+	printops.lower_case_e = false;
 	printops.division_sign = DIVISION_SIGN_SLASH;
 	printops.multiplication_sign = MULTIPLICATION_SIGN_ASTERISK;
 	
@@ -1926,6 +1927,8 @@ void load_preferences() {
 					printops.use_unicode_signs = v;	
 				else if(svar == "lower_case_numbers")
 					printops.lower_case_numbers = v;
+				else if(svar == "lower_case_e")
+					printops.lower_case_e = v;
 				else if(svar == "multiplication_sign")
 					printops.multiplication_sign = (MultiplicationSign) v;
 				else if(svar == "division_sign")
@@ -1984,6 +1987,7 @@ bool save_preferences(bool mode)
 	fprintf(file, "short_multiplication=%i\n", printops.short_multiplication);
 	fprintf(file, "use_unicode_signs=%i\n", printops.use_unicode_signs);
 	fprintf(file, "lower_case_numbers=%i\n", printops.lower_case_numbers);
+	fprintf(file, "lower_case_e=%i\n", printops.lower_case_e);
 	fprintf(file, "multiplication_sign=%i\n", printops.multiplication_sign);
 	fprintf(file, "division_sign=%i\n", printops.division_sign);
 	if(mode)

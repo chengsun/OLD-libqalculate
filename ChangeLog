@@ -1,3 +1,7 @@
+2005-06-09 Niklas Knutsson  <nq@altern.org>
+
+	* Support for "e" instead of "E" in result
+
 2005-06-07 Niklas Knutsson  <nq@altern.org>
 
 	* SIGN_POWER_1, ... => "^(1)", ... instead of "^1", ...

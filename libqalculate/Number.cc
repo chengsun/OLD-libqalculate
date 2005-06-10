@@ -2241,7 +2241,8 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 				}
 				*ips.exp = i2s(expo);
 			} else {
-				str += "E";
+				if(po.lower_case_e) str += "e";
+				else str += "E";
 				str += i2s(expo);
 			}
 		}
@@ -2496,7 +2497,8 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 					}
 					*ips.exp = i2s(expo);
 				} else {
-					str += "E";
+					if(po.lower_case_e) str += "e";
+					else str += "E";
 					str += i2s(expo);
 				}
 			}
@@ -2523,9 +2525,13 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			str = num.print(po, ips);
 			if(ips.num) *ips.num = str;
 			if(po.spacious) str += " ";
-			if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION, po.can_display_unicode_string_arg))) str += SIGN_DIVISION;
-			if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION_SLASH && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION_SLASH, po.can_display_unicode_string_arg))) str += SIGN_DIVISION_SLASH;
-			else str += "/";
+			if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION, po.can_display_unicode_string_arg))) {
+				str += SIGN_DIVISION;
+			} else if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION_SLASH && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION_SLASH, po.can_display_unicode_string_arg))) {
+				str += SIGN_DIVISION_SLASH;
+			} else {
+				str += "/";
+			}
 			if(po.spacious) str += " ";
 			InternalPrintStruct ips_n = ips;
 			ips_n.minus = NULL;

@@ -6686,9 +6686,13 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 		case STRUCT_INVERSE: {
 			print_str = "1";
 			if(po.spacious) print_str += " ";
-			if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION, po.can_display_unicode_string_arg))) print_str += SIGN_DIVISION;
-			else if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION_SLASH && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION_SLASH, po.can_display_unicode_string_arg))) print_str += SIGN_DIVISION_SLASH;
-			else print_str += "/";
+			if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION, po.can_display_unicode_string_arg))) {
+				print_str += SIGN_DIVISION;
+			} else if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION_SLASH && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION_SLASH, po.can_display_unicode_string_arg))) {
+				print_str += SIGN_DIVISION_SLASH;
+			} else {
+				print_str += "/";
+			}
 			if(po.spacious) print_str += " ";
 			ips_n.depth++;
 			ips_n.division_depth++;
@@ -6702,9 +6706,13 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 			ips_n.wrap = CHILD(0).needsParenthesis(po, ips_n, *this, 1, true, true);
 			print_str = CHILD(0).print(po, ips_n);
 			if(po.spacious) print_str += " ";
-			if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION, po.can_display_unicode_string_arg))) print_str += SIGN_DIVISION;
-			else if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION_SLASH && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION_SLASH, po.can_display_unicode_string_arg))) print_str += SIGN_DIVISION_SLASH;
-			else print_str += "/";
+			if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION, po.can_display_unicode_string_arg))) {
+				print_str += SIGN_DIVISION;
+			} else if(po.use_unicode_signs && po.division_sign == DIVISION_SIGN_DIVISION_SLASH && (!po.can_display_unicode_string_function || (*po.can_display_unicode_string_function) (SIGN_DIVISION_SLASH, po.can_display_unicode_string_arg))) {
+				print_str += SIGN_DIVISION_SLASH;
+			} else {
+				print_str += "/";
+			}
 			if(po.spacious) print_str += " ";
 			ips_n.wrap = CHILD(1).needsParenthesis(po, ips_n, *this, 2, true, true);
 			print_str += CHILD(1).print(po, ips_n);

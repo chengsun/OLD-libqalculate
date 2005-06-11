@@ -981,6 +981,9 @@ void Calculator::addBuiltinFunctions() {
 	
 	f_xor = addFunction(new XorFunction());
 	f_bitxor = addFunction(new BitXorFunction());
+	f_even = addFunction(new EvenFunction());
+	f_odd = addFunction(new OddFunction());
+	f_shift = addFunction(new ShiftFunction());
 	
 	f_abs = addFunction(new AbsFunction());
 	f_signum = addFunction(new SignumFunction());
@@ -3464,6 +3467,11 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		return;
 	}
 	if((i = str.find_first_of(LESS GREATER EQUALS NOT, 0)) != string::npos) {
+		while(i != string::npos && (str[i] == LESS_CH && i + 1 < str.length() && str[i + 1] == LESS_CH) || (str[i] == GREATER_CH && i + 1 < str.length() && str[i + 1] == GREATER_CH)) {
+			i = str.find_first_of(LESS GREATER NOT EQUALS, i + 2);
+		}
+	}
+	if(i != string::npos) {
 		bool b = false;
 		bool c = false;
 		while(i != string::npos && str[i] == NOT_CH && str.length() > i + 1 && str[i + 1] == NOT_CH) {
@@ -3474,6 +3482,15 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		}
 		MathOperation s = OPERATION_ADD;
 		while(!c) {
+			while(i != string::npos && (str[i] == LESS_CH && i + 1 < str.length() && str[i + 1] == LESS_CH) || (str[i] == GREATER_CH && i + 1 < str.length() && str[i + 1] == GREATER_CH)) {
+				i = str.find_first_of(LESS GREATER NOT EQUALS, i + 2);
+				while(i != string::npos && str[i] == NOT_CH && str.length() > i + 1 && str[i + 1] == NOT_CH) {
+					i++;
+					if(i + 1 == str.length()) {
+						i = string::npos;
+					}
+				}
+			}
 			if(i == string::npos) {
 				str2 = str.substr(0, str.length());
 			} else {
@@ -3563,6 +3580,25 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		} else {
 			parseAdd(str, mstruct, po);
 		}
+		return;
+	}
+	if((i = str.find(SHIFT_LEFT, 1)) != string::npos && i + 2 != str.length()) {
+		MathStructure mstruct1, mstruct2;
+		str2 = str.substr(0, i);
+		str = str.substr(i + 2, str.length() - (i + 2));
+		parseAdd(str2, &mstruct1, po);
+		parseAdd(str, &mstruct2, po);
+		mstruct2.negate();
+		mstruct->set(f_shift, &mstruct1, &mstruct2, NULL);
+		return;
+	}
+	if((i = str.find(SHIFT_RIGHT, 1)) != string::npos && i + 2 != str.length()) {
+		MathStructure mstruct1, mstruct2;
+		str2 = str.substr(0, i);
+		str = str.substr(i + 2, str.length() - (i + 2));
+		parseAdd(str2, &mstruct1, po);
+		parseAdd(str, &mstruct2, po);
+		mstruct->set(f_shift, &mstruct1, &mstruct2, NULL);
 		return;
 	}
 	if(str[0] == BITWISE_NOT_CH) {
@@ -6259,6 +6295,14 @@ bool Calculator::canFetch() {
 		return true;
 	}
 	return false;*/
+}
+string Calculator::getExchangeRatesFileName() {
+	string homedir = getLocalDir();
+	mkdir(homedir.c_str(), S_IRWXU);
+	return homedir + "eurofxref-daily.xml";	
+}
+string Calculator::getExchangeRatesUrl() {
+	return "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
 }
 bool Calculator::fetchExchangeRates(int timeout) {
 	pid_t pid;

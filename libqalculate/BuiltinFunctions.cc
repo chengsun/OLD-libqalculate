@@ -523,6 +523,35 @@ int XorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 	return 1;
 }
 
+OddFunction::OddFunction() : MathFunction("odd", 1) {
+	setArgumentDefinition(1, new IntegerArgument());
+}
+int OddFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	if(vargs[0].number().isOdd()) {
+		mstruct.set(1, 1);
+	} else {
+		mstruct.clear();
+	}
+	return 1;
+}
+EvenFunction::EvenFunction() : MathFunction("even", 1) {
+	setArgumentDefinition(1, new IntegerArgument());
+}
+int EvenFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	if(vargs[0].number().isEven()) {
+		mstruct.set(1, 1);
+	} else {
+		mstruct.clear();
+	}
+	return 1;
+}
+ShiftFunction::ShiftFunction() : MathFunction("shift", 2) {
+	setArgumentDefinition(1, new IntegerArgument());
+	setArgumentDefinition(2, new IntegerArgument());
+}
+int ShiftFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	FR_FUNCTION_2(shift)
+}
 
 AbsFunction::AbsFunction() : MathFunction("abs", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));

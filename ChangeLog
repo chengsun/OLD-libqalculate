@@ -1,3 +1,15 @@
+2005-06-11 Niklas Knutsson  <nq@altern.org>
+
+	* Remove requirement glib-2.0 >= 2.4 and require libxml2 >= 2.3.8
+
+2005-06-10 Niklas Knutsson  <nq@altern.org>
+
+	* Do not use unicode prefix names for long names
+	* xor() and bitxor() is NOT algebra
+	* Add even() and odd() functions
+	* shift() function and operators ("<<" and ">>")
+	* Add functins for getting exchange rates url and file name to allow interface to do the downloading themselves
+
 2005-06-09 Niklas Knutsson  <nq@altern.org>
 
 	* Support for "e" instead of "E" in result

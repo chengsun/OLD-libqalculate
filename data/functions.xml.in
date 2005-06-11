@@ -759,6 +759,29 @@
         </argument>
       </builtin_function>
     </category>
+    <category>
+      <_title>Integers</_title>
+      <builtin_function name="even">
+        <_title>Even</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>even</_name>
+        </name>
+        <argument index="1">
+          <_title>Number</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="odd">
+        <_title>Odd</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>odd</_name>
+        </name>
+        <argument index="1">
+          <_title>Number</_title>
+        </argument>
+      </builtin_function>
+    </category>
   </category>
   <category>
     <_title>Analysis</_title>
@@ -2165,6 +2188,45 @@
         <_title>Expression if condition is NOT met</_title>
       </argument>
     </builtin_function>
+    <builtin_function name="xor">
+      <_title>Logical Exclusive OR</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>xor</_name>
+      </name>
+      <argument index="1">
+        <_title>Value 1</_title>
+      </argument>
+      <argument index="2">
+        <_title>Value 2</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="bitxor">
+      <_title>Bitwise Exclusive OR</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>bitxor</_name>
+      </name>
+      <argument index="1">
+        <_title>Value 1</_title>
+      </argument>
+      <argument index="2">
+        <_title>Value 2</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="shift">
+      <_title>Shift Bits</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>shift</_name>
+      </name>
+      <argument index="1">
+        <_title>Number</_title>
+      </argument>
+      <argument index="2">
+        <_title>Bits</_title>
+      </argument>
+    </builtin_function>
   </category>
   <category>
     <_title>Algebra</_title>
@@ -2240,32 +2302,6 @@
       </argument>
       <argument index="2">
         <_title>With respect to</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="xor">
-      <_title>Logical Exclusive OR</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>xor</_name>
-      </name>
-      <argument index="1">
-        <_title>Value 1</_title>
-      </argument>
-      <argument index="2">
-        <_title>Value 2</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="bitxor">
-      <_title>Bitwise Exclusive OR</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>bitxor</_name>
-      </name>
-      <argument index="1">
-        <_title>Value 1</_title>
-      </argument>
-      <argument index="2">
-        <_title>Value 2</_title>
       </argument>
     </builtin_function>
     <function>

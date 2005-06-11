@@ -722,6 +722,28 @@ bool Number::bitEqv(const Number &o) {
 	setPrecisionAndApproximateFrom(o);
 	return true;
 }
+bool Number::shiftLeft(const Number &o) {
+	if(!o.isInteger() || !isInteger() || o.isNegative()) return false;
+	cln::cl_I intval = cln::numerator(cln::rational(cln::realpart(value)));
+	intval << cln::numerator(cln::rational(cln::realpart(o.internalNumber())));
+	value = intval;
+	setPrecisionAndApproximateFrom(o);
+	return true;
+}
+bool Number::shiftRight(const Number &o) {
+	if(!o.isInteger() || !isInteger() || o.isNegative()) return false;
+	cln::cl_I intval = cln::numerator(cln::rational(cln::realpart(value)));
+	intval >> cln::numerator(cln::rational(cln::realpart(o.internalNumber())));
+	value = intval;
+	setPrecisionAndApproximateFrom(o);
+	return true;
+}
+bool Number::shift(const Number &o) {
+	if(!o.isInteger() || !isInteger()) return false;
+	value = cln::ash(cln::numerator(cln::rational(cln::realpart(value))), cln::numerator(cln::rational(cln::realpart(o.internalNumber()))));
+	setPrecisionAndApproximateFrom(o);
+	return true;
+}
 
 bool Number::hasRealPart() const {
 	return isInfinite() || !cln::zerop(cln::realpart(value));

@@ -482,6 +482,8 @@ extern Calculator *calculator;
 #define	BITWISE_AND		"&"
 #define	BITWISE_OR		"|"
 #define	BITWISE_NOT		"~"
+#define SHIFT_RIGHT		">>"
+#define SHIFT_LEFT		"<<"
 #define	LESS			"<"
 #define	GREATER			">"
 #define	NOT			"!"

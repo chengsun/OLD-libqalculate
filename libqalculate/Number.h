@@ -107,6 +107,9 @@ class Number {
 		bool bitXor(const Number &o);
 		bool bitNot();
 		bool bitEqv(const Number &o);
+		bool shiftLeft(const Number &o);
+		bool shiftRight(const Number &o);
+		bool shift(const Number &o);
 		
 		bool hasRealPart() const;
 		bool hasImaginaryPart() const;

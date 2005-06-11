@@ -31,7 +31,7 @@ const string &Prefix::shortName(bool return_long_if_no_short, bool use_unicode) 
 	return s_name;
 }
 const string &Prefix::longName(bool return_short_if_no_long, bool use_unicode) const {
-	if(return_short_if_no_long && l_name.empty()) {
+	if(return_short_if_no_long && l_name.empty()) {		
 		if(use_unicode && !u_name.empty()) return u_name;
 		return s_name;
 	}
@@ -56,14 +56,15 @@ void Prefix::setUnicodeName(string unicode_name) {
 	CALCULATOR->prefixNameChanged(this);
 }
 const string &Prefix::name(bool short_default, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
-	if(use_unicode && !u_name.empty() && (!can_display_unicode_string_function || (*can_display_unicode_string_function) (u_name.c_str(), can_display_unicode_string_arg))) return u_name;
 	if(short_default) {
+		if(use_unicode && !u_name.empty() && (!can_display_unicode_string_function || (*can_display_unicode_string_function) (u_name.c_str(), can_display_unicode_string_arg))) return u_name;
 		if(s_name.empty()) {
 			return l_name;
 		}
 		return s_name;
 	}
 	if(l_name.empty()) {
+		if(use_unicode && !u_name.empty() && (!can_display_unicode_string_function || (*can_display_unicode_string_function) (u_name.c_str(), can_display_unicode_string_arg))) return u_name;
 		return s_name;
 	}
 	return l_name;

@@ -7,7 +7,7 @@ dnl | initialize autotools |---------------------------------------------------
 dnl  ----------------------
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(libqalculate, 0.8.1)
+AM_INIT_AUTOMAKE(libqalculate, 0.8.1.1)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
@@ -99,8 +99,8 @@ AC_PATH_CLN(1.1.0, [
 
 
 PKG_CHECK_MODULES(GLIB, [
-	glib-2.0 >= 2.4
-	libxml-2.0
+	glib-2.0
+	libxml-2.0 >= 2.3.8
 	])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)

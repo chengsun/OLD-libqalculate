@@ -1,6 +1,11 @@
+2005-08-21 Niklas Knutsson  <nq@altern.org>
+
+	* Fix (1/2)^n < 0.5
+
 2005-06-11 Niklas Knutsson  <nq@altern.org>
 
 	* Remove requirement glib-2.0 >= 2.4 and require libxml2 >= 2.3.8
+	* Do not let << take precedence over >> read from left to right
 
 2005-06-10 Niklas Knutsson  <nq@altern.org>
 

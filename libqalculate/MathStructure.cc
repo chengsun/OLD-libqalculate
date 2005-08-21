@@ -8881,6 +8881,21 @@ bool MathStructure::isolate_x(const EvaluationOptions &eo, const MathStructure &
 					return true;
 				}
 			} else if(CHILD(0)[1].contains(x_var)) {
+				if(ct_comp != COMPARISON_EQUALS && ct_comp != COMPARISON_NOT_EQUALS) {
+					if(CHILD(0)[0].isNumber() && CHILD(0)[0].number().isReal()) {
+						if(CHILD(0)[0].number().isFraction()) {
+							switch(ct_comp) {
+								case COMPARISON_LESS: {ct_comp = COMPARISON_GREATER; break;}
+								case COMPARISON_GREATER: {ct_comp = COMPARISON_LESS; break;}
+								case COMPARISON_EQUALS_LESS: {ct_comp = COMPARISON_EQUALS_GREATER; break;}
+								case COMPARISON_EQUALS_GREATER: {ct_comp = COMPARISON_EQUALS_LESS; break;}
+								default: {}
+							}
+						}
+					} else {
+						return false;
+					}
+				}
 				MathStructure msave(CHILD(1));
 				CHILD(1).set(CALCULATOR->f_logn, &msave, &CHILD(0)[0], NULL);
 				eo2.calculate_functions = true;

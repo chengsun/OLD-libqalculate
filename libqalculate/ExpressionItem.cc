@@ -45,11 +45,13 @@ bool ExpressionName::operator != (const ExpressionName &ename) const {
 }
 
 ExpressionItem::ExpressionItem(string cat_, string name_, string title_, string descr_, bool is_local, bool is_builtin, bool is_active) {
+
 	b_local = is_local;
 	b_builtin = is_builtin;
 	remove_blank_ends(name_);
 	remove_blank_ends(cat_);
 	remove_blank_ends(title_);
+
 	if(!name_.empty()) {
 		names.resize(1);
 		names[0].name = name_;
@@ -61,6 +63,7 @@ ExpressionItem::ExpressionItem(string cat_, string name_, string title_, string 
 		names[0].reference = true;
 		names[0].plural = false;
 	}
+
 	stitle = title_;
 	scat = cat_;
 	sdescr = descr_;
@@ -72,6 +75,7 @@ ExpressionItem::ExpressionItem(string cat_, string name_, string title_, string 
 	b_hidden = false;
 	b_destroyed = false;
 	i_ref = 0;
+
 }
 ExpressionItem::ExpressionItem() {
 	b_changed = false;

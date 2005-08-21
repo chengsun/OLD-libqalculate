@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-11 10:35+0200\n"
+"POT-Creation-Date: 2005-06-11 12:55+0200\n"
 "PO-Revision-Date: 2003-10-27 12:29+0100\n"
 "Last-Translator: Niklas Knutsson <nq@altern.org>\n"
 "Language-Team: Swedish\n"
@@ -51,11 +51,11 @@ msgstr "Dataset"
 msgid "Eccentricity"
 msgstr "Excentricitet"
 
-#: data/datasets.xml.in.h:6 data/functions.xml.in.h:155
+#: data/datasets.xml.in.h:6 data/functions.xml.in.h:156
 msgid "Element"
 msgstr "Element"
 
-#: data/datasets.xml.in.h:7 data/functions.xml.in.h:159
+#: data/datasets.xml.in.h:7 data/functions.xml.in.h:160
 msgid "Elements"
 msgstr "Element"
 
@@ -79,11 +79,11 @@ msgstr "Genomsnittlig densitet"
 msgid "Mean Surface Temperature"
 msgstr "Genomsnittlig yttemperatur"
 
-#: data/datasets.xml.in.h:13 data/functions.xml.in.h:284
+#: data/datasets.xml.in.h:13 data/functions.xml.in.h:285
 msgid "Name"
 msgstr "Namn"
 
-#: data/datasets.xml.in.h:14 data/functions.xml.in.h:293
+#: data/datasets.xml.in.h:14 data/functions.xml.in.h:294
 msgid "Number"
 msgstr "Nummer"
 
@@ -826,14 +826,18 @@ msgid "Bitwise Exclusive OR"
 msgstr "Dosekvivalent"
 
 #: data/functions.xml.in.h:40
-msgid "Body Mass Index (BMI)"
+msgid "Bitwise Shift"
 msgstr ""
 
 #: data/functions.xml.in.h:41
+msgid "Body Mass Index (BMI)"
+msgstr ""
+
+#: data/functions.xml.in.h:42
 msgid "Bottom"
 msgstr "Nedre gräns"
 
-#: data/functions.xml.in.h:42
+#: data/functions.xml.in.h:43
 #, fuzzy
 msgid ""
 "Calculates and returns the price per $100 face value of a security bond. The "
@@ -846,7 +850,7 @@ msgstr ""
 "30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: verkliga "
 "dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:43
+#: data/functions.xml.in.h:44
 #, fuzzy
 msgid ""
 "Calculates and returns the price per $100 face value of a security. The "
@@ -859,7 +863,7 @@ msgstr ""
 "30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: verkliga "
 "dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:44
+#: data/functions.xml.in.h:45
 #, fuzzy
 msgid ""
 "Calculates number of periods of an investment based on periodic constant "
@@ -872,7 +876,7 @@ msgstr ""
 "betalning i början av perioden och 0 (förvald) för betalning i slutet av "
 "perioden."
 
-#: data/functions.xml.in.h:45
+#: data/functions.xml.in.h:46
 msgid ""
 "Calculates the Body Mass Index. The resulting BMI-value is interpreted as "
 "follows:&#10;&#10;Underweight&#9;&#9;&lt; 18.5&#10;Normal weight&#9;&#9;18.5-"
@@ -885,7 +889,7 @@ msgstr ""
 "&#10;Notera att du måste använda enheter för vikt (ex. 59kg) och längd (ex. "
 "174cm)."
 
-#: data/functions.xml.in.h:46
+#: data/functions.xml.in.h:47
 #, fuzzy
 msgid ""
 "Calculates the amount of a payment of an annuity going towards interest.&#10;"
@@ -896,7 +900,7 @@ msgstr ""
 "anger när betalningarna sker. 1 för betalning i början av perioden och 0 "
 "(förvald) för betalning i slutet av perioden."
 
-#: data/functions.xml.in.h:47
+#: data/functions.xml.in.h:48
 #, fuzzy
 msgid ""
 "Calculates the amount of a payment of an annuity going towards principal."
@@ -907,15 +911,15 @@ msgstr ""
 "anger när betalningarna sker. 1 för betalning i början av perioden och 0 "
 "(förvald) för betalning i slutet av perioden."
 
-#: data/functions.xml.in.h:48
+#: data/functions.xml.in.h:49
 msgid "Calculates the area of a circle using the diameter"
 msgstr "Beräknar omkretsen för en cirkel."
 
-#: data/functions.xml.in.h:49
+#: data/functions.xml.in.h:50
 msgid "Calculates the area of a circle using the radius"
 msgstr "Beräknar arean för en cirkel."
 
-#: data/functions.xml.in.h:50
+#: data/functions.xml.in.h:51
 msgid ""
 "Calculates the demand elesticity. Also works for supply elasticity, income "
 "elasticity, cross-price elasticity, etc. Just replace demand, with supply, "
@@ -924,51 +928,51 @@ msgid ""
 "where x is the default price variable."
 msgstr ""
 
-#: data/functions.xml.in.h:51
+#: data/functions.xml.in.h:52
 msgid "Calculates the determinant of a matrix."
 msgstr "Beräknar determinanten för en matris."
 
-#: data/functions.xml.in.h:52
+#: data/functions.xml.in.h:53
 msgid "Calculates the difference between the first and third quartile."
 msgstr "Beräknar skillnaden mellan den första och tredje kvartilen."
 
-#: data/functions.xml.in.h:53
+#: data/functions.xml.in.h:54
 msgid "Calculates the difference between the min and max value."
 msgstr "Beräknar skillnaden mellan min och max värdet."
 
-#: data/functions.xml.in.h:54
+#: data/functions.xml.in.h:55
 msgid "Calculates the duration of a security."
 msgstr "Beräknar livslängden på en säkerhet."
 
-#: data/functions.xml.in.h:55
+#: data/functions.xml.in.h:56
 msgid "Calculates the effective interest for a given nominal rate."
 msgstr "Beräknar den effektiva räntan från en given nominell räntesats."
 
-#: data/functions.xml.in.h:56
+#: data/functions.xml.in.h:57
 msgid "Calculates the interest paid on a given period of an investment."
 msgstr "Beräknar den betalda räntan för en viss period av en investering."
 
-#: data/functions.xml.in.h:57
+#: data/functions.xml.in.h:58
 msgid ""
 "Calculates the nominal interest rate from a given effective interest rate "
 "compounded at given intervals."
 msgstr "Beräknar den nominella räntesatsen från en given effektiv ränta."
 
-#: data/functions.xml.in.h:58
+#: data/functions.xml.in.h:59
 msgid "Calculates the norm/length of a vector."
 msgstr "Beräknar normalen för en vektor."
 
-#: data/functions.xml.in.h:59
+#: data/functions.xml.in.h:60
 msgid "Calculates the permanent of a matrix."
 msgstr "Beräknar permanenten för en matris."
 
-#: data/functions.xml.in.h:60
+#: data/functions.xml.in.h:61
 msgid ""
 "Calculates the return on continuously compounded interest, given the "
 "principal, nominal rate and time in years."
 msgstr ""
 
-#: data/functions.xml.in.h:61
+#: data/functions.xml.in.h:62
 msgid ""
 "Calculates the sum-of-years digits depreciation for an asset based on its "
 "cost, salvage value, anticipated life, and a particular period. This method "
@@ -978,100 +982,100 @@ msgid ""
 "periods (typically years) over which the asset is depreciated."
 msgstr ""
 
-#: data/functions.xml.in.h:62
+#: data/functions.xml.in.h:63
 msgid "Calculates the value of a level-coupon bond."
 msgstr ""
 
-#: data/functions.xml.in.h:63
+#: data/functions.xml.in.h:64
 #, fuzzy
 msgid "Calculates the value of a zero-coupon (pure discount) bond."
 msgstr "Beräknar arean för en cirkel."
 
-#: data/functions.xml.in.h:64
+#: data/functions.xml.in.h:65
 msgid "Calculus"
 msgstr ""
 
-#: data/functions.xml.in.h:65
+#: data/functions.xml.in.h:66
 msgid "Category"
 msgstr "Kategori"
 
-#: data/functions.xml.in.h:66
+#: data/functions.xml.in.h:67
 msgid "Ceil"
 msgstr "Tak"
 
-#: data/functions.xml.in.h:67
+#: data/functions.xml.in.h:68
 msgid "Character"
 msgstr "Tecken"
 
-#: data/functions.xml.in.h:68
+#: data/functions.xml.in.h:69
 msgid "Circle"
 msgstr "Cirkel"
 
-#: data/functions.xml.in.h:69
+#: data/functions.xml.in.h:70
 msgid "Circle Area"
 msgstr "Cirkelarea"
 
-#: data/functions.xml.in.h:70
+#: data/functions.xml.in.h:71
 msgid "Circle Circumference"
 msgstr "Cirkelomkrets"
 
-#: data/functions.xml.in.h:71
+#: data/functions.xml.in.h:72
 msgid "Cofactor"
 msgstr "Kofaktor"
 
-#: data/functions.xml.in.h:72
+#: data/functions.xml.in.h:73
 msgid "Column"
 msgstr "Kolumn"
 
-#: data/functions.xml.in.h:73
+#: data/functions.xml.in.h:74
 msgid "Column Variable"
 msgstr "Kolumnvariabel"
 
-#: data/functions.xml.in.h:74
+#: data/functions.xml.in.h:75
 msgid "Columns"
 msgstr "Kolumner"
 
-#: data/functions.xml.in.h:75
+#: data/functions.xml.in.h:76
 msgid "Combinations"
 msgstr "Kombinationer"
 
-#: data/functions.xml.in.h:76
+#: data/functions.xml.in.h:77
 msgid "Combinatorics"
 msgstr "Kombinatorik"
 
-#: data/functions.xml.in.h:77
+#: data/functions.xml.in.h:78
 msgid "Complex Exponential (Cis)"
 msgstr "Komplex exponentialfunction (Cis)"
 
-#: data/functions.xml.in.h:78
+#: data/functions.xml.in.h:79
 msgid "Complex Number"
 msgstr "Komplext nummer"
 
-#: data/functions.xml.in.h:79
+#: data/functions.xml.in.h:80
 msgid "Component"
 msgstr "Komponent"
 
-#: data/functions.xml.in.h:80
+#: data/functions.xml.in.h:81
 msgid "Component Index"
 msgstr "Komponentindex"
 
-#: data/functions.xml.in.h:81
+#: data/functions.xml.in.h:82
 msgid "Component Variable"
 msgstr "Komponentvariabel"
 
-#: data/functions.xml.in.h:82
+#: data/functions.xml.in.h:83
 msgid "Components"
 msgstr "Komponenter"
 
-#: data/functions.xml.in.h:83
+#: data/functions.xml.in.h:84
 msgid "Components / Step size"
 msgstr "Komponenter / stegstorlek"
 
-#: data/functions.xml.in.h:84
+#: data/functions.xml.in.h:85
 msgid "Compound"
 msgstr ""
 
-#: data/functions.xml.in.h:85
+#: data/functions.xml.in.h:86
 #, fuzzy
 msgid ""
 "Computes the future value of an investment. This is based on periodic, "
@@ -1084,50 +1088,50 @@ msgstr ""
 "betalning i början av perioden och 0 (förvald) för betalning i slutet av "
 "perioden."
 
-#: data/functions.xml.in.h:86
+#: data/functions.xml.in.h:87
 msgid "Concatenate Strings"
 msgstr "Sammanfoga textsträngar"
 
-#: data/functions.xml.in.h:87
+#: data/functions.xml.in.h:88
 msgid "Condition"
 msgstr "Förutsättning"
 
-#: data/functions.xml.in.h:88
+#: data/functions.xml.in.h:89
 msgid "Cone"
 msgstr "Kon"
 
-#: data/functions.xml.in.h:89
+#: data/functions.xml.in.h:90
 msgid "Cone Volume"
 msgstr "Konvolym"
 
-#: data/functions.xml.in.h:90
+#: data/functions.xml.in.h:91
 msgid "Construct Matrix"
 msgstr "Skapa matris"
 
-#: data/functions.xml.in.h:91
+#: data/functions.xml.in.h:92
 msgid "Construct Vector"
 msgstr "Skapa vektor"
 
-#: data/functions.xml.in.h:92
+#: data/functions.xml.in.h:93
 msgid "Consumer Surplus"
 msgstr "Konsumentöverskott"
 
-#: data/functions.xml.in.h:93
+#: data/functions.xml.in.h:94
 msgid "Convert Matrix to Vector"
 msgstr "Omvandla matris till vektor"
 
-#: data/functions.xml.in.h:94
+#: data/functions.xml.in.h:95
 msgid ""
 "Converts a decimal dollar price into a dollar price expressed as a fraction."
 msgstr ""
 
-#: data/functions.xml.in.h:95
+#: data/functions.xml.in.h:96
 msgid ""
 "Converts a dollar price expressed as a fraction into a dollar price "
 "expressed as a decimal number."
 msgstr ""
 
-#: data/functions.xml.in.h:96
+#: data/functions.xml.in.h:97
 msgid ""
 "Corresponds to the product symbol. Multiplies factors for each x ranging "
 "from the lower to the upper limit."
@@ -1135,7 +1139,7 @@ msgstr ""
 "Motsvarar produktsymbolen. Multiplicerar faktorer för varje x från den undre "
 "till den övre gränsen."
 
-#: data/functions.xml.in.h:97
+#: data/functions.xml.in.h:98
 msgid ""
 "Corresponds to the sum symbol. Adds terms for each x ranging from the lower "
 "to the upper limit."
@@ -1143,155 +1147,155 @@ msgstr ""
 "Motsvarar summasymbolen. Adderar termer för varje x från den undre till den "
 "övre gränsen."
 
-#: data/functions.xml.in.h:98
+#: data/functions.xml.in.h:99
 msgid "Cosecant"
 msgstr "Cosekant"
 
-#: data/functions.xml.in.h:99
+#: data/functions.xml.in.h:100
 msgid "Cosine"
 msgstr "Cosinus"
 
-#: data/functions.xml.in.h:100
+#: data/functions.xml.in.h:101
 msgid "Cost"
 msgstr "Kostnad"
 
-#: data/functions.xml.in.h:101
+#: data/functions.xml.in.h:102
 msgid "Cotangent"
 msgstr "Cotangens"
 
-#: data/functions.xml.in.h:102
+#: data/functions.xml.in.h:103
 msgid "Counter Update Function"
 msgstr "Funktion för uppdatering av röknare"
 
-#: data/functions.xml.in.h:103
+#: data/functions.xml.in.h:104
 msgid "Counter Variable"
 msgstr "Röknarvariabel"
 
-#: data/functions.xml.in.h:104
+#: data/functions.xml.in.h:105
 msgid "Coupon Rate"
 msgstr "Kupongränta"
 
-#: data/functions.xml.in.h:105
+#: data/functions.xml.in.h:106
 msgid "Coupons per Year"
 msgstr "Antal kuponger per år"
 
-#: data/functions.xml.in.h:106
+#: data/functions.xml.in.h:107
 msgid "Covariance"
 msgstr "Kovarians"
 
-#: data/functions.xml.in.h:107
+#: data/functions.xml.in.h:108
 msgid "Cube"
 msgstr "Kub"
 
-#: data/functions.xml.in.h:108
+#: data/functions.xml.in.h:109
 msgid "Cube Root"
 msgstr "Kubikrot"
 
-#: data/functions.xml.in.h:109
+#: data/functions.xml.in.h:110
 msgid "Cube Volume"
 msgstr "Kubvolym"
 
-#: data/functions.xml.in.h:110
+#: data/functions.xml.in.h:111
 msgid "Current Time"
 msgstr "Nuvarande tid"
 
-#: data/functions.xml.in.h:111
+#: data/functions.xml.in.h:112
 msgid "Custom Sum of Components"
 msgstr "Anpassad komponentsumma"
 
-#: data/functions.xml.in.h:112
+#: data/functions.xml.in.h:113
 msgid "Cylinder"
 msgstr "Cylinder"
 
-#: data/functions.xml.in.h:113
+#: data/functions.xml.in.h:114
 msgid "Cylinder Volume"
 msgstr "Cylindervolym"
 
-#: data/functions.xml.in.h:114
+#: data/functions.xml.in.h:115
 msgid "Data"
 msgstr "Data"
 
-#: data/functions.xml.in.h:115
+#: data/functions.xml.in.h:116
 msgid "Data 1"
 msgstr "Data 1"
 
-#: data/functions.xml.in.h:116
+#: data/functions.xml.in.h:117
 msgid "Data 2"
 msgstr "Data 2"
 
-#: data/functions.xml.in.h:117
+#: data/functions.xml.in.h:118
 msgid "Date"
 msgstr "Datum"
 
-#: data/functions.xml.in.h:118
+#: data/functions.xml.in.h:119
 msgid "Date &amp; Time"
 msgstr "Datum &amp; Tid"
 
-#: data/functions.xml.in.h:119
+#: data/functions.xml.in.h:120
 msgid "Day Counting Basis"
 msgstr "Dagsräkningssystem"
 
-#: data/functions.xml.in.h:120
+#: data/functions.xml.in.h:121
 msgid "Day of Month"
 msgstr "Månadsdag"
 
-#: data/functions.xml.in.h:121
+#: data/functions.xml.in.h:122
 msgid "Day of Week"
 msgstr "Veckodag"
 
-#: data/functions.xml.in.h:122
+#: data/functions.xml.in.h:123
 msgid "Day of Year"
 msgstr "Dag på året"
 
-#: data/functions.xml.in.h:123
+#: data/functions.xml.in.h:124
 msgid "Days between two dates"
 msgstr "Antal dagar mellan två datum"
 
-#: data/functions.xml.in.h:124
+#: data/functions.xml.in.h:125
 msgid "Decile"
 msgstr "Decil"
 
-#: data/functions.xml.in.h:125
+#: data/functions.xml.in.h:126
 msgid "Decimal Dollar"
 msgstr "Decimala dollar"
 
-#: data/functions.xml.in.h:126
+#: data/functions.xml.in.h:127
 msgid "Demand Function"
 msgstr "Efterfrågefunktion"
 
-#: data/functions.xml.in.h:127
+#: data/functions.xml.in.h:128
 msgid "Demand Function or Price"
 msgstr "Efterfrågefunktion eller pris"
 
-#: data/functions.xml.in.h:128
+#: data/functions.xml.in.h:129
 msgid "Denominator"
 msgstr "Nämnare"
 
-#: data/functions.xml.in.h:129
+#: data/functions.xml.in.h:130
 msgid "Denominator of Fraction"
 msgstr "Bråktalets nämnare "
 
-#: data/functions.xml.in.h:130
+#: data/functions.xml.in.h:131
 msgid "Derangements"
 msgstr ""
 
-#: data/functions.xml.in.h:131
+#: data/functions.xml.in.h:132
 msgid "Derive"
 msgstr "Derivera"
 
-#: data/functions.xml.in.h:132
+#: data/functions.xml.in.h:133
 msgid "Descriptive Statistics"
 msgstr "Beskrivande statistik"
 
-#: data/functions.xml.in.h:133
+#: data/functions.xml.in.h:134
 msgid "Desired Future Value"
 msgstr "Önskat framtida värde"
 
-#: data/functions.xml.in.h:134
+#: data/functions.xml.in.h:135
 msgid "Determinant"
 msgstr "Determinanten"
 
-#: data/functions.xml.in.h:135
+#: data/functions.xml.in.h:136
 msgid ""
 "Determines the straight line depreciation of an asset for a single period."
 "&#10;&#10;Cost is the amount you paid for the asset. Salvage is the value of "
@@ -1300,258 +1304,258 @@ msgid ""
 "asset."
 msgstr ""
 
-#: data/functions.xml.in.h:136
+#: data/functions.xml.in.h:137
 msgid "Diameter"
 msgstr "Diameter"
 
-#: data/functions.xml.in.h:137
+#: data/functions.xml.in.h:138
 msgid "Dimension"
 msgstr ""
 
-#: data/functions.xml.in.h:138
+#: data/functions.xml.in.h:139
 msgid "Discount"
 msgstr "Diskonto"
 
-#: data/functions.xml.in.h:139
+#: data/functions.xml.in.h:140
 msgid "Discount Rate"
 msgstr "Diskonto"
 
-#: data/functions.xml.in.h:140
+#: data/functions.xml.in.h:141
 msgid "Discount rate for a security"
 msgstr "Reduceringshastighet för säkerhet"
 
-#: data/functions.xml.in.h:141
+#: data/functions.xml.in.h:142
 msgid "Display Error"
 msgstr "Visa felmeddelande"
 
-#: data/functions.xml.in.h:142
+#: data/functions.xml.in.h:143
 msgid "Display Message"
 msgstr "Visa meddelande"
 
-#: data/functions.xml.in.h:143
+#: data/functions.xml.in.h:144
 msgid "Display Warning"
 msgstr "Visa varning"
 
-#: data/functions.xml.in.h:144
+#: data/functions.xml.in.h:145
 msgid "Distribution"
 msgstr "Distribution"
 
-#: data/functions.xml.in.h:145
+#: data/functions.xml.in.h:146
 msgid "Divide"
 msgstr "Dela"
 
-#: data/functions.xml.in.h:146
+#: data/functions.xml.in.h:147
 msgid "Do Function"
 msgstr "Funktion"
 
-#: data/functions.xml.in.h:147
+#: data/functions.xml.in.h:148
 msgid "Dollar Decimal"
 msgstr "Dollar decimal"
 
-#: data/functions.xml.in.h:148
+#: data/functions.xml.in.h:149
 msgid "Dollar Fraction"
 msgstr "Dollar bråktal"
 
-#: data/functions.xml.in.h:149
+#: data/functions.xml.in.h:150
 msgid "Double Factorial"
 msgstr "Dubbelfakultet"
 
-#: data/functions.xml.in.h:150
+#: data/functions.xml.in.h:151
 msgid "Duration"
 msgstr "Duration"
 
-#: data/functions.xml.in.h:151
+#: data/functions.xml.in.h:152
 msgid "Durbin-Watson"
 msgstr "Durbin-Watson"
 
-#: data/functions.xml.in.h:152
+#: data/functions.xml.in.h:153
 msgid "Economics"
 msgstr "Ekonomi"
 
-#: data/functions.xml.in.h:153
+#: data/functions.xml.in.h:154
 msgid "Effective Interest Rate"
 msgstr "Effektiv räntesats"
 
-#: data/functions.xml.in.h:154
+#: data/functions.xml.in.h:155
 msgid "Elasticity"
 msgstr "Elasticitet"
 
-#: data/functions.xml.in.h:156
+#: data/functions.xml.in.h:157
 msgid "Element Info"
 msgstr "Grundämnesinfo"
 
-#: data/functions.xml.in.h:157
+#: data/functions.xml.in.h:158
 msgid "Element Number"
 msgstr "Grundämnesnumber"
 
-#: data/functions.xml.in.h:158
+#: data/functions.xml.in.h:159
 msgid "Element Variable"
 msgstr "Elementvariabel"
 
-#: data/functions.xml.in.h:160
+#: data/functions.xml.in.h:161
 msgid "End Column"
 msgstr "Slutkolumn"
 
-#: data/functions.xml.in.h:161
+#: data/functions.xml.in.h:162
 msgid "End Row"
 msgstr "Slutrad"
 
-#: data/functions.xml.in.h:162
+#: data/functions.xml.in.h:163
 msgid "Equation"
 msgstr "Ekvation"
 
-#: data/functions.xml.in.h:163
+#: data/functions.xml.in.h:164
 msgid "Equation 1"
 msgstr "Ekvation 1"
 
-#: data/functions.xml.in.h:164
+#: data/functions.xml.in.h:165
 msgid "Equation 2"
 msgstr "Ekvation 2"
 
-#: data/functions.xml.in.h:165
+#: data/functions.xml.in.h:166
 msgid "Equation Vector"
 msgstr "Ekvationsvektor"
 
-#: data/functions.xml.in.h:166
+#: data/functions.xml.in.h:167
 msgid "Even"
 msgstr "Jämnt"
 
-#: data/functions.xml.in.h:167
+#: data/functions.xml.in.h:168
 msgid "Exponent"
 msgstr "Exponent"
 
-#: data/functions.xml.in.h:168
+#: data/functions.xml.in.h:169
 msgid "Exponential (e^x)"
 msgstr "Exponentialfunktion (e^x)"
 
-#: data/functions.xml.in.h:169
+#: data/functions.xml.in.h:170
 msgid "Exponents &amp; Logarithms"
 msgstr "Exponenter &amp; Logaritmer"
 
-#: data/functions.xml.in.h:170
+#: data/functions.xml.in.h:171
 msgid "Export To CSV File"
 msgstr "Exportera till CSV-fil"
 
-#: data/functions.xml.in.h:171
+#: data/functions.xml.in.h:172
 msgid "Expression"
 msgstr "Uttryck"
 
-#: data/functions.xml.in.h:172
+#: data/functions.xml.in.h:173
 msgid "Expression if condition is NOT met"
 msgstr "Uttryck om villkoret INTE uppfylls"
 
-#: data/functions.xml.in.h:173
+#: data/functions.xml.in.h:174
 msgid "Expression if condition is met"
 msgstr "Uttryck om villkoret uppfylls"
 
-#: data/functions.xml.in.h:174
+#: data/functions.xml.in.h:175
 msgid "Extract Column as Vector"
 msgstr "Extrahera kolumn som vektor"
 
-#: data/functions.xml.in.h:175
+#: data/functions.xml.in.h:176
 msgid "Extract Fractional Part"
 msgstr "Extrahera bråkdel"
 
-#: data/functions.xml.in.h:176
+#: data/functions.xml.in.h:177
 msgid "Extract Integer Part"
 msgstr "Extrahera heltal"
 
-#: data/functions.xml.in.h:177
+#: data/functions.xml.in.h:178
 msgid "Extract row as vector"
 msgstr "Skapa vektor från rad"
 
-#: data/functions.xml.in.h:178
+#: data/functions.xml.in.h:179
 msgid "Extreme Values"
 msgstr "Extremvärden"
 
-#: data/functions.xml.in.h:179
+#: data/functions.xml.in.h:180
 msgid "Face Value"
 msgstr "Nominellt värde"
 
-#: data/functions.xml.in.h:180
+#: data/functions.xml.in.h:181
 msgid "Factor Expression"
 msgstr "Faktoruttryck"
 
-#: data/functions.xml.in.h:181
+#: data/functions.xml.in.h:182
 msgid "Factorial"
 msgstr "Fakultet"
 
-#: data/functions.xml.in.h:182
+#: data/functions.xml.in.h:183
 msgid "Factors"
 msgstr "Faktorer"
 
-#: data/functions.xml.in.h:183
+#: data/functions.xml.in.h:184
 msgid "File Name"
 msgstr "Filnamn"
 
-#: data/functions.xml.in.h:184
+#: data/functions.xml.in.h:185
 msgid "Finance"
 msgstr "Finans"
 
-#: data/functions.xml.in.h:185
+#: data/functions.xml.in.h:186
 msgid "Financial function mode"
 msgstr "Läge för financiella funktioner"
 
-#: data/functions.xml.in.h:186
+#: data/functions.xml.in.h:187
 msgid "Find Linear Function"
 msgstr "Finn linjär funktion"
 
-#: data/functions.xml.in.h:187
+#: data/functions.xml.in.h:188
 msgid ""
 "Finds the linear function for the straight line between two distinct points."
 msgstr ""
 "Finner den linjära funktionen för den räta linjen mellan två distinkta "
 "punkter."
 
-#: data/functions.xml.in.h:188
+#: data/functions.xml.in.h:189
 msgid "First Component"
 msgstr "Första komponenten"
 
-#: data/functions.xml.in.h:189
+#: data/functions.xml.in.h:190
 msgid "First Data Row"
 msgstr "Första raden med data"
 
-#: data/functions.xml.in.h:190
+#: data/functions.xml.in.h:191
 msgid "First Date"
 msgstr "Första datumet"
 
-#: data/functions.xml.in.h:191
+#: data/functions.xml.in.h:192
 msgid "First Interest"
 msgstr "Första ränteinbetalning"
 
-#: data/functions.xml.in.h:192
+#: data/functions.xml.in.h:193
 msgid "For Condition"
 msgstr "Medans-villkor"
 
-#: data/functions.xml.in.h:193
+#: data/functions.xml.in.h:194
 msgid "For...Do"
 msgstr "för...utför"
 
-#: data/functions.xml.in.h:194
+#: data/functions.xml.in.h:195
 msgid "Fractional Dollar"
 msgstr "Bråktalsdollar"
 
-#: data/functions.xml.in.h:195 data/units.xml.in.h:135
+#: data/functions.xml.in.h:196 data/units.xml.in.h:135
 msgid "Frequency"
 msgstr "Frekvens"
 
-#: data/functions.xml.in.h:196
+#: data/functions.xml.in.h:197
 msgid "Function"
 msgstr "Funktion"
 
-#: data/functions.xml.in.h:197
+#: data/functions.xml.in.h:198
 msgid "Future Value"
 msgstr "Framtida värde"
 
-#: data/functions.xml.in.h:198
+#: data/functions.xml.in.h:199
 msgid "Gamma Function"
 msgstr "Gammafunktion"
 
-#: data/functions.xml.in.h:199
+#: data/functions.xml.in.h:200
 msgid "Generate Vector"
 msgstr "Skapa vektor"
 
-#: data/functions.xml.in.h:200
+#: data/functions.xml.in.h:201
 msgid ""
 "Generates a pseudo-random number. Returns a real number between 0 and 1, if "
 "ceil is zero (default), or an integer between 1 and (including) ceil."
@@ -1560,7 +1564,7 @@ msgstr ""
 "och 1, om taket är noll (förval), eller ett heltal mellan 1 och (inklusive) "
 "taket."
 
-#: data/functions.xml.in.h:201
+#: data/functions.xml.in.h:202
 msgid ""
 "Generates a vector from a function with a variable (default x) running from "
 "min to max. The fourth argument is either the requested number of components "
@@ -1568,692 +1572,692 @@ msgid ""
 "the variable."
 msgstr ""
 
-#: data/functions.xml.in.h:202
+#: data/functions.xml.in.h:203
 msgid "Geometric Mean"
 msgstr "Geometriskt medelvärde"
 
-#: data/functions.xml.in.h:203
+#: data/functions.xml.in.h:204
 msgid "Geometry"
 msgstr "Geometri"
 
-#: data/functions.xml.in.h:204
+#: data/functions.xml.in.h:205
 msgid "Greatest Common Divisor"
 msgstr "Största gemensamma divisor"
 
-#: data/functions.xml.in.h:205
+#: data/functions.xml.in.h:206
 msgid "Harmonic Mean"
 msgstr "Harmoniskt medelvärde"
 
-#: data/functions.xml.in.h:206
+#: data/functions.xml.in.h:207
 msgid "Height"
 msgstr "Höjd"
 
-#: data/functions.xml.in.h:207
+#: data/functions.xml.in.h:208
 msgid "Hexadecimal"
 msgstr "Hexadecimal"
 
-#: data/functions.xml.in.h:208
+#: data/functions.xml.in.h:209
 msgid "Hexadecimal Number"
 msgstr "Hexadecimalt nummer"
 
-#: data/functions.xml.in.h:209
+#: data/functions.xml.in.h:210
 msgid "Hyperbolic Cosecant"
 msgstr "Cosekant hyperbolicus"
 
-#: data/functions.xml.in.h:210
+#: data/functions.xml.in.h:211
 msgid "Hyperbolic Cosine"
 msgstr "Cosinus hyperbolicus"
 
-#: data/functions.xml.in.h:211
+#: data/functions.xml.in.h:212
 msgid "Hyperbolic Cotangent"
 msgstr "Cotangens hyperbolicus"
 
-#: data/functions.xml.in.h:212
+#: data/functions.xml.in.h:213
 msgid "Hyperbolic Secant"
 msgstr "Sekant hyperbolicus"
 
-#: data/functions.xml.in.h:213
+#: data/functions.xml.in.h:214
 msgid "Hyperbolic Sine"
 msgstr "Sinus hyperbolicus"
 
-#: data/functions.xml.in.h:214
+#: data/functions.xml.in.h:215
 msgid "Hyperbolic Tangent"
 msgstr "Tangens hyperbolicus"
 
-#: data/functions.xml.in.h:215
+#: data/functions.xml.in.h:216
 msgid "Hyperfactorial"
 msgstr "Hyperfakultet"
 
-#: data/functions.xml.in.h:216
+#: data/functions.xml.in.h:217
 msgid "Hypotenuse"
 msgstr "Hypotenusa"
 
-#: data/functions.xml.in.h:217
+#: data/functions.xml.in.h:218
 msgid "Identity"
 msgstr "Identitetsmatris"
 
-#: data/functions.xml.in.h:218
+#: data/functions.xml.in.h:219
 msgid "If...Then...Else"
 msgstr "Om...då...annars"
 
-#: data/functions.xml.in.h:219
+#: data/functions.xml.in.h:220
 msgid "Imaginary Part"
 msgstr "Imaginär del"
 
-#: data/functions.xml.in.h:220
+#: data/functions.xml.in.h:221
 msgid "Imports a CSV data file as a matrix."
 msgstr "Importerar en CSV data file till en matrix"
 
-#: data/functions.xml.in.h:221
+#: data/functions.xml.in.h:222
 msgid "Index"
 msgstr "Index"
 
-#: data/functions.xml.in.h:222
+#: data/functions.xml.in.h:223
 msgid "Index Variable"
 msgstr "Indexvariabel"
 
-#: data/functions.xml.in.h:223
+#: data/functions.xml.in.h:224
 msgid "Initial Value"
 msgstr "Initialt värde"
 
-#: data/functions.xml.in.h:224
+#: data/functions.xml.in.h:225
 msgid "Initial Value of Counter"
 msgstr "Initialt värde för räknare"
 
-#: data/functions.xml.in.h:225
+#: data/functions.xml.in.h:226
 msgid "Integers"
 msgstr "Heltal"
 
-#: data/functions.xml.in.h:226
+#: data/functions.xml.in.h:227
 msgid "Integral Point"
 msgstr "Integralpunkt"
 
-#: data/functions.xml.in.h:227
+#: data/functions.xml.in.h:228
 msgid "Integrate"
 msgstr "Integrera"
 
-#: data/functions.xml.in.h:228
+#: data/functions.xml.in.h:229
 msgid "Interest Rate"
 msgstr "Räntesats"
 
-#: data/functions.xml.in.h:229
+#: data/functions.xml.in.h:230
 msgid "Interest paid on a given period of an investment (ISPMT)"
 msgstr ""
 
-#: data/functions.xml.in.h:230
+#: data/functions.xml.in.h:231
 msgid "Interest rate for a fully invested security"
 msgstr ""
 
-#: data/functions.xml.in.h:231
+#: data/functions.xml.in.h:232
 msgid "Interquartile Range"
 msgstr "Kvartilavstånd"
 
-#: data/functions.xml.in.h:232
+#: data/functions.xml.in.h:233
 msgid "Inverse Cosecant"
 msgstr "Invers cosekant"
 
-#: data/functions.xml.in.h:233
+#: data/functions.xml.in.h:234
 msgid "Inverse Cosine"
 msgstr "Invers cosinus"
 
-#: data/functions.xml.in.h:234
+#: data/functions.xml.in.h:235
 msgid "Inverse Cotangent"
 msgstr "Invers cotangens"
 
-#: data/functions.xml.in.h:235
+#: data/functions.xml.in.h:236
 msgid "Inverse Hyperbolic Cosecant"
 msgstr "Invers cosekant hyperbolicus"
 
-#: data/functions.xml.in.h:236
+#: data/functions.xml.in.h:237
 msgid "Inverse Hyperbolic Cosine"
 msgstr "Invers cosinus hyperbolicus"
 
-#: data/functions.xml.in.h:237
+#: data/functions.xml.in.h:238
 msgid "Inverse Hyperbolic Cotangent"
 msgstr "Invers cotangens hyperbolicus"
 
-#: data/functions.xml.in.h:238
+#: data/functions.xml.in.h:239
 msgid "Inverse Hyperbolic Sine"
 msgstr "Invers sinus hyperbolicus"
 
-#: data/functions.xml.in.h:239
+#: data/functions.xml.in.h:240
 msgid "Inverse Hyperbolic Tangent"
 msgstr "Invers tangens hyperbolicus"
 
-#: data/functions.xml.in.h:240
+#: data/functions.xml.in.h:241
 msgid "Inverse Hyperbolic secant"
 msgstr "Invers sekant hyperbolicus"
 
-#: data/functions.xml.in.h:241
+#: data/functions.xml.in.h:242
 msgid "Inverse Secant"
 msgstr "Invers sekant"
 
-#: data/functions.xml.in.h:242
+#: data/functions.xml.in.h:243
 msgid "Inverse Sine"
 msgstr "Invers sinus"
 
-#: data/functions.xml.in.h:243
+#: data/functions.xml.in.h:244
 msgid "Inverse Tangent"
 msgstr "Invers tangens"
 
-#: data/functions.xml.in.h:244
+#: data/functions.xml.in.h:245
 msgid "Investment"
 msgstr "Investering"
 
-#: data/functions.xml.in.h:245
+#: data/functions.xml.in.h:246
 msgid "Issue Date"
 msgstr "Startdatum"
 
-#: data/functions.xml.in.h:246
+#: data/functions.xml.in.h:247
 msgid "Last Component"
 msgstr "Sista komponenten"
 
-#: data/functions.xml.in.h:247 data/units.xml.in.h:211
+#: data/functions.xml.in.h:248 data/units.xml.in.h:211
 msgid "Length"
 msgstr "Längd"
 
-#: data/functions.xml.in.h:248
+#: data/functions.xml.in.h:249
 msgid "Length of Base"
 msgstr "Basens längd"
 
-#: data/functions.xml.in.h:249
+#: data/functions.xml.in.h:250
 msgid "Length of Side"
 msgstr "Sidans längd"
 
-#: data/functions.xml.in.h:250
+#: data/functions.xml.in.h:251
 msgid "Length of string"
 msgstr "Textsträngslängd"
 
-#: data/functions.xml.in.h:251
+#: data/functions.xml.in.h:252
 #, fuzzy
 msgid "Level-Coupon Bond"
 msgstr "Nollkupong"
 
-#: data/functions.xml.in.h:252
+#: data/functions.xml.in.h:253
 msgid "Life"
 msgstr "Livslängd"
 
-#: data/functions.xml.in.h:253
+#: data/functions.xml.in.h:254
 msgid "Load CSV File"
 msgstr "Ladda CSV-fil"
 
-#: data/functions.xml.in.h:254
+#: data/functions.xml.in.h:255
 msgid "Logical"
 msgstr "Logik"
 
-#: data/functions.xml.in.h:255
+#: data/functions.xml.in.h:256
 msgid "Logical Exclusive OR"
 msgstr ""
 
-#: data/functions.xml.in.h:256
+#: data/functions.xml.in.h:257
 msgid "Logistic Distribution"
 msgstr "Logistisk distribution"
 
-#: data/functions.xml.in.h:257
+#: data/functions.xml.in.h:258
 msgid "Lower Limit"
 msgstr "Undre gräns"
 
-#: data/functions.xml.in.h:258
+#: data/functions.xml.in.h:259
 msgid "Lower Limit (i)"
 msgstr "Undre gräns (i)"
 
-#: data/functions.xml.in.h:259
+#: data/functions.xml.in.h:260
 msgid "Market Interest Rate"
 msgstr "Marknadsränta"
 
-#: data/functions.xml.in.h:260
+#: data/functions.xml.in.h:261
 msgid "Matrices &amp; Vectors"
 msgstr "Matriser &amp; Vektorer"
 
-#: data/functions.xml.in.h:261
+#: data/functions.xml.in.h:262
 msgid "Matrix"
 msgstr "Matris"
 
-#: data/functions.xml.in.h:262
+#: data/functions.xml.in.h:263
 msgid "Matrix Area"
 msgstr "Matrisarea"
 
-#: data/functions.xml.in.h:263
+#: data/functions.xml.in.h:264
 msgid "Matrix Inverse"
 msgstr "Matrisinvers"
 
-#: data/functions.xml.in.h:264
+#: data/functions.xml.in.h:265
 msgid "Matrix Variable"
 msgstr "Matrisvariabel"
 
-#: data/functions.xml.in.h:265
+#: data/functions.xml.in.h:266
 msgid "Matrix or Rows/Columns"
 msgstr "Matris eller Rader/Kolumner"
 
-#: data/functions.xml.in.h:266
+#: data/functions.xml.in.h:267
 msgid "Matrix/Vector"
 msgstr "Matriser/Vektor"
 
-#: data/functions.xml.in.h:267
+#: data/functions.xml.in.h:268
 msgid "Maturity Date"
 msgstr "Mognadsdatum"
 
-#: data/functions.xml.in.h:268
+#: data/functions.xml.in.h:269
 msgid "Max"
 msgstr "Max"
 
-#: data/functions.xml.in.h:269
+#: data/functions.xml.in.h:270
 msgid "Mean"
 msgstr "Medelvärde"
 
-#: data/functions.xml.in.h:270
+#: data/functions.xml.in.h:271
 msgid "Mean Deviation"
 msgstr "Medelavvikelse"
 
-#: data/functions.xml.in.h:271
+#: data/functions.xml.in.h:272
 msgid "Means"
 msgstr "Medelvärde"
 
-#: data/functions.xml.in.h:272
+#: data/functions.xml.in.h:273
 msgid "Median"
 msgstr "Median"
 
-#: data/functions.xml.in.h:273
+#: data/functions.xml.in.h:274
 msgid "Merge Vectors"
 msgstr "Sammanslå vektorer"
 
-#: data/functions.xml.in.h:274
+#: data/functions.xml.in.h:275
 msgid "Message"
 msgstr "Meddelande"
 
-#: data/functions.xml.in.h:275
+#: data/functions.xml.in.h:276
 msgid "Microeconomics"
 msgstr "Mikroekonomi"
 
-#: data/functions.xml.in.h:276
+#: data/functions.xml.in.h:277
 msgid "Min"
 msgstr "Min"
 
-#: data/functions.xml.in.h:277
+#: data/functions.xml.in.h:278
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#: data/functions.xml.in.h:278
+#: data/functions.xml.in.h:279
 msgid "Mode"
 msgstr "Typvärde"
 
-#: data/functions.xml.in.h:279
+#: data/functions.xml.in.h:280
 msgid "Modulus"
 msgstr "Modulus"
 
-#: data/functions.xml.in.h:280
+#: data/functions.xml.in.h:281
 msgid "Moments"
 msgstr "Moment"
 
-#: data/functions.xml.in.h:281
+#: data/functions.xml.in.h:282
 msgid "Month"
 msgstr "Månad"
 
-#: data/functions.xml.in.h:282
+#: data/functions.xml.in.h:283
 msgid "Multifactorial"
 msgstr "Multifakultet"
 
-#: data/functions.xml.in.h:283
+#: data/functions.xml.in.h:284
 msgid "Multiply"
 msgstr "Multiplicera"
 
-#: data/functions.xml.in.h:285
+#: data/functions.xml.in.h:286
 msgid "Name of Element"
 msgstr "Grundämnets namn"
 
-#: data/functions.xml.in.h:286
+#: data/functions.xml.in.h:287
 msgid "Natural Logarithm"
 msgstr "Naturlig logaritm"
 
-#: data/functions.xml.in.h:287
+#: data/functions.xml.in.h:288
 msgid "Negate"
 msgstr "Negera"
 
-#: data/functions.xml.in.h:288
+#: data/functions.xml.in.h:289
 msgid "New Value"
 msgstr "Nytt värde"
 
-#: data/functions.xml.in.h:289
+#: data/functions.xml.in.h:290
 msgid "Nominal Interest Rate"
 msgstr "Nominell räntesats"
 
-#: data/functions.xml.in.h:290
+#: data/functions.xml.in.h:291
 msgid "Non-Negative Value"
 msgstr "Icke-negativt nummer"
 
-#: data/functions.xml.in.h:291
+#: data/functions.xml.in.h:292
 msgid "Norm (length)"
 msgstr "Normal"
 
-#: data/functions.xml.in.h:292
+#: data/functions.xml.in.h:293
 msgid "Nth root"
 msgstr "N:te roten"
 
-#: data/functions.xml.in.h:294
+#: data/functions.xml.in.h:295
 msgid "Number Base"
 msgstr "Nummerbas"
 
-#: data/functions.xml.in.h:295
+#: data/functions.xml.in.h:296
 msgid "Number Bases"
 msgstr "Nummerbaser"
 
-#: data/functions.xml.in.h:296
+#: data/functions.xml.in.h:297
 msgid "Number Theory"
 msgstr "Nummerteori"
 
-#: data/functions.xml.in.h:297
+#: data/functions.xml.in.h:298
 msgid "Number of Elements"
 msgstr "Antal element"
 
-#: data/functions.xml.in.h:298
+#: data/functions.xml.in.h:299
 msgid "Number of Periods"
 msgstr "Antal perioder"
 
-#: data/functions.xml.in.h:299
+#: data/functions.xml.in.h:300
 msgid "Number of coupons to be paid"
 msgstr ""
 
-#: data/functions.xml.in.h:300
+#: data/functions.xml.in.h:301
 msgid "Numerator"
 msgstr "Täljare"
 
-#: data/functions.xml.in.h:301
+#: data/functions.xml.in.h:302
 msgid "Objects"
 msgstr "Objekt"
 
-#: data/functions.xml.in.h:302
+#: data/functions.xml.in.h:303
 msgid "Octal"
 msgstr "Oktal"
 
-#: data/functions.xml.in.h:303
+#: data/functions.xml.in.h:304
 msgid "Octal Number"
 msgstr "Oktalt nummer"
 
-#: data/functions.xml.in.h:304
+#: data/functions.xml.in.h:305
 msgid "Odd"
 msgstr "Ojämnt"
 
-#: data/functions.xml.in.h:305
+#: data/functions.xml.in.h:306
 msgid "Order"
 msgstr "Ordning"
 
-#: data/functions.xml.in.h:306
+#: data/functions.xml.in.h:307
 msgid "Original Value"
 msgstr "Ursprungligt värde"
 
-#: data/functions.xml.in.h:307
+#: data/functions.xml.in.h:308
 msgid "Paired T-Test"
 msgstr "Parvist t-test"
 
-#: data/functions.xml.in.h:308
+#: data/functions.xml.in.h:309
 msgid "Par Value"
 msgstr "Nominellt värde"
 
-#: data/functions.xml.in.h:309
+#: data/functions.xml.in.h:310
 msgid "Parallelogram"
 msgstr "Parallelogram"
 
-#: data/functions.xml.in.h:310
+#: data/functions.xml.in.h:311
 msgid "Parallelogram Area"
 msgstr "Parallelogramarea"
 
-#: data/functions.xml.in.h:311
+#: data/functions.xml.in.h:312
 msgid "Parallelogram Perimeter"
 msgstr "Parallelogramomkrets"
 
-#: data/functions.xml.in.h:312
+#: data/functions.xml.in.h:313
 msgid "Pareto Distribution"
 msgstr "Paretofördelning"
 
-#: data/functions.xml.in.h:313
+#: data/functions.xml.in.h:314
 msgid "Payment for a loan"
 msgstr ""
 
-#: data/functions.xml.in.h:314
+#: data/functions.xml.in.h:315
 msgid "Payment made each period"
 msgstr "Periodisk avbetalning "
 
-#: data/functions.xml.in.h:315
+#: data/functions.xml.in.h:316
 msgid "Payment of an annuity going towards interest (IPMT)"
 msgstr ""
 
-#: data/functions.xml.in.h:316
+#: data/functions.xml.in.h:317
 msgid "Payment of an annuity going towards principal (PPMT)"
 msgstr ""
 
-#: data/functions.xml.in.h:317
+#: data/functions.xml.in.h:318
 msgid "Pearson's Correlation Coefficient"
 msgstr "Pearsons korrelationskoefficient"
 
-#: data/functions.xml.in.h:318
+#: data/functions.xml.in.h:319
 msgid "Percentile"
 msgstr "Percentil"
 
-#: data/functions.xml.in.h:320
+#: data/functions.xml.in.h:321
 #, no-c-format
 msgid "Percentile (%)"
 msgstr "Percentil (%)"
 
-#: data/functions.xml.in.h:321
+#: data/functions.xml.in.h:322
 msgid "Period"
 msgstr "Period"
 
-#: data/functions.xml.in.h:322
+#: data/functions.xml.in.h:323
 msgid "Periodic Interest Rate"
 msgstr "Periodisk räntesats"
 
-#: data/functions.xml.in.h:323
+#: data/functions.xml.in.h:324
 msgid "Periods"
 msgstr "Antal perioder"
 
-#: data/functions.xml.in.h:324
+#: data/functions.xml.in.h:325
 msgid "Periods for investment to attain desired value"
 msgstr ""
 
-#: data/functions.xml.in.h:325
+#: data/functions.xml.in.h:326
 msgid "Periods of an investment"
 msgstr ""
 
-#: data/functions.xml.in.h:326
+#: data/functions.xml.in.h:327
 msgid "Periods per year"
 msgstr "Perioder per år"
 
-#: data/functions.xml.in.h:327
+#: data/functions.xml.in.h:328
 msgid "Permanent"
 msgstr "Permanent"
 
-#: data/functions.xml.in.h:328
+#: data/functions.xml.in.h:329
 msgid "Permutations"
 msgstr "Permutationer"
 
-#: data/functions.xml.in.h:329
+#: data/functions.xml.in.h:330
 msgid "Pooled Variance"
 msgstr "Gemensam varians"
 
-#: data/functions.xml.in.h:330
+#: data/functions.xml.in.h:331
 msgid "Precalculate expression"
 msgstr "Beräkna uttrycket först"
 
-#: data/functions.xml.in.h:331
+#: data/functions.xml.in.h:332
 msgid "Present Value"
 msgstr "Nuvärde"
 
-#: data/functions.xml.in.h:332
+#: data/functions.xml.in.h:333
 msgid "Price"
 msgstr "Pris"
 
-#: data/functions.xml.in.h:333
+#: data/functions.xml.in.h:334
 msgid "Price Variable"
 msgstr "Prisvariabel"
 
-#: data/functions.xml.in.h:334
+#: data/functions.xml.in.h:335
 msgid "Price per $100 face value"
 msgstr ""
 
-#: data/functions.xml.in.h:335
+#: data/functions.xml.in.h:336
 msgid "Price per $100 face value of a security"
 msgstr ""
 
-#: data/functions.xml.in.h:336
+#: data/functions.xml.in.h:337
 msgid "Price per $100 face value of a security bond"
 msgstr ""
 
-#: data/functions.xml.in.h:337
+#: data/functions.xml.in.h:338
 msgid "Principal"
 msgstr ""
 
-#: data/functions.xml.in.h:338
+#: data/functions.xml.in.h:339
 msgid "Prism"
 msgstr "Prism"
 
-#: data/functions.xml.in.h:339
+#: data/functions.xml.in.h:340
 msgid "Process Matrix Elements"
 msgstr "Modifiera matriselement"
 
-#: data/functions.xml.in.h:340
+#: data/functions.xml.in.h:341
 msgid "Process Vector Components"
 msgstr "Modifiera vektorkomponenter"
 
-#: data/functions.xml.in.h:341
+#: data/functions.xml.in.h:342
 msgid "Producer Surplus"
 msgstr "Producentöverskott"
 
-#: data/functions.xml.in.h:342
+#: data/functions.xml.in.h:343
 msgid "Product"
 msgstr "Produkt"
 
-#: data/functions.xml.in.h:343
+#: data/functions.xml.in.h:344
 msgid "Puts each element of a matrix in vertical order in a vector."
 msgstr "Placerar varje element i en matris i vertikal ordning i en vektor."
 
-#: data/functions.xml.in.h:344
+#: data/functions.xml.in.h:345
 msgid "Pyramid"
 msgstr "Pyramid"
 
-#: data/functions.xml.in.h:345
+#: data/functions.xml.in.h:346
 msgid "Pyramid Volume"
 msgstr "Pyramidvolym"
 
-#: data/functions.xml.in.h:346
+#: data/functions.xml.in.h:347
 msgid "Quadratic Mean (RMS)"
 msgstr "Kvadratiskt medelvärde"
 
-#: data/functions.xml.in.h:347
+#: data/functions.xml.in.h:348
 msgid "Quantity Variabel"
 msgstr "Kvantitetsvariabel"
 
-#: data/functions.xml.in.h:348
+#: data/functions.xml.in.h:349
 msgid "Quartile"
 msgstr "Kvartil"
 
-#: data/functions.xml.in.h:349
+#: data/functions.xml.in.h:350
 msgid "Radians"
 msgstr "Radianer"
 
-#: data/functions.xml.in.h:350
+#: data/functions.xml.in.h:351
 msgid "Radians to Default Angle Unit"
 msgstr "Radians till färvald vinkelenhet"
 
-#: data/functions.xml.in.h:351
+#: data/functions.xml.in.h:352
 msgid "Radius"
 msgstr "Radie"
 
-#: data/functions.xml.in.h:352
+#: data/functions.xml.in.h:353
 msgid "Raise"
 msgstr "Upphöj"
 
-#: data/functions.xml.in.h:353
+#: data/functions.xml.in.h:354
 msgid "Random Number"
 msgstr "Slumptal"
 
-#: data/functions.xml.in.h:354
+#: data/functions.xml.in.h:355
 msgid "Random Number Between Limits"
 msgstr "Slumptal mellan gräser"
 
-#: data/functions.xml.in.h:355
+#: data/functions.xml.in.h:356
 msgid "Range"
 msgstr "Omfång"
 
-#: data/functions.xml.in.h:356
+#: data/functions.xml.in.h:357
 msgid "Rank"
 msgstr "Rangordna"
 
-#: data/functions.xml.in.h:357
+#: data/functions.xml.in.h:358
 msgid "Rate"
 msgstr "Räntesats"
 
-#: data/functions.xml.in.h:358
+#: data/functions.xml.in.h:359
 msgid "Rayleigh Distribution"
 msgstr "Rayleighfördelning"
 
-#: data/functions.xml.in.h:359
+#: data/functions.xml.in.h:360
 msgid "Rayleigh Tail Distribution"
 msgstr "Rayleighsvansfördelning"
 
-#: data/functions.xml.in.h:360
+#: data/functions.xml.in.h:361
 msgid "Real Part"
 msgstr "Reell del"
 
-#: data/functions.xml.in.h:361
+#: data/functions.xml.in.h:362
 msgid "Reciprocal"
 msgstr "Reciprok"
 
-#: data/functions.xml.in.h:362
+#: data/functions.xml.in.h:363
 msgid "Rectangle"
 msgstr "Rektangel"
 
-#: data/functions.xml.in.h:363
+#: data/functions.xml.in.h:364
 msgid "Rectangle Area"
 msgstr "Rektangelarea"
 
-#: data/functions.xml.in.h:364
+#: data/functions.xml.in.h:365
 msgid "Rectangle Perimeter"
 msgstr "Rektangelomkrets"
 
-#: data/functions.xml.in.h:365
+#: data/functions.xml.in.h:366
 msgid "Redemption"
 msgstr "Utlösande summa"
 
-#: data/functions.xml.in.h:366
+#: data/functions.xml.in.h:367
 msgid "Regression"
 msgstr "Regression"
 
-#: data/functions.xml.in.h:367
+#: data/functions.xml.in.h:368
 msgid "Remainder"
 msgstr "Rest"
 
-#: data/functions.xml.in.h:368
+#: data/functions.xml.in.h:369
 msgid "Replace"
 msgstr "Ersätt"
 
-#: data/functions.xml.in.h:369
+#: data/functions.xml.in.h:370
 msgid "Return on continuously compounded interest"
 msgstr ""
 
-#: data/functions.xml.in.h:370
+#: data/functions.xml.in.h:371
 msgid "Returns a column in a matrix as a vector."
 msgstr "Returnerar en kolumn i en matris som en vektor."
 
-#: data/functions.xml.in.h:371
+#: data/functions.xml.in.h:372
 msgid "Returns a decimal integer from a binary number"
 msgstr "Returnerar ett decimalt heltal från ett binärt tal"
 
-#: data/functions.xml.in.h:372
+#: data/functions.xml.in.h:373
 msgid ""
 "Returns a decimal integer from a number of specified base between 2 and 36"
 msgstr ""
 "Returnerar ett decimalt heltal från ett tal med en angiven bas mellan 2 och "
 "36."
 
-#: data/functions.xml.in.h:373
+#: data/functions.xml.in.h:374
 msgid "Returns a decimal integer from an octal number"
 msgstr "Returnerar ett decimalt heltal från ett oktalt tal"
 
-#: data/functions.xml.in.h:374
+#: data/functions.xml.in.h:375
 msgid "Returns a decimal value from a hexadecimal number"
 msgstr "Returnerar ett decimalt värde från ett hexadecimalt tal"
 
-#: data/functions.xml.in.h:375
+#: data/functions.xml.in.h:376
 msgid ""
 "Returns a matrix with specified order and listed elements. Omitted elements "
 "are set to zero."
@@ -2261,34 +2265,34 @@ msgstr ""
 "Returnerar en matris med specifierat antal rader och kolumner, och angivna "
 "element.Utelämnade element sätts till noll."
 
-#: data/functions.xml.in.h:376
+#: data/functions.xml.in.h:377
 msgid "Returns a part of a matrix."
 msgstr "Returnerar en del av en matris."
 
-#: data/functions.xml.in.h:377
+#: data/functions.xml.in.h:378
 msgid "Returns a part of a vector."
 msgstr "Returnerar en del av en vektor."
 
-#: data/functions.xml.in.h:378
+#: data/functions.xml.in.h:379
 msgid "Returns a row in a matrix as a vector."
 msgstr "Returnerar en rad i en matris som en vektor."
 
-#: data/functions.xml.in.h:379
+#: data/functions.xml.in.h:380
 msgid "Returns a sorted vector."
 msgstr "Returnerar en sorterad vektor."
 
-#: data/functions.xml.in.h:380
+#: data/functions.xml.in.h:381
 msgid "Returns a vector with listed components."
 msgstr "Returnerar en vektor med angivna komponenter."
 
-#: data/functions.xml.in.h:381
+#: data/functions.xml.in.h:382
 msgid ""
 "Returns a vector with values of components replaced with their mutual ranks."
 msgstr ""
 "Returnerar en vektor med komponenternas värden ersatta av deras inbördes "
 "rangordning."
 
-#: data/functions.xml.in.h:382
+#: data/functions.xml.in.h:383
 #, fuzzy
 msgid ""
 "Returns accrued interest for a security which pays periodic interest.&#10;"
@@ -2301,11 +2305,11 @@ msgstr ""
 "30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: verkliga "
 "dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:383
+#: data/functions.xml.in.h:384
 msgid "Returns an integer between (including) bottom and top."
 msgstr "Returnerar ett heltal mellan (inklusive) nedre och övre gräns"
 
-#: data/functions.xml.in.h:384
+#: data/functions.xml.in.h:385
 #, fuzzy
 msgid ""
 "Returns the accrued interest for a security which pays interest at maturity "
@@ -2318,11 +2322,11 @@ msgstr ""
 "30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: verkliga "
 "dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:385
+#: data/functions.xml.in.h:386
 msgid "Returns the adjoint of a matrix."
 msgstr "Returnerar adjoint för en matris."
 
-#: data/functions.xml.in.h:386
+#: data/functions.xml.in.h:387
 #, fuzzy
 msgid ""
 "Returns the amount of payment for a loan based on a constant interest rate "
@@ -2335,7 +2339,7 @@ msgstr ""
 "betalning i början av perioden och 0 (förvald) för betalning i slutet av "
 "perioden."
 
-#: data/functions.xml.in.h:387
+#: data/functions.xml.in.h:388
 #, fuzzy
 msgid ""
 "Returns the amount received at the maturity date for an invested security."
@@ -2348,23 +2352,23 @@ msgstr ""
 "30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: verkliga "
 "dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:388
+#: data/functions.xml.in.h:389
 msgid "Returns the base n logarithm."
 msgstr "Returnerar logaritmen för bas n."
 
-#: data/functions.xml.in.h:389
+#: data/functions.xml.in.h:390
 msgid "Returns the bond equivalent for a treasury bill."
 msgstr ""
 
-#: data/functions.xml.in.h:390
+#: data/functions.xml.in.h:391
 msgid "Returns the cofactor of the element at specified position."
 msgstr "Returnerar kofaktorn för elementet på angiven position"
 
-#: data/functions.xml.in.h:391
+#: data/functions.xml.in.h:392
 msgid "Returns the component at specified position in a vector."
 msgstr "Returnerar komponenten på angiven position i en vektor."
 
-#: data/functions.xml.in.h:392
+#: data/functions.xml.in.h:393
 #, fuzzy
 msgid ""
 "Returns the discount rate for a security.&#10;&#10;Basis is the type of day "
@@ -2376,15 +2380,15 @@ msgstr ""
 "30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: verkliga "
 "dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:393
+#: data/functions.xml.in.h:394
 msgid "Returns the element at specified position in a matrix."
 msgstr "Returnerar elementet på angiven position i en matris."
 
-#: data/functions.xml.in.h:394
+#: data/functions.xml.in.h:395
 msgid "Returns the highest value."
 msgstr "Returnerar det högsta värdet."
 
-#: data/functions.xml.in.h:395
+#: data/functions.xml.in.h:396
 msgid ""
 "Returns the identity matrix of a matrix or with specified number of rows/"
 "columns."
@@ -2392,7 +2396,7 @@ msgstr ""
 "Returnerar identitetsmatrisen för en matris eller med angivet antal rader/"
 "kolumner."
 
-#: data/functions.xml.in.h:396
+#: data/functions.xml.in.h:397
 #, fuzzy
 msgid ""
 "Returns the interest rate for a fully invested security.&#10;&#10;Basis is "
@@ -2404,31 +2408,31 @@ msgstr ""
 "30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: verkliga "
 "dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:397
+#: data/functions.xml.in.h:398
 msgid "Returns the inverse of a matrix."
 msgstr "Returnerar inversen för en matris."
 
-#: data/functions.xml.in.h:398
+#: data/functions.xml.in.h:399
 msgid "Returns the lowest value."
 msgstr "Returnerar det lägsta värdet."
 
-#: data/functions.xml.in.h:399
+#: data/functions.xml.in.h:400
 msgid "Returns the most frequently occuring value."
 msgstr "Returnerar det mest förekommande värdet."
 
-#: data/functions.xml.in.h:400
+#: data/functions.xml.in.h:401
 msgid "Returns the non-negative square root of x * pi"
 msgstr "Returnerar icke-negativa kvadratroten av x * pi"
 
-#: data/functions.xml.in.h:401
+#: data/functions.xml.in.h:402
 msgid "Returns the number of columns in a matrix."
 msgstr "Returner antalet kolumner i en matris."
 
-#: data/functions.xml.in.h:402
+#: data/functions.xml.in.h:403
 msgid "Returns the number of components in a vector."
 msgstr "Returnerar antalet komponenter i en vektor."
 
-#: data/functions.xml.in.h:403
+#: data/functions.xml.in.h:404
 #, fuzzy
 msgid ""
 "Returns the number of coupons to be paid between the settlement and the "
@@ -2441,7 +2445,7 @@ msgstr ""
 "30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: verkliga "
 "dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:404
+#: data/functions.xml.in.h:405
 #, fuzzy
 msgid ""
 "Returns the number of days between two dates.&#10;&#10;Basis is the type of "
@@ -2452,25 +2456,25 @@ msgstr ""
 "Amerikanskt 30/360 (förvald), 1: verkliga dagar, 2: verkliga dagar/360, 3: "
 "verkliga dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:405
+#: data/functions.xml.in.h:406
 msgid "Returns the number of elements in a matrix."
 msgstr "Returnerar antalet element i en matris."
 
-#: data/functions.xml.in.h:406
+#: data/functions.xml.in.h:407
 msgid ""
 "Returns the number of periods needed for an investment to attain a desired "
 "value."
 msgstr ""
 
-#: data/functions.xml.in.h:407
+#: data/functions.xml.in.h:408
 msgid "Returns the number of rows in a matrix."
 msgstr "Returnerar antalet rader i en matris."
 
-#: data/functions.xml.in.h:408
+#: data/functions.xml.in.h:409
 msgid "Returns the number of samples."
 msgstr "Returnerar antalet prov."
 
-#: data/functions.xml.in.h:409
+#: data/functions.xml.in.h:410
 #, fuzzy
 msgid ""
 "Returns the number of years (fractional) between two dates.&#10;&#10;Basis "
@@ -2481,7 +2485,7 @@ msgstr ""
 "vara: 0: Amerikanskt 30/360, 1: verkliga dagar (förvald), 2: verkliga "
 "dagar/360, 3: verkliga dagar/365, eller 4: Europeiskt 30/360"
 
-#: data/functions.xml.in.h:410
+#: data/functions.xml.in.h:411
 #, fuzzy
 msgid ""
 "Returns the present value of an investment.&#10;&#10;If type = 1 then the "
@@ -2493,131 +2497,127 @@ msgstr ""
 "betalning i början av perioden och 0 (förvald) för betalning i slutet av "
 "perioden."
 
-#: data/functions.xml.in.h:411
+#: data/functions.xml.in.h:412
 msgid "Returns the price per $100 value for a treasury bill."
 msgstr ""
 
-#: data/functions.xml.in.h:412
+#: data/functions.xml.in.h:413
 msgid ""
 "Returns the probability density p(x) at x for a Pareto distribution with "
 "exponent and scale. (from Gnumeric)"
 msgstr ""
 
-#: data/functions.xml.in.h:413
+#: data/functions.xml.in.h:414
 msgid ""
 "Returns the probability density p(x) at x for a Rayleigh distribution with "
 "scale parameter sigma. (from Gnumeric)"
 msgstr ""
 
-#: data/functions.xml.in.h:414
+#: data/functions.xml.in.h:415
 msgid ""
 "Returns the probability density p(x) at x for a Rayleigh tail distribution "
 "with scale parameter sigma and a lower limit. (from Gnumeric)"
 msgstr ""
 
-#: data/functions.xml.in.h:415
+#: data/functions.xml.in.h:416
 msgid ""
 "Returns the probability density p(x) at x for a logistic distribution with "
 "scale parameter. (from Gnumeric)"
 msgstr ""
 
-#: data/functions.xml.in.h:416
+#: data/functions.xml.in.h:417
 msgid "Returns the transpose of a matrix."
 msgstr "Returnerar transponeringen av en matris."
 
-#: data/functions.xml.in.h:417
+#: data/functions.xml.in.h:418
 msgid ""
 "Returns the value of an investment, given the principal, nominal interest "
 "rate, compounding frequency and time."
 msgstr ""
 
-#: data/functions.xml.in.h:418
+#: data/functions.xml.in.h:419
 msgid "Returns the yield for a treasury bill."
 msgstr ""
 
-#: data/functions.xml.in.h:419
+#: data/functions.xml.in.h:420
 msgid "Riemann Zeta"
 msgstr "Riemanns Zeta"
 
-#: data/functions.xml.in.h:420
+#: data/functions.xml.in.h:421
 msgid "Roman Number"
 msgstr "Romerskt tal"
 
-#: data/functions.xml.in.h:421
+#: data/functions.xml.in.h:422
 msgid "Round"
 msgstr "Avrunda"
 
-#: data/functions.xml.in.h:422
+#: data/functions.xml.in.h:423
 msgid "Round Downwards"
 msgstr "Avrunda neråt"
 
-#: data/functions.xml.in.h:423
+#: data/functions.xml.in.h:424
 msgid "Round Towards Zero"
 msgstr "Avrunda mot noll"
 
-#: data/functions.xml.in.h:424
+#: data/functions.xml.in.h:425
 msgid "Round Upwards"
 msgstr "Avrunda uppåt"
 
-#: data/functions.xml.in.h:425
+#: data/functions.xml.in.h:426
 msgid "Rounding"
 msgstr "Avrundning"
 
-#: data/functions.xml.in.h:426
+#: data/functions.xml.in.h:427
 msgid "Row"
 msgstr "Rad"
 
-#: data/functions.xml.in.h:427
+#: data/functions.xml.in.h:428
 msgid "Row Variable"
 msgstr "Radvariabel"
 
-#: data/functions.xml.in.h:428
+#: data/functions.xml.in.h:429
 msgid "Rows"
 msgstr "Rader"
 
-#: data/functions.xml.in.h:429
+#: data/functions.xml.in.h:430
 msgid "Salvage Value"
 msgstr "Slutvärde"
 
-#: data/functions.xml.in.h:430
+#: data/functions.xml.in.h:431
 msgid "Salvage value"
 msgstr "Slutvärde"
 
-#: data/functions.xml.in.h:431
+#: data/functions.xml.in.h:432
 msgid "Save as Variable"
 msgstr "Spara som variabel"
 
-#: data/functions.xml.in.h:432
+#: data/functions.xml.in.h:433
 msgid "Scale"
 msgstr "Skala"
 
-#: data/functions.xml.in.h:433
+#: data/functions.xml.in.h:434
 msgid "Secant"
 msgstr "Sekant"
 
-#: data/functions.xml.in.h:434
+#: data/functions.xml.in.h:435
 msgid "Second Date"
 msgstr "Andra datumet"
 
-#: data/functions.xml.in.h:435
+#: data/functions.xml.in.h:436
 msgid "Select Vector Components"
 msgstr "Utvälj vektorkomponenter"
 
-#: data/functions.xml.in.h:436
+#: data/functions.xml.in.h:437
 msgid "Select first match"
 msgstr "Välj första matchande komponent"
 
-#: data/functions.xml.in.h:437
+#: data/functions.xml.in.h:438
 msgid "Separator"
 msgstr "Avskiljare"
 
-#: data/functions.xml.in.h:438
+#: data/functions.xml.in.h:439
 msgid "Settlement Date"
 msgstr "Avräkningsdatum"
-
-#: data/functions.xml.in.h:439
-msgid "Shift Bits"
-msgstr "Shifta bitar"
 
 #: data/functions.xml.in.h:440
 msgid "Side A"
@@ -7833,3 +7833,6 @@ msgstr "ja"
 #: data/variables.xml.in.h:203
 msgid "z"
 msgstr ""
+
+#~ msgid "Shift Bits"
+#~ msgstr "Shifta bitar"

@@ -2215,7 +2215,7 @@
       </argument>
     </builtin_function>
     <builtin_function name="shift">
-      <_title>Shift Bits</_title>
+      <_title>Bitwise Shift</_title>
       <name index="1">
         <reference>true</reference>
         <_name>shift</_name>

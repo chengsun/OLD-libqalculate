@@ -286,7 +286,7 @@ Calculator::Calculator() {
 	b_argument_errors = true;
 	calculator = this;
 	srand48(time(0));
-
+	
 	addBuiltinVariables();
 	addBuiltinFunctions();
 	addBuiltinUnits();
@@ -927,6 +927,7 @@ void Calculator::reset() {
 	resetUnits();
 }
 void Calculator::addBuiltinVariables() {
+
 	v_e = (KnownVariable*) addVariable(new EVariable());
 	v_pi = (KnownVariable*) addVariable(new PiVariable());	
 	Number nr(1, 1);
@@ -943,10 +944,10 @@ void Calculator::addBuiltinVariables() {
 	v_undef = (KnownVariable*) addVariable(new KnownVariable("", "undefined", mstruct, "Undefined", false, true));
 	addVariable(new EulerVariable());
 	addVariable(new CatalanVariable());
-	
 	v_x = (UnknownVariable*) addVariable(new UnknownVariable("Unknowns", "x", "", true, false));
 	v_y = (UnknownVariable*) addVariable(new UnknownVariable("Unknowns", "y", "", true, false));
 	v_z = (UnknownVariable*) addVariable(new UnknownVariable("Unknowns", "z", "", true, false));
+	
 }
 void Calculator::addBuiltinFunctions() {
 
@@ -3582,22 +3583,25 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		}
 		return;
 	}
-	if((i = str.find(SHIFT_LEFT, 1)) != string::npos && i + 2 != str.length()) {
+	i = str.find(SHIFT_LEFT, 1);
+	i2 = str.find(SHIFT_RIGHT, 1);
+	if(i != string::npos && i + 2 != str.length() && (i2 == string::npos || i < i2)) {
+		MathStructure mstruct1, mstruct2;
+		str2 = str.substr(0, i);
+		str = str.substr(i + 2, str.length() - (i + 2));
+		parseAdd(str2, &mstruct1, po);
+		parseAdd(str, &mstruct2, po);
+		mstruct->set(f_shift, &mstruct1, &mstruct2, NULL);
+		return;
+	}
+	i = i2;
+	if(i != string::npos && i + 2 != str.length()) {
 		MathStructure mstruct1, mstruct2;
 		str2 = str.substr(0, i);
 		str = str.substr(i + 2, str.length() - (i + 2));
 		parseAdd(str2, &mstruct1, po);
 		parseAdd(str, &mstruct2, po);
 		mstruct2.negate();
-		mstruct->set(f_shift, &mstruct1, &mstruct2, NULL);
-		return;
-	}
-	if((i = str.find(SHIFT_RIGHT, 1)) != string::npos && i + 2 != str.length()) {
-		MathStructure mstruct1, mstruct2;
-		str2 = str.substr(0, i);
-		str = str.substr(i + 2, str.length() - (i + 2));
-		parseAdd(str2, &mstruct1, po);
-		parseAdd(str, &mstruct2, po);
 		mstruct->set(f_shift, &mstruct1, &mstruct2, NULL);
 		return;
 	}

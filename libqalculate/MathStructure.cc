@@ -2538,7 +2538,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 							return 1;
 						}
 					}
-					if(mstruct.isZero()) {
+					if(mstruct.isZero() && !containsType(STRUCT_UNIT, false, true, true)) {
 						clear(true);
 						MERGE_APPROX_AND_PREC(mstruct)
 						return 1;
@@ -2557,7 +2557,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 					return 0;
 				}
 				default: {
-					if((mstruct.isZero() && !representsUndefined(true, true)) || (isZero() && !mstruct.representsUndefined(true, true))) {
+					if((mstruct.isZero() && !containsType(STRUCT_UNIT, false, true, true) && !representsUndefined(true, true)) || (isZero() && !mstruct.representsUndefined(true, true) && !mstruct.containsType(STRUCT_UNIT, false, true, true))) {
 						clear(true); 
 						MERGE_APPROX_AND_PREC(mstruct)
 						return 1;

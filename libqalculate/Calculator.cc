@@ -2594,18 +2594,20 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 		q_end.push_back(quote_index);
 		quote_index++;
 	}
+	int index_shift = 0;
 	for(size_t i = 0; i < signs.size(); i++) {
 		size_t ui = str.find(signs[i]);
 		while(ui != string::npos) {
 			bool b = false;
 			for(size_t ui2 = 0; ui2 < q_end.size(); ui2++) {
-				if(ui <= q_end[ui2] && ui >= q_begin[ui2]) {
-					ui = str.find(signs[i], q_end[ui2] + 1);
+				if(ui <= q_end[ui2] + index_shift && ui >= q_begin[ui2] + index_shift) {
+					ui = str.find(signs[i], q_end[ui2] + 1 + index_shift);
 					b = true;
 					break;
 				}
 			}
 			if(!b) {
+				index_shift += real_signs[i].length() - signs[i].length();
 				str.replace(ui, signs[i].length(), real_signs[i]);
 				ui = str.find(signs[i], ui + real_signs[i].length());
 			}

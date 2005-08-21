@@ -1,6 +1,8 @@
 2005-08-21 Niklas Knutsson  <nq@altern.org>
 
 	* Fix (1/2)^n < 0.5
+	* Fix replacement of unicode signs when skipping quotes
+	* Fix 0 oC to oF (0*unit != 0)
 
 2005-06-11 Niklas Knutsson  <nq@altern.org>
 

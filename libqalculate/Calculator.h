@@ -131,6 +131,8 @@ class Calculator {
 	bool b_argument_errors;
 	bool exchange_rates_warning_issued;
 
+	int has_gnomevfs;
+
 	bool b_gnuplot_open;
 	string gnuplot_cmdline;
 	FILE *gnuplot_pipe, *calculate_pipe_r, *calculate_pipe_w, *print_pipe_r, *print_pipe_w;
@@ -356,9 +358,11 @@ class Calculator {
 	int testCondition(string expression);
 	
 	bool canFetch();
+	bool hasGnomeVFS();
 	bool loadExchangeRates();
 	string getExchangeRatesFileName();
 	string getExchangeRatesUrl();
+	bool fetchExchangeRates(int timeout, string wget_args);
 	bool fetchExchangeRates(int timeout = 15);
 	bool checkExchangeRatesDate();
 	

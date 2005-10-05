@@ -879,6 +879,11 @@ int main (int argc, char *argv[]) {
 			set_option(str2 + str.substr(ispace + 1, slen - (ispace + 1)));
 		} else if(EQUALS_IGNORECASE_AND_LOCAL(scom, "base", _("base"))) {
 			set_option(str);
+		} else if(EQUALS_IGNORECASE_AND_LOCAL(scom, "exrates", _("exrates"))) {
+			str = str.substr(ispace + 1, slen - (ispace + 1));
+			remove_blank_ends(str);
+			CALCULATOR->fetchExchangeRates(15, str);
+			CALCULATOR->loadExchangeRates();
 		} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "exrates", _("exrates"))) {
 			CALCULATOR->fetchExchangeRates(15);
 			CALCULATOR->loadExchangeRates();
@@ -1068,7 +1073,11 @@ int main (int argc, char *argv[]) {
 			PUTS_UNICODE(_("mode"));
 			FPUTS_UNICODE(_("set"), stdout); fputs(" ", stdout); FPUTS_UNICODE(_("OPTION"), stdout); fputs(" ", stdout); PUTS_UNICODE(_("VALUE"));
 			FPUTS_UNICODE(_("save"), stdout); fputs("/", stdout); FPUTS_UNICODE(_("store"), stdout); fputs(" ", stdout); FPUTS_UNICODE(_("NAME"), stdout); fputs(" [", stdout); FPUTS_UNICODE(_("CATEGORY"), stdout); fputs("] [", stdout); FPUTS_UNICODE("[", stdout); fputs(_("TITLE"), stdout); PUTS_UNICODE("]");
-			PUTS_UNICODE(_("exrates"));
+			FPUTS_UNICODE(_("exrates"), stdout);
+			if(!CALCULATOR->hasGnomeVFS()) {
+				fputs(" ", stdout); FPUTS_UNICODE("[", stdout); fputs(_("WGET ARGUMENTS"), stdout); FPUTS_UNICODE("]", stdout);
+			}
+			puts("");
 			FPUTS_UNICODE(_("quit"), stdout); fputs("/", stdout); PUTS_UNICODE(_("exit"));
 			puts("");
 			PUTS_UNICODE(_("Type help COMMAND for more help (example: help save)."));

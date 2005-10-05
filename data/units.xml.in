@@ -225,8 +225,8 @@
         <_name>PLN</_name>
       </abbreviation>
     </builtin_unit>
-    <builtin_unit name="ROL">
-      <_title>Romanian Leu</_title>
+    <builtin_unit name="RON">
+      <_title>Romanian New Leu</_title>
       <name index="1">
         <_name>leu</_name>
       </name>

@@ -184,6 +184,7 @@ Calculator::Calculator() {
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #endif
 
+	has_gnomevfs = -1;
 	exchange_rates_warning_issued = false;
 
 	setPrecision(DEFAULT_PRECISION);
@@ -6290,7 +6291,20 @@ bool Calculator::loadExchangeRates() {
 	exchange_rates_warning_issued = false;
 	return true;
 }
+bool Calculator::hasGnomeVFS() {
+	if(has_gnomevfs >= 0) return has_gnomevfs > 0;
+	gchar *gstr = g_find_program_in_path("gnomevfs-copy");
+	if(gstr) {
+		g_free(gstr);
+		has_gnomevfs = 1;
+		return true;
+	}
+	g_free(gstr);
+	has_gnomevfs = 0;
+	return has_gnomevfs > 0;
+}
 bool Calculator::canFetch() {
+	if(hasGnomeVFS()) return true;
 	gchar *gstr = g_find_program_in_path("wget");
 	if(gstr) {
 		g_free(gstr);
@@ -6310,32 +6324,34 @@ string Calculator::getExchangeRatesFileName() {
 string Calculator::getExchangeRatesUrl() {
 	return "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
 }
-bool Calculator::fetchExchangeRates(int timeout) {
-	pid_t pid;
-	int status;
+bool Calculator::fetchExchangeRates(int timeout, string wget_args) {
+	int status = 0;
 	string filename_arg;
 	string homedir = getLocalDir();
 	mkdir(homedir.c_str(), S_IRWXU);	
-	filename_arg =  "--output-document=";
-	filename_arg += homedir;
-	filename_arg += "eurofxref-daily.xml";	
+	string cmdline;
+	if(hasGnomeVFS()) {
+		cmdline = "gnomevfs-copy http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
+		cmdline += " "; cmdline += homedir;
+	} else {
 	
-	pid = fork();
-	if(pid == 0) {
+		cmdline = "wget";
+		cmdline += " "; cmdline += wget_args;
+		filename_arg =  "--output-document=";
+		filename_arg += homedir;
+		filename_arg += "eurofxref-daily.xml";
 		string timeout_s = "--timeout=";
 		timeout_s += i2s(timeout);
-		execlp("wget", "--quiet", filename_arg.c_str(), "--tries=1", timeout_s.c_str(), "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml", NULL);
-		_exit(EXIT_FAILURE);
-	} else if(pid < 0) {
-		//error
-		status = -1;
-	} else {
-		if(waitpid(pid, &status, 0) != pid) {
-			status = -1;
-		}
+		cmdline += " "; cmdline += filename_arg;
+		cmdline += " "; cmdline += timeout_s;
+		cmdline += " "; cmdline += "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
 	}
+	if(!g_spawn_command_line_sync(cmdline.c_str(), NULL, NULL, NULL, NULL)) status = -1;
 	if(status != 0) error(true, _("Failed to download exchange rates from ECB."), NULL);
-	return status == 0;
+	return status == 0;	
+}
+bool Calculator::fetchExchangeRates(int timeout) {
+	return fetchExchangeRates(timeout, "--quiet --tries=1");
 }
 bool Calculator::checkExchangeRatesDate() {
 	if(exchange_rates_warning_issued) return true;

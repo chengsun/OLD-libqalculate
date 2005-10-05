@@ -1,6 +1,8 @@
 2005-10-05 Niklas Knutsson  <nq@altern.org>
 
 	* Do not create qalculate symlink to qalc (confusing when installing GUI in other location)
+	* Use gnomevfs-copy instead of wget if available
+	* Allow user to specify wget arguments
 
 2005-09-21 Niklas Knutsson  <nq@altern.org>
 

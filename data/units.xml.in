@@ -3002,6 +3002,67 @@
         <exponent>1</exponent>
       </base>
     </unit>
+    <unit type="composite">
+      <hidden>true</hidden>
+      <_title>Miles per Hour</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>mile_p_h</_name>
+      </name>
+      <part>
+        <unit>mi</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
+      <part>
+        <unit>h</unit>
+        <prefix>0</prefix>
+        <exponent>-1</exponent>
+      </part>
+    </unit>
+    <unit type="alias">
+      <_title>Miles per Hour</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>mph</_name>
+      </abbreviation>
+      <base>
+        <unit>mile_p_h</unit>
+        <relation>1</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="composite">
+      <hidden>true</hidden>
+      <_title>Miles per Gallon</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>mile_p_gal</_name>
+      </name>
+      <part>
+        <unit>mi</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
+      <part>
+        <unit>gal</unit>
+        <prefix>0</prefix>
+        <exponent>-1</exponent>
+      </part>
+    </unit>
+    <unit type="alias">
+      <hidden>true</hidden>
+      <_title>Miles per Gallon</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>mpg</_name>
+      </name>
+      <base>
+        <unit>mile_p_gal</unit>
+        <relation>1</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
     <category>
       <_title>Acceleration</_title>
       <unit type="composite">

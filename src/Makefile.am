@@ -25,6 +25,6 @@ defs2doc_LDADD = \
 	@GLIB_LIBS@ \
 	../libqalculate/libqalculate.la
 
-install-exec-local:
-	cd $(DESTDIR)$(bindir) && rm -f qalculate; $(LN_S) @LN_QALCULATE@ qalculate
+#install-exec-local:
+#	cd $(DESTDIR)$(bindir) && rm -f qalculate; $(LN_S) @LN_QALCULATE@ qalculate
 

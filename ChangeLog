@@ -1,3 +1,11 @@
+2005-10-05 Niklas Knutsson  <nq@altern.org>
+
+	* Do not create qalculate symlink to qalc (confusing when installing GUI in other location)
+
+2005-09-21 Niklas Knutsson  <nq@altern.org>
+
+	* mph and mpg units
+
 2005-08-21 Niklas Knutsson  <nq@altern.org>
 
 	* Fix (1/2)^n < 0.5

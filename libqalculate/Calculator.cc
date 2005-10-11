@@ -317,17 +317,26 @@ Calculator::~Calculator() {
 
 Unit *Calculator::getGraUnit() {
 	if(!u_gra) u_gra = getUnit("gra");
-	if(!u_gra) CALCULATOR->error(_("Gradians unit is missing."), NULL);
+	if(!u_gra) {
+		CALCULATOR->error(true, _("Gradians unit is missing. Creating one for this session."), NULL);
+		u_gra = addUnit(new AliasUnit(_("Angle/Plane Angle"), "gra", "gradians", "gradian", "Gradian", getRadUnit(), "pi/200", 1, "", false, true, true));	
+	}
 	return u_gra;
 }
 Unit *Calculator::getRadUnit() {
 	if(!u_rad) u_rad = getUnit("rad");
-	if(!u_rad) CALCULATOR->error(_("Radians unit is missing."), NULL);
+	if(!u_rad) {
+		CALCULATOR->error(true, _("Radians unit is missing. Creating one for this session."), NULL);
+		u_rad = addUnit(new Unit(_("Angle/Plane Angle"), "rad", "radians", "radian", "Radian", false, true, true));
+	}
 	return u_rad;
 }
 Unit *Calculator::getDegUnit() {
 	if(!u_deg) u_deg = getUnit("deg");
-	if(!u_deg) CALCULATOR->error(_("Degrees unit is missing."), NULL);
+	if(!u_deg) {
+		CALCULATOR->error(true, _("Degrees unit is missing. Creating one for this session."), NULL);
+		u_deg = addUnit(new AliasUnit(_("Angle/Plane Angle"), "deg", "degrees", "degree", "Degree", getRadUnit(), "pi/180", 1, "", false, true, true));
+	}
 	return u_deg;
 }
 
@@ -3908,6 +3917,11 @@ bool Calculator::loadGlobalDefinitions() {
 	bool b = true;
 	if(!loadDefinitions(filename.c_str(), false)) {
 		b = false;
+	}
+	filename = dir;
+	filename += "currencies.xml";
+	if(!loadDefinitions(filename.c_str(), false)) {
+		b = false;
 	}	
 	filename = dir;
 	filename += "units.xml";
@@ -3930,6 +3944,31 @@ bool Calculator::loadGlobalDefinitions() {
 		b = false;
 	}
 	return b;
+}
+bool Calculator::loadGlobalDefinitions(string filename) {
+	string dir = PACKAGE_DATA_DIR;
+	dir += "/qalculate/";
+	dir += filename;
+	return loadDefinitions(dir.c_str(), false);
+}
+bool Calculator::loadGlobalPrefixes() {
+	return loadGlobalDefinitions("prefixes.xml");
+}
+bool Calculator::loadGlobalCurrencies() {
+	return loadGlobalDefinitions("currencies.xml");
+}
+bool Calculator::loadGlobalUnits() {
+	bool b = loadGlobalDefinitions("currencies.xml");
+	return loadGlobalDefinitions("units.xml") && b;
+}
+bool Calculator::loadGlobalVariables() {
+	return loadGlobalDefinitions("variables.xml");
+}
+bool Calculator::loadGlobalFunctions() {
+	return loadGlobalDefinitions("functions.xml");
+}
+bool Calculator::loadGlobalDataSets() {
+	return loadGlobalDefinitions("datasets.xml");
 }
 bool Calculator::loadLocalDefinitions() {
 	string filename;
@@ -4280,7 +4319,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 		xmlFreeDoc(doc);
 		return false;
 	}
-	int version_numbers[] = {0, 8, 1};
+	int version_numbers[] = {0, 8, 2};
 	parse_qalculate_version(version, version_numbers);
 	
 	ParseOptions po;
@@ -6326,24 +6365,17 @@ string Calculator::getExchangeRatesUrl() {
 }
 bool Calculator::fetchExchangeRates(int timeout, string wget_args) {
 	int status = 0;
-	string filename_arg;
 	string homedir = getLocalDir();
 	mkdir(homedir.c_str(), S_IRWXU);	
 	string cmdline;
 	if(hasGnomeVFS()) {
 		cmdline = "gnomevfs-copy http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
 		cmdline += " "; cmdline += homedir;
-	} else {
-	
+	} else {	
 		cmdline = "wget";
+		cmdline += " "; cmdline += "--timeout="; cmdline += i2s(timeout);
 		cmdline += " "; cmdline += wget_args;
-		filename_arg =  "--output-document=";
-		filename_arg += homedir;
-		filename_arg += "eurofxref-daily.xml";
-		string timeout_s = "--timeout=";
-		timeout_s += i2s(timeout);
-		cmdline += " "; cmdline += filename_arg;
-		cmdline += " "; cmdline += timeout_s;
+		cmdline += " "; cmdline +=  "--output-document="; cmdline += homedir; cmdline += "eurofxref-daily.xml";
 		cmdline += " "; cmdline += "http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
 	}
 	if(!g_spawn_command_line_sync(cmdline.c_str(), NULL, NULL, NULL, NULL)) status = -1;

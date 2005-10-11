@@ -343,6 +343,13 @@ class Calculator {
 	bool unitIsUsedByOtherUnits(const Unit *u) const;	
 	string getName(string name = "", ExpressionItem *object = NULL, bool force = false, bool always_append = false);
 	bool loadGlobalDefinitions();
+	bool loadGlobalDefinitions(string filename);
+	bool loadGlobalPrefixes();
+	bool loadGlobalCurrencies();
+	bool loadGlobalUnits();
+	bool loadGlobalVariables();
+	bool loadGlobalFunctions();
+	bool loadGlobalDataSets();
 	bool loadLocalDefinitions();
 	int loadDefinitions(const char *file_name, bool is_user_defs = true);
 	bool saveDefinitions();	

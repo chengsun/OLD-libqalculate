@@ -1,8 +1,15 @@
+2005-10-08 Niklas Knutsson  <nq@altern.org>
+
+	* Move currency definitions to currencies.xml
+	* Functions for loading sepearate global definitions files
+	* Create angle units if not loaded from definitions files
+
 2005-10-05 Niklas Knutsson  <nq@altern.org>
 
 	* Do not create qalculate symlink to qalc (confusing when installing GUI in other location)
 	* Use gnomevfs-copy instead of wget if available
 	* Allow user to specify wget arguments
+	* Update currencies
 
 2005-09-21 Niklas Knutsson  <nq@altern.org>
 

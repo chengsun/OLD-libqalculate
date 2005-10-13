@@ -7438,7 +7438,7 @@ bool MathStructure::syncUnits(bool sync_complex_relations) {
 				}
 			}
 			for(size_t i2 = 0; !do_erase && i2 < alias_units.size(); i2++) {
-				if(cu->containsRelativeTo(alias_units[i2])) {
+				if(i != i2 && cu->containsRelativeTo(alias_units[i2])) {
 					for(size_t i3 = 0; i3 < composite_units.size(); i3++) {
 						if(composite_units[i3] == cu) {
 							b = true;

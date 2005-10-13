@@ -1539,7 +1539,7 @@ MathStructure Calculator::convert(const MathStructure &mstruct, Unit *to_unit, c
 				}
 			}
 		}
-		if(b) {			
+		if(b) {		
 			mstruct_new.divide(to_unit);
 			EvaluationOptions eo2 = eo;
 			eo2.calculate_functions = false;

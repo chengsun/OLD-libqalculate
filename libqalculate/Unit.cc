@@ -626,8 +626,8 @@ bool CompositeUnit::containsRelativeTo(Unit *u) const {
 			if(cu->containsRelativeTo(u)) return true;
 		}
 	}
-	if(u->subtype() == SUBTYPE_COMPOSITE_UNIT) {
-		cu = (CompositeUnit*) u;
+	if(u->baseUnit()->subtype() == SUBTYPE_COMPOSITE_UNIT) {
+		cu = (CompositeUnit*) u->baseUnit();
 		for(size_t i = 0; i < cu->units.size(); i++) {	
 			if(containsRelativeTo(cu->units[i]->baseUnit())) return true;
 		}

@@ -16,6 +16,54 @@
         <_name>meters</_name>
       </plural>
     </unit>
+    <unit type="composite">
+      <_title>Kilometer</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>km_c</name>
+      </name>
+      <part>
+        <unit>m</unit>
+        <prefix>3</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Decimeter</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>dm_c</name>
+      </name>
+      <part>
+        <unit>m</unit>
+        <prefix>-1</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Centimeter</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>cm_c</name>
+      </name>
+      <part>
+        <unit>m</unit>
+        <prefix>-2</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Millimeter</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>mm_c</name>
+      </name>
+      <part>
+        <unit>m</unit>
+        <prefix>-3</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
     <unit type="alias">
       <_title>Nautical Mile</_title>
       <name index="1">
@@ -530,6 +578,30 @@
         <_name>grams</_name>
       </plural>
     </unit>
+    <unit type="composite">
+      <_title>Kilogram</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>kg_c</name>
+      </name>
+      <part>
+        <unit>g</unit>
+        <prefix>3</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Hektogram</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>hg_c</name>
+      </name>
+      <part>
+        <unit>g</unit>
+        <prefix>2</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
     <unit type="alias">
       <_title>Metric Ton</_title>
       <abbreviation index="1">
@@ -879,6 +951,40 @@
           <exponent>-3</exponent>
         </part>
       </unit>
+      <unit type="composite">
+        <_title>Gram per Cubic Decimeter</_title>
+        <name index="1">
+          <reference>true</reference>
+          <name>g_p_cudm</name>
+        </name>
+        <part>
+          <unit>g</unit>
+          <prefix>0</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>m</unit>
+          <prefix>-1</prefix>
+          <exponent>-3</exponent>
+        </part>
+      </unit>
+      <unit type="composite">
+        <_title>Gram per Cubic Centimeter</_title>
+        <name index="1">
+          <reference>true</reference>
+          <name>g_p_cucm</name>
+        </name>
+        <part>
+          <unit>g</unit>
+          <prefix>0</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>m</unit>
+          <prefix>-2</prefix>
+          <exponent>-3</exponent>
+        </part>
+      </unit>
     </category>
     <category>
       <_title>Mass Fraction</_title>
@@ -969,6 +1075,36 @@
       <base>
         <unit>h</unit>
         <relation>24</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Week</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>week</_name>
+      </name>
+      <plural index="2">
+        <_name>weeks</_name>
+      </plural>
+      <base>
+        <unit>day</unit>
+        <relation>7</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Fortnight</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>fortnight</_name>
+      </name>
+      <plural index="2">
+        <_name>fortnights</_name>
+      </plural>
+      <base>
+        <unit>week</unit>
+        <relation>2</relation>
         <exponent>1</exponent>
       </base>
     </unit>
@@ -1486,6 +1622,16 @@
         <_name>moles</_name>
       </plural>
     </unit>
+    <unit type="base">
+      <_title>Einstein</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>einstein</_name>
+      </name>
+      <plural index="2">
+        <_name>einsteins</_name>
+      </plural>
+    </unit>
     <category>
       <_title>Substance Concentration</_title>
       <unit type="composite">
@@ -1685,6 +1831,24 @@
           <exponent>-2</exponent>
         </part>
       </unit>
+      <unit type="composite">
+        <hidden>true</hidden>
+        <_title>Lumen per Square Foot</_title>
+        <name index="1">
+          <reference>true</reference>
+          <name>lm_p_sqft</name>
+        </name>
+        <part>
+          <unit>lm</unit>
+          <prefix>0</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>ft</unit>
+          <prefix>0</prefix>
+          <exponent>-2</exponent>
+        </part>
+      </unit>
       <unit type="alias">
         <system>SI</system>
         <_title>Lux</_title>
@@ -1697,6 +1861,21 @@
         </name>
         <base>
           <unit>lm_p_sqm</unit>
+          <relation>1</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <_title>Foot-Candle</_title>
+        <abbreviation index="1">
+          <reference>true</reference>
+          <_name>fc</_name>
+        </abbreviation>
+        <name index="2">
+          <_name>footcandle</_name>
+        </name>
+        <base>
+          <unit>lm_p_sqft</unit>
           <relation>1</relation>
           <exponent>1</exponent>
         </base>
@@ -1761,6 +1940,50 @@
           <exponent>-2</exponent>
         </part>
       </unit>
+      <unit type="composite">
+        <_title>Einstein per Square Meter per Second</_title>
+        <name index="1">
+          <reference>true</reference>
+          <name>einstein_p_sqm_p_s</name>
+        </name>
+        <part>
+          <unit>einstein</unit>
+          <prefix>0</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>m</unit>
+          <prefix>0</prefix>
+          <exponent>-2</exponent>
+        </part>
+	<part>
+          <unit>s</unit>
+          <prefix>0</prefix>
+          <exponent>-1</exponent>
+        </part>
+      </unit>
+      <unit type="composite">
+        <_title>Microeinstein per Square Meter per Second</_title>
+        <name index="1">
+          <reference>true</reference>
+          <name>microeinstein_p_sqm_p_s</name>
+        </name>
+        <part>
+          <unit>einstein</unit>
+          <prefix>-6</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>m</unit>
+          <prefix>0</prefix>
+          <exponent>-2</exponent>
+        </part>
+	<part>
+          <unit>s</unit>
+          <prefix>0</prefix>
+          <exponent>-1</exponent>
+        </part>
+      </unit>
     </category>
     <category>
       <_title>Radiance</_title>
@@ -1801,6 +2024,18 @@
       <part>
         <unit>m</unit>
         <prefix>0</prefix>
+        <exponent>2</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Square Kilometer</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>sqkm</name>
+      </name>
+      <part>
+        <unit>m</unit>
+        <prefix>3</prefix>
         <exponent>2</exponent>
       </part>
     </unit>
@@ -1924,6 +2159,30 @@
         <exponent>2</exponent>
       </part>
     </unit>
+    <unit type="composite">
+      <_title>Square Inch</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>sqin</name>
+      </name>
+      <part>
+        <unit>in</unit>
+        <prefix>0</prefix>
+        <exponent>2</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Square Mile</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>sqmi</name>
+      </name>
+      <part>
+        <unit>mi</unit>
+        <prefix>0</prefix>
+        <exponent>2</exponent>
+      </part>
+    </unit>
   </category>
   <category>
     <_title>Volume</_title>
@@ -1968,6 +2227,42 @@
       </base>
     </unit>
     <unit type="composite">
+      <_title>Milliliter</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>ml_c</name>
+      </name>
+      <part>
+        <unit>l</unit>
+        <prefix>-3</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Centiliter</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>cl_c</name>
+      </name>
+      <part>
+        <unit>l</unit>
+        <prefix>-2</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Deciliter</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>dl_c</name>
+      </name>
+      <part>
+        <unit>l</unit>
+        <prefix>-1</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
       <_title>Cubic Inch</_title>
       <name index="1">
         <reference>true</reference>
@@ -1979,6 +2274,73 @@
         <exponent>3</exponent>
       </part>
     </unit>
+    <category>
+      <_title>Fuel Economy</_title>
+      <unit type="composite">
+        <_title>Liter per Kilometer</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>l_p_km</_name>
+        </name>
+        <part>
+          <unit>l</unit>
+          <prefix>0</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>m</unit>
+          <prefix>3</prefix>
+          <exponent>-1</exponent>
+        </part>
+      </unit>
+      <unit type="composite">
+        <_title>Kilometer per Liter</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>km_p_l</_name>
+        </name>
+        <part>
+          <unit>m</unit>
+          <prefix>3</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>l</unit>
+          <prefix>0</prefix>
+          <exponent>-1</exponent>
+        </part>
+      </unit>
+      <unit type="composite">
+        <hidden>true</hidden>
+        <_title>Miles per Gallon</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>mile_p_gal</_name>
+        </name>
+        <part>
+          <unit>mi</unit>
+          <prefix>0</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>gal</unit>
+          <prefix>0</prefix>
+          <exponent>-1</exponent>
+        </part>
+      </unit>
+      <unit type="alias">
+        <_title>Miles per Gallon</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>mpg</_name>
+        </name>
+        <base>
+          <unit>mile_p_gal</unit>
+          <relation>1</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+    </category>
     <category>
       <_title>Cooking</_title>
       <unit type="alias">
@@ -2457,6 +2819,23 @@
       </part>
     </unit>
     <unit type="composite">
+      <_title>Kilometer per Hour</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>km_p_h</name>
+      </name>
+      <part>
+        <unit>m</unit>
+        <prefix>3</prefix>
+        <exponent>1</exponent>
+      </part>
+      <part>
+        <unit>h</unit>
+        <prefix>0</prefix>
+        <exponent>-1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
       <_title>Nautical Mile per Hour</_title>
       <name index="1">
         <reference>true</reference>
@@ -2518,37 +2897,6 @@
         <exponent>1</exponent>
       </base>
     </unit>
-    <unit type="composite">
-      <hidden>true</hidden>
-      <_title>Miles per Gallon</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>mile_p_gal</_name>
-      </name>
-      <part>
-        <unit>mi</unit>
-        <prefix>0</prefix>
-        <exponent>1</exponent>
-      </part>
-      <part>
-        <unit>gal</unit>
-        <prefix>0</prefix>
-        <exponent>-1</exponent>
-      </part>
-    </unit>
-    <unit type="alias">
-      <hidden>true</hidden>
-      <_title>Miles per Gallon</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>mpg</_name>
-      </name>
-      <base>
-        <unit>mile_p_gal</unit>
-        <relation>1</relation>
-        <exponent>1</exponent>
-      </base>
-    </unit>
     <category>
       <_title>Acceleration</_title>
       <unit type="composite">
@@ -2584,6 +2932,21 @@
         <base>
           <unit>m_p_sqs</unit>
           <relation>1/100</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <_title>Gee</_title>
+        <name index="1">
+	  <reference>true</reference>
+          <_name>gee</_name>
+        </name>
+        <plural index="2">
+          <_name>gees</_name>
+        </plural>
+        <base>
+          <unit>m_p_sqs</unit>
+          <relation>9.80665</relation>
           <exponent>1</exponent>
         </base>
       </unit>
@@ -3049,6 +3412,40 @@
         <relation>1</relation>
         <exponent>1</exponent>
       </base>
+    </unit>
+    <unit type="composite">
+      <_title>Watt Hour</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>W_h</name>
+      </name>
+      <part>
+        <unit>W</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
+      <part>
+        <unit>h</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Kilowatt Hour</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>W_h</name>
+      </name>
+      <part>
+        <unit>W</unit>
+        <prefix>3</prefix>
+        <exponent>1</exponent>
+      </part>
+      <part>
+        <unit>h</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
     </unit>
     <unit type="alias">
       <_title>Calorie (international table)</_title>

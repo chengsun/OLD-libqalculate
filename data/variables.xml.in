@@ -267,7 +267,7 @@
           <suffix>true</suffix>
           <_name>t_P</_name>
         </abbreviation>
-        <value approximate="true">5.39121E-44*s</value>
+        <value approximate="true" precision="3">5.39121E-44*s</value>
       </variable>
       <variable>
         <_title>Planck Temperature</_title>
@@ -280,7 +280,7 @@
           <suffix>true</suffix>
           <_name>T_P</_name>
         </abbreviation>
-        <value approximate="true">1.41679E32*K</value>
+        <value approximate="true" precision="3">1.41679E32*K</value>
       </variable>
       <variable>
         <_title>Planck Mass</_title>
@@ -293,7 +293,7 @@
           <suffix>true</suffix>
           <_name>m_P</_name>
         </abbreviation>
-        <value approximate="true">2.17645E-5*g</value>
+        <value approximate="true" precision="3">2.17645E-5*g</value>
       </variable>
       <variable>
         <_title>Planck Length</_title>
@@ -306,7 +306,7 @@
           <suffix>true</suffix>
           <_name>l_P</_name>
         </abbreviation>
-        <value approximate="true">1.61624E-35*m</value>
+        <value approximate="true" precision="3">1.61624E-35*m</value>
       </variable>
       <variable>
         <_title>Planck Constant</_title>
@@ -314,7 +314,7 @@
           <reference>true</reference>
           <_name>planck</_name>
         </name>
-        <value approximate="true">6.626 0693E-34*J*s</value>
+        <value approximate="true" precision="5">6.6260693E-34*J*s</value>
       </variable>
       <variable>
         <_title>Planck Constant over 2 pi</_title>
@@ -333,7 +333,7 @@
         <abbreviation index="2">
           <_name>G</_name>
         </abbreviation>
-        <value approximate="true">6.6742E-11*m^3*kg^(-1)*s^(-2)</value>
+        <value approximate="true" precision="2">6.6742E-11*m^3*kg^(-1)*s^(-2)</value>
       </variable>
       <variable>
         <_title>Electric Constant (Permittivity of Free Space)</_title>
@@ -391,7 +391,7 @@
           <suffix>true</suffix>
           <_name>&#x3BC;_B</_name>
         </abbreviation>
-        <value approximate="true">927.400949E-26*J*T^(-1)</value>
+        <value approximate="true" precision="6">927.400949E-26*J*T^(-1)</value>
       </variable>
       <variable>
         <_title>Conductance Quantum</_title>
@@ -404,7 +404,7 @@
           <avoid_input>true</avoid_input>
           <_name>G_0</_name>
         </abbreviation>
-        <value approximate="true">7.748091733E-5*S</value>
+        <value approximate="true" precision="7">7.748091733E-5*S</value>
       </variable>
       <variable>
         <_title>Elementary Charge</_title>
@@ -417,7 +417,7 @@
           <avoid_input>true</avoid_input>
           <_name>e_charge</_name>
         </abbreviation>
-        <value approximate="true">1.60217653E-19*C</value>
+        <value approximate="true" precision="6">1.60217653E-19*C</value>
       </variable>
       <variable>
         <_title>Josephson Constant</_title>
@@ -430,7 +430,7 @@
           <suffix>true</suffix>
           <_name>K_J</_name>
         </abbreviation>
-        <value approximate="true">483597.879E9*Hz*V^(-1)</value>
+        <value approximate="true" precision="6">483597.879E9*Hz*V^(-1)</value>
       </variable>
       <variable>
         <_title>Magnetic Flux Quantum</_title>
@@ -444,7 +444,7 @@
           <suffix>true</suffix>
           <_name>&#x3A6;_0</_name>
         </abbreviation>
-        <value approximate="true">2.06783372E-15*Wb</value>
+        <value approximate="true" precision="6">2.06783372E-15*Wb</value>
       </variable>
       <variable>
         <_title>Nuclear Magneton</_title>
@@ -458,7 +458,7 @@
           <suffix>true</suffix>
           <_name>&#x3BC;_N</_name>
         </abbreviation>
-        <value approximate="true">5.05078343E-27*J*T^(-1)</value>
+        <value approximate="true" precision="6">5.05078343E-27*J*T^(-1)</value>
       </variable>
       <variable>
         <_title>von Klitzing Constant</_title>
@@ -471,7 +471,7 @@
           <suffix>true</suffix>
           <_name>R_K</_name>
         </abbreviation>
-        <value approximate="true">25812.807449*ohm</value>
+        <value approximate="true" precision="8">25812.807449*ohm</value>
       </variable>
     </category>
     <category>
@@ -488,7 +488,7 @@
           <suffix>true</suffix>
           <_name>m_&#x3B1;</_name>
         </abbreviation>
-        <value approximate="true">6.6446565E-24*g</value>
+        <value approximate="true" precision="5">6.6446565E-24*g</value>
       </variable>
       <variable>
         <_title>Bohr Radius</_title>
@@ -501,7 +501,7 @@
           <suffix>true</suffix>
           <_name>a_o</_name>
         </abbreviation>
-        <value approximate="true">0.5291772108E-10*m</value>
+        <value approximate="true" precision="7">0.5291772108E-10*m</value>
       </variable>
       <variable>
         <_title>Classical Electron Radius</_title>
@@ -514,7 +514,7 @@
           <suffix>true</suffix>
           <_name>r_e</_name>
         </abbreviation>
-        <value approximate="true">2.817940325E-15*m</value>
+        <value approximate="true" precision="7">2.817940325E-15*m</value>
       </variable>
       <variable>
         <_title>Compton Wavelength</_title>
@@ -528,7 +528,7 @@
           <suffix>true</suffix>
           <_name>&#x3BB;_C</_name>
         </abbreviation>
-        <value approximate="true">2.426310238E-12*m</value>
+        <value approximate="true" precision="7">2.426310238E-12*m</value>
       </variable>
       <variable>
         <_title>Electron Mass</_title>
@@ -541,7 +541,7 @@
           <suffix>true</suffix>
           <_name>m_e</_name>
         </abbreviation>
-        <value approximate="true">9.1093826E-28*g</value>
+        <value approximate="true" precision="5">9.1093826E-28*g</value>
       </variable>
       <variable>
         <_title>Helion Mass</_title>
@@ -554,7 +554,7 @@
           <suffix>true</suffix>
           <_name>m_h</_name>
         </abbreviation>
-        <value approximate="true">5.00641214E-24*g</value>
+        <value approximate="true" precision="6">5.00641214E-24*g</value>
       </variable>
       <variable>
         <_title>Neutron Mass</_title>
@@ -567,7 +567,7 @@
           <suffix>true</suffix>
           <_name>m_n</_name>
         </abbreviation>
-        <value approximate="true">1.67492728</value>
+        <value approximate="true" precision="6">1.67492728E-24*g</value>
       </variable>
       <variable>
         <_title>Proton Mass</_title>
@@ -580,7 +580,7 @@
           <suffix>true</suffix>
           <_name>m_p</_name>
         </abbreviation>
-        <value approximate="true">1.67262171E-24*g</value>
+        <value approximate="true" precision="6">1.67262171E-24*g</value>
       </variable>
       <variable>
         <_title>Rydberg Constant</_title>
@@ -594,7 +594,7 @@
           <suffix>true</suffix>
           <_name>R_&#x221E;</_name>
         </abbreviation>
-        <value approximate="true">10973731.568525*m^(-1)</value>
+        <value approximate="true" precision="11">10973731.568525*m^(-1)</value>
       </variable>
       <variable>
         <_title>Tau Mass</_title>
@@ -608,7 +608,7 @@
           <suffix>true</suffix>
           <_name>m_&#x3C4;</_name>
         </abbreviation>
-        <value approximate="true">3.16777E-24*g</value>
+        <value approximate="true" precision="3">3.16777E-24*g</value>
       </variable>
     </category>
     <category>
@@ -624,7 +624,7 @@
           <suffix>true</suffix>
           <_name>m_u</_name>
         </abbreviation>
-        <value approximate="true">1.66053886E-24*g</value>
+        <value approximate="true" precision="6">1.66053886E-24*g</value>
       </variable>
       <variable>
         <_title>Avogadro Constant</_title>
@@ -637,7 +637,7 @@
           <suffix>true</suffix>
           <_name>N_A</_name>
         </abbreviation>
-        <value approximate="true">6.0221415E23*mol^(-1)</value>
+        <value approximate="true" precision="5">6.0221415E23*mol^(-1)</value>
       </variable>
       <variable>
         <_title>Boltzmann Constant</_title>
@@ -645,7 +645,7 @@
           <reference>true</reference>
           <_name>boltzmann</_name>
         </name>
-        <value approximate="true">1.3806505E-23*J*K^(-1)</value>
+        <value approximate="true" precision="5">1.3806505E-23*J*K^(-1)</value>
       </variable>
       <variable>
         <_title>Faraday Constant</_title>
@@ -653,7 +653,7 @@
           <reference>true</reference>
           <_name>faraday</_name>
         </name>
-        <value approximate="true">96485.3383*C*mol^(-1)</value>
+        <value approximate="true" precision="6">96485.3383*C*mol^(-1)</value>
       </variable>
       <variable>
         <_title>First Radiation Constant</_title>
@@ -666,7 +666,7 @@
           <suffix>true</suffix>
           <_name>c_1</_name>
         </abbreviation>
-        <value approximate="true">3.74177138E-16*W*m^2</value>
+        <value approximate="true" precision="6">3.74177138E-16*W*m^2</value>
       </variable>
       <variable>
         <_title>Ideal Gas Constant</_title>
@@ -674,7 +674,7 @@
           <reference>true</reference>
           <_name>ideal_gas</_name>
         </name>
-        <value approximate="true" precision="5">8.314472*J*K^(-1)*mol^(-1)</value>
+        <value approximate="true" precision="4">8.314472*J*K^(-1)*mol^(-1)</value>
       </variable>
       <variable>
         <_title>Second Radiation Constant</_title>
@@ -687,7 +687,7 @@
           <suffix>true</suffix>
           <_name>c_2</_name>
         </abbreviation>
-        <value approximate="true">1.4387752E-2*m*K</value>
+        <value approximate="true" precision="5">1.4387752E-2*m*K</value>
       </variable>
     </category>
   </category>

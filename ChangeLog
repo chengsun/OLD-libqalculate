@@ -1,6 +1,7 @@
 2005-10-17 Niklas Knutsson  <nq@altern.org>
 
 	* Print option to hide underscores (if not for suffix) in names
+	* Adjust precision of constants
 
 2005-10-16 Niklas Knutsson  <nq@altern.org>
 

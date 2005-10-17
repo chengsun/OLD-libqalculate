@@ -345,7 +345,8 @@ static const struct ParseOptions {
 	bool limit_implicit_multiplication;
 	ReadPrecisionMode read_precision;
 	AngleUnit angle_unit;
-	ParseOptions() : variables_enabled(true), functions_enabled(true), unknowns_enabled(true), units_enabled(true), rpn(false), base(BASE_DECIMAL), limit_implicit_multiplication(false), read_precision(DONT_READ_PRECISION), angle_unit(ANGLE_UNIT_NONE) {}
+	MathStructure *unended_function;
+	ParseOptions() : variables_enabled(true), functions_enabled(true), unknowns_enabled(true), units_enabled(true), rpn(false), base(BASE_DECIMAL), limit_implicit_multiplication(false), read_precision(DONT_READ_PRECISION), angle_unit(ANGLE_UNIT_NONE), unended_function(NULL) {}
 } default_parse_options;
 
 static const struct EvaluationOptions {

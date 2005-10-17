@@ -2581,7 +2581,11 @@ MathStructure Calculator::parse(string str, const ParseOptions &po) {
 	
 }
 
-void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &po) {
+void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &parseoptions) {
+
+	ParseOptions po = parseoptions;
+	MathStructure *unended_function = po.unended_function;
+	po.unended_function = NULL;
 
 	mstruct->clear();
 
@@ -3028,7 +3032,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 								str_index += name_length;
 								moved_forward = true;
 							} else {
-								bool b = false;
+								bool b = false, b_unended_function = false;
 								size_t i5 = 1;
 								i6 = 0;
 								while(!b) {
@@ -3036,6 +3040,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 										b = true;
 										i5 = 2;
 										i6++;
+										b_unended_function = true;
 										break;
 									} else {
 										char c = str[str_index + name_length + i6];
@@ -3056,8 +3061,20 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 								if(b && i5 == 2) {
 									stmp2 = str.substr(str_index + name_length, i6 - 1);
 									stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
-									if(f == f_vector) stmp += i2s(parseAddVectorId(stmp2, po));
-									else stmp += i2s(parseAddId(f, stmp2, po));
+									size_t id_i;
+									if(b_unended_function && unended_function) {
+										po.unended_function = unended_function;
+									}
+									if(f == f_vector) {
+										id_i = parseAddVectorId(stmp2, po);
+									} else {
+										id_i = parseAddId(f, stmp2, po);
+										
+									}
+									if(b_unended_function && po.unended_function && !po.unended_function->isFunction()) {
+										po.unended_function->set(*id_structs[id_i]);
+									}
+									stmp += i2s(id_i);
 									stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
 									i4 = i6 + 1 + name_length - 2;
 									b = false;
@@ -3071,8 +3088,10 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 									while(true) {
 										i5 = str.find(RIGHT_PARENTHESIS_CH, i7);
 										if(i5 == string::npos) {
-											str.append(1, RIGHT_PARENTHESIS_CH);
-											i5 = str.length() - 1;
+											b_unended_function = true;
+											//str.append(1, RIGHT_PARENTHESIS_CH);
+											//i5 = str.length() - 1;
+											i5 = str.length();
 										}
 										if(i5 < (i6 = str.find(LEFT_PARENTHESIS_CH, i8)) || i6 == string::npos) {
 											i6 = i5;
@@ -3082,12 +3101,27 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 										i7 = i5 + 1;
 										i8 = i6 + 1;
 									}
+									if(!b) {
+										b_unended_function = false;
+									}
 								}
 								if(b) {
 									stmp2 = str.substr(str_index + name_length + i9, i6 - (str_index + name_length + i9));
 									stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
-									if(f == f_vector) stmp += i2s(parseAddVectorId(stmp2, po));
-									else stmp += i2s(parseAddId(f, stmp2, po));
+									size_t id_i;
+									if(b_unended_function && unended_function) {
+										po.unended_function = unended_function;
+									}
+									if(f == f_vector) {
+										id_i = parseAddVectorId(stmp2, po);
+									} else {
+										id_i = parseAddId(f, stmp2, po);
+										
+									}
+									if(b_unended_function && po.unended_function && !po.unended_function->isFunction()) {
+										po.unended_function->set(*id_structs[id_i]);
+									}
+									stmp += i2s(id_i);
 									stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
 									i4 = i6 + 1 - str_index;
 								}
@@ -4319,7 +4353,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 		xmlFreeDoc(doc);
 		return false;
 	}
-	int version_numbers[] = {0, 8, 2};
+	int version_numbers[] = {0, 8, 3};
 	parse_qalculate_version(version, version_numbers);
 	
 	ParseOptions po;

@@ -165,7 +165,10 @@ string MathFunction::printCondition() {
 	}
 	return str;
 }
-int MathFunction::args(const string &argstr, MathStructure &vargs, const ParseOptions &po) {
+int MathFunction::args(const string &argstr, MathStructure &vargs, const ParseOptions &parseoptions) {
+	ParseOptions po = parseoptions;
+	MathStructure *unended_function = po.unended_function;
+	po.unended_function = NULL;
 	vargs.clearVector();
 	int start_pos = 0;
 	bool in_cit1 = false, in_cit2 = false;
@@ -270,6 +273,7 @@ int MathFunction::args(const string &argstr, MathStructure &vargs, const ParseOp
 	}
 	if(!str.empty()) {
 		itmp++;
+		po.unended_function = unended_function;
 		if(itmp <= maxargs() || args() < 0) {
 			stmp = str.substr(start_pos, str.length() - start_pos);
 			remove_blank_ends(stmp);

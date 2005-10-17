@@ -1,3 +1,12 @@
+2005-10-16 Niklas Knutsson  <nq@altern.org>
+
+	* Add unended_function to parse_options and put unended function there when parsing
+
+2005-10-15 Niklas Knutsson  <nq@altern.org>
+
+	* mmHg unit
+	* Ideal Gas Constant
+
 2005-10-13 Niklas Knutsson  <nq@altern.org>
 
 	* Fortnight unit

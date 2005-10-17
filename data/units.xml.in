@@ -3290,6 +3290,18 @@
           <exponent>1</exponent>
         </base>
       </unit>
+      <unit type="alias">
+        <_title>Millimeter of Mercury</_title>
+	<abbreviation index="1">
+          <reference>true</reference>
+          <_name>mmHg</_name>
+        </abbreviation>
+        <base>
+          <unit>atm</unit>
+          <relation>1/760</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
     </category>
     <category>
       <_title>Dynamic Viscosity</_title>

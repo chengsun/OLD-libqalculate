@@ -669,6 +669,14 @@
         <value approximate="true">3.74177138E-16*W*m^2</value>
       </variable>
       <variable>
+        <_title>Ideal Gas Constant</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>ideal_gas</_name>
+        </name>
+        <value approximate="true" precision="5">8.314472*J*K^(-1)*mol^(-1)</value>
+      </variable>
+      <variable>
         <_title>Second Radiation Constant</_title>
         <name index="1">
           <reference>true</reference>

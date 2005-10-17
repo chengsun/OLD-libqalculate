@@ -1,3 +1,7 @@
+2005-10-17 Niklas Knutsson  <nq@altern.org>
+
+	* Print option to hide underscores (if not for suffix) in names
+
 2005-10-16 Niklas Knutsson  <nq@altern.org>
 
 	* Add unended_function to parse_options and put unended function there when parsing

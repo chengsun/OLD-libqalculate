@@ -120,6 +120,7 @@ class Calculator {
 	char *saved_locale;
 	int disable_errors_ref;
 	vector<int> stopped_errors_count;
+	vector<int> stopped_warnings_count;
 	vector<int> stopped_messages_count;
 	pthread_t calculate_thread;
 	pthread_attr_t calculate_thread_attr;
@@ -205,7 +206,7 @@ class Calculator {
 
 	bool showArgumentErrors() const;
 	void beginTemporaryStopMessages();
-	int endTemporaryStopMessages(int *message_count = NULL);	
+	int endTemporaryStopMessages(int *message_count = NULL, int *warning_count = NULL);	
 	
 	size_t addId(MathStructure *m_struct, bool persistent = false);
 	size_t parseAddId(MathFunction *f, const string &str, const ParseOptions &po, bool persistent = false);
@@ -260,6 +261,7 @@ class Calculator {
 	
 	string localizeExpression(string str) const;
 	string unlocalizeExpression(string str) const;
+	bool separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const;
 	bool calculate(MathStructure *mstruct, string str, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, string *to_str = NULL);
 	MathStructure calculate(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, string *to_str = NULL);
 	string printMathStructureTimeOut(const MathStructure &mstruct, int usecs = 100000, const PrintOptions &op = default_print_options);

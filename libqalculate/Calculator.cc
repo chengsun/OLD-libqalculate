@@ -362,14 +362,17 @@ bool Calculator::showArgumentErrors() const {
 void Calculator::beginTemporaryStopMessages() {
 	disable_errors_ref++;
 	stopped_errors_count.push_back(0);
+	stopped_warnings_count.push_back(0);
 	stopped_messages_count.push_back(0);
 }
-int Calculator::endTemporaryStopMessages(int *message_count) {
+int Calculator::endTemporaryStopMessages(int *message_count, int *warning_count) {
 	if(disable_errors_ref <= 0) return -1;
 	disable_errors_ref--;
 	int ret = stopped_errors_count[disable_errors_ref];
 	if(message_count) *message_count = stopped_messages_count[disable_errors_ref];
+	if(warning_count) *warning_count = stopped_warnings_count[disable_errors_ref];
 	stopped_errors_count.pop_back();
+	stopped_warnings_count.pop_back();
 	stopped_messages_count.pop_back();
 	return ret;
 }
@@ -1106,6 +1109,10 @@ void Calculator::error(bool critical, const char *TEMPLATE, ...) {
 			for(size_t i = 0; i < stopped_errors_count.size(); i++) {
 				stopped_errors_count[i]++;
 			}
+		} else {
+			for(size_t i = 0; i < stopped_warnings_count.size(); i++) {
+				stopped_warnings_count[i]++;
+			}
 		}
 		return;
 	}
@@ -1141,6 +1148,10 @@ void Calculator::message(MessageType mtype, const char *TEMPLATE, ...) {
 		if(mtype == MESSAGE_ERROR) {
 			for(size_t i = 0; i < stopped_errors_count.size(); i++) {
 				stopped_errors_count[i]++;
+			}
+		} else if(mtype == MESSAGE_WARNING) {
+			for(size_t i = 0; i < stopped_warnings_count.size(); i++) {
+				stopped_warnings_count[i]++;
 			}
 		}
 		return;
@@ -1236,6 +1247,7 @@ void Calculator::abort() {
 		pthread_cancel(calculate_thread);
 		restoreState();
 		stopped_messages_count.clear();
+		stopped_warnings_count.clear();
 		stopped_errors_count.clear();
 		disable_errors_ref = 0;
 		clearBuffers();
@@ -1402,24 +1414,31 @@ bool Calculator::calculate(MathStructure *mstruct, string str, int usecs, const 
 	}
 	return true;
 }
-MathStructure Calculator::calculate(string str, const EvaluationOptions &eo, MathStructure *parsed_struct, string *to_str) {
-	size_t i = 0; 
-	string str2 = "";
+bool Calculator::separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const {
+	to_str = "";
+	size_t i = 0;
 	if(eo.parse_options.units_enabled && (i = str.find(_(" to "))) != string::npos) {
 		size_t l = strlen(_(" to "));
-		str2 = str.substr(i + l, str.length() - i - l);		
-		remove_blank_ends(str2);
-		if(!str2.empty()) {
+		to_str = str.substr(i + l, str.length() - i - l);		
+		remove_blank_ends(to_str);
+		if(!to_str.empty()) {
 			str = str.substr(0, i);
+			return true;
 		}
 	} else if(local_to && eo.parse_options.units_enabled && (i = str.find(" to ")) != string::npos) {
 		size_t l = strlen(" to ");
-		str2 = str.substr(i + l, str.length() - i - l);		
-		remove_blank_ends(str2);
-		if(!str2.empty()) {
+		to_str = str.substr(i + l, str.length() - i - l);		
+		remove_blank_ends(to_str);
+		if(!to_str.empty()) {
 			str = str.substr(0, i);
+			return true;
 		}
 	}
+	return false;
+}
+MathStructure Calculator::calculate(string str, const EvaluationOptions &eo, MathStructure *parsed_struct, string *to_str) {
+	string str2;
+	separateToExpression(str, str2, eo);
 	if(to_str) *to_str = str2;
 	MathStructure mstruct;
 	parse(&mstruct, str, eo.parse_options);

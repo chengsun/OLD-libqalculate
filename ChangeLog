@@ -1,3 +1,8 @@
+2005-10-18 Niklas Knutsson  <nq@altern.org>
+
+	* Put seperation of unit expression to string in calculate function in a separate function
+	* Add stopped warnings count
+
 2005-10-17 Niklas Knutsson  <nq@altern.org>
 
 	* Print option to hide underscores (if not for suffix) in names

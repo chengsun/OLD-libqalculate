@@ -866,7 +866,17 @@ size_t Calculator::parseAddId(MathFunction *f, const string &str, const ParseOpt
 	}
 	ids_p[id] = persistent;
 	id_structs[id] = new MathStructure();
-	f->parse(*id_structs[id], str, po);
+	int n = f->parse(*id_structs[id], str, po);
+	if(po.unended_function && !po.unended_function->isFunction() && (id_structs[id]->isFunction() || id_structs[id]->isVector())) {
+		po.unended_function->set(*id_structs[id]);
+		if(po.unended_function->isVector()) {
+			po.unended_function->setType(STRUCT_FUNCTION);
+			po.unended_function->setFunction(f_vector);
+		}
+		while(po.unended_function->size() < n) {
+			po.unended_function->addChild(m_undefined);
+		}
+	}
 	return id;
 }
 size_t Calculator::parseAddIdAppend(MathFunction *f, const MathStructure &append_mstruct, const string &str, const ParseOptions &po, bool persistent) {
@@ -895,7 +905,17 @@ size_t Calculator::parseAddVectorId(const string &str, const ParseOptions &po, b
 	}
 	ids_p[id] = persistent;
 	id_structs[id] = new MathStructure();
-	f_vector->args(str, *id_structs[id], po);
+	int n = f_vector->args(str, *id_structs[id], po);
+	if(po.unended_function && !po.unended_function->isFunction() && (id_structs[id]->isFunction() || id_structs[id]->isVector())) {
+		po.unended_function->set(*id_structs[id]);
+		if(po.unended_function->isVector()) {
+			po.unended_function->setType(STRUCT_FUNCTION);
+			po.unended_function->setFunction(f_vector);
+		}
+		while(po.unended_function->size() < n) {
+			po.unended_function->addChild(m_undefined);
+		}
+	}
 	return id;
 }
 MathStructure *Calculator::getId(size_t id) {
@@ -3080,20 +3100,15 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 								if(b && i5 == 2) {
 									stmp2 = str.substr(str_index + name_length, i6 - 1);
 									stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
-									size_t id_i;
 									if(b_unended_function && unended_function) {
 										po.unended_function = unended_function;
 									}
 									if(f == f_vector) {
-										id_i = parseAddVectorId(stmp2, po);
+										stmp += i2s(parseAddVectorId(stmp2, po));
 									} else {
-										id_i = parseAddId(f, stmp2, po);
-										
+										stmp += i2s(parseAddId(f, stmp2, po));										
 									}
-									if(b_unended_function && po.unended_function && !po.unended_function->isFunction()) {
-										po.unended_function->set(*id_structs[id_i]);
-									}
-									stmp += i2s(id_i);
+									po.unended_function = NULL;
 									stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
 									i4 = i6 + 1 + name_length - 2;
 									b = false;
@@ -3127,20 +3142,15 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 								if(b) {
 									stmp2 = str.substr(str_index + name_length + i9, i6 - (str_index + name_length + i9));
 									stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
-									size_t id_i;
 									if(b_unended_function && unended_function) {
 										po.unended_function = unended_function;
 									}
 									if(f == f_vector) {
-										id_i = parseAddVectorId(stmp2, po);
+										stmp += i2s(parseAddVectorId(stmp2, po));
 									} else {
-										id_i = parseAddId(f, stmp2, po);
-										
+										stmp += i2s(parseAddId(f, stmp2, po));
 									}
-									if(b_unended_function && po.unended_function && !po.unended_function->isFunction()) {
-										po.unended_function->set(*id_structs[id_i]);
-									}
-									stmp += i2s(id_i);
+									po.unended_function = NULL;
 									stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
 									i4 = i6 + 1 - str_index;
 								}

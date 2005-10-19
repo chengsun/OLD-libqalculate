@@ -1,3 +1,7 @@
+2005-10-19 Niklas Knutsson  <nq@altern.org>
+
+	* Add arguments past max arguments to unended_function
+
 2005-10-18 Niklas Knutsson  <nq@altern.org>
 
 	* Put seperation of unit expression to string in calculate function in a separate function

@@ -428,10 +428,11 @@ MathStructure MathFunction::parse(const string &argv, const ParseOptions &po) {
 	return vargs;
 	//return createFunctionMathStructureFromVArgs(vargs);
 }
-void MathFunction::parse(MathStructure &mstruct, const string &argv, const ParseOptions &po) {
-	args(argv, mstruct, po);
+int MathFunction::parse(MathStructure &mstruct, const string &argv, const ParseOptions &po) {
+	int n = args(argv, mstruct, po);
 	mstruct.setType(STRUCT_FUNCTION);
 	mstruct.setFunction(this);
+	return n;
 }
 bool MathFunction::testArguments(MathStructure &vargs) {
 	size_t last = 0;

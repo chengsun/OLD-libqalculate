@@ -1122,18 +1122,12 @@ void Calculator::addBuiltinUnits() {
 }
 void Calculator::error(bool critical, const char *TEMPLATE, ...) {
 	if(disable_errors_ref > 0) {
-		for(size_t i = 0; i < stopped_messages_count.size(); i++) {
-			stopped_messages_count[i]++;
-		}
+		stopped_messages_count[disable_errors_ref - 1]++;
 		if(critical) {
-			for(size_t i = 0; i < stopped_errors_count.size(); i++) {
-				stopped_errors_count[i]++;
-			}
+			stopped_errors_count[disable_errors_ref - 1]++;
 		} else {
-			for(size_t i = 0; i < stopped_warnings_count.size(); i++) {
-				stopped_warnings_count[i]++;
-			}
-		}
+			stopped_warnings_count[disable_errors_ref - 1]++;
+		}		
 		return;
 	}
 	string error_str = TEMPLATE;
@@ -1162,17 +1156,11 @@ void Calculator::error(bool critical, const char *TEMPLATE, ...) {
 }
 void Calculator::message(MessageType mtype, const char *TEMPLATE, ...) {
 	if(disable_errors_ref > 0) {
-		for(size_t i = 0; i < stopped_messages_count.size(); i++) {
-			stopped_messages_count[i]++;
-		}
+		stopped_messages_count[disable_errors_ref - 1]++;
 		if(mtype == MESSAGE_ERROR) {
-			for(size_t i = 0; i < stopped_errors_count.size(); i++) {
-				stopped_errors_count[i]++;
-			}
+			stopped_errors_count[disable_errors_ref - 1]++;
 		} else if(mtype == MESSAGE_WARNING) {
-			for(size_t i = 0; i < stopped_warnings_count.size(); i++) {
-				stopped_warnings_count[i]++;
-			}
+			stopped_warnings_count[disable_errors_ref - 1]++;
 		}
 		return;
 	}

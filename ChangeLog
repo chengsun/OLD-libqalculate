@@ -1,3 +1,8 @@
+2005-10-20 Niklas Knutsson  <nq@altern.org>
+
+	* Only give "Error in unit expression" message on errors in CompositeUnit parsing
+	* Do not accumulate the error count between levels for temporary stop messages
+
 2005-10-19 Niklas Knutsson  <nq@altern.org>
 
 	* Add arguments past max arguments to unended_function

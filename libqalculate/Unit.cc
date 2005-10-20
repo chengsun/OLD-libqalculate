@@ -674,8 +674,11 @@ void CompositeUnit::setBaseExpression(string base_expression_) {
 	po.functions_enabled = false;
 	po.unknowns_enabled = false;
 	MathStructure mstruct;
+	bool had_errors = false;
+	CALCULATOR->beginTemporaryStopMessages();
 	CALCULATOR->parse(&mstruct, base_expression_, po);
 	mstruct.eval(eo);
+	if(CALCULATOR->endTemporaryStopMessages() > 0) had_errors = true;
 	if(mstruct.isUnit()) {
 		add(mstruct.unit(), 1, mstruct.prefix());
 	} else if(mstruct.isPower() && mstruct[0].isUnit() && mstruct[1].isInteger()) {
@@ -687,12 +690,13 @@ void CompositeUnit::setBaseExpression(string base_expression_) {
 			} else if(mstruct[i].isPower() && mstruct[i][0].isUnit() && mstruct[i][1].isInteger()) {
 				add(mstruct[i][0].unit(), mstruct[i][1].number().intValue(), mstruct[i][0].prefix());
 			} else {
-				CALCULATOR->error(false, _("Error in unitexpression."), NULL);
+				had_errors = true;
 			}
 		}
 	} else {
-		CALCULATOR->error(false, _("Error in unitexpression."), NULL);
+		had_errors = true;
 	}
+	if(had_errors) CALCULATOR->error(false, _("Error(s) in unitexpression."), NULL);
 	setChanged(true);
 	updateNames();
 }

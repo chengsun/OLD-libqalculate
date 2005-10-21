@@ -461,7 +461,7 @@
         </base>
       </unit>
       <unit type="alias">
-        <_title>Gradian</_title>
+        <_title>Gradian (Gon)</_title>
         <abbreviation index="1">
           <reference>true</reference>
           <_name>gra</_name>
@@ -472,9 +472,60 @@
         <plural index="3">
           <_name>gradians</_name>
         </plural>
+	<name index="4">
+          <_name>gon</_name>
+        </name>
+	<plural index="5">
+          <_name>gons</_name>
+        </plural>
         <base>
           <unit>rad</unit>
           <relation>pi/200</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <_title>Arcminute</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>arcminute</_name>
+        </name>
+        <plural index="2">
+          <_name>arcminutes</_name>
+        </plural>
+        <base>
+          <unit>deg</unit>
+          <relation>1/60</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <_title>Arcsecond</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>arcsecond</_name>
+        </name>
+        <plural index="2">
+          <_name>arcseconds</_name>
+        </plural>
+        <base>
+          <unit>arcminute</unit>
+          <relation>1/60</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <_title>Turn</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>turn</_name>
+        </name>
+        <plural index="2">
+          <_name>turns</_name>
+        </plural>
+        <base>
+          <unit>deg</unit>
+          <relation>360</relation>
           <exponent>1</exponent>
         </base>
       </unit>
@@ -523,7 +574,7 @@
       <_title>Angular Acceleration</_title>
       <unit type="composite">
         <system>SI</system>
-        <_title>Radians per Square Second</_title>
+        <_title>Radians per Second Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>rad_p_sqs</name>
@@ -1161,12 +1212,31 @@
           <_name>amperes</_name>
         </plural>
       </unit>
+      <unit type="alias">
+        <system>CGS</system>
+        <_title>Abampere</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>abampere</_name>
+        </name>
+        <abbreviation index="2">
+          <_name>abA</_name>
+        </abbreviation>
+        <plural index="3">
+          <_name>abamperes</_name>
+        </plural>
+        <base>
+          <unit>A</unit>
+          <relation>10</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
     </category>
     <category>
       <_title>Current Density</_title>
       <unit type="composite">
         <system>SI</system>
-        <_title>Ampere per Square Meter</_title>
+        <_title>Ampere per Meter Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>A_p_sqm</name>
@@ -1221,6 +1291,53 @@
           <exponent>1</exponent>
         </base>
       </unit>
+      <unit type="alias">
+        <system>CGS</system>
+        <_title>Abcoulomb</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>abcoulomb</_name>
+        </name>
+        <plural index="2">
+          <_name>abcoulombs</_name>
+        </plural>
+        <abbreviation index="3">
+          <_name>abC</_name>
+        </abbreviation>
+        <abbreviation index="4">
+          <_name>aC</_name>
+        </abbreviation>
+        <base>
+          <unit>C</unit>
+          <relation>10</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <system>CGS</system>
+        <_title>Statcoloumb (Franklin)</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>statcoulomb</_name>
+        </name>
+        <plural index="2">
+          <_name>statcoulombs</_name>
+        </plural>
+        <abbreviation index="3">
+          <_name>statC</_name>
+        </abbreviation>
+        <name index="4">
+          <_name>franklin</_name>
+        </name>
+        <abbreviation index="5">
+          <_name>Fr</_name>
+        </abbreviation>
+        <base>
+          <unit>C</unit>
+          <relation approximate="true">3.3356410E-10</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
     </category>
     <category>
       <_title>Electric Charge Density</_title>
@@ -1247,7 +1364,7 @@
       <_title>Electric Flux Density</_title>
       <unit type="composite">
         <system>SI</system>
-        <_title>Coulomb per Square Meter</_title>
+        <_title>Coulomb per Meter Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>C_p_sqm</name>
@@ -1299,6 +1416,44 @@
         <base>
           <unit>W_p_A</unit>
           <relation>1</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <system>CGS</system>
+        <_title>Statvolt</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>statvolt</_name>
+        </name>
+        <plural index="2">
+          <_name>statvolts</_name>
+        </plural>
+        <abbreviation index="3">
+          <_name>statV</_name>
+        </abbreviation>
+        <base>
+          <unit>V</unit>
+          <relation>299.792458</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <system>CGS</system>
+        <_title>Abvolt</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>abvolt</_name>
+        </name>
+        <plural index="2">
+          <_name>abvolts</_name>
+        </plural>
+        <abbreviation index="3">
+          <_name>abV</_name>
+        </abbreviation>
+        <base>
+          <unit>V</unit>
+          <relation>1E-8</relation>
           <exponent>1</exponent>
         </base>
       </unit>
@@ -1379,6 +1534,46 @@
         <base>
           <unit>V_p_A</unit>
           <relation>1</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <system>CGS</system>
+        <_title>Abohm</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>abohm</_name>
+        </name>
+        <plural index="2">
+          <_name>abohms</_name>
+        </plural>
+        <abbreviation index="3">
+          <unicode>true</unicode>
+          <_name>ab&#x3A9;</_name>
+        </abbreviation>
+        <base>
+          <unit>ohm</unit>
+          <relation>1E-9</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <system>CGS</system>
+        <_title>Statohm</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>statohm</_name>
+        </name>
+        <plural index="2">
+          <_name>statohms</_name>
+        </plural>
+        <abbreviation index="3">
+          <unicode>true</unicode>
+          <_name>stat&#x3A9;</_name>
+        </abbreviation>
+        <base>
+          <unit>ohm</unit>
+          <relation approximate="true">8.9875517874E11</relation>
           <exponent>1</exponent>
         </base>
       </unit>
@@ -1737,7 +1932,7 @@
       <_title>Luminance</_title>
       <unit type="composite">
         <system>SI</system>
-        <_title>Candela per Square Meter</_title>
+        <_title>Candela per Meter Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>cd_p_sqm</name>
@@ -1815,7 +2010,7 @@
     <category>
       <_title>Illuminance</_title>
       <unit type="composite">
-        <_title>Lumen per Square Meter</_title>
+        <_title>Lumen per Meter Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>lm_p_sqm</name>
@@ -1833,7 +2028,7 @@
       </unit>
       <unit type="composite">
         <hidden>true</hidden>
-        <_title>Lumen per Square Foot</_title>
+        <_title>Lumen per Foot Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>lm_p_sqft</name>
@@ -1924,7 +2119,7 @@
       <_title>Irradiance</_title>
       <unit type="composite">
         <system>SI</system>
-        <_title>Watt per Square Meter</_title>
+        <_title>Watt per Meter Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>W_p_sqm</name>
@@ -1941,7 +2136,7 @@
         </part>
       </unit>
       <unit type="composite">
-        <_title>Einstein per Square Meter per Second</_title>
+        <_title>Einstein per Meter per Second</_title>
         <name index="1">
           <reference>true</reference>
           <name>einstein_p_sqm_p_s</name>
@@ -1963,7 +2158,7 @@
         </part>
       </unit>
       <unit type="composite">
-        <_title>Microeinstein per Square Meter per Second</_title>
+        <_title>Microeinstein per Meter Squared per Second</_title>
         <name index="1">
           <reference>true</reference>
           <name>microeinstein_p_sqm_p_s</name>
@@ -2901,7 +3096,7 @@
       <_title>Acceleration</_title>
       <unit type="composite">
         <system>SI</system>
-        <_title>Meter per Square Second</_title>
+        <_title>Meter per Second Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>m_p_sqs</name>
@@ -3071,7 +3266,7 @@
     <category>
       <_title>Magnetic Flux Density</_title>
       <unit type="composite">
-        <_title>Weber per Square Meter</_title>
+        <_title>Weber per Meter Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>Wb_p_sqm</name>
@@ -3124,7 +3319,7 @@
   <category>
     <_title>Force</_title>
     <unit type="composite">
-      <_title>Meter Kilogram per Square Second</_title>
+      <_title>Meter Kilogram per Second Squared</_title>
       <name index="1">
         <reference>true</reference>
         <name>m_kg_p_sqs</name>
@@ -3183,6 +3378,94 @@
         <exponent>1</exponent>
       </base>
     </unit>
+    <unit type="alias">
+      <system>Imperial</system>
+      <_title>Pound-force</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>lbf</_name>
+      </abbreviation>
+      <name index="2">
+        <_name>pound_force</_name>
+      </name>
+      <base>
+        <unit>N</unit>
+        <relation>4.4482216152605</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="composite">
+      <hidden>true</hidden>
+      <_title>Pound Foot per Second Squared</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>lb_ft_p_sqs</name>
+      </name>
+      <part>
+        <unit>lb</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
+      <part>
+        <unit>ft</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
+      <part>
+        <unit>s</unit>
+        <prefix>0</prefix>
+        <exponent>-2</exponent>
+      </part>
+    </unit>
+    <unit type="alias">
+      <system>Imperial</system>
+      <_title>Poundal</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>poundal</_name>
+      </name>
+      <plural index="2">
+        <_name>poundals</_name>
+      </plural>
+      <abbreviation index="3">
+        <_name>pdl</_name>
+      </abbreviation>
+      <base>
+        <unit>lb_ft_p_sqs</unit>
+        <relation>1</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Pond (Gram-Force)</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>pond</_name>
+      </name>
+      <plural index="2">
+        <_name>ponds</_name>
+      </plural>
+      <abbreviation index="3">
+        <_name>gf</_name>
+      </abbreviation>
+      <base>
+        <unit>N</unit>
+        <relation>0.00980665</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="composite">
+      <_title>Kilopond (Kilogram-Force)</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>kpond_c</name>
+      </name>
+      <part>
+        <unit>pond</unit>
+        <prefix>3</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
     <category>
       <_title>Moment of Force</_title>
       <unit type="composite">
@@ -3207,7 +3490,7 @@
     <category>
       <_title>Pressure</_title>
       <unit type="composite">
-        <_title>Newton per Square Meter</_title>
+        <_title>Newton per Meter Squared</_title>
         <name index="1">
           <reference>true</reference>
           <name>N_p_sqm</name>
@@ -3592,6 +3875,39 @@
         <relation>1E-7</relation>
         <exponent>1</exponent>
       </base>
+    </unit>
+    <unit type="alias">
+      <_title>Foe</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>foe</_name>
+      </name>
+      <plural index="2">
+        <_name>foes</_name>
+      </plural>
+      <base>
+        <unit>erg</unit>
+        <relation>1E51</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="composite">
+      <system>Imperial</system>
+      <_title>Foot-Pound Force</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>ft_lbf</name>
+      </name>
+      <part>
+        <unit>ft</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
+      <part>
+        <unit>lbf</unit>
+        <prefix>0</prefix>
+        <exponent>1</exponent>
+      </part>
     </unit>
     <category>
       <_title>Specific Energy</_title>

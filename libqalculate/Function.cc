@@ -323,6 +323,14 @@ int MathFunction::args(const string &argstr, MathStructure &vargs, const ParseOp
 			CALCULATOR->error(false, _("Additional arguments for function %s() was ignored. Function can only use %s argument(s)."), name().c_str(), i2s(maxargs()).c_str());
 		}
 	}
+	if(unended_function && !unended_function->isFunction()) {
+		unended_function->set(vargs);
+		unended_function->setType(STRUCT_FUNCTION);
+		unended_function->setFunction(this);
+		while(unended_function->size() < itmp) {
+			unended_function->addChild(m_undefined);
+		}
+	}
 	if(itmp < maxargs() && itmp >= minargs()) {
 		int itmp2 = itmp;
 		while(itmp2 < maxargs()) {

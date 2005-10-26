@@ -351,7 +351,7 @@ bool Calculator::utf8_pos_is_valid_in_name(char *pos) {
 			str += pos[1];
 			pos++;
 		}
-		return str != SIGN_DIVISION && str != SIGN_DIVISION_SLASH && str != SIGN_MULTIPLICATION && str != SIGN_MULTIDOT && str != SIGN_MINUS && str != SIGN_PLUS && str != SIGN_NOT_EQUAL && str != SIGN_GREATER_OR_EQUAL && str != SIGN_LESS_OR_EQUAL;
+		return str != SIGN_DIVISION && str != SIGN_DIVISION_SLASH && str != SIGN_MULTIPLICATION && str != SIGN_MULTIDOT && str != SIGN_SMALLCIRCLE && str != SIGN_MULTIBULLET && str != SIGN_MINUS && str != SIGN_PLUS && str != SIGN_NOT_EQUAL && str != SIGN_GREATER_OR_EQUAL && str != SIGN_LESS_OR_EQUAL;
 	}
 	return true;
 }
@@ -866,17 +866,7 @@ size_t Calculator::parseAddId(MathFunction *f, const string &str, const ParseOpt
 	}
 	ids_p[id] = persistent;
 	id_structs[id] = new MathStructure();
-	int n = f->parse(*id_structs[id], str, po);
-	if(po.unended_function && !po.unended_function->isFunction() && (id_structs[id]->isFunction() || id_structs[id]->isVector())) {
-		po.unended_function->set(*id_structs[id]);
-		if(po.unended_function->isVector()) {
-			po.unended_function->setType(STRUCT_FUNCTION);
-			po.unended_function->setFunction(f_vector);
-		}
-		while(po.unended_function->size() < n) {
-			po.unended_function->addChild(m_undefined);
-		}
-	}
+	f->parse(*id_structs[id], str, po);
 	return id;
 }
 size_t Calculator::parseAddIdAppend(MathFunction *f, const MathStructure &append_mstruct, const string &str, const ParseOptions &po, bool persistent) {
@@ -905,17 +895,7 @@ size_t Calculator::parseAddVectorId(const string &str, const ParseOptions &po, b
 	}
 	ids_p[id] = persistent;
 	id_structs[id] = new MathStructure();
-	int n = f_vector->args(str, *id_structs[id], po);
-	if(po.unended_function && !po.unended_function->isFunction() && (id_structs[id]->isFunction() || id_structs[id]->isVector())) {
-		po.unended_function->set(*id_structs[id]);
-		if(po.unended_function->isVector()) {
-			po.unended_function->setType(STRUCT_FUNCTION);
-			po.unended_function->setFunction(f_vector);
-		}
-		while(po.unended_function->size() < n) {
-			po.unended_function->addChild(m_undefined);
-		}
-	}
+	f_vector->args(str, *id_structs[id], po);
 	return id;
 }
 MathStructure *Calculator::getId(size_t id) {

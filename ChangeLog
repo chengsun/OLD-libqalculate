@@ -1,3 +1,13 @@
+2005-10-26 Niklas Knutsson  <nq@altern.org>
+
+	* Update Swedish translation
+	* light_year => lightyear
+	* Fix unended function information when optional arguments
+
+2005-10-22 Niklas Knutsson  <nq@altern.org>
+
+	* Add SIGN_SMALLCIRCLE and SIGN_MULTIBULLET to utf8_pos_is_valid_in_name to fix completion
+
 2005-10-21 Niklas Knutsson  <nq@altern.org>
 
 	* Lots of new units

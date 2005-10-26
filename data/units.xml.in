@@ -367,10 +367,10 @@
         <_name>ly</_name>
       </abbreviation>
       <name index="2">
-        <_name>light_year</_name>
+        <_name>lightyear</_name>
       </name>
       <plural index="3">
-        <_name>light_years</_name>
+        <_name>lightyears</_name>
       </plural>
       <base>
         <unit>m</unit>
@@ -1222,7 +1222,10 @@
         <abbreviation index="2">
           <_name>abA</_name>
         </abbreviation>
-        <plural index="3">
+	<abbreviation index="3">
+          <_name>aA</_name>
+        </abbreviation>
+        <plural index="4">
           <_name>abamperes</_name>
         </plural>
         <base>

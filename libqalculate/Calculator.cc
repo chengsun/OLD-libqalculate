@@ -4350,7 +4350,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 		xmlFreeDoc(doc);
 		return false;
 	}
-	int version_numbers[] = {0, 8, 3};
+	int version_numbers[] = {0, 9, 0};
 	parse_qalculate_version(version, version_numbers);
 	
 	ParseOptions po;

@@ -255,7 +255,8 @@ Calculator::Calculator() {
 	
 	ids_i = 0;
 	
-	null_prefix = new Prefix(0, "", "");
+	decimal_null_prefix = new DecimalPrefix(0, "", "");
+	binary_null_prefix = new BinaryPrefix(0, "", "");
 	m_undefined.setUndefined();
 	m_empty_vector.clearVector();
 	m_empty_matrix.clearMatrix();
@@ -523,11 +524,21 @@ Prefix *Calculator::getPrefix(string name_) const {
 	}
 	return NULL;
 }
-Prefix *Calculator::getExactPrefix(int exp10, int exp) const {
-	for(size_t i = 0; i < prefixes.size(); i++) {
-		if(prefixes[i]->exponent(exp) == exp10) {
-			return prefixes[i];
-		} else if(prefixes[i]->exponent(exp) > exp10) {
+DecimalPrefix *Calculator::getExactDecimalPrefix(int exp10, int exp) const {
+	for(size_t i = 0; i < decimal_prefixes.size(); i++) {
+		if(decimal_prefixes[i]->exponent(exp) == exp10) {
+			return decimal_prefixes[i];
+		} else if(decimal_prefixes[i]->exponent(exp) > exp10) {
+			break;
+		}
+	}
+	return NULL;
+}
+BinaryPrefix *Calculator::getExactBinaryPrefix(int exp2, int exp) const {
+	for(size_t i = 0; i < binary_prefixes.size(); i++) {
+		if(binary_prefixes[i]->exponent(exp) == exp2) {
+			return binary_prefixes[i];
+		} else if(binary_prefixes[i]->exponent(exp) > exp2) {
 			break;
 		}
 	}
@@ -545,22 +556,22 @@ Prefix *Calculator::getExactPrefix(const Number &o, int exp) const {
 	}
 	return NULL;
 }
-Prefix *Calculator::getNearestPrefix(int exp10, int exp) const {
-	if(prefixes.size() <= 0) return NULL;
+DecimalPrefix *Calculator::getNearestDecimalPrefix(int exp10, int exp) const {
+	if(decimal_prefixes.size() <= 0) return NULL;
 	int i = 0;
 	if(exp < 0) {
-		i = prefixes.size() - 1;
+		i = decimal_prefixes.size() - 1;
 	}
-	while((exp < 0 && i >= 0) || (exp >= 0 && i < (int) prefixes.size())) {	
-		if(prefixes[i]->exponent(exp) == exp10) {
-			return prefixes[i];
-		} else if(prefixes[i]->exponent(exp) > exp10) {
+	while((exp < 0 && i >= 0) || (exp >= 0 && i < (int) decimal_prefixes.size())) {	
+		if(decimal_prefixes[i]->exponent(exp) == exp10) {
+			return decimal_prefixes[i];
+		} else if(decimal_prefixes[i]->exponent(exp) > exp10) {
 			if(i == 0) {
-				return prefixes[i];
-			} else if(exp10 - prefixes[i - 1]->exponent(exp) < prefixes[i]->exponent(exp) - exp10) {
-				return prefixes[i - 1];
+				return decimal_prefixes[i];
+			} else if(exp10 - decimal_prefixes[i - 1]->exponent(exp) < decimal_prefixes[i]->exponent(exp) - exp10) {
+				return decimal_prefixes[i - 1];
 			} else {
-				return prefixes[i];
+				return decimal_prefixes[i];
 			}
 		}
 		if(exp < 0) {
@@ -569,33 +580,33 @@ Prefix *Calculator::getNearestPrefix(int exp10, int exp) const {
 			i++;
 		}
 	}
-	return prefixes[prefixes.size() - 1];
+	return decimal_prefixes[decimal_prefixes.size() - 1];
 }
-Prefix *Calculator::getBestPrefix(int exp10, int exp, bool all_prefixes) const {
-	if(prefixes.size() <= 0 || exp10 == 0) return NULL;
+DecimalPrefix *Calculator::getBestDecimalPrefix(int exp10, int exp, bool all_prefixes) const {
+	if(decimal_prefixes.size() <= 0 || exp10 == 0) return NULL;
 	int i = 0;
 	if(exp < 0) {
-		i = prefixes.size() - 1;
+		i = decimal_prefixes.size() - 1;
 	}
-	Prefix *p = NULL, *p_prev = NULL;
+	DecimalPrefix *p = NULL, *p_prev = NULL;
 	int exp10_1, exp10_2;
-	while((exp < 0 && i >= 0) || (exp >= 0 && i < (int) prefixes.size())) {
-		if(all_prefixes || prefixes[i]->exponent() % 3 == 0) {
-			p = prefixes[i];
+	while((exp < 0 && i >= 0) || (exp >= 0 && i < (int) decimal_prefixes.size())) {
+		if(all_prefixes || decimal_prefixes[i]->exponent() % 3 == 0) {
+			p = decimal_prefixes[i];
 			if(p_prev && p_prev->exponent() >= 0 != p->exponent() >= 0 && p_prev->exponent() != 0) {
 				if(exp < 0) {
 					i++;
 				} else {
 					i--;
 				}
-				p = null_prefix;
+				p = decimal_null_prefix;
 			}
 			if(p->exponent(exp) == exp10) {
-				if(p == null_prefix) return NULL;
+				if(p == decimal_null_prefix) return NULL;
 				return p;
 			} else if(p->exponent(exp) > exp10) {
 				if(i == 0) {
-					if(p == null_prefix) return NULL;
+					if(p == decimal_null_prefix) return NULL;
 					return p;
 				}
 				exp10_1 = exp10;
@@ -607,7 +618,7 @@ Prefix *Calculator::getBestPrefix(int exp10, int exp, bool all_prefixes) const {
 				exp10_2 *= 2;
 				exp10_2 += 2;
 				if(exp10_1 < exp10_2) {
-					if(p_prev == null_prefix) return NULL;
+					if(p_prev == decimal_null_prefix) return NULL;
 					return p_prev;
 				} else {
 					return p;
@@ -623,33 +634,33 @@ Prefix *Calculator::getBestPrefix(int exp10, int exp, bool all_prefixes) const {
 	}
 	return p_prev;
 }
-Prefix *Calculator::getBestPrefix(const Number &exp10, const Number &exp, bool all_prefixes) const {
-	if(prefixes.size() <= 0 || exp10.isZero()) return NULL;
+DecimalPrefix *Calculator::getBestDecimalPrefix(const Number &exp10, const Number &exp, bool all_prefixes) const {
+	if(decimal_prefixes.size() <= 0 || exp10.isZero()) return NULL;
 	int i = 0;
 	ComparisonResult c;
 	if(exp.isNegative()) {
-		i = prefixes.size() - 1;
+		i = decimal_prefixes.size() - 1;
 	}
-	Prefix *p = NULL, *p_prev = NULL;
+	DecimalPrefix *p = NULL, *p_prev = NULL;
 	Number exp10_1, exp10_2;
-	while((exp.isNegative() && i >= 0) || (!exp.isNegative() && i < (int) prefixes.size())) {
-		if(all_prefixes || prefixes[i]->exponent() % 3 == 0) {
-			p = prefixes[i];
+	while((exp.isNegative() && i >= 0) || (!exp.isNegative() && i < (int) decimal_prefixes.size())) {
+		if(all_prefixes || decimal_prefixes[i]->exponent() % 3 == 0) {
+			p = decimal_prefixes[i];
 			if(p_prev && p_prev->exponent() >= 0 != p->exponent() >= 0 && p_prev->exponent() != 0) {
 				if(exp.isNegative()) {
 					i++;
 				} else {
 					i--;
 				}
-				p = null_prefix;
+				p = decimal_null_prefix;
 			}
 			c = exp10.compare(p->exponent(exp));
 			if(c == COMPARISON_RESULT_EQUAL) {
-				if(p == null_prefix) return NULL;
+				if(p == decimal_null_prefix) return NULL;
 				return p;
 			} else if(c == COMPARISON_RESULT_GREATER) {
 				if(i == 0) {
-					if(p == null_prefix) return NULL;
+					if(p == decimal_null_prefix) return NULL;
 					return p;
 				}
 				exp10_1 = exp10;
@@ -661,7 +672,7 @@ Prefix *Calculator::getBestPrefix(const Number &exp10, const Number &exp, bool a
 				exp10_2 *= 2;
 				exp10_2 += 2;
 				if(exp10_1.isLessThan(exp10_2)) {
-					if(p_prev == null_prefix) return NULL;
+					if(p_prev == decimal_null_prefix) return NULL;
 					return p_prev;
 				} else {
 					return p;
@@ -677,7 +688,140 @@ Prefix *Calculator::getBestPrefix(const Number &exp10, const Number &exp, bool a
 	}
 	return p_prev;
 }
+BinaryPrefix *Calculator::getNearestBinaryPrefix(int exp2, int exp) const {
+	if(binary_prefixes.size() <= 0) return NULL;
+	int i = 0;
+	if(exp < 0) {
+		i = binary_prefixes.size() - 1;
+	}
+	while((exp < 0 && i >= 0) || (exp >= 0 && i < (int) binary_prefixes.size())) {	
+		if(binary_prefixes[i]->exponent(exp) == exp2) {
+			return binary_prefixes[i];
+		} else if(binary_prefixes[i]->exponent(exp) > exp2) {
+			if(i == 0) {
+				return binary_prefixes[i];
+			} else if(exp2 - binary_prefixes[i - 1]->exponent(exp) < binary_prefixes[i]->exponent(exp) - exp2) {
+				return binary_prefixes[i - 1];
+			} else {
+				return binary_prefixes[i];
+			}
+		}
+		if(exp < 0) {
+			i--;
+		} else {
+			i++;
+		}
+	}
+	return binary_prefixes[binary_prefixes.size() - 1];
+}
+BinaryPrefix *Calculator::getBestBinaryPrefix(int exp2, int exp) const {
+	if(binary_prefixes.size() <= 0 || exp2 == 0) return NULL;
+	int i = 0;
+	if(exp < 0) {
+		i = binary_prefixes.size() - 1;
+	}
+	BinaryPrefix *p = NULL, *p_prev = NULL;
+	int exp2_1, exp2_2;
+	while((exp < 0 && i >= 0) || (exp >= 0 && i < (int) binary_prefixes.size())) {
+		p = binary_prefixes[i];
+		if(p_prev && p_prev->exponent() >= 0 != p->exponent() >= 0 && p_prev->exponent() != 0) {
+			if(exp < 0) {
+				i++;
+			} else {
+				i--;
+			}
+			p = binary_null_prefix;
+		}
+		if(p->exponent(exp) == exp2) {
+			if(p == binary_null_prefix) return NULL;
+			return p;
+		} else if(p->exponent(exp) > exp2) {
+			if(i == 0) {
+				if(p == binary_null_prefix) return NULL;
+				return p;
+			}
+			exp2_1 = exp2;
+			if(p_prev) {
+				exp2_1 -= p_prev->exponent(exp);
+			}
+			exp2_2 = p->exponent(exp);
+			exp2_2 -= exp2;
+			exp2_2 *= 2;
+			exp2_2 += 2;
+			if(exp2_1 < exp2_2) {
+				if(p_prev == binary_null_prefix) return NULL;
+				return p_prev;
+			} else {
+				return p;
+			}
+		}
+		p_prev = p;
+		if(exp < 0) {
+			i--;
+		} else {
+			i++;
+		}
+	}
+	return p_prev;
+}
+BinaryPrefix *Calculator::getBestBinaryPrefix(const Number &exp2, const Number &exp) const {
+	if(binary_prefixes.size() <= 0 || exp2.isZero()) return NULL;
+	int i = 0;
+	ComparisonResult c;
+	if(exp.isNegative()) {
+		i = binary_prefixes.size() - 1;
+	}
+	BinaryPrefix *p = NULL, *p_prev = NULL;
+	Number exp2_1, exp2_2;
+	while((exp.isNegative() && i >= 0) || (!exp.isNegative() && i < (int) binary_prefixes.size())) {
+		p = binary_prefixes[i];
+		if(p_prev && p_prev->exponent() >= 0 != p->exponent() >= 0 && p_prev->exponent() != 0) {
+			if(exp.isNegative()) {
+				i++;
+			} else {
+				i--;
+			}
+			p = binary_null_prefix;
+		}
+		c = exp2.compare(p->exponent(exp));
+		if(c == COMPARISON_RESULT_EQUAL) {
+			if(p == binary_null_prefix) return NULL;
+			return p;
+		} else if(c == COMPARISON_RESULT_GREATER) {
+			if(i == 0) {
+				if(p == binary_null_prefix) return NULL;
+				return p;
+			}
+			exp2_1 = exp2;
+			if(p_prev) {
+				exp2_1 -= p_prev->exponent(exp);
+			}
+			exp2_2 = p->exponent(exp);
+			exp2_2 -= exp2;
+			exp2_2 *= 2;
+			exp2_2 += 2;
+			if(exp2_1.isLessThan(exp2_2)) {
+				if(p_prev == binary_null_prefix) return NULL;
+				return p_prev;
+			} else {
+				return p;
+			}
+		}
+		p_prev = p;
+		if(exp.isNegative()) {
+			i--;
+		} else {
+			i++;
+		}
+	}
+	return p_prev;
+}
 Prefix *Calculator::addPrefix(Prefix *p) {
+	if(p->type() == PREFIX_DECIMAL) {
+		decimal_prefixes.push_back((DecimalPrefix*) p);
+	} else if(p->type() == PREFIX_BINARY) {
+		binary_prefixes.push_back((BinaryPrefix*) p);
+	}
 	prefixes.push_back(p);
 	prefixNameChanged(p, true);
 	return p;	
@@ -1508,7 +1652,7 @@ MathStructure Calculator::convert(const MathStructure &mstruct, Unit *to_unit, c
 		}
 		mstruct_new.childrenUpdated();
 		EvaluationOptions eo2 = eo;
-		eo2.calculate_functions = false;
+		//eo2.calculate_functions = false;
 		eo2.sync_units = false;
 		eo2.keep_prefixes = true;
 		mstruct_new.eval(eo2);
@@ -1549,7 +1693,7 @@ MathStructure Calculator::convert(const MathStructure &mstruct, Unit *to_unit, c
 		if(b) {		
 			mstruct_new.divide(to_unit);
 			EvaluationOptions eo2 = eo;
-			eo2.calculate_functions = false;
+			//eo2.calculate_functions = false;
 			eo2.sync_units = true;
 			eo2.keep_prefixes = false;
 			mstruct_new.eval(eo2);
@@ -1570,7 +1714,7 @@ MathStructure Calculator::convertToBaseUnits(const MathStructure &mstruct, const
 		}
 	}
 	EvaluationOptions eo2 = eo;
-	eo2.calculate_functions = false;
+	//eo2.calculate_functions = false;
 	mstruct_new.eval(eo2);
 	return mstruct_new;
 }
@@ -1816,7 +1960,7 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 }
 MathStructure Calculator::convertToBestUnit(const MathStructure &mstruct, const EvaluationOptions &eo) {
 	EvaluationOptions eo2 = eo;
-	eo2.calculate_functions = false;
+	//eo2.calculate_functions = false;
 	eo2.sync_units = false;
 	switch(mstruct.type()) {
 		case STRUCT_BITWISE_XOR: {}
@@ -1891,7 +2035,7 @@ MathStructure Calculator::convertToCompositeUnit(const MathStructure &mstruct, C
 		}
 		mstruct_new.childrenUpdated();
 		EvaluationOptions eo2 = eo;
-		eo2.calculate_functions = false;
+		//eo2.calculate_functions = false;
 		eo2.sync_units = false;
 		eo2.keep_prefixes = true;
 		mstruct_new.eval(eo2);
@@ -1929,7 +2073,7 @@ MathStructure Calculator::convertToCompositeUnit(const MathStructure &mstruct, C
 		if(b) {	
 			mstruct_new.divide(mstruct_cu);
 			EvaluationOptions eo2 = eo;
-			eo2.calculate_functions = false;
+			//eo2.calculate_functions = false;
 			eo2.sync_units = true;
 			eo2.keep_prefixes = false;
 			mstruct_new.eval(eo2);
@@ -3372,16 +3516,19 @@ void Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOption
 				po2.read_precision = READ_PRECISION_WHEN_DECIMALS;
 				MathStructure *mstruct2 = new MathStructure();
 				parseNumber(mstruct2, str, po2);
-				mstruct->add_nocopy(mstruct2, s, true);
+				if(s == OPERATION_DIVIDE && po.preserve_format) mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
+				else mstruct->add_nocopy(mstruct2, s, true);
 			} else {
 				MathStructure *mstruct2 = new MathStructure();
 				parseNumber(mstruct2, str, po);
-				mstruct->add_nocopy(mstruct2, s, true);
+				if(s == OPERATION_DIVIDE && po.preserve_format) mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
+				else mstruct->add_nocopy(mstruct2, s, true);
 			}
 		} else {
 			MathStructure *mstruct2 = new MathStructure();
 			parseOperators(mstruct2, str, po);
-			mstruct->add_nocopy(mstruct2, s, true);
+			if(s == OPERATION_DIVIDE && po.preserve_format) mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
+			else mstruct->add_nocopy(mstruct2, s, true);
 		}
 	}
 }
@@ -4279,7 +4426,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 
 	xmlDocPtr doc;
 	xmlNodePtr cur, child, child2, child3;
-	string version, stmp, name, uname, type, svalue, plural, singular, category_title, category, description, title, reverse, base, argname, usystem;
+	string version, stmp, name, uname, type, svalue, sexp, plural, singular, category_title, category, description, title, reverse, base, argname, usystem;
 	bool best_title, next_best_title, best_category_title, next_best_category_title, best_description, next_best_description;
 	bool best_plural, next_best_plural, best_singular, next_best_singular, best_argname, next_best_argname;
 	bool best_proptitle, next_best_proptitle, best_propdescr, next_best_propdescr;
@@ -5038,6 +5185,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					cu = NULL;
 					ITEM_INIT_DTH
 					ITEM_INIT_NAME
+					b = true;
 					while(child != NULL) {
 						u = NULL;
 						if(!xmlStrcmp(child->name, (const xmlChar*) "part")) {
@@ -5052,20 +5200,35 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 										u = getCompositeUnit(base);
 									}
 								} else if(!xmlStrcmp(child2->name, (const xmlChar*) "prefix")) {
+									XML_GET_STRING_FROM_PROP(child2, "type", stmp)
 									XML_GET_STRING_FROM_TEXT(child2, svalue);
-									litmp = s2i(svalue);
-									if(litmp == 0) {
-										p = NULL;
+									p = NULL;
+									if(stmp == "binary") {
+										litmp = s2i(svalue);
+										if(litmp != 0) {
+											p = getExactBinaryPrefix(litmp);
+											if(!p) b = false;
+										}
+									} else if(stmp == "number") {
+										nr.set(stmp);
+										if(!nr.isZero()) {
+											p = getExactPrefix(stmp);
+											if(!p) b = false;
+										}
 									} else {
-										p = getExactPrefix(litmp);
-										if(!p) {
-											if(cu) {
-												delete cu;
-											}
-											cu = NULL;
-											break;
-										}												
+										litmp = s2i(svalue);
+										if(litmp != 0) {
+											p = getExactDecimalPrefix(litmp);
+											if(!p) b = false;
+										}
 									}
+									if(!b) {
+										if(cu) {
+											delete cu;
+										}
+										cu = NULL;
+										break;
+									}												
 								} else if(!xmlStrcmp(child2->name, (const xmlChar*) "exponent")) {
 									XML_GET_STRING_FROM_TEXT(child2, stmp);
 									if(stmp.empty()) {
@@ -5075,7 +5238,8 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 									}
 								}
 								child2 = child2->next;
-							}	
+							}
+							if(!b) break;
 							if(u) {
 								if(!cu) {
 									cu = new CompositeUnit("", "", "", "", is_user_defs, false, active);
@@ -5159,7 +5323,8 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 				}
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "prefix")) {
 				child = cur->xmlChildrenNode;
-				uname = "";
+				XML_GET_STRING_FROM_PROP(cur, "type", type)
+				uname = ""; sexp = ""; svalue = "";
 				while(child != NULL) {
 					if(!xmlStrcmp(child->name, (const xmlChar*) "name")) {
 						XML_GET_STRING_FROM_TEXT(child, name);
@@ -5168,11 +5333,25 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					} else if(!xmlStrcmp(child->name, (const xmlChar*) "unicode")) {	
 						XML_GET_STRING_FROM_TEXT(child, uname);
 					} else if(!xmlStrcmp(child->name, (const xmlChar*) "exponent")) {	
+						XML_GET_STRING_FROM_TEXT(child, sexp);
+					} else if(!xmlStrcmp(child->name, (const xmlChar*) "value")) {	
 						XML_GET_STRING_FROM_TEXT(child, svalue);
 					}
 					child = child->next;
 				}
-				addPrefix(new Prefix(s2i(svalue), name, stmp, uname));
+				if(type == "decimal") {
+					addPrefix(new DecimalPrefix(s2i(sexp), name, stmp, uname));
+				} else if(type == "number") {
+					addPrefix(new NumberPrefix(svalue, name, stmp, uname));
+				} else if(type == "binary") {
+					addPrefix(new BinaryPrefix(s2i(sexp), name, stmp, uname));
+				} else {
+					if(svalue.empty()) {
+						addPrefix(new DecimalPrefix(s2i(sexp), name, stmp, uname));
+					} else {
+						addPrefix(new NumberPrefix(svalue, name, stmp, uname));
+					}
+				}
 				done_something = true;
 			}
 			after_load_object:
@@ -5292,7 +5471,23 @@ int Calculator::savePrefixes(const char* file_name, bool save_global) {
 		if(!prefixes[i]->longName(false).empty()) xmlNewTextChild(newnode, NULL, (xmlChar*) "name", (xmlChar*) prefixes[i]->longName(false).c_str());
 		if(!prefixes[i]->shortName(false).empty()) xmlNewTextChild(newnode, NULL, (xmlChar*) "abbreviation", (xmlChar*) prefixes[i]->shortName(false).c_str());
 		if(!prefixes[i]->unicodeName(false).empty()) xmlNewTextChild(newnode, NULL, (xmlChar*) "unicode", (xmlChar*) prefixes[i]->unicodeName(false).c_str());
-		xmlNewTextChild(newnode, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(prefixes[i]->exponent()).c_str());
+		switch(prefixes[i]->type()) {
+			case PREFIX_DECIMAL: {
+				xmlNewProp(newnode, (xmlChar*) "type", (xmlChar*) "decimal");
+				xmlNewTextChild(newnode, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(((DecimalPrefix*) prefixes[i])->exponent()).c_str());
+				break;
+			}
+			case PREFIX_BINARY: {
+				xmlNewProp(newnode, (xmlChar*) "type", (xmlChar*) "binary");
+				xmlNewTextChild(newnode, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(((BinaryPrefix*) prefixes[i])->exponent()).c_str());
+				break;
+			}
+			case PREFIX_NUMBER: {
+				xmlNewProp(newnode, (xmlChar*) "type", (xmlChar*) "number");
+				xmlNewTextChild(newnode, NULL, (xmlChar*) "value", (xmlChar*) prefixes[i]->value().print(save_printoptions).c_str());
+				break;
+			}
+		}
 	}	
 	int returnvalue = xmlSaveFormatFile(file_name, doc, 1);
 	xmlFreeDoc(doc);
@@ -5605,7 +5800,25 @@ int Calculator::saveUnits(const char* file_name, bool save_global) {
 						for(size_t i2 = 0; i2 < cu->units.size(); i2++) {
 							newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "part", NULL);
 							xmlNewTextChild(newnode2, NULL, (xmlChar*) "unit", (xmlChar*) cu->units[i2]->firstBaseUnit()->referenceName().c_str());
-							xmlNewTextChild(newnode2, NULL, (xmlChar*) "prefix", (xmlChar*) i2s(cu->units[i2]->prefixExponent()).c_str());
+							Prefix *p = cu->units[i2]->prefix();
+							if(p) {
+								switch(p->type()) {
+									case PREFIX_DECIMAL: {
+										xmlNewTextChild(newnode2, NULL, (xmlChar*) "prefix", (xmlChar*) i2s(((DecimalPrefix*) p)->exponent()).c_str());
+										break;
+									}
+									case PREFIX_BINARY: {
+										newnode3 = xmlNewTextChild(newnode2, NULL, (xmlChar*) "prefix", (xmlChar*) i2s(((BinaryPrefix*) p)->exponent()).c_str());
+										xmlNewProp(newnode3, (xmlChar*) "type", (xmlChar*) "binary");
+										break;
+									}
+									case PREFIX_NUMBER: {
+										newnode3 = xmlNewTextChild(newnode2, NULL, (xmlChar*) "prefix", (xmlChar*) p->value().print(save_printoptions).c_str());
+										xmlNewProp(newnode3, (xmlChar*) "type", (xmlChar*) "number");
+										break;
+									}
+								}
+							}
 							xmlNewTextChild(newnode2, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(cu->units[i2]->firstBaseExp()).c_str());
 						}
 					}

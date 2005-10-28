@@ -482,7 +482,8 @@ Prefix *AliasUnit_Composite::prefix() const {
 	return prefixv;
 }
 int AliasUnit_Composite::prefixExponent() const {
-	if(prefixv) return prefixv->exponent();
+	if(prefixv && prefixv->type() == PREFIX_DECIMAL) return ((DecimalPrefix*) prefixv)->exponent();
+	if(prefixv && prefixv->type() == PREFIX_BINARY) return ((BinaryPrefix*) prefixv)->exponent();
 	return 0;
 }
 void AliasUnit_Composite::set(Unit *u, int exp_, Prefix *prefix_) {
@@ -649,7 +650,7 @@ MathStructure CompositeUnit::generateMathStructure() const {
 		if(!has_p || units[i]->prefix()) {
 			mstruct2.set(units[i]->firstBaseUnit(), units[i]->prefix());
 		} else {				
-			mstruct2.set(units[i]->firstBaseUnit(), CALCULATOR->null_prefix);
+			mstruct2.set(units[i]->firstBaseUnit(), CALCULATOR->decimal_null_prefix);
 		}
 		if(units[i]->firstBaseExp() != 1) mstruct2 ^= units[i]->firstBaseExp();
 		if(i == 0) mstruct = mstruct2;

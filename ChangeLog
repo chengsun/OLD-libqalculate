@@ -1,3 +1,10 @@
+2005-10-28 Niklas Knutsson  <nq@altern.org>
+
+	* Option to reduce transformation when parsing and print formating
+	* Support for binary and other prefixes
+	* Information units (bit, byte, etc.) and binary prefixes
+	* Neper and Bel units
+
 2005-10-26 Niklas Knutsson  <nq@altern.org>
 
 	* Update Swedish translation

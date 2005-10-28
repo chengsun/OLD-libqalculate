@@ -654,7 +654,7 @@
       </part>
     </unit>
     <unit type="alias">
-      <_title>Metric Ton</_title>
+      <_title>Metric Ton (Tonne)</_title>
       <abbreviation index="1">
         <reference>true</reference>
         <_name>t</_name>
@@ -4314,5 +4314,310 @@
         </part>
       </unit>
     </category>
+  </category>
+  <category>
+    <_title>Ratio</_title>
+    <unit type="base">
+      <_title>Neper</_title>
+      <abbreviation index="1">
+        <reference>true</reference>
+        <_name>Np</_name>
+      </abbreviation>
+      <name index="2">
+        <_name>neper</_name>
+      </name>
+      <plural index="3">
+        <_name>nepers</_name>
+      </plural>
+    </unit>
+    <unit type="alias">
+      <_title>Bel</_title>
+      <abbreviation index="3">
+        <reference>true</reference>
+        <_name>B</_name>
+      </abbreviation>
+      <name index="2">
+        <_name>bel</_name>
+      </name>
+      <plural index="2">
+        <_name>bels</_name>
+      </plural>
+      <base>
+        <unit>Np</unit>
+        <relation>0.5*ln(10)</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="composite">
+      <_title>Decibel</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>dB_c</name>
+      </name>
+      <part>
+        <unit>B</unit>
+        <prefix>-1</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+  </category>
+  <category>
+    <_title>Information</_title>
+    <unit type="base">
+      <_title>Bit</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>bit</_name>
+      </name>
+      <plural index="2">
+        <_name>bits</_name>
+      </plural>
+    </unit>
+    <unit type="alias">
+      <_title>Byte (8-bit)</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>byte</_name>
+      </name>
+      <plural index="2">
+        <_name>bytes</_name>
+      </plural>
+      <name index="3">
+        <_name>octet</_name>
+      </name>
+      <plural index="4">
+        <_name>octets</_name>
+      </plural>
+      <base>
+        <unit>bit</unit>
+        <relation>8</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Nibble</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>nibble</_name>
+      </name>
+      <plural index="2">
+        <_name>nibbles</_name>
+      </plural>
+      <name index="3">
+        <_name>nybble</_name>
+      </name>
+      <plural index="4">
+        <_name>nybbles</_name>
+      </plural>
+      <name index="5">
+        <_name>semioctet</_name>
+      </name>
+      <plural index="6">
+        <_name>semioctets</_name>
+      </plural>
+      <base>
+        <unit>bit</unit>
+        <relation>4</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Tribble</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>tribble</_name>
+      </name>
+      <plural index="2">
+        <_name>tribbles</_name>
+      </plural>
+      <base>
+        <unit>nibble</unit>
+        <relation>3</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Word (16-bit)</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>word</_name>
+      </name>
+      <plural index="2">
+        <_name>words</_name>
+      </plural>
+      <base>
+        <unit>bit</unit>
+        <relation>16</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="composite">
+      <_title>Kilobyte</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>kbyte_c</name>
+      </name>
+      <part>
+        <unit>byte</unit>
+        <prefix>3</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Kibibyte</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Kibyte_c</name>
+      </name>
+      <part>
+        <unit>byte</unit>
+        <prefix type="binary">10</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Mebibyte</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Mibyte_c</name>
+      </name>
+      <part>
+        <unit>byte</unit>
+        <prefix type="binary">20</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Gibibyte</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Gibyte_c</name>
+      </name>
+      <part>
+        <unit>byte</unit>
+        <prefix type="binary">30</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Megabyte</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Mbyte_c</name>
+      </name>
+      <part>
+        <unit>byte</unit>
+        <prefix>6</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Gigabyte</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Gbyte_c</name>
+      </name>
+      <part>
+        <unit>byte</unit>
+        <prefix>9</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Terabyte</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Tbyte_c</name>
+      </name>
+      <part>
+        <unit>byte</unit>
+        <prefix>12</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Kilobit</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>kbit_c</name>
+      </name>
+      <part>
+        <unit>bit</unit>
+        <prefix>3</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Kibibit</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Kibit_c</name>
+      </name>
+      <part>
+        <unit>bit</unit>
+        <prefix type="binary">10</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Mebibit</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Mibit_c</name>
+      </name>
+      <part>
+        <unit>bit</unit>
+        <prefix type="binary">20</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Gibibit</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Gibit_c</name>
+      </name>
+      <part>
+        <unit>bit</unit>
+        <prefix type="binary">30</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Megabit</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Mbit_c</name>
+      </name>
+      <part>
+        <unit>bit</unit>
+        <prefix>6</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Gigabit</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Gbit_c</name>
+      </name>
+      <part>
+        <unit>bit</unit>
+        <prefix>9</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
+    <unit type="composite">
+      <_title>Terabit</_title>
+      <name index="1">
+        <reference>true</reference>
+        <name>Tbit_c</name>
+      </name>
+      <part>
+        <unit>bit</unit>
+        <prefix>12</prefix>
+        <exponent>1</exponent>
+      </part>
+    </unit>
   </category>
 </QALCULATE>

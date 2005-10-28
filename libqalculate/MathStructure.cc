@@ -5223,13 +5223,14 @@ void MathStructure::unformat(const EvaluationOptions &eo) {
 		}
 		case STRUCT_UNIT: {
 			if(o_prefix && !eo.keep_prefixes) {
-				if(o_prefix == CALCULATOR->null_prefix) {
+				if(o_prefix == CALCULATOR->decimal_null_prefix || o_prefix == CALCULATOR->binary_null_prefix) {
 					o_prefix = NULL;
 				} else {
 					Unit *u = o_unit;
 					Prefix *p = o_prefix;
-					set(10);
-					raise(p->exponent());
+					//set(10);
+					//raise(p->exponent());
+					set(p->value());
 					multiply(u);
 				}
 			}
@@ -5605,7 +5606,7 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 				Number exp10;
 				if(b) {
 					if(po.prefix) {
-						if(po.prefix != CALCULATOR->null_prefix)  {
+						if(po.prefix != CALCULATOR->decimal_null_prefix && po.prefix != CALCULATOR->binary_null_prefix) {
 							if(CHILD(i).isUnit()) CHILD(i).setPrefix(po.prefix);
 							else CHILD(i)[0].setPrefix(po.prefix);
 							if(CHILD(0).isNumber()) {
@@ -5649,7 +5650,7 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 							e2 *= i;
 							exp10 -= e2;
 						}
-						Prefix *p = CALCULATOR->getBestPrefix(exp10, exp, po.use_all_prefixes);
+						DecimalPrefix *p = CALCULATOR->getBestDecimalPrefix(exp10, exp, po.use_all_prefixes);
 						if(p) {
 							Number test_exp(exp10);
 							test_exp -= p->exponent(exp);
@@ -5662,11 +5663,11 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 							}
 						}
 					}
-					if(b2 && CHILD(0).isNumber() && ((po.prefix && po.prefix != CALCULATOR->null_prefix) || po.use_unit_prefixes)) {
+					if(b2 && CHILD(0).isNumber() && ((po.prefix && po.prefix != CALCULATOR->decimal_null_prefix && po.prefix != CALCULATOR->binary_null_prefix) || po.use_unit_prefixes)) {
 						exp10 = CHILD(0).number();
 						exp10.log(10);
 						exp10.floor();
-						Prefix *p = CALCULATOR->getBestPrefix(exp10, exp2, po.use_all_prefixes);
+						DecimalPrefix *p = CALCULATOR->getBestDecimalPrefix(exp10, exp2, po.use_all_prefixes);
 						if(p) {
 							Number test_exp(exp10);
 							test_exp -= p->exponent(exp2);
@@ -5683,7 +5684,7 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 			}
 		}
 		case STRUCT_UNIT: {
-			if(!o_prefix && (po.prefix && po.prefix != CALCULATOR->null_prefix)) {
+			if(!o_prefix && (po.prefix && po.prefix != CALCULATOR->decimal_null_prefix && po.prefix != CALCULATOR->binary_null_prefix)) {
 				transform(STRUCT_MULTIPLICATION, m_one);
 				SWAP_CHILDS(0, 1);
 				setPrefixes(po, parent, pindex);
@@ -5692,7 +5693,7 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 		}
 		case STRUCT_POWER: {
 			if(CHILD(0).isUnit()) {
-				if(CHILD(1).isNumber() && CHILD(1).number().isReal() && !o_prefix && (po.prefix && po.prefix != CALCULATOR->null_prefix)) {
+				if(CHILD(1).isNumber() && CHILD(1).number().isReal() && !o_prefix && (po.prefix && po.prefix != CALCULATOR->decimal_null_prefix && po.prefix != CALCULATOR->binary_null_prefix)) {
 					transform(STRUCT_MULTIPLICATION, m_one);
 					SWAP_CHILDS(0, 1);
 					setPrefixes(po, parent, pindex);
@@ -5979,15 +5980,19 @@ void MathStructure::prefixCurrencies() {
 	}
 }
 void MathStructure::format(const PrintOptions &po) {
-	sort(po);
-	if(po.improve_division_multipliers) {
-		if(improve_division_multipliers(po)) sort(po);
+	if(!po.preserve_format) {
+		sort(po);
+		if(po.improve_division_multipliers) {
+			if(improve_division_multipliers(po)) sort(po);
+		}
+		setPrefixes(po);
 	}
-	setPrefixes(po);
 	formatsub(po);
-	postFormatUnits(po);
-	if(po.sort_options.prefix_currencies && po.abbreviate_names && CALCULATOR->place_currency_code_before) {
-		prefixCurrencies();
+	if(!po.preserve_format) {
+		postFormatUnits(po);
+		if(po.sort_options.prefix_currencies && po.abbreviate_names && CALCULATOR->place_currency_code_before) {
+			prefixCurrencies();
+		}
 	}
 }
 void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, size_t pindex) {
@@ -6001,6 +6006,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 			break;
 		}
 		case STRUCT_DIVISION: {
+			if(po.preserve_format) break;
 			if(CHILD(0).isAddition() && CHILD(0).size() > 0) {
 				bool b = true;
 				for(size_t i = 0; i < CHILD(0).size(); i++) {
@@ -6019,7 +6025,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 			break;
 		}
 		case STRUCT_MULTIPLICATION: {
-
+			if(po.preserve_format) break;
 			if(CHILD(0).isNegate()) {
 				CHILD(0).number().negate();
 				if(CHILD(0)[0].isOne()) {
@@ -6136,6 +6142,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 			break;
 		}
 		case STRUCT_UNIT: {
+			if(po.preserve_format) break;
 			if(!parent || (!parent->isPower() && !parent->isMultiplication() && !parent->isInverse() && !(parent->isDivision() && pindex == 2))) {				
 				multiply(m_one);
 				SWAP_CHILDS(0, 1);
@@ -6143,6 +6150,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 			break;
 		}
 		case STRUCT_POWER: {
+			if(po.preserve_format) break;
 			if((!po.negative_exponents || CHILD(0).isAddition()) && CHILD(1).isNegate() && (!CHILD(0).isVector() || !CHILD(1).isMinusOne())) {
 				if(CHILD(1)[0].isOne()) {
 					m_type = STRUCT_INVERSE;

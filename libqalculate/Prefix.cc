@@ -15,8 +15,7 @@
 #include "Calculator.h"
 #include "Number.h"
 
-Prefix::Prefix(int exp10, string long_name, string short_name, string unicode_name) {
-	exp = exp10;
+Prefix::Prefix(string long_name, string short_name, string unicode_name) {
 	l_name = long_name;
 	s_name = short_name;
 	u_name = unicode_name;
@@ -69,22 +68,94 @@ const string &Prefix::name(bool short_default, bool use_unicode, bool (*can_disp
 	}
 	return l_name;
 }
-int Prefix::exponent(int iexp) const {
+
+DecimalPrefix::DecimalPrefix(int exp10, string long_name, string short_name, string unicode_name) : Prefix(long_name, short_name, unicode_name) {
+	exp = exp10;
+}
+DecimalPrefix::~DecimalPrefix() {
+}
+int DecimalPrefix::exponent(int iexp) const {
 	return exp * iexp;
 }
-Number Prefix::exponent(const Number &nexp) const {
+Number DecimalPrefix::exponent(const Number &nexp) const {
 	return nexp * exp;
 }
-void Prefix::setExponent(int iexp) {
+void DecimalPrefix::setExponent(int iexp) {
 	exp = exp;
 }
-Number Prefix::value(const Number &nexp) const {
+Number DecimalPrefix::value(const Number &nexp) const {
 	Number nr(exponent(nexp));
 	nr.exp10();
 	return nr;
 }
-Number Prefix::value(int iexp) const {
+Number DecimalPrefix::value(int iexp) const {
 	Number nr(exponent(iexp));
 	nr.exp10();
 	return nr;
+}
+Number DecimalPrefix::value() const {
+	Number nr(exp);
+	nr.exp10();
+	return nr;
+}
+int DecimalPrefix::type() const {
+	return PREFIX_DECIMAL;
+}
+
+BinaryPrefix::BinaryPrefix(int exp2, string long_name, string short_name, string unicode_name) : Prefix(long_name, short_name, unicode_name) {
+	exp = exp2;
+}
+BinaryPrefix::~BinaryPrefix() {
+}
+int BinaryPrefix::exponent(int iexp) const {
+	return exp * iexp;
+}
+Number BinaryPrefix::exponent(const Number &nexp) const {
+	return nexp * exp;
+}
+void BinaryPrefix::setExponent(int iexp) {
+	exp = exp;
+}
+Number BinaryPrefix::value(const Number &nexp) const {
+	Number nr(exponent(nexp));
+	nr.exp2();
+	return nr;
+}
+Number BinaryPrefix::value(int iexp) const {
+	Number nr(exponent(iexp));
+	nr.exp2();
+	return nr;
+}
+Number BinaryPrefix::value() const {
+	Number nr(exp);
+	nr.exp2();
+	return nr;
+}
+int BinaryPrefix::type() const {
+	return PREFIX_BINARY;
+}
+
+NumberPrefix::NumberPrefix(const Number &nr, string long_name, string short_name, string unicode_name) : Prefix(long_name, short_name, unicode_name) {
+	o_number = nr;
+}
+NumberPrefix::~NumberPrefix() {
+}
+Number NumberPrefix::setValue(const Number &nr) {
+	o_number = nr;
+}
+Number NumberPrefix::value(const Number &nexp) const {
+	Number nr(o_number);
+	nr.raise(nexp);
+	return nr;
+}
+Number NumberPrefix::value(int iexp) const {
+	Number nr(o_number);
+	nr.raise(iexp);
+	return nr;
+}
+Number NumberPrefix::value() const {
+	return o_number;
+}
+int NumberPrefix::type() const {
+	return PREFIX_NUMBER;
 }

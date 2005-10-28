@@ -176,7 +176,8 @@ class Calculator {
 	MathFunction *f_diff, *f_integrate, *f_solve, *f_multisolve;
 	MathFunction *f_error, *f_warning, *f_message, *f_save, *f_load, *f_export, *f_title;
 	Unit *u_rad, *u_gra, *u_deg, *u_euro;
-	Prefix *null_prefix;
+	DecimalPrefix *decimal_null_prefix;
+	BinaryPrefix *binary_null_prefix;
 
   	bool place_currency_code_before, place_currency_sign_before;
   
@@ -193,6 +194,8 @@ class Calculator {
 	vector<MathFunction*> functions;	
 	vector<Unit*> units;	
 	vector<Prefix*> prefixes;
+	vector<DecimalPrefix*> decimal_prefixes;
+	vector<BinaryPrefix*> binary_prefixes;
   
 	Calculator();
 	virtual ~Calculator();
@@ -228,11 +231,15 @@ class Calculator {
 
 	Prefix *getPrefix(size_t index) const;	
 	Prefix *getPrefix(string name_) const;		
-	Prefix *getExactPrefix(int exp10, int exp = 1) const;			
+	DecimalPrefix *getExactDecimalPrefix(int exp10, int exp = 1) const;
+	BinaryPrefix *getExactBinaryPrefix(int exp2, int exp = 1) const;
 	Prefix *getExactPrefix(const Number &o, int exp = 1) const;				
-	Prefix *getNearestPrefix(int exp10, int exp = 1) const;		
-	Prefix *getBestPrefix(int exp10, int exp = 1, bool all_prefixes = true) const;		
-	Prefix *getBestPrefix(const Number &exp10, const Number &exp, bool all_prefixes = true) const;
+	DecimalPrefix *getNearestDecimalPrefix(int exp10, int exp = 1) const;		
+	DecimalPrefix *getBestDecimalPrefix(int exp10, int exp = 1, bool all_prefixes = true) const;		
+	DecimalPrefix *getBestDecimalPrefix(const Number &exp10, const Number &exp, bool all_prefixes = true) const;
+	BinaryPrefix *getNearestBinaryPrefix(int exp2, int exp = 1) const;		
+	BinaryPrefix *getBestBinaryPrefix(int exp2, int exp = 1) const;		
+	BinaryPrefix *getBestBinaryPrefix(const Number &exp2, const Number &exp) const;
 	Prefix *addPrefix(Prefix *p);
 	void prefixNameChanged(Prefix *p, bool new_item = false);	
 

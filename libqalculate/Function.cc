@@ -327,7 +327,7 @@ int MathFunction::args(const string &argstr, MathStructure &vargs, const ParseOp
 		unended_function->set(vargs);
 		unended_function->setType(STRUCT_FUNCTION);
 		unended_function->setFunction(this);
-		while(unended_function->size() < itmp) {
+		while((int) unended_function->size() < itmp) {
 			unended_function->addChild(m_undefined);
 		}
 	}

@@ -636,7 +636,7 @@ bool CompositeUnit::containsRelativeTo(Unit *u) const {
 	}	
 	return false;
 }
-MathStructure CompositeUnit::generateMathStructure() const {
+MathStructure CompositeUnit::generateMathStructure(bool make_division) const {
 	MathStructure mstruct;
 	bool has_p = false;
 	for(size_t i = 0; i < units.size(); i++) {
@@ -645,6 +645,7 @@ MathStructure CompositeUnit::generateMathStructure() const {
 			break;
 		}
 	}
+	MathStructure mden;
 	for(size_t i = 0; i < units.size(); i++) {
 		MathStructure mstruct2;
 		if(!has_p || units[i]->prefix()) {
@@ -652,9 +653,32 @@ MathStructure CompositeUnit::generateMathStructure() const {
 		} else {				
 			mstruct2.set(units[i]->firstBaseUnit(), CALCULATOR->decimal_null_prefix);
 		}
-		if(units[i]->firstBaseExp() != 1) mstruct2 ^= units[i]->firstBaseExp();
-		if(i == 0) mstruct = mstruct2;
-		else mstruct *= mstruct2;
+		if(make_division && units[i]->firstBaseExp() < 0) {
+			if(units[i]->firstBaseExp() != -1) {
+				mstruct2 ^= -units[i]->firstBaseExp();
+			}
+		} else if(units[i]->firstBaseExp() != 1) {			
+			mstruct2 ^= units[i]->firstBaseExp();
+		}
+		if(i == 0) {
+			if(make_division && units[i]->firstBaseExp() < 0) {
+				mstruct = 1;
+				mden = mstruct2;
+			} else {
+				mstruct = mstruct2;
+			}
+		} else if(make_division && units[i]->firstBaseExp() < 0) {
+			if(mden.isZero()) {
+				mden = mstruct2;
+			} else {
+				mden *= mstruct2;
+			}
+		} else {
+			mstruct *= mstruct2;
+		}
+	}
+	if(make_division && !mden.isZero()) {
+		mstruct.transform(STRUCT_DIVISION, mden);
 	}
 	return mstruct;
 }

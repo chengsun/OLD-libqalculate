@@ -155,8 +155,8 @@ void *calculate_proc(void *pipe) {
 		MathStructure *mstruct = (MathStructure*) x;
 		mstruct->set(_("aborted"));
 		if(CALCULATOR->tmp_parsedstruct) CALCULATOR->tmp_parsedstruct->set(_("aborted"));
-		if(CALCULATOR->tmp_tostr) *CALCULATOR->tmp_tostr = "";
-		mstruct->set(CALCULATOR->calculate(CALCULATOR->expression_to_calculate, CALCULATOR->tmp_evaluationoptions, CALCULATOR->tmp_parsedstruct, CALCULATOR->tmp_tostr));
+		if(CALCULATOR->tmp_tostruct) CALCULATOR->tmp_tostruct->setUndefined();
+		mstruct->set(CALCULATOR->calculate(CALCULATOR->expression_to_calculate, CALCULATOR->tmp_evaluationoptions, CALCULATOR->tmp_parsedstruct, CALCULATOR->tmp_tostruct, CALCULATOR->tmp_maketodivision));
 		CALCULATOR->b_busy = false;
 	}
 	return NULL;
@@ -963,6 +963,9 @@ int Calculator::getPrecision() const {
 
 const string &Calculator::getDecimalPoint() const {return DOT_STR;}
 const string &Calculator::getComma() const {return COMMA_STR;}
+string Calculator::localToString() const {
+	return _(" to ");
+}
 void Calculator::setLocale() {
 	setlocale(LC_NUMERIC, saved_locale);
 	lconv *locale = localeconv();
@@ -1101,9 +1104,9 @@ void Calculator::addBuiltinVariables() {
 	v_undef = (KnownVariable*) addVariable(new KnownVariable("", "undefined", mstruct, "Undefined", false, true));
 	addVariable(new EulerVariable());
 	addVariable(new CatalanVariable());
-	v_x = (UnknownVariable*) addVariable(new UnknownVariable("Unknowns", "x", "", true, false));
-	v_y = (UnknownVariable*) addVariable(new UnknownVariable("Unknowns", "y", "", true, false));
-	v_z = (UnknownVariable*) addVariable(new UnknownVariable("Unknowns", "z", "", true, false));
+	v_x = (UnknownVariable*) addVariable(new UnknownVariable("", "x", "", true, false));
+	v_y = (UnknownVariable*) addVariable(new UnknownVariable("", "y", "", true, false));
+	v_z = (UnknownVariable*) addVariable(new UnknownVariable("", "z", "", true, false));
 	
 }
 void Calculator::addBuiltinFunctions() {
@@ -1215,6 +1218,7 @@ void Calculator::addBuiltinFunctions() {
 	f_concatenate = addFunction(new ConcatenateFunction());
 		
 	f_replace = addFunction(new ReplaceFunction());
+	f_stripunits = addFunction(new StripUnitsFunction());
 
 	f_genvector = addFunction(new GenerateVectorFunction());
 	f_for = addFunction(new ForFunction());
@@ -1516,7 +1520,7 @@ string Calculator::unlocalizeExpression(string str) const {
 	}
 	return str;
 }
-bool Calculator::calculate(MathStructure *mstruct, string str, int usecs, const EvaluationOptions &eo, MathStructure *parsed_struct, string *to_str) {
+bool Calculator::calculate(MathStructure *mstruct, string str, int usecs, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
 	mstruct->set(string(_("calculating...")));
 	saveState();
 	b_busy = true;
@@ -1528,7 +1532,8 @@ bool Calculator::calculate(MathStructure *mstruct, string str, int usecs, const 
 	expression_to_calculate = str;
 	tmp_evaluationoptions = eo;
 	tmp_parsedstruct = parsed_struct;
-	tmp_tostr = to_str;
+	tmp_tostruct = to_struct;
+	tmp_maketodivision = make_to_division;
 	void *x = (void*) mstruct;
 	fwrite(&x, sizeof(void*), 1, calculate_pipe_w);
 	fflush(calculate_pipe_w);
@@ -1568,17 +1573,40 @@ bool Calculator::separateToExpression(string &str, string &to_str, const Evaluat
 	}
 	return false;
 }
-MathStructure Calculator::calculate(string str, const EvaluationOptions &eo, MathStructure *parsed_struct, string *to_str) {
+MathStructure Calculator::calculate(string str, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
 	string str2;
 	separateToExpression(str, str2, eo);
-	if(to_str) *to_str = str2;
 	MathStructure mstruct;
 	parse(&mstruct, str, eo.parse_options);
-	if(parsed_struct) parsed_struct->set(mstruct);
+	if(parsed_struct) {
+		beginTemporaryStopMessages();
+		ParseOptions po = eo.parse_options;
+		po.preserve_format = true;
+		parse(parsed_struct, str, po);
+		endTemporaryStopMessages();
+	}
 	mstruct.eval(eo);
 	if(!str2.empty()) {
-		return convert(mstruct, str2, eo);
+		Unit *u = getUnit(str2);
+		if(u) {
+			if(to_struct) to_struct->set(u);
+			return convert(mstruct, u, eo);
+		}
+		for(size_t i = 0; i < signs.size(); i++) {
+			if(str2 == signs[i]) {
+				u = getUnit(real_signs[i]);
+				break;
+			}
+		}
+		if(u) {
+			if(to_struct) to_struct->set(u);
+			return convert(mstruct, u, eo);
+		}
+		CompositeUnit cu("", "temporary_composite_convert", "", str2);
+		if(to_struct) to_struct->set(cu.generateMathStructure(make_to_division));
+		return convertToCompositeUnit(mstruct, &cu, eo);
 	} else {
+		if(to_struct) to_struct->setUndefined();
 		switch(eo.auto_post_conversion) {
 			case POST_CONVERSION_BEST: {
 				return convertToBestUnit(mstruct, eo);
@@ -2921,6 +2949,11 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 		} else if(str_index > 0 && po.base >= 2 && po.base <= 10 && is_in(EXPS, str[str_index]) && str_index + 1 < str.length() && is_in(NUMBERS, str[str_index + 1])) {
 			
 		} else if(po.base >= 2 && po.base <= 10 && is_not_in(NUMBERS NOT_IN_NAMES, str[str_index])) {
+			bool p_mode = false;
+			void *best_p_object = NULL;
+			Prefix *best_p = NULL;
+			size_t best_pl = 0;
+			size_t best_pnl = 0;
 			bool moved_forward = false;
 			const string *found_function_name = NULL;
 			bool case_sensitive;
@@ -2955,7 +2988,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 						if(ufv_index < ufvl.size()) {
 							switch(ufvl_t[ufv_index]) {
 								case 'v': {
-									if(po.variables_enabled) {
+									if(po.variables_enabled && !p_mode) {
 										name = &((ExpressionItem*) ufvl[ufv_index])->getName(ufvl_i[ufv_index]).name;
 										case_sensitive = ((ExpressionItem*) ufvl[ufv_index])->getName(ufvl_i[ufv_index]).case_sensitive;
 										name_length = name->length();
@@ -2970,7 +3003,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 									break;
 								}
 								case 'f': {
-									if(po.functions_enabled && !found_function_name) {
+									if(po.functions_enabled && !found_function_name && !p_mode) {
 										name = &((ExpressionItem*) ufvl[ufv_index])->getName(ufvl_i[ufv_index]).name;
 										case_sensitive = ((ExpressionItem*) ufvl[ufv_index])->getName(ufvl_i[ufv_index]).case_sensitive;
 										name_length = name->length();
@@ -2983,7 +3016,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 									break;
 								}
 								case 'u': {
-									if(po.units_enabled) {
+									if(po.units_enabled && !p_mode) {
 										name = &((ExpressionItem*) ufvl[ufv_index])->getName(ufvl_i[ufv_index]).name;
 										case_sensitive = ((ExpressionItem*) ufvl[ufv_index])->getName(ufvl_i[ufv_index]).case_sensitive;
 										name_length = name->length();
@@ -3082,7 +3115,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 						vt3 = 0;
 					}
 					case 1: {
-						if(!found_function_name && po.functions_enabled && (!po.limit_implicit_multiplication || ufv_index + 1 == unit_chars_left || ufv_index + 1 == name_chars_left) && vt3 < ufv[vt2][ufv_index].size()) {
+						if(!found_function_name && po.functions_enabled && !p_mode && (!po.limit_implicit_multiplication || ufv_index + 1 == unit_chars_left || ufv_index + 1 == name_chars_left) && vt3 < ufv[vt2][ufv_index].size()) {
 							object = ufv[vt2][ufv_index][vt3];
 							ufvt = 'f';
 							name = &((MathFunction*) object)->getName(ufv_i[vt2][ufv_index][vt3]).name;
@@ -3095,7 +3128,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 						vt3 = 0;
 					}
 					case 2: {
-						if(po.units_enabled && (!po.limit_implicit_multiplication || ufv_index + 1 == unit_chars_left) && ufv_index < unit_chars_left && vt3 < ufv[vt2][ufv_index].size()) {							
+						if(po.units_enabled && !p_mode && (!po.limit_implicit_multiplication || ufv_index + 1 == unit_chars_left) && ufv_index < unit_chars_left && vt3 < ufv[vt2][ufv_index].size()) {							
 							object = ufv[vt2][ufv_index][vt3];
 							if(ufv_index + 1 == unit_chars_left || !((Unit*) object)->getName(ufv_i[vt2][ufv_index][vt3]).plural) {
 								ufvt = 'u';					
@@ -3110,7 +3143,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 						vt3 = 0;
 					}
 					case 3: {
-						if(po.variables_enabled && (!po.limit_implicit_multiplication || ufv_index + 1 == unit_chars_left || ufv_index + 1 == name_chars_left) && vt3 < ufv[vt2][ufv_index].size()) {
+						if(po.variables_enabled && !p_mode && (!po.limit_implicit_multiplication || ufv_index + 1 == unit_chars_left || ufv_index + 1 == name_chars_left) && vt3 < ufv[vt2][ufv_index].size()) {
 							object = ufv[vt2][ufv_index][vt3];
 							ufvt = 'v';
 							name = &((Variable*) object)->getName(ufv_i[vt2][ufv_index][vt3]).name;
@@ -3297,7 +3330,8 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 							p = (Prefix*) object;
 							str_index += name_length;
 							unit_chars_left = last_unit_char - str_index + 1;
-							int name_length_old = name_length;
+							size_t name_length_old = name_length;
+							int index = 0; 
 							if(unit_chars_left > UFV_LENGTHS) {
 								for(size_t ufv_index2 = 0; ufv_index2 < ufvl.size(); ufv_index2++) {
 									name = NULL;
@@ -3315,15 +3349,26 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 										}
 									}								
 									if(name && ((case_sensitive && compare_name(*name, str, name_length, str_index)) || (!case_sensitive && compare_name_no_case(*name, str, name_length, str_index)))) {
-										str.erase(str_index - name_length_old, name_length_old);
-										str_index -= name_length_old;
-										object = ufvl[ufv_index2];
-										goto replace_text_by_unit_place;
+										if((!p_mode && name_length_old > 1) || (p_mode && (name_length + name_length_old > best_pl || ((ufvt != 'P' || !((Unit*) ufvl[ufv_index2])->getName(ufvl_i[ufv_index2]).abbreviation) && name_length + name_length_old == best_pl)))) {
+											p_mode = true;
+											best_p = p;
+											best_p_object = ufvl[ufv_index2];
+											best_pl = name_length + name_length_old;
+											best_pnl = name_length_old;
+											index = -1;
+											break;
+										}
+										if(!p_mode) {
+											str.erase(str_index - name_length_old, name_length_old);
+											str_index -= name_length_old;
+											object = ufvl[ufv_index2];
+											goto replace_text_by_unit_place;
+										}
 									}
 								}
 							}
-							int index; 
-							if(UFV_LENGTHS >= unit_chars_left) {
+							if(index < 0) {							
+							} else if(UFV_LENGTHS >= unit_chars_left) {
 								index = unit_chars_left - 1;
 							} else if(po.limit_implicit_multiplication) {
 								index = -1;
@@ -3335,16 +3380,26 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 									name = &((Unit*) ufv[2][index][ufv_index2])->getName(ufv_i[2][index][ufv_index2]).name;
 									case_sensitive = ((Unit*) ufv[2][index][ufv_index2])->getName(ufv_i[2][index][ufv_index2]).case_sensitive;
 									name_length = name->length();
-									if(ufv_index2 + 1 == unit_chars_left || !((Unit*) ufv[2][index][ufv_index2])->getName(ufv_i[2][index][ufv_index2]).plural) {
+									if(index + 1 == (int) unit_chars_left || !((Unit*) ufv[2][index][ufv_index2])->getName(ufv_i[2][index][ufv_index2]).plural) {
 										if(name_length <= unit_chars_left && ((case_sensitive && compare_name(*name, str, name_length, str_index)) || (!case_sensitive && compare_name_no_case(*name, str, name_length, str_index)))) {
-											str.erase(str_index - name_length_old, name_length_old);
-											str_index -= name_length_old;
-											object = ufv[2][index][ufv_index2];
-											goto replace_text_by_unit_place;
+											if((!p_mode && name_length_old > 1) || (p_mode && (name_length + name_length_old > best_pl || ((ufvt != 'P' || !((Unit*) ufv[2][index][ufv_index2])->getName(ufv_i[2][index][ufv_index2]).abbreviation) && name_length + name_length_old == best_pl)))) {
+												p_mode = true;
+												best_p = p;
+												best_p_object = ufv[2][index][ufv_index2];
+												best_pl = name_length + name_length_old;
+												best_pnl = name_length_old;
+												index = -1;
+											}
+											if(!p_mode) {
+												str.erase(str_index - name_length_old, name_length_old);
+												str_index -= name_length_old;
+												object = ufv[2][index][ufv_index2];
+												goto replace_text_by_unit_place;
+											}
 										}
 									}
 								}
-								if(po.limit_implicit_multiplication) {
+								if(po.limit_implicit_multiplication || (p_mode && index + 1 + name_length_old < best_pl)) {
 									break;
 								}
 							}
@@ -3359,7 +3414,13 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 					}
 				}
 			}
-			if(!moved_forward && found_function) {
+			if(!moved_forward && p_mode) {
+				object = best_p_object;
+				p = best_p;
+				str.erase(str_index, best_pnl);
+				name_length = best_pl - best_pnl;
+				goto replace_text_by_unit_place;
+			} else if(!moved_forward && found_function) {
 				object = found_function;
 				name = found_function_name;
 				name_length = found_function_name_length;

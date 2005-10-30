@@ -26,7 +26,6 @@
 #endif
 
 MathStructure *mstruct, *parsed_mstruct;
-string *parsed_to_str;
 KnownVariable *vans[5];
 string result_text, parsed_text;
 bool load_global_defs, fetch_exchange_rates_at_startup, first_time, first_qalculate_run, save_mode_on_exit, save_defs_on_exit;
@@ -655,7 +654,6 @@ int main (int argc, char *argv[]) {
 
 	mstruct = new MathStructure();
 	parsed_mstruct = new MathStructure();
-	parsed_to_str = new string;
 
 	bool canfetch = CALCULATOR->canFetch();
 
@@ -1547,10 +1545,22 @@ void *view_proc(void *pipe) {
 		MathStructure m(*((MathStructure*) x));
 		fread(&x, sizeof(void*), 1, view_pipe);
 		if(x) {
-			PrintOptions po = printops;
+			PrintOptions po;
+			po.preserve_format = true;
+			po.show_ending_zeroes = true;
+			po.lower_case_e = printops.lower_case_e;
+			po.lower_case_numbers = printops.lower_case_numbers;
+			po.abbreviate_names = false;
+			po.use_unicode_signs = printops.use_unicode_signs;
+			po.multiplication_sign = printops.multiplication_sign;
+			po.division_sign = printops.division_sign;
 			po.short_multiplication = false;
 			po.excessive_parenthesis = true;
 			po.improve_division_multipliers = false;
+			/*PrintOptions po = printops;
+			po.short_multiplication = false;
+			po.excessive_parenthesis = true;
+			po.improve_division_multipliers = false;*/
 			MathStructure mp(*((MathStructure*) x));
 			fread(&po.is_approximate, sizeof(bool*), 1, view_pipe);
 			mp.format(po);
@@ -1689,7 +1699,7 @@ void execute_expression(bool goto_input) {
 	expression_executed = true;
 
 	b_busy = true;
-	CALCULATOR->calculate(mstruct, CALCULATOR->unlocalizeExpression(str), 0, evalops, parsed_mstruct, parsed_to_str);
+	CALCULATOR->calculate(mstruct, CALCULATOR->unlocalizeExpression(str), 0, evalops, parsed_mstruct);
 	struct timespec rtime;
 	rtime.tv_sec = 0;
 	rtime.tv_nsec = 10000000;

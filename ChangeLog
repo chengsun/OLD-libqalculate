@@ -1,3 +1,14 @@
+2005-10-30 Niklas Knutsson  <nq@altern.org>
+
+	* Add metre/metres for meter/meters
+	* nounit() function
+
+2005-10-29 Niklas Knutsson  <nq@altern.org>
+
+	* Fix Kibit interpretation (was kibitonne, is now kibibit) and similar
+	* Update setting of parsed structure and to expression in calculate function
+	* Update qalc
+
 2005-10-28 Niklas Knutsson  <nq@altern.org>
 
 	* Option to reduce transformation when parsing and print formating

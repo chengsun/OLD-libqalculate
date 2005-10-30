@@ -15,6 +15,12 @@
       <plural index="3">
         <_name>meters</_name>
       </plural>
+      <name index="4">
+        <_name>metre</_name>
+      </name>
+      <plural index="5">
+        <_name>metres</_name>
+      </plural>
     </unit>
     <unit type="composite">
       <_title>Kilometer</_title>

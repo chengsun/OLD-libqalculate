@@ -161,7 +161,7 @@ class CompositeUnit : public Unit {
 		virtual string print(bool plural_, bool short_, bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
 		virtual int subtype() const;
 		virtual bool containsRelativeTo(Unit *u) const;
-		virtual MathStructure generateMathStructure() const;
+		virtual MathStructure generateMathStructure(bool make_division = false) const;
 		virtual void setBaseExpression(string base_expression_);		
 		virtual void updateNames();
 		virtual void clear();

@@ -7947,6 +7947,37 @@ bool MathStructure::replace(const MathStructure &mfrom1, const MathStructure &mt
 	}
 	return b;
 }
+bool MathStructure::removeType(int mtype) {
+	if(m_type == mtype || (m_type == STRUCT_POWER && CHILD(0).type() == mtype)) {
+		set(1);
+		return true;
+	}
+	bool b = false;
+	if(m_type == STRUCT_MULTIPLICATION) {
+		for(int i = 0; i < (int) SIZE; i++) {
+			if(CHILD(i).removeType(mtype)) {
+				if(CHILD(i).isOne()) {
+					ERASE(i);
+					i--;
+				} else {
+					CHILD_UPDATED(i);
+				}
+				b = true;
+			}
+		}
+		if(SIZE == 0) {
+			set(1);
+		}
+	} else {
+		for(size_t i = 0; i < SIZE; i++) {
+			if(CHILD(i).removeType(mtype)) {
+				b = true;
+				CHILD_UPDATED(i);
+			}
+		}
+	}
+	return b;
+}
 
 MathStructure MathStructure::generateVector(MathStructure x_mstruct, const MathStructure &min, const MathStructure &max, int steps, MathStructure *x_vector, const EvaluationOptions &eo) const {
 	if(steps < 1) {

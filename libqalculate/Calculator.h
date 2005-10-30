@@ -171,7 +171,7 @@ class Calculator {
 	MathFunction *f_bin, *f_oct, *f_hex, *f_base, *f_roman;
 	MathFunction *f_ascii, *f_char;
 	MathFunction *f_length, *f_concatenate;
-	MathFunction *f_replace;
+	MathFunction *f_replace, *f_stripunits;
 	MathFunction *f_genvector, *f_for, *f_sum, *f_product, *f_process, *f_process_matrix, *f_csum, *f_if, *f_function, *f_select;
 	MathFunction *f_diff, *f_integrate, *f_solve, *f_multisolve;
 	MathFunction *f_error, *f_warning, *f_message, *f_save, *f_load, *f_export, *f_title;
@@ -186,7 +186,8 @@ class Calculator {
 	PrintOptions tmp_printoptions;
 	EvaluationOptions tmp_evaluationoptions;
 	MathStructure *tmp_parsedstruct;
-	string *tmp_tostr;
+	MathStructure *tmp_tostruct;
+	bool tmp_maketodivision;
 	
 	PrintOptions save_printoptions;	
   
@@ -250,6 +251,7 @@ class Calculator {
 	const string &getComma() const;	
 	void setLocale();
 	void unsetLocale();
+	string localToString() const;
 	
 	void resetVariables();
 	void resetFunctions();	
@@ -269,8 +271,8 @@ class Calculator {
 	string localizeExpression(string str) const;
 	string unlocalizeExpression(string str) const;
 	bool separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const;
-	bool calculate(MathStructure *mstruct, string str, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, string *to_str = NULL);
-	MathStructure calculate(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, string *to_str = NULL);
+	bool calculate(MathStructure *mstruct, string str, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	MathStructure calculate(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
 	string printMathStructureTimeOut(const MathStructure &mstruct, int usecs = 100000, const PrintOptions &op = default_print_options);
 	
 	MathStructure parse(string str, const ParseOptions &po = default_parse_options);

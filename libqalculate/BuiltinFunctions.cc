@@ -2154,6 +2154,14 @@ int ReplaceFunction::calculate(MathStructure &mstruct, const MathStructure &varg
 	mstruct.replace(vargs[1], vargs[2]);
 	return 1;
 }
+StripUnitsFunction::StripUnitsFunction() : MathFunction("nounit", 1) {
+}
+int StripUnitsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	mstruct = vargs[0];
+	mstruct.eval(eo);
+	mstruct.removeType(STRUCT_UNIT);
+	return 1;
+}
 
 ErrorFunction::ErrorFunction() : MathFunction("error", 1) {
 	setArgumentDefinition(1, new TextArgument());

@@ -1,3 +1,12 @@
+2005-11-02 Niklas Knutsson  <nq@altern.org>
+	
+	* More parse polishing
+	* Fix for cln-1.1.10 and remove all "obfuscating" cln operators
+
+2005-10-31 Niklas Knutsson  <nq@altern.org>
+
+	* Cleaner parsing (same result but looks nicer)
+
 2005-10-30 Niklas Knutsson  <nq@altern.org>
 
 	* Add metre/metres for meter/meters

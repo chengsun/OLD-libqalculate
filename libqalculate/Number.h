@@ -14,7 +14,6 @@
 
 #include <libqalculate/includes.h>
 
-#define WANT_OBFUSCATING_OPERATORS
 #include <cln/cln.h>
 
 class Number {

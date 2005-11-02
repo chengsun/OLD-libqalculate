@@ -277,10 +277,10 @@ class Calculator {
 	
 	MathStructure parse(string str, const ParseOptions &po = default_parse_options);
 	void parse(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
-	void parseNumber(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
-	void parseOperators(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
-	void parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po, MathOperation s);
-	void parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po);
+	bool parseNumber(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
+	bool parseOperators(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
+	bool parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po, MathOperation s);
+	bool parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po);
 	
 	MathStructure convert(double value, Unit *from_unit, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options);
 	MathStructure convert(string str, Unit *from_unit, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options);

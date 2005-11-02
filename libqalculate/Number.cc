@@ -308,7 +308,7 @@ void Number::set(string number, int base, ReadPrecisionMode read_precision) {
 				}
 				default: {
 					cur.clear();
-					CALCULATOR->error(true, _("Unknown roman numeral: %s."), number.substr(i, 1).c_str(), NULL);
+					CALCULATOR->error(true, _("Unknown roman numeral: %c."), number[i], NULL);
 				}
 			}
 			if(!cur.isZero()) {
@@ -436,10 +436,10 @@ void Number::set(string number, int base, ReadPrecisionMode read_precision) {
 			if(exp_minus) {
 				cl_I cl10 = 10;
 				exp = cln::abs(exp);
-				den *= expt_pos(cl10, exp);
+				den = den * expt_pos(cl10, exp);
 			} else {
 				cl_I cl10 = 10;
-				num *= expt_pos(cl10, exp);
+				num = num * expt_pos(cl10, exp);
 			}
 			break;
 		} else if(number[index] == '.') {
@@ -480,7 +480,7 @@ void Number::set(string number, int base, ReadPrecisionMode read_precision) {
 		} else if(number[index] == 'i') {
 			b_cplx = true;
 		} else {
-			CALCULATOR->error(true, _("Character \'%s\' was ignored in the number \"%s\" with base %s."), number.substr(index, 1).c_str(), number.c_str(), i2s(base).c_str(), NULL);
+			CALCULATOR->error(true, _("Character \'%c\' was ignored in the number \"%s\" with base %s."), number[index], number.c_str(), i2s(base).c_str(), NULL);
 		}
 	}
 	if(minus) num = -num;
@@ -672,8 +672,8 @@ Number Number::complexDenominator() const {
 }
 
 void Number::operator = (const Number &o) {set(o);}
-void Number::operator -- (int) {value--;}
-void Number::operator ++ (int) {value++;}
+void Number::operator -- (int) {value = cln::minus1(value);}
+void Number::operator ++ (int) {value = cln::plus1(value);}
 Number Number::operator - () const {Number o(*this); o.negate(); return o;}
 Number Number::operator * (const Number &o) const {Number o2(*this); o2.multiply(o); return o2;}
 Number Number::operator / (const Number &o) const {Number o2(*this); o2.divide(o); return o2;}
@@ -1424,7 +1424,7 @@ bool Number::mod(const Number &o) {
 bool Number::frac() {
 	if(isInfinite() || isComplex()) return false;
 	cl_N whole_value = cln::truncate1(cln::realpart(value));
-	value -= whole_value;
+	value = value - whole_value;
 	return true;
 }
 bool Number::rem(const Number &o) {
@@ -1721,9 +1721,9 @@ bool Number::factorial() {
 		return false;
 	}
 	cln::cl_I i = cln::numerator(cln::rational(cln::realpart(value)));
-	i--;
-	for(; !cln::zerop(i); i--) {
-		value *= i;
+	i = cln::minus1(i);
+	for(; !cln::zerop(i); i = cln::minus1(i)) {
+		value = value * i;
 	}
 	return true;
 }
@@ -1743,9 +1743,9 @@ bool Number::multiFactorial(const Number &o) {
 	}
 	cln::cl_I i = cln::numerator(cln::rational(cln::realpart(value)));
 	cln::cl_I i_o = cln::numerator(cln::rational(cln::realpart(o.internalNumber())));
-	i -= i_o;
-	for(; cln::plusp(i); i -= i_o) {
-		value *= i;
+	i = i - i_o;
+	for(; cln::plusp(i); i = i - i_o) {
+		value = value * i;
 	}
 	return true;
 }
@@ -1763,9 +1763,9 @@ bool Number::doubleFactorial() {
 	}
 	cln::cl_I i = cln::numerator(cln::rational(cln::realpart(value)));
 	cln::cl_I i2 = 2;
-	i -= i2;
-	for(; cln::plusp(i); i -= i2) {
-		value *= i;
+	i = i - i2;
+	for(; cln::plusp(i); i = i - i2) {
+		value = value * i;
 	}
 	return true;
 }
@@ -1788,13 +1788,13 @@ bool Number::binomial(const Number &m, const Number &k) {
 		cl_I im = cln::numerator(cln::rational(cln::realpart(m.internalNumber())));
 		cl_I ik = cln::numerator(cln::rational(cln::realpart(k.internalNumber())));
 		if(im > long(INT_MAX) || ik > long(INT_MAX)) {
-			ik--;
+			ik = cln::minus1(ik);
 			Number k_fac(k);
 			k_fac.factorial();
 			cl_I ithis = im;
-			for(; !zerop(ik); ik--) {
-				im--;
-				ithis *= im;
+			for(; !cln::zerop(ik); ik = cln::minus1(ik)) {
+				im = cln::minus1(im);
+				ithis = ithis * im;
 			}
 			value = ithis;
 			divide(k_fac);
@@ -2157,14 +2157,14 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 					ivalue = div.quotient;
 					if(po.round_halfway_to_even && cln::evenp(ivalue)) {
 						if(div.remainder * base > cln::cl_I(base) / cln::cl_I(2)) {
-							ivalue++;
+							ivalue = cln::plus1(ivalue);
 						}
 					} else {
 						if(div.remainder * base >= cln::cl_I(base) / cln::cl_I(2)) {
-							ivalue++;
+							ivalue = cln::plus1(ivalue);
 						}
 					}
-					ivalue *= cln::expt_pos(cln::cl_I(base), -(po.max_decimals - expo));
+					ivalue = ivalue * cln::expt_pos(cln::cl_I(base), -(po.max_decimals - expo));
 					exact = false;
 					rerun = true;
 					goto integer_rerun;
@@ -2175,14 +2175,14 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 					ivalue = div.quotient;
 					if(po.round_halfway_to_even && cln::evenp(ivalue)) {
 						if(div.remainder * base > cln::cl_I(base) / cln::cl_I(2)) {
-							ivalue++;
+							ivalue = cln::plus1(ivalue);
 						}
 					} else {
 						if(div.remainder * base >= cln::cl_I(base) / cln::cl_I(2)) {
-							ivalue++;
+							ivalue = cln::plus1(ivalue);
 						}
 					}
-					ivalue *= cln::expt_pos(cln::cl_I(base), -precision2);
+					ivalue = ivalue * cln::expt_pos(cln::cl_I(base), -precision2);
 					exact = false;
 					rerun = true;
 					goto integer_rerun;
@@ -2351,14 +2351,14 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 						num = divr.quotient;
 						if(po.round_halfway_to_even && cln::evenp(num)) {
 							if(divr.remainder * base > cln::cl_I(base) / cln::cl_I(2)) {
-								num++;
+								num = cln::plus1(num);
 							}
 						} else {
 							if(divr.remainder * base >= cln::cl_I(base) / cln::cl_I(2)) {
-								num++;
+								num = cln::plus1(num);
 							}
 						}
-						num *= cln::expt_pos(cln::cl_I(base), -(po.max_decimals - expo));
+						num = num * cln::expt_pos(cln::cl_I(base), -(po.max_decimals - expo));
 						exact = false;
 						if(neg) num = -num;
 					}
@@ -2369,14 +2369,14 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 						num = divr.quotient;
 						if(po.round_halfway_to_even && cln::evenp(num)) {
 							if(divr.remainder * base > cln::cl_I(base) / cln::cl_I(2)) {
-								num++;
+								num = cln::plus1(num);
 							}
 						} else {
 							if(divr.remainder * base >= cln::cl_I(base) / cln::cl_I(2)) {
-								num++;
+								num = cln::plus1(num);
 							}
 						}
-						num *= cln::expt_pos(cln::cl_I(base), -precision2);
+						num = num * cln::expt_pos(cln::cl_I(base), -precision2);
 						exact = false;
 						if(neg) num = -num;
 					}
@@ -2389,7 +2389,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 				if(po.indicate_infinite_series && !infinite_series) {
 					remainders.push_back(remainder);
 				}
-				remainder *= base;
+				remainder = remainder * base;
 				div = cln::truncate2(remainder, d);
 				remainder2 = div.remainder;
 				remainder = div.quotient;
@@ -2398,8 +2398,8 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 					started = !cln::zerop(remainder);
 				}
 				if(started) {
-					num *= base;	
-					num += remainder;
+					num = num * base;	
+					num = num + remainder;
 				}
 				l10++;
 				remainder = remainder2;
@@ -2417,17 +2417,17 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			}
 			remainders.clear();
 			if(!exact && !infinite_series) {
-				remainder *= base;
+				remainder = remainder * base;
 				div = cln::truncate2(remainder, d);
 				remainder2 = div.remainder;
 				remainder = div.quotient;
 				if(po.round_halfway_to_even && cln::evenp(num)) {
 					if(remainder > cl_I(base) / cl_I(2)) {
-						num += 1;
+						num = cln::plus1(num);
 					}
 				} else {
 					if(remainder >= cl_I(base) / cl_I(2)) {
-						num += 1;
+						num = cln::plus1(num);
 					}
 				}
 			}

@@ -1261,17 +1261,38 @@ void Calculator::error(bool critical, const char *TEMPLATE, ...) {
 	string error_str = TEMPLATE;
 	va_list ap;
 	va_start(ap, TEMPLATE);
-	const char *str;
+	size_t i = 0;
 	while(true) {
-		size_t i = error_str.find("%s");
-		if(i == string::npos) break;	
-		str = va_arg(ap, const char*);
-		if(!str) break;
-		error_str.replace(i, 2, str);
+		i = error_str.find("%", i);
+		if(i == string::npos || i + 1 == error_str.length()) break;
+		switch(error_str[i + 1]) {
+			case 's': {
+				const char *str = va_arg(ap, const char*);
+				if(!str) {
+					i++;
+				} else {
+					error_str.replace(i, 2, str);
+					i += strlen(str);
+				}
+				break;
+			}
+			case 'c': {
+				char c = (char) va_arg(ap, int);
+				if(c > 0) {
+					error_str.replace(i, 2, 1, c);
+				}
+				i++;
+				break;
+			}
+			default: {
+				i++;
+				break;
+			}
+		}
 	}
 	va_end(ap);
 	bool dup_error = false;
-	for(size_t i = 0; i < messages.size(); i++) {
+	for(i = 0; i < messages.size(); i++) {
 		if(error_str == messages[i].message()) {
 			dup_error = true;
 			break;
@@ -1295,17 +1316,38 @@ void Calculator::message(MessageType mtype, const char *TEMPLATE, ...) {
 	string error_str = TEMPLATE;
 	va_list ap;
 	va_start(ap, TEMPLATE);
-	const char *str;
+	size_t i = 0;
 	while(true) {
-		size_t i = error_str.find("%s");
-		if(i == string::npos) break;	
-		str = va_arg(ap, const char*);
-		if(!str) break;
-		error_str.replace(i, 2, str);
+		i = error_str.find("%", i);
+		if(i == string::npos || i + 1 == error_str.length()) break;
+		switch(error_str[i + 1]) {
+			case 's': {
+				const char *str = va_arg(ap, const char*);
+				if(!str) {
+					i++;
+				} else {
+					error_str.replace(i, 2, str);
+					i += strlen(str);
+				}
+				break;
+			}
+			case 'c': {
+				char c = (char) va_arg(ap, int);
+				if(c > 0) {
+					error_str.replace(i, 2, 1, c);
+				}
+				i++;
+				break;
+			}
+			default: {
+				i++;
+				break;
+			}
+		}
 	}
 	va_end(ap);
 	bool dup_error = false;
-	for(size_t i = 0; i < messages.size(); i++) {
+	for(i = 0; i < messages.size(); i++) {
 		if(error_str == messages[i].message()) {
 			dup_error = true;
 			break;
@@ -3469,46 +3511,51 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 
 }
 
-void Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOptions &po) {
+bool Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOptions &po) {
 	mstruct->clear();
+	if(str.find_first_not_of(OPERATORS SPACE) == string::npos) {
+		if(disable_errors_ref > 0) {
+			stopped_messages_count[disable_errors_ref - 1]++;
+			stopped_warnings_count[disable_errors_ref - 1]++;
+		} else {
+			error(false, _("Misplaced operator(s) \"%s\" ignored"), str.c_str(), NULL);
+		}
+		return false;
+	}
 	string ssave = str;
-	char s = PLUS_CH;
-	bool has_sign = false;
+	int minus_count = 0;
+	bool has_sign = false, had_non_sign = false;
 	size_t i = 0;
 	while(i < str.length()) {
-		if(str[i] == MINUS_CH) {
+		if(!had_non_sign && str[i] == MINUS_CH) {
 			has_sign = true;
-			if(s == MINUS_CH)
-				s = PLUS_CH;
-			else
-				s = MINUS_CH;
+			minus_count++;
 			str.erase(i, 1);
-		} else if(str[i] == PLUS_CH) {
+		} else if(!had_non_sign && str[i] == PLUS_CH) {
 			has_sign = true;
 			str.erase(i, 1);
 		} else if(str[i] == SPACE_CH) {
 			str.erase(i, 1);
 		} else if(is_in(OPERATORS, str[i])) {
-			error(false, _("Misplaced '%s' ignored"), str.substr(0, 1).c_str(), NULL);
+			if(disable_errors_ref > 0) {
+				stopped_messages_count[disable_errors_ref - 1]++;
+				stopped_warnings_count[disable_errors_ref - 1]++;
+			} else {
+				error(false, _("Misplaced '%c' ignored"), str[i], NULL);
+			}
 			str.erase(i, 1);
 		} else {
+			had_non_sign = true;
 			i++;
 		}
 	}
 	if(str.empty()) {
-		if(!has_sign) {
-			return;
-		} else if(s == MINUS_CH) {
+		if(minus_count % 2 == 1) {
 			mstruct->set(-1, 1);
-		} else {
+		} else if(has_sign) {
 			mstruct->set(1, 1);
 		}
-	}
-	for(int index = str.length() - 1; index >= 0; index--) {	
-		if(is_in(OPERATORS, str[index])) {
-			error(false, _("Misplaced '%s' ignored"), str.substr(index, 1).c_str(), NULL);
-			str.erase(index, 1);
-		}
+		return false;
 	}
 	if(str[0] == ID_WRAP_LEFT_CH && str.length() > 2 && str[str.length() - 1] == ID_WRAP_RIGHT_CH) {
 		int id = s2i(str.substr(1, str.length() - 2));
@@ -3516,39 +3563,52 @@ void Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOpti
 		if(!m_temp) {
 			mstruct->setUndefined();
 			error(true, _("Internal id %s does not exist."), i2s(id).c_str(), NULL);
-			return;
+			return true;
 		}
 		mstruct->set_nocopy(*m_temp);
 		m_temp->unref();
-		if(s == MINUS_CH) mstruct->negate();
-		return;
+		if(po.preserve_format) {
+			while(minus_count > 0) {
+				mstruct->transform(STRUCT_NEGATE);
+				minus_count--;
+			}
+		} else if(minus_count % 2 == 1) {
+			mstruct->negate();
+		}
+		return true;
 	}
 	size_t itmp;
-	if(str.empty() || ((itmp = str.find_first_not_of(" ")) == string::npos)) {
-		return;
-	}
 	if(po.base >= 2 && po.base <= 10 && (itmp = str.find_first_not_of(NUMBER_ELEMENTS MINUS, 0)) != string::npos) {
-		string stmp = str.substr(itmp, str.length() - itmp);
-		str.erase(itmp, str.length() - itmp);
 		if(itmp == 0) {
-			error(true, _("\"%s\" is not a valid variable/function/unit."), ssave.c_str(), NULL);
-			mstruct->set(1, 1);
-			return;
+			error(true, _("\"%s\" is not a valid variable/function/unit."), str.c_str(), NULL);
+			if(minus_count % 2 == 1) {
+				mstruct->set(-1, 1);
+			} else if(has_sign) {
+				mstruct->set(1, 1);
+			}
+			return false;
 		} else {
-			error(true, _("Trailing characters in expression \"%s\" was ignored."), ssave.c_str(), NULL);
+			string stmp = str.substr(itmp, str.length() - itmp);
+			error(true, _("Trailing characters \"%s\" (not a valid variable/function/unit) in number \"%s\" was ignored."), stmp.c_str(), str.c_str(), NULL);
+			str.erase(itmp, str.length() - itmp);
 		}
 	}
-	if(s == MINUS_CH) {
-		str.insert(str.begin(), 1, MINUS_CH);
-	}
-	
 	Number nr(str, po.base, po.read_precision);
+	if(!po.preserve_format && minus_count % 2 == 1) {
+		nr.negate();
+	}
 	mstruct->set(nr);
-	return;
+	if(po.preserve_format) {
+		while(minus_count > 0) {
+			mstruct->transform(STRUCT_NEGATE);
+			minus_count--;
+		}
+	}
+	return true;
 	
 }
 
-void Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po) {
+bool Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po) {
 	if(str.length() > 0) {
 		size_t i;
 		if(po.base >= 2 && po.base <= 10) {
@@ -3557,13 +3617,14 @@ void Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOption
 			i = str.find_first_of(SPACE MULTIPLICATION_2 OPERATORS PARENTHESISS ID_WRAP_LEFT, 1);
 		}
 		if(i == string::npos && str[0] != LOGICAL_NOT_CH && str[0] != BITWISE_NOT_CH && !(str[0] == ID_WRAP_LEFT_CH && str.find(ID_WRAP_RIGHT) < str.length() - 1)) {
-			parseNumber(mstruct, str, po);
+			return parseNumber(mstruct, str, po);
 		} else {
-			parseOperators(mstruct, str, po);
+			return parseOperators(mstruct, str, po);
 		}
 	}	
+	return false;
 }
-void Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po, MathOperation s) {
+bool Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po, MathOperation s) {
 	if(str.length() > 0) {
 		size_t i;
 		if(po.base >= 2 && po.base <= 10) {
@@ -3576,25 +3637,53 @@ void Calculator::parseAdd(string &str, MathStructure *mstruct, const ParseOption
 				ParseOptions po2 = po;
 				po2.read_precision = READ_PRECISION_WHEN_DECIMALS;
 				MathStructure *mstruct2 = new MathStructure();
-				parseNumber(mstruct2, str, po2);
-				if(s == OPERATION_DIVIDE && po.preserve_format) mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
-				else mstruct->add_nocopy(mstruct2, s, true);
+				if(!parseNumber(mstruct2, str, po2)) {
+					mstruct2->unref();
+					return false;
+				}
+				if(s == OPERATION_DIVIDE && po.preserve_format) {
+					mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
+				} else if(s == OPERATION_SUBTRACT && po.preserve_format) {
+					mstruct2->transform(STRUCT_NEGATE);
+					mstruct->add_nocopy(mstruct2, OPERATION_ADD, true);
+				} else {
+					mstruct->add_nocopy(mstruct2, s, true);
+				}
 			} else {
 				MathStructure *mstruct2 = new MathStructure();
-				parseNumber(mstruct2, str, po);
-				if(s == OPERATION_DIVIDE && po.preserve_format) mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
-				else mstruct->add_nocopy(mstruct2, s, true);
+				if(!parseNumber(mstruct2, str, po)) {
+					mstruct2->unref();
+					return false;
+				}
+				if(s == OPERATION_DIVIDE && po.preserve_format) {
+					mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
+				} else if(s == OPERATION_SUBTRACT && po.preserve_format) {
+					mstruct2->transform(STRUCT_NEGATE);
+					mstruct->add_nocopy(mstruct2, OPERATION_ADD, true);
+				} else {
+					mstruct->add_nocopy(mstruct2, s, true);
+				}
 			}
 		} else {
 			MathStructure *mstruct2 = new MathStructure();
-			parseOperators(mstruct2, str, po);
-			if(s == OPERATION_DIVIDE && po.preserve_format) mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
-			else mstruct->add_nocopy(mstruct2, s, true);
+			if(!parseOperators(mstruct2, str, po)) {
+				mstruct2->unref();
+				return false;
+			}
+			if(s == OPERATION_DIVIDE && po.preserve_format) {
+				mstruct->transform_nocopy(STRUCT_DIVISION, mstruct2);
+			} else if(s == OPERATION_SUBTRACT && po.preserve_format) {
+				mstruct2->transform(STRUCT_NEGATE);
+				mstruct->add_nocopy(mstruct2, OPERATION_ADD, true);
+			} else {
+				mstruct->add_nocopy(mstruct2, s, true);
+			}
 		}
 	}
+	return true;
 }
 
-void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseOptions &po) {
+bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseOptions &po) {
 	string save_str = str;
 	mstruct->clear();
 	size_t i = 0, i2 = 0, i3 = 0;
@@ -3690,7 +3779,7 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		} else {
 			parseAdd(str, mstruct, po);
 		}
-		return;
+		return true;
 	}
 	if((i = str.find(LOGICAL_OR, 1)) != string::npos && i + 2 != str.length()) {
 		bool b = false;
@@ -3710,13 +3799,13 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		} else {
 			parseAdd(str, mstruct, po);
 		}
-		return;
+		return true;
 	}	
 	if(str[0] == LOGICAL_NOT_CH) {
 		str.erase(str.begin());
 		parseAdd(str, mstruct, po);
 		mstruct->setLogicalNot();
-		return;
+		return true;
 	}
 	if((i = str.find_first_of(LESS GREATER EQUALS NOT, 0)) != string::npos) {
 		while(i != string::npos && (str[i] == LESS_CH && i + 1 < str.length() && str[i + 1] == LESS_CH) || (str[i] == GREATER_CH && i + 1 < str.length() && str[i + 1] == GREATER_CH)) {
@@ -3760,7 +3849,7 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 				parseAdd(str2, mstruct, po, s);
 			}
 			if(i == string::npos) {
-				return;
+				return true;
 			}
 			if(!b) {
 				parseAdd(str2, mstruct, po);
@@ -3812,7 +3901,7 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		} else {
 			parseAdd(str, mstruct, po);
 		}
-		return;
+		return true;
 	}
 	if((i = str.find(BITWISE_AND, 1)) != string::npos && i + 1 != str.length()) {
 		bool b = false;
@@ -3832,7 +3921,7 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		} else {
 			parseAdd(str, mstruct, po);
 		}
-		return;
+		return true;
 	}
 	i = str.find(SHIFT_LEFT, 1);
 	i2 = str.find(SHIFT_RIGHT, 1);
@@ -3843,7 +3932,7 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		parseAdd(str2, &mstruct1, po);
 		parseAdd(str, &mstruct2, po);
 		mstruct->set(f_shift, &mstruct1, &mstruct2, NULL);
-		return;
+		return true;
 	}
 	i = i2;
 	if(i != string::npos && i + 2 != str.length()) {
@@ -3852,15 +3941,16 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		str = str.substr(i + 2, str.length() - (i + 2));
 		parseAdd(str2, &mstruct1, po);
 		parseAdd(str, &mstruct2, po);
-		mstruct2.negate();
+		if(po.preserve_format) mstruct2.transform(STRUCT_NEGATE);
+		else mstruct2.negate();
 		mstruct->set(f_shift, &mstruct1, &mstruct2, NULL);
-		return;
+		return true;
 	}
 	if(str[0] == BITWISE_NOT_CH) {
 		str.erase(str.begin());
 		parseAdd(str, mstruct, po);
 		mstruct->setBitwiseNot();
-		return;
+		return true;
 	}
 			
 	i = 0;
@@ -3876,7 +3966,7 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 			if(i == string::npos) {
 				if(!b) {
 					parseAdd(str, mstruct, po2);
-					return;
+					return true;
 				}
 				if(i3 != 0) {
 					str2 = str.substr(i3 + 1, str.length() - i3 - 1);
@@ -3885,18 +3975,47 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 				}
 				remove_blank_ends(str2);
 				if(!str2.empty()) {
-					error(true, _("RPN syntax error. Values left at the end of the RPN expression."), NULL);
+					error(false, _("RPN syntax error. Values left at the end of the RPN expression."), NULL);
 				} else if(mstack.size() > 1) {
 					if(last_operator == 0) {
 						error(false, _("Unused stack values."), NULL);
 					} else {
 						while(mstack.size() > 1) {
 							switch(last_operator) {
-								case PLUS_CH: {mstack[mstack.size() - 2]->add_nocopy(mstack.back()); mstack.pop_back(); break;}
-								case MINUS_CH: {mstack[mstack.size() - 2]->subtract_nocopy(mstack.back()); mstack.pop_back(); break;}
-								case MULTIPLICATION_CH: {mstack[mstack.size() - 2]->multiply_nocopy(mstack.back()); mstack.pop_back(); break;}
-								case DIVISION_CH: {mstack[mstack.size() - 2]->divide_nocopy(mstack.back()); mstack.pop_back(); break;}
-								case POWER_CH: {mstack[mstack.size() - 2]->raise_nocopy(mstack.back()); mstack.pop_back(); break;}
+								case PLUS_CH: {
+									mstack[mstack.size() - 2]->add_nocopy(mstack.back()); 
+									mstack.pop_back(); 
+									break;
+								}
+								case MINUS_CH: {
+									if(po.preserve_format) {
+										mstack.back()->transform(STRUCT_NEGATE);
+										mstack[mstack.size() - 2]->add_nocopy(mstack.back()); 
+									} else {
+										mstack[mstack.size() - 2]->subtract_nocopy(mstack.back()); 
+									}
+									mstack.pop_back(); 
+									break;
+								}
+								case MULTIPLICATION_CH: {
+									mstack[mstack.size() - 2]->multiply_nocopy(mstack.back()); 
+									mstack.pop_back(); 
+									break;
+								}
+								case DIVISION_CH: {
+									if(po.preserve_format) {
+										mstack[mstack.size() - 2]->transform_nocopy(STRUCT_DIVISION, mstack.back());
+									} else {
+										mstack[mstack.size() - 2]->divide_nocopy(mstack.back());
+									}
+									mstack.pop_back(); 
+									break;
+								}
+								case POWER_CH: {
+									mstack[mstack.size() - 2]->raise_nocopy(mstack.back()); 
+									mstack.pop_back(); 
+									break;
+								}
 							}
 						}
 					}
@@ -3906,7 +4025,7 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 					mstack.back()->unref();
 					mstack.pop_back();
 				}
-				return;
+				return true;
 			}
 			b = true;
 			if(i3 != 0) {
@@ -3926,11 +4045,40 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 					error(false, _("RPN syntax error. Operator ignored as there where only one stack value."), NULL);
 				} else {
 					switch(str[i]) {
-						case PLUS_CH: {mstack[mstack.size() - 2]->add_nocopy(mstack.back()); mstack.pop_back(); break;}
-						case MINUS_CH: {mstack[mstack.size() - 2]->subtract_nocopy(mstack.back()); mstack.pop_back(); break;}
-						case MULTIPLICATION_CH: {mstack[mstack.size() - 2]->multiply_nocopy(mstack.back()); mstack.pop_back(); break;}
-						case DIVISION_CH: {mstack[mstack.size() - 2]->divide_nocopy(mstack.back()); mstack.pop_back(); break;}
-						case POWER_CH: {mstack[mstack.size() - 2]->raise_nocopy(mstack.back()); mstack.pop_back(); break;}
+						case PLUS_CH: {
+							mstack[mstack.size() - 2]->add_nocopy(mstack.back()); 
+							mstack.pop_back(); 
+							break;
+						}
+						case MINUS_CH: {
+							if(po.preserve_format) {
+								mstack.back()->transform(STRUCT_NEGATE);
+								mstack[mstack.size() - 2]->add_nocopy(mstack.back()); 
+							} else {
+								mstack[mstack.size() - 2]->subtract_nocopy(mstack.back()); 
+							}
+							mstack.pop_back(); 
+							break;
+						}
+						case MULTIPLICATION_CH: {
+							mstack[mstack.size() - 2]->multiply_nocopy(mstack.back()); 
+							mstack.pop_back(); 
+							break;
+						}
+						case DIVISION_CH: {
+							if(po.preserve_format) {
+								mstack[mstack.size() - 2]->transform_nocopy(STRUCT_DIVISION, mstack.back());
+							} else {
+								mstack[mstack.size() - 2]->divide_nocopy(mstack.back()); 
+							}
+							mstack.pop_back(); 
+							break;
+						}
+						case POWER_CH: {
+							mstack[mstack.size() - 2]->raise_nocopy(mstack.back()); 
+							mstack.pop_back(); 
+							break;
+						}
 					}
 					last_operator = str[i];
 				}
@@ -3944,6 +4092,15 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		bool min = false;
 		while(i != string::npos && i + 1 != str.length()) {
 			if(i < 1 || is_not_in(MULTIPLICATION_2 OPERATORS EXPS, str[i - 1])) {
+				if(i < 1 && str.find_first_not_of(MULTIPLICATION_2 OPERATORS EXPS) == string::npos) {
+					if(disable_errors_ref > 0) {
+						stopped_messages_count[disable_errors_ref - 1]++;
+						stopped_warnings_count[disable_errors_ref - 1]++;
+					} else {
+						error(false, _("Misplaced operator(s) \"%s\" ignored"), str.c_str(), NULL);
+					}
+					return b && !c;
+				}
 				str2 = str.substr(0, i);
 				if(!c && b) {
 					if(min) {
@@ -3956,7 +4113,10 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 						c = true;
 					} else {
 						parseAdd(str2, mstruct, po);
-						if(c && min) mstruct->negate();
+						if(c && min) {
+							if(po.preserve_format) mstruct->transform(STRUCT_NEGATE);
+							else mstruct->negate();
+						}
 						c = false;
 					}
 					b = true;
@@ -3967,14 +4127,15 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 			} else {
 				i = str.find_first_of(PLUS MINUS, i + 1);
 			}
-			
 		}
 		if(b) {
 			if(c) {
-				parseAdd(str, mstruct, po);
+				b = parseAdd(str, mstruct, po);
 				if(min) {
-					mstruct->negate();
+					if(po.preserve_format) mstruct->transform(STRUCT_NEGATE);
+					else mstruct->negate();
 				}
+				return b;
 			} else {
 				if(min) {
 					parseAdd(str, mstruct, po, OPERATION_SUBTRACT);
@@ -3982,27 +4143,64 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 					parseAdd(str, mstruct, po, OPERATION_ADD);
 				}
 			}
-			return;
+			return true;
 		}
 	}
-	if((i = str.find_first_of(MULTIPLICATION DIVISION, 1)) != string::npos && i + 1 != str.length()) {
+	if((i = str.find_first_of(MULTIPLICATION DIVISION, 0)) != string::npos && i + 1 != str.length()) {
 		bool b = false;
 		bool div = false;
 		while(i != string::npos && i + 1 != str.length()) {
-			str2 = str.substr(0, i);
-			if(b) {
-				if(div) {
-					parseAdd(str2, mstruct, po, OPERATION_DIVIDE);
-				} else {
-					parseAdd(str2, mstruct, po, OPERATION_MULTIPLY);
+			if(i < 1) {
+				if(i < 1 && str.find_first_not_of(MULTIPLICATION_2 OPERATORS EXPS) == string::npos) {
+					if(disable_errors_ref > 0) {
+						stopped_messages_count[disable_errors_ref - 1]++;
+						stopped_warnings_count[disable_errors_ref - 1]++;
+					} else {
+						error(false, _("Misplaced operator(s) \"%s\" ignored"), str.c_str(), NULL);
+					}
+					return b;
 				}
+				i = 1;
+				while(i < str.length() && is_in(MULTIPLICATION DIVISION, str[i])) {
+					i++;
+				}
+				if(disable_errors_ref > 0) {
+					stopped_messages_count[disable_errors_ref - 1]++;
+					stopped_warnings_count[disable_errors_ref - 1]++;
+				} else {
+					error(false, _("Misplaced operator(s) \"%s\" ignored"), str.substr(0, i).c_str(), NULL);
+				}
+				str = str.substr(i, str.length() - i);
+				i = str.find_first_of(MULTIPLICATION DIVISION, 0);
 			} else {
-				parseAdd(str2, mstruct, po);
-				b = true;
+				str2 = str.substr(0, i);
+				if(b) {
+					if(div) {
+						parseAdd(str2, mstruct, po, OPERATION_DIVIDE);
+					} else {
+						parseAdd(str2, mstruct, po, OPERATION_MULTIPLY);
+					}
+				} else {
+					parseAdd(str2, mstruct, po);
+					b = true;
+				}
+				if(is_in(MULTIPLICATION DIVISION, str[i + 1])) {
+					i2 = 1;
+					while(i2 + i + 1 != str.length() && is_in(MULTIPLICATION DIVISION, str[i2 + i + 1])) {
+						i2++;
+					}
+					if(disable_errors_ref > 0) {
+						stopped_messages_count[disable_errors_ref - 1]++;
+						stopped_warnings_count[disable_errors_ref - 1]++;
+					} else {
+						error(false, _("Misplaced operator(s) \"%s\" ignored"), str.substr(i, i2).c_str(), NULL);
+					}
+					i += i2;
+				}
+				div = str[i] == DIVISION_CH;
+				str = str.substr(i + 1, str.length() - (i + 1));
+				i = str.find_first_of(MULTIPLICATION DIVISION, 0);
 			}
-			div = str[i] == DIVISION_CH;
-			str = str.substr(i + 1, str.length() - (i + 1));
-			i = str.find_first_of(MULTIPLICATION DIVISION, 1);
 		}
 		if(b) {
 			if(div) {
@@ -4010,10 +4208,10 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 			} else {
 				parseAdd(str, mstruct, po, OPERATION_MULTIPLY);
 			}
-		} else {
-			parseAdd(str, mstruct, po);
+			return true;
 		}
-	} else if((i = str.find(MULTIPLICATION_2_CH, 1)) != string::npos && i + 1 != str.length()) {
+	}
+	if((i = str.find(MULTIPLICATION_2_CH, 1)) != string::npos && i + 1 != str.length()) {
 		bool b = false;
 		while(i != string::npos && i + 1 != str.length()) {
 			str2 = str.substr(0, i);
@@ -4028,10 +4226,10 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		}
 		if(b) {
 			parseAdd(str, mstruct, po, OPERATION_MULTIPLY);
-		} else {
-			parseAdd(str, mstruct, po);
+			return true;
 		}
-	} else if((i = str.find(POWER_CH, 1)) != string::npos && i + 1 != str.length()) {
+	}
+	if((i = str.find(POWER_CH, 1)) != string::npos && i + 1 != str.length()) {
 		str2 = str.substr(0, i);
 		str = str.substr(i + 1, str.length() - (i + 1));		
 		parseAdd(str2, mstruct, po);
@@ -4052,10 +4250,9 @@ void Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		parseAdd(str2, mstruct, po);
 		parseAdd(str, mstruct, po, OPERATION_MULTIPLY);
 	} else {
-		parseNumber(mstruct, str, po);
-		return;
+		return parseNumber(mstruct, str, po);
 	}
-	return;
+	return true;
 }
 
 string Calculator::getName(string name, ExpressionItem *object, bool force, bool always_append) {
@@ -6702,7 +6899,7 @@ bool Calculator::checkExchangeRatesDate() {
 		}
 	}
 	if(!up_to_date) {
-		error(false, _("It has been more than one week since the exchange rates last were updated."));
+		error(false, _("It has been more than one week since the exchange rates last were updated."), NULL);
 		exchange_rates_warning_issued = true;
 	}
 	return up_to_date;

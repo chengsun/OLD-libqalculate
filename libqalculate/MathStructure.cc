@@ -6360,7 +6360,7 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_INVERSE: {return flat_division && po.excessive_parenthesis;}
 				case STRUCT_ADDITION: {return true;}
 				case STRUCT_POWER: {return po.excessive_parenthesis;}
-				case STRUCT_NEGATE: {return index > 1;}
+				case STRUCT_NEGATE: {return index > 1 || po.excessive_parenthesis;}
 				case STRUCT_BITWISE_AND: {return true;}
 				case STRUCT_BITWISE_OR: {return true;}
 				case STRUCT_BITWISE_XOR: {return true;}

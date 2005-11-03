@@ -1643,6 +1643,7 @@ int MathStructure::merge_addition(MathStructure &mstruct, const EvaluationOption
 				case STRUCT_POWER: {
 					if(mstruct[1].hasNegativeSign()) {
 						bool b = false;
+						size_t index = 0;
 						for(size_t i = 0; i < SIZE; i++) {
 							if(CHILD(i).isPower() && CHILD(i)[1].hasNegativeSign()) {
 								if(b) {
@@ -1650,17 +1651,23 @@ int MathStructure::merge_addition(MathStructure &mstruct, const EvaluationOption
 									break;
 								}
 								if(mstruct == CHILD(i)) {
+									index = i;
 									b = true;
 								}
 								if(!b) break;
 							}
 						}
-						if(b) {						
-							for(size_t index = 0; index < SIZE; index++) {
-								if(!CHILD(index).isPower() || !CHILD(index)[1].hasNegativeSign()) {
-									CHILD(index).add(m_one, true);
-									break;
+						if(b) {		
+							if(SIZE == 2) {
+								if(index == 0) {
+									CHILD(1).add(m_one, true);
+								} else {
+									CHILD(0).add(m_one, true);
 								}
+							} else {
+								ERASE(index);
+								add(m_one);
+								multiply(mstruct, false);
 							}
 							return 1;
 						}
@@ -2413,7 +2420,10 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 						for(size_t i = 0; i < SIZE; i++) {
 							if(CHILD(i).isOne()) ret = -1;
 							else ret = CHILD(i).merge_multiplication(mstruct, eo, false);
-							if(ret == 0) {
+							if(ret == 1 && mstruct.size() > 0) {
+								MathStructure mstruct2(mstruct);
+								mstruct.set_nocopy(mstruct2);
+							} else if(ret == 0) {
 								MathStructure mstruct2(mstruct);
 								ret = mstruct2.merge_multiplication(CHILD(i), eo, false);
 								if(ret == 1) {
@@ -2423,7 +2433,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 							if(ret == 1) {
 								merged[i] = true;
 								merges++;
-							} else {
+							} else {								
 								merged[i] = false;
 							}
 						}
@@ -2484,11 +2494,26 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 					return 1;
 				}
 				case STRUCT_POWER: {
-					if(mstruct[1].isNumber() && *this == mstruct[0]) {
-						if(representsNonNegative(true) || mstruct[1].representsPositive(true)) {
-							set_nocopy(mstruct, true);
-							CHILD(1) += m_one;
-							return 1;
+					if(mstruct[1].isNumber()) {
+						if(*this == mstruct[0]) {
+							if(representsNonNegative(true) || mstruct[1].representsPositive(true)) {
+								set_nocopy(mstruct, true);
+								CHILD(1) += m_one;
+								return 1;
+							}
+						} else {
+							for(size_t i = 0; i < SIZE; i++) {
+								int ret = CHILD(i).merge_multiplication(mstruct, eo, false);
+								if(ret == 0) {
+									ret = mstruct.merge_multiplication(CHILD(i), eo, false);
+									if(ret == 1) {
+										CHILD(i).set_nocopy(mstruct);
+									}
+								}
+								if(ret == 1) {
+									return 1;
+								}	
+							}
 						}
 					}
 				}
@@ -6512,8 +6537,10 @@ int MathStructure::neededMultiplicationSign(const PrintOptions &po, const Intern
 	if(index <= 1) return MULTIPLICATION_SIGN_NONE;
 	if(par_prev && par) return MULTIPLICATION_SIGN_NONE;
 	if(par_prev) return MULTIPLICATION_SIGN_OPERATOR;
-	if(par) return MULTIPLICATION_SIGN_NONE;
 	int t = parent[index - 2].type();
+	if(flat_power && t == STRUCT_POWER) return MULTIPLICATION_SIGN_OPERATOR;
+	if(par && t == STRUCT_POWER) return MULTIPLICATION_SIGN_SPACE;
+	if(par) return MULTIPLICATION_SIGN_NONE;
 	bool abbr_prev = false, abbr_this = false;
 	int namelen_prev = namelen(parent[index - 2], po, ips, &abbr_prev);
 	int namelen_this = namelen(*this, po, ips, &abbr_this);	
@@ -6567,7 +6594,7 @@ int MathStructure::neededMultiplicationSign(const PrintOptions &po, const Intern
 		case STRUCT_INVERSE: {}
 		case STRUCT_DIVISION: {if(flat_division) return MULTIPLICATION_SIGN_OPERATOR; return MULTIPLICATION_SIGN_SPACE;}
 		case STRUCT_ADDITION: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_POWER: {return CHILD(0).neededMultiplicationSign(po, ips, parent, index, par, par_prev, flat_division, flat_power);}
+		case STRUCT_POWER: {return CHILD(0).neededMultiplicationSign(po, ips, parent, index, CHILD(0).needsParenthesis(po, ips, *this, 1, flat_division, flat_power), par_prev, flat_division, flat_power);}
 		case STRUCT_NEGATE: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_BITWISE_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_BITWISE_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
@@ -8184,7 +8211,7 @@ bool MathStructure::differentiate(const MathStructure &x_var, const EvaluationOp
 				MathStructure mstruct(CHILD(0));
 				MathStructure mstruct2(CHILD(1));
 				mstruct.differentiate(x_var, eo);
-				mstruct2.differentiate(x_var, eo);			
+				mstruct2.differentiate(x_var, eo);	
 				mstruct *= CHILD(1);
 				mstruct2 *= CHILD(0);
 				set(mstruct, true);

@@ -1,7 +1,14 @@
+2005-11-03 Niklas Knutsson  <nq@altern.org>
+
+	* Fix simplification of (ax^b+cx^d)/x
+	* Fix (xy/z)+1/z
+	* Fix suggested multiplication sign before and after power
+
 2005-11-02 Niklas Knutsson  <nq@altern.org>
 	
 	* More parse polishing
 	* Fix for cln-1.1.10 and remove all "obfuscating" cln operators
+	* Builtin function's represents...() was not used because of missing const in declaration
 
 2005-10-31 Niklas Knutsson  <nq@altern.org>
 

@@ -118,6 +118,8 @@ string printCL_I(cl_I integ, int base = 10, bool display_sign = true, bool displ
 				else str += "I";
 			}
 			return str;
+		} else if(!zerop(integ)) {
+			CALCULATOR->error(false, _("Cannot display numbers greater than 9999 or less than -9999 as roman numerals."), NULL);
 		}
 		base = 10;
 	}

@@ -37,7 +37,6 @@
 #include <queue>
 #include <glib.h>
 
-#define WANT_OBFUSCATING_OPERATORS
 #include <cln/cln.h>
 using namespace cln;
 
@@ -3513,6 +3512,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 
 bool Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOptions &po) {
 	mstruct->clear();
+	if(str.empty()) return false;
 	if(str.find_first_not_of(OPERATORS SPACE) == string::npos) {
 		if(disable_errors_ref > 0) {
 			stopped_messages_count[disable_errors_ref - 1]++;
@@ -3754,7 +3754,11 @@ bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		}
 		str2 = str.substr(i + 1, i2 - (i + 1));
 		MathStructure *mstruct2 = new MathStructure();
-		parseOperators(mstruct2, str2, po);
+		if(str2.empty()) {
+			CALCULATOR->error(false, "Empty expression in parentheses interpreted as zero.", NULL);
+		} else {
+			parseOperators(mstruct2, str2, po);
+		}
 		str2 = ID_WRAP_LEFT;
 		str2 += i2s(addId(mstruct2));
 		str2 += ID_WRAP_RIGHT;

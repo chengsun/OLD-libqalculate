@@ -25,7 +25,6 @@ string i2s(int value);
 string i2s(long int value);
 string i2s(unsigned int value);
 string i2s(unsigned long int value);
-string i2s(unsigned long long int value);
 const char *b2yn(bool b, bool capital = true);
 const char *b2tf(bool b, bool capital = true);
 const char *b2oo(bool b, bool capital = true);

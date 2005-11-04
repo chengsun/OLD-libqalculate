@@ -377,7 +377,7 @@ int Calculator::endTemporaryStopMessages(int *message_count, int *warning_count)
 	return ret;
 }
 Variable *Calculator::getVariable(size_t index) const {
-	if(index >= 0 && index < variables.size()) {
+	if(index < variables.size()) {
 		return variables[index];
 	}
 	return NULL;
@@ -427,7 +427,7 @@ bool Calculator::checkSaveFunctionCalled() {
 		return true;
 	}
 	return false;
-};
+}
 ExpressionItem *Calculator::getActiveExpressionItem(ExpressionItem *item) {
 	if(!item) return NULL;
 	for(size_t i = 1; i <= item->countNames(); i++) {
@@ -489,13 +489,13 @@ ExpressionItem *Calculator::getExpressionItem(string name, ExpressionItem *item)
 	return NULL;
 }
 Unit *Calculator::getUnit(size_t index) const {
-	if(index >= 0 && index < units.size()) {
+	if(index < units.size()) {
 		return units[index];
 	}
 	return NULL;
 }
 MathFunction *Calculator::getFunction(size_t index) const {
-	if(index >= 0 && index < functions.size()) {
+	if(index < functions.size()) {
 		return functions[index];
 	}
 	return NULL;
@@ -510,7 +510,7 @@ Assumptions *Calculator::defaultAssumptions() {
 }
 
 Prefix *Calculator::getPrefix(size_t index) const {
-	if(index >= 0 && index < prefixes.size()) {
+	if(index < prefixes.size()) {
 		return prefixes[index];
 	}
 	return NULL;
@@ -5705,7 +5705,7 @@ bool Calculator::saveDefinitions() {
 }
 
 struct node_tree_item {
-	xmlNodePtr node;;
+	xmlNodePtr node;
 	string category;
 	vector<node_tree_item> items;
 };

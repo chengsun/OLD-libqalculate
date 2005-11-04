@@ -524,7 +524,7 @@ MathStructure MathFunction::calculate(MathStructure &vargs, const EvaluationOpti
 		return createFunctionMathStructureFromVArgs(vargs);
 	}
 }
-int MathFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int MathFunction::calculate(MathStructure&, const MathStructure&, const EvaluationOptions&) {
 	//mstruct = createFunctionMathStructureFromVArgs(vargs);
 	return 0;
 }
@@ -1282,7 +1282,7 @@ void Argument::parse(MathStructure *mstruct, const string &str, const ParseOptio
 	}
 }
 
-bool Argument::subtest(MathStructure &value, const EvaluationOptions &eo) const {
+bool Argument::subtest(MathStructure&, const EvaluationOptions&) const {
 	return true;
 }
 string Argument::name() const {
@@ -1885,7 +1885,7 @@ string BooleanArgument::subprintlong() const {return _("a boolean (0 or 1)");}
 AngleArgument::AngleArgument(string name_, bool does_test, bool does_error) : Argument(name_, does_test, does_error) {}
 AngleArgument::AngleArgument(const AngleArgument *arg) {set(arg);}
 AngleArgument::~AngleArgument() {}
-bool AngleArgument::subtest(MathStructure &value, const EvaluationOptions &eo) const {
+bool AngleArgument::subtest(MathStructure&, const EvaluationOptions&) const {
 	return true;
 }
 int AngleArgument::type() const {return ARGUMENT_TYPE_ANGLE;}

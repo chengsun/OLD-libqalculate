@@ -843,11 +843,12 @@ int main (int argc, char *argv[]) {
 				if(!CALCULATOR->variableNameIsValid(name)) {
 					name = CALCULATOR->convertToValidVariableName(name);
 					size_t l = name.length() + strlen(_("Illegal name. Save as %s instead?"));
-					char cstr[l];
+					char *cstr = (char*) malloc(sizeof(char) * (l + 1));
 					snprintf(cstr, l, _("Illegal name. Save as %s instead?"), name.c_str());
 					if(!ask_question(cstr)) {
 						b = false;
 					}
+					free(cstr);
 				}
 				if(b && CALCULATOR->variableNameTaken(name)) {
 					if(!ask_question(_("An unit or variable with the same name already exists.\nDo you want to overwrite it?"))) {

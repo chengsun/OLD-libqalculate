@@ -81,7 +81,7 @@ Number DecimalPrefix::exponent(const Number &nexp) const {
 	return nexp * exp;
 }
 void DecimalPrefix::setExponent(int iexp) {
-	exp = exp;
+	exp = iexp;
 }
 Number DecimalPrefix::value(const Number &nexp) const {
 	Number nr(exponent(nexp));
@@ -114,7 +114,7 @@ Number BinaryPrefix::exponent(const Number &nexp) const {
 	return nexp * exp;
 }
 void BinaryPrefix::setExponent(int iexp) {
-	exp = exp;
+	exp = iexp;
 }
 Number BinaryPrefix::value(const Number &nexp) const {
 	Number nr(exponent(nexp));
@@ -140,7 +140,7 @@ NumberPrefix::NumberPrefix(const Number &nr, string long_name, string short_name
 }
 NumberPrefix::~NumberPrefix() {
 }
-Number NumberPrefix::setValue(const Number &nr) {
+void NumberPrefix::setValue(const Number &nr) {
 	o_number = nr;
 }
 Number NumberPrefix::value(const Number &nexp) const {

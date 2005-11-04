@@ -30,7 +30,7 @@
 
 VectorFunction::VectorFunction() : MathFunction("vector", -1) {
 }
-int VectorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int VectorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = vargs;
 	mstruct.setType(STRUCT_VECTOR);
 	return 1;
@@ -40,7 +40,7 @@ MatrixFunction::MatrixFunction() : MathFunction("matrix", 3) {
 	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 	setArgumentDefinition(3, new VectorArgument());
 }
-int MatrixFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int MatrixFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	size_t rows = (size_t) vargs[0].number().intValue();
 	size_t columns = (size_t) vargs[1].number().intValue();
 	mstruct.clearMatrix(); mstruct.resizeMatrix(rows, columns, m_zero);
@@ -65,7 +65,7 @@ RankFunction::RankFunction() : MathFunction("rank", 1, 2) {
 	setArgumentDefinition(2, new BooleanArgument(""));
 	setDefaultValue(2, "1");
 }
-int RankFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int RankFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = vargs[0];
 	return mstruct.rankVector(vargs[1].number().getBoolean());
 }
@@ -74,7 +74,7 @@ SortFunction::SortFunction() : MathFunction("sort", 1, 2) {
 	setArgumentDefinition(2, new BooleanArgument(""));
 	setDefaultValue(2, "1");
 }
-int SortFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int SortFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = vargs[0];
 	return mstruct.sortVector(vargs[1].number().getBoolean());
 }
@@ -82,7 +82,7 @@ MergeVectorsFunction::MergeVectorsFunction() : MathFunction("mergevectors", 1, -
 	setArgumentDefinition(1, new VectorArgument(""));
 	setArgumentDefinition(2, new VectorArgument(""));
 }
-int MergeVectorsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int MergeVectorsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct.clearVector();
 	for(size_t i = 0; i < vargs.size(); i++) {
 		if(vargs[i].isVector()) {
@@ -98,7 +98,7 @@ int MergeVectorsFunction::calculate(MathStructure &mstruct, const MathStructure 
 MatrixToVectorFunction::MatrixToVectorFunction() : MathFunction("matrix2vector", 1) {
 	setArgumentDefinition(1, new MatrixArgument());
 }
-int MatrixToVectorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int MatrixToVectorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	vargs[0].matrixToVector(mstruct);
 	return 1;
 }
@@ -106,7 +106,7 @@ RowFunction::RowFunction() : MathFunction("row", 2) {
 	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 	setArgumentDefinition(2, new MatrixArgument());	
 }
-int RowFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int RowFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	size_t row = (size_t) vargs[0].number().intValue();
 	if(row > vargs[1].rows()) {
 		CALCULATOR->error(true, _("Row %s does not exist in matrix."), vargs[0].print().c_str(), NULL);
@@ -119,7 +119,7 @@ ColumnFunction::ColumnFunction() : MathFunction("column", 2) {
 	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 	setArgumentDefinition(2, new MatrixArgument());	
 }
-int ColumnFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ColumnFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	size_t col = (size_t) vargs[0].number().intValue();
 	if(col > vargs[1].columns()) {
 		CALCULATOR->error(true, _("Column %s does not exist in matrix."), vargs[0].print().c_str(), NULL);
@@ -131,21 +131,21 @@ int ColumnFunction::calculate(MathStructure &mstruct, const MathStructure &vargs
 RowsFunction::RowsFunction() : MathFunction("rows", 1) {
 	setArgumentDefinition(1, new MatrixArgument(""));
 }
-int RowsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int RowsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = (int) vargs[0].rows();
 	return 1;
 }
 ColumnsFunction::ColumnsFunction() : MathFunction("columns", 1) {
 	setArgumentDefinition(1, new MatrixArgument(""));
 }
-int ColumnsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ColumnsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = (int) vargs[0].columns();
 	return 1;
 }
 ElementsFunction::ElementsFunction() : MathFunction("elements", 1) {
 	setArgumentDefinition(1, new MatrixArgument(""));
 }
-int ElementsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ElementsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = (int) (vargs[0].rows() * vargs[0].columns());
 	return 1;
 }
@@ -154,7 +154,7 @@ ElementFunction::ElementFunction() : MathFunction("element", 3) {
 	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 	setArgumentDefinition(3, new MatrixArgument(""));
 }
-int ElementFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ElementFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	size_t row = (size_t) vargs[0].number().intValue();
 	size_t col = (size_t) vargs[1].number().intValue();
 	bool b = true;
@@ -176,7 +176,7 @@ int ElementFunction::calculate(MathStructure &mstruct, const MathStructure &varg
 ComponentsFunction::ComponentsFunction() : MathFunction("dimension", 1) {
 	setArgumentDefinition(1, new VectorArgument(""));
 }
-int ComponentsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ComponentsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = (int) vargs[0].components();
 	return 1;
 }
@@ -184,7 +184,7 @@ ComponentFunction::ComponentFunction() : MathFunction("component", 2) {
 	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 	setArgumentDefinition(2, new VectorArgument(""));
 }
-int ComponentFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ComponentFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	size_t i = (size_t) vargs[0].number().intValue();
 	if(i > vargs[1].components()) {
 		CALCULATOR->error(true, _("Component %s does not exist in vector."), vargs[0].print().c_str(), NULL);
@@ -198,7 +198,7 @@ LimitsFunction::LimitsFunction() : MathFunction("limits", 3) {
 	setArgumentDefinition(2, new IntegerArgument(""));	
 	setArgumentDefinition(3, new VectorArgument(""));	
 }
-int LimitsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int LimitsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	vargs[2].getRange(vargs[0].number().intValue(), vargs[1].number().intValue(), mstruct);
 	return 1;
 }
@@ -209,14 +209,14 @@ AreaFunction::AreaFunction() : MathFunction("area", 5) {
 	setArgumentDefinition(4, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));	
 	setArgumentDefinition(5, new MatrixArgument(""));	
 }
-int AreaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int AreaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	vargs[4].getArea(vargs[0].number().intValue(), vargs[1].number().intValue(), vargs[2].number().intValue(), vargs[3].number().intValue(), mstruct);
 	return 1;
 }
 TransposeFunction::TransposeFunction() : MathFunction("transpose", 1) {
 	setArgumentDefinition(1, new MatrixArgument());
 }
-int TransposeFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int TransposeFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = vargs[0];
 	return mstruct.transposeMatrix();
 }
@@ -228,7 +228,7 @@ IdentityFunction::IdentityFunction() : MathFunction("identity", 1) {
 	arg->addArgument(marg);
 	setArgumentDefinition(1, arg);
 }
-int IdentityFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int IdentityFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	if(vargs[0].isMatrix()) {
 		if(vargs[0].rows() != vargs[0].columns()) {
 			return 0;
@@ -296,7 +296,7 @@ int ZetaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 GammaFunction::GammaFunction() : MathFunction("gamma", 1, 1, SIGN_CAPITAL_GAMMA) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false));
 }
-int GammaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int GammaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	if(vargs[0].number().isRational()) {
 		if(vargs[0].number().isInteger()) {
 			mstruct.set(CALCULATOR->f_factorial, &vargs[0], NULL);
@@ -347,7 +347,7 @@ BetaFunction::BetaFunction() : MathFunction("beta", 2, 2, SIGN_CAPITAL_BETA) {
 	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_NONE, false));
 	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_NONE, false));
 }
-int BetaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int BetaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = vargs[0]; 
 	mstruct.set(CALCULATOR->f_gamma, &vargs[0], NULL);
 	MathStructure mstruct2(CALCULATOR->f_gamma, &vargs[1], NULL);
@@ -363,19 +363,19 @@ FactorialFunction::FactorialFunction() : MathFunction("factorial", 1) {
 int FactorialFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(factorial)
 }
-bool FactorialFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool FactorialFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
-bool FactorialFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool FactorialFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool FactorialFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool FactorialFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool FactorialFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool FactorialFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool FactorialFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool FactorialFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool FactorialFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return false;}
-bool FactorialFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return false;}
-bool FactorialFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool FactorialFunction::representsPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool FactorialFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool FactorialFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool FactorialFunction::representsNonPositive(const MathStructure&, bool) const {return false;}
+bool FactorialFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool FactorialFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool FactorialFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool FactorialFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool FactorialFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool FactorialFunction::representsNonZero(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool FactorialFunction::representsEven(const MathStructure&, bool) const {return false;}
+bool FactorialFunction::representsOdd(const MathStructure&, bool) const {return false;}
+bool FactorialFunction::representsUndefined(const MathStructure&) const {return false;}
 
 DoubleFactorialFunction::DoubleFactorialFunction() : MathFunction("factorial2", 1) {
 	IntegerArgument *arg = new IntegerArgument("", ARGUMENT_MIN_MAX_NONE, true, true);
@@ -386,19 +386,19 @@ DoubleFactorialFunction::DoubleFactorialFunction() : MathFunction("factorial2", 
 int DoubleFactorialFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(doubleFactorial)
 }
-bool DoubleFactorialFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool DoubleFactorialFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
-bool DoubleFactorialFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool DoubleFactorialFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool DoubleFactorialFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool DoubleFactorialFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool DoubleFactorialFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool DoubleFactorialFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool DoubleFactorialFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool DoubleFactorialFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool DoubleFactorialFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return false;}
-bool DoubleFactorialFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return false;}
-bool DoubleFactorialFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool DoubleFactorialFunction::representsPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool DoubleFactorialFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool DoubleFactorialFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool DoubleFactorialFunction::representsNonPositive(const MathStructure&, bool) const {return false;}
+bool DoubleFactorialFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool DoubleFactorialFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool DoubleFactorialFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool DoubleFactorialFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool DoubleFactorialFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool DoubleFactorialFunction::representsNonZero(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool DoubleFactorialFunction::representsEven(const MathStructure&, bool) const {return false;}
+bool DoubleFactorialFunction::representsOdd(const MathStructure&, bool) const {return false;}
+bool DoubleFactorialFunction::representsUndefined(const MathStructure&) const {return false;}
 
 MultiFactorialFunction::MultiFactorialFunction() : MathFunction("multifactorial", 2) {
 	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_NONNEGATIVE, true, true));
@@ -407,26 +407,26 @@ MultiFactorialFunction::MultiFactorialFunction() : MathFunction("multifactorial"
 int MultiFactorialFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION_2(multiFactorial)
 }
-bool MultiFactorialFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool MultiFactorialFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
-bool MultiFactorialFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool MultiFactorialFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool MultiFactorialFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool MultiFactorialFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool MultiFactorialFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool MultiFactorialFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool MultiFactorialFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool MultiFactorialFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
-bool MultiFactorialFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return false;}
-bool MultiFactorialFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return false;}
-bool MultiFactorialFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool MultiFactorialFunction::representsPositive(const MathStructure &vargs, bool) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool MultiFactorialFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool MultiFactorialFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool MultiFactorialFunction::representsNonPositive(const MathStructure&, bool) const {return false;}
+bool MultiFactorialFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool MultiFactorialFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool MultiFactorialFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool MultiFactorialFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool MultiFactorialFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool MultiFactorialFunction::representsNonZero(const MathStructure &vargs, bool) const {return vargs.size() == 2 && vargs[1].representsInteger() && vargs[1].representsPositive() && vargs[0].representsInteger() && vargs[0].representsNonNegative();}
+bool MultiFactorialFunction::representsEven(const MathStructure&, bool) const {return false;}
+bool MultiFactorialFunction::representsOdd(const MathStructure&, bool) const {return false;}
+bool MultiFactorialFunction::representsUndefined(const MathStructure&) const {return false;}
 
 BinomialFunction::BinomialFunction() : MathFunction("binomial", 2) {
 	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE, true, true));
 	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_NONNEGATIVE, true, true));
 	setCondition("\\x>=\\y");
 }
-int BinomialFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int BinomialFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	Number nr;
 	if(!nr.binomial(vargs[0].number(), vargs[1].number())) return 0;
 	mstruct = nr;
@@ -475,7 +475,7 @@ int BitXorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs
 }
 XorFunction::XorFunction() : MathFunction("xor", 2) {
 }
-int XorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int XorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int b0, b1;
 	if(vargs[0].representsNonPositive(true)) {
 		b0 = 0;
@@ -526,7 +526,7 @@ int XorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 OddFunction::OddFunction() : MathFunction("odd", 1) {
 	setArgumentDefinition(1, new IntegerArgument());
 }
-int OddFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int OddFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	if(vargs[0].number().isOdd()) {
 		mstruct.set(1, 1);
 	} else {
@@ -537,7 +537,7 @@ int OddFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 EvenFunction::EvenFunction() : MathFunction("even", 1) {
 	setArgumentDefinition(1, new IntegerArgument());
 }
-int EvenFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int EvenFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	if(vargs[0].number().isEven()) {
 		mstruct.set(1, 1);
 	} else {
@@ -557,14 +557,14 @@ AbsFunction::AbsFunction() : MathFunction("abs", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
 }
 bool AbsFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber(allow_units) && vargs[0].representsNonZero(allow_units);}
-bool AbsFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
+bool AbsFunction::representsNegative(const MathStructure&, bool) const {return false;}
 bool AbsFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber(allow_units);}
-bool AbsFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return false;}
+bool AbsFunction::representsNonPositive(const MathStructure&, bool) const {return false;}
 bool AbsFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger(allow_units);}
 bool AbsFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber(allow_units);}
 bool AbsFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsRational(allow_units);}
 bool AbsFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber(allow_units);}
-bool AbsFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
+bool AbsFunction::representsComplex(const MathStructure&, bool) const {return false;}
 bool AbsFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber(allow_units) && vargs[0].representsNonZero(allow_units);}
 bool AbsFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsEven(allow_units);}
 bool AbsFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsOdd(allow_units);}
@@ -608,19 +608,19 @@ CeilFunction::CeilFunction() : MathFunction("ceil", 1) {
 int CeilFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(ceil)
 }
-bool CeilFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsPositive();}
-bool CeilFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
-bool CeilFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonNegative();}
-bool CeilFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonPositive();}
-bool CeilFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool CeilFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool CeilFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool CeilFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool CeilFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool CeilFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsPositive();}
-bool CeilFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsEven();}
-bool CeilFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsOdd();}
-bool CeilFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool CeilFunction::representsPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsPositive();}
+bool CeilFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool CeilFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonNegative();}
+bool CeilFunction::representsNonPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonPositive();}
+bool CeilFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool CeilFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool CeilFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool CeilFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool CeilFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool CeilFunction::representsNonZero(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsPositive();}
+bool CeilFunction::representsEven(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsEven();}
+bool CeilFunction::representsOdd(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsOdd();}
+bool CeilFunction::representsUndefined(const MathStructure&) const {return false;}
 
 FloorFunction::FloorFunction() : MathFunction("floor", 1) {
 	NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR(1)
@@ -628,19 +628,19 @@ FloorFunction::FloorFunction() : MathFunction("floor", 1) {
 int FloorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(floor)
 }
-bool FloorFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool FloorFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNegative();}
-bool FloorFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonNegative();}
-bool FloorFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonPositive();}
-bool FloorFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool FloorFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool FloorFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool FloorFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool FloorFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool FloorFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNegative();}
-bool FloorFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsEven();}
-bool FloorFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsOdd();}
-bool FloorFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool FloorFunction::representsPositive(const MathStructure&, bool) const {return false;}
+bool FloorFunction::representsNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNegative();}
+bool FloorFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonNegative();}
+bool FloorFunction::representsNonPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonPositive();}
+bool FloorFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool FloorFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool FloorFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool FloorFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool FloorFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool FloorFunction::representsNonZero(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNegative();}
+bool FloorFunction::representsEven(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsEven();}
+bool FloorFunction::representsOdd(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsOdd();}
+bool FloorFunction::representsUndefined(const MathStructure&) const {return false;}
 
 TruncFunction::TruncFunction() : MathFunction("trunc", 1) {
 	NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR(1)
@@ -648,19 +648,19 @@ TruncFunction::TruncFunction() : MathFunction("trunc", 1) {
 int TruncFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(trunc)
 }
-bool TruncFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool TruncFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
-bool TruncFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonNegative();}
-bool TruncFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonPositive();}
-bool TruncFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool TruncFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool TruncFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool TruncFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool TruncFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool TruncFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return false;}
-bool TruncFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsEven();}
-bool TruncFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsOdd();}
-bool TruncFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool TruncFunction::representsPositive(const MathStructure&, bool) const {return false;}
+bool TruncFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool TruncFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonNegative();}
+bool TruncFunction::representsNonPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonPositive();}
+bool TruncFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool TruncFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool TruncFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool TruncFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool TruncFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool TruncFunction::representsNonZero(const MathStructure&, bool) const {return false;}
+bool TruncFunction::representsEven(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsEven();}
+bool TruncFunction::representsOdd(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsOdd();}
+bool TruncFunction::representsUndefined(const MathStructure&) const {return false;}
 
 RoundFunction::RoundFunction() : MathFunction("round", 1) {
 	NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR(1)
@@ -668,19 +668,19 @@ RoundFunction::RoundFunction() : MathFunction("round", 1) {
 int RoundFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(round)
 }
-bool RoundFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool RoundFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
-bool RoundFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonNegative();}
-bool RoundFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonPositive();}
-bool RoundFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool RoundFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool RoundFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool RoundFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool RoundFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool RoundFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return false;}
-bool RoundFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsEven();}
-bool RoundFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsOdd();}
-bool RoundFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool RoundFunction::representsPositive(const MathStructure&, bool) const {return false;}
+bool RoundFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool RoundFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonNegative();}
+bool RoundFunction::representsNonPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonPositive();}
+bool RoundFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool RoundFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool RoundFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool RoundFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool RoundFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool RoundFunction::representsNonZero(const MathStructure&, bool) const {return false;}
+bool RoundFunction::representsEven(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsEven();}
+bool RoundFunction::representsOdd(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger() && vargs[0].representsOdd();}
+bool RoundFunction::representsUndefined(const MathStructure&) const {return false;}
 
 FracFunction::FracFunction() : MathFunction("frac", 1) {
 	NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR(1)
@@ -724,19 +724,19 @@ int ImFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, co
 	}
 	return -1;
 }
-bool ImFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool ImFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
-bool ImFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool ImFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool ImFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool ImFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool ImFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool ImFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool ImFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool ImFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsComplex();}
-bool ImFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-bool ImFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return false;}
-bool ImFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool ImFunction::representsPositive(const MathStructure&, bool) const {return false;}
+bool ImFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool ImFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool ImFunction::representsNonPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool ImFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool ImFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool ImFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool ImFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool ImFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool ImFunction::representsNonZero(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsComplex();}
+bool ImFunction::representsEven(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool ImFunction::representsOdd(const MathStructure&, bool) const {return false;}
+bool ImFunction::representsUndefined(const MathStructure&) const {return false;}
 
 ReFunction::ReFunction() : MathFunction("re", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
@@ -752,24 +752,24 @@ int ReFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, co
 	}
 	return -1;
 }
-bool ReFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsPositive();}
-bool ReFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNegative();}
-bool ReFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNonNegative();}
-bool ReFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNonPositive();}
-bool ReFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsInteger();}
-bool ReFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool ReFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsRational();}
-bool ReFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool ReFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return false;}
-bool ReFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonZero();}
-bool ReFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsEven();}
-bool ReFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsOdd();}
-bool ReFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool ReFunction::representsPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsPositive();}
+bool ReFunction::representsNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNegative();}
+bool ReFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNonNegative();}
+bool ReFunction::representsNonPositive(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNonPositive();}
+bool ReFunction::representsInteger(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsInteger();}
+bool ReFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool ReFunction::representsRational(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsRational();}
+bool ReFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool ReFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool ReFunction::representsNonZero(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNonZero();}
+bool ReFunction::representsEven(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsEven();}
+bool ReFunction::representsOdd(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsOdd();}
+bool ReFunction::representsUndefined(const MathStructure&) const {return false;}
 
 ArgFunction::ArgFunction() : MathFunction("arg", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
 }
-int ArgFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ArgFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	if(vargs[0].isNumber()) {
 		if(vargs[0].number().isOne()) {
 			mstruct.clear();
@@ -806,14 +806,14 @@ int ArgFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 
 SqrtFunction::SqrtFunction() : MathFunction("sqrt", 1) {
 }
-int SqrtFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int SqrtFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = vargs[0];
 	mstruct ^= MathStructure(1, 2);
 	return 1;
 }
 SquareFunction::SquareFunction() : MathFunction("sq", 1) {
 }
-int SquareFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int SquareFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = vargs[0];
 	mstruct ^= 2;
 	return 1;
@@ -821,7 +821,7 @@ int SquareFunction::calculate(MathStructure &mstruct, const MathStructure &vargs
 
 ExpFunction::ExpFunction() : MathFunction("exp", 1) {
 }
-int ExpFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ExpFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = CALCULATOR->v_e;
 	mstruct ^= vargs[0];
 	return 1;
@@ -830,19 +830,19 @@ int ExpFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 LogFunction::LogFunction() : MathFunction("ln", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONZERO, false));
 }
-bool LogFunction::representsPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool LogFunction::representsNegative(const MathStructure &vargs, bool allow_units) const {return false;}
-bool LogFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsPositive();}
-bool LogFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return false;}
-bool LogFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return false;}
-bool LogFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber() && vargs[0].representsNonZero();}
-bool LogFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return false;}
-bool LogFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsPositive();}
-bool LogFunction::representsComplex(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNegative();}
-bool LogFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return false;}
-bool LogFunction::representsEven(const MathStructure &vargs, bool allow_units) const {return false;}
-bool LogFunction::representsOdd(const MathStructure &vargs, bool allow_units) const {return false;}
-bool LogFunction::representsUndefined(const MathStructure &vargs) const {return false;}
+bool LogFunction::representsPositive(const MathStructure&, bool) const {return false;}
+bool LogFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool LogFunction::representsNonNegative(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsPositive();}
+bool LogFunction::representsNonPositive(const MathStructure&, bool) const {return false;}
+bool LogFunction::representsInteger(const MathStructure&, bool) const {return false;}
+bool LogFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber() && vargs[0].representsNonZero();}
+bool LogFunction::representsRational(const MathStructure&, bool) const {return false;}
+bool LogFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsPositive();}
+bool LogFunction::representsComplex(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal() && vargs[0].representsNegative();}
+bool LogFunction::representsNonZero(const MathStructure&, bool) const {return false;}
+bool LogFunction::representsEven(const MathStructure&, bool) const {return false;}
+bool LogFunction::representsOdd(const MathStructure&, bool) const {return false;}
+bool LogFunction::representsUndefined(const MathStructure&) const {return false;}
 int LogFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 
 	mstruct = vargs[0]; 
@@ -1028,8 +1028,8 @@ bool is_number_angle_value(const MathStructure &mstruct) {
 SinFunction::SinFunction() : MathFunction("sin", 1) {
 	setArgumentDefinition(1, new AngleArgument());
 }
-bool SinFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && is_number_angle_value(vargs[0]);}
-bool SinFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && is_real_angle_value(vargs[0]);}
+bool SinFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && is_number_angle_value(vargs[0]);}
+bool SinFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && is_real_angle_value(vargs[0]);}
 int SinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 
 	mstruct = vargs[0]; 
@@ -1168,8 +1168,8 @@ int SinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 CosFunction::CosFunction() : MathFunction("cos", 1) {
 	setArgumentDefinition(1, new AngleArgument());
 }
-bool CosFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && is_number_angle_value(vargs[0]);}
-bool CosFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && is_real_angle_value(vargs[0]);}
+bool CosFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && is_number_angle_value(vargs[0]);}
+bool CosFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && is_real_angle_value(vargs[0]);}
 int CosFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 
 	mstruct = vargs[0]; 
@@ -1287,7 +1287,7 @@ int CosFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 TanFunction::TanFunction() : MathFunction("tan", 1) {
 	setArgumentDefinition(1, new AngleArgument());
 }
-int TanFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int TanFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct.set(CALCULATOR->f_sin, &vargs[0], NULL);
 	mstruct.divide_nocopy(new MathStructure(CALCULATOR->f_cos, &vargs[0], NULL));
 	return 1;
@@ -1296,7 +1296,7 @@ int TanFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 AsinFunction::AsinFunction() : MathFunction("asin", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false));
 }
-bool AsinFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool AsinFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
 int AsinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	
 	if(vargs[0].number().isZero()) {
@@ -1402,7 +1402,7 @@ int AsinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 AcosFunction::AcosFunction() : MathFunction("acos", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false));
 }
-bool AcosFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool AcosFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
 int AcosFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	
 	if(vargs[0].number().isZero()) {
@@ -1506,8 +1506,8 @@ int AcosFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 AtanFunction::AtanFunction() : MathFunction("atan", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false));
 }
-bool AtanFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool AtanFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool AtanFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool AtanFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
 int AtanFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	
 	if(vargs[0].number().isZero()) {
@@ -1644,23 +1644,23 @@ int AtanFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 SinhFunction::SinhFunction() : MathFunction("sinh", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false));
 }
-bool SinhFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool SinhFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool SinhFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool SinhFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
 int SinhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(sinh)
 }
 CoshFunction::CoshFunction() : MathFunction("cosh", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false));	
 }
-bool CoshFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool CoshFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
+bool CoshFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool CoshFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
 int CoshFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(cosh)
 }
 TanhFunction::TanhFunction() : MathFunction("tanh", 1) {}
-bool TanhFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool TanhFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-int TanhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+bool TanhFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool TanhFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+int TanhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct.set(CALCULATOR->f_sinh, &vargs[0], NULL);
 	mstruct.divide_nocopy(new MathStructure(CALCULATOR->f_cosh, &vargs[0], NULL));
 	return 1;
@@ -1668,9 +1668,9 @@ int TanhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 AsinhFunction::AsinhFunction() : MathFunction("asinh", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
 }
-bool AsinhFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-bool AsinhFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsReal();}
-int AsinhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+bool AsinhFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+bool AsinhFunction::representsReal(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsReal();}
+int AsinhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	MathStructure m_arg(vargs[0]);
 	m_arg ^= 2;
 	m_arg += 1;
@@ -1682,8 +1682,8 @@ int AsinhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 AcoshFunction::AcoshFunction() : MathFunction("acosh", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
 }
-bool AcoshFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return vargs.size() == 1 && vargs[0].representsNumber();}
-int AcoshFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+bool AcoshFunction::representsNumber(const MathStructure &vargs, bool) const {return vargs.size() == 1 && vargs[0].representsNumber();}
+int AcoshFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	MathStructure m_arg(vargs[0]);
 	m_arg ^= 2;
 	m_arg -= 1;
@@ -1695,7 +1695,7 @@ int AcoshFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 AtanhFunction::AtanhFunction() : MathFunction("atanh", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
 }
-int AtanhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int AtanhFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	
 	MathStructure m_arg = 1;
 	m_arg += vargs[0];
@@ -1738,7 +1738,7 @@ int RadiansToDefaultAngleUnitFunction::calculate(MathStructure &mstruct, const M
 TotalFunction::TotalFunction() : MathFunction("total", 1) {
 	setArgumentDefinition(1, new VectorArgument(""));
 }
-int TotalFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int TotalFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct.clear();
 	for(size_t index = 0; index < vargs[0].size(); index++) {
 		mstruct.add(vargs[0][index], true);
@@ -1756,7 +1756,7 @@ PercentileFunction::PercentileFunction() : MathFunction("percentile", 2) {
 	setArgumentDefinition(1, arg);
 	setArgumentDefinition(2, new VectorArgument(""));
 }
-int PercentileFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int PercentileFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	MathStructure v(vargs[1]);
 	MathStructure *mp;
 	Number fr100(100);
@@ -1798,7 +1798,7 @@ int PercentileFunction::calculate(MathStructure &mstruct, const MathStructure &v
 MinFunction::MinFunction() : MathFunction("min", 1) {
 	setArgumentDefinition(1, new VectorArgument(""));
 }
-int MinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int MinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	ComparisonResult cmp;
 	const MathStructure *min = NULL;
 	vector<const MathStructure*> unsolveds;
@@ -1841,7 +1841,7 @@ int MinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 MaxFunction::MaxFunction() : MathFunction("max", 1) {
 	setArgumentDefinition(1, new VectorArgument(""));
 }
-int MaxFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int MaxFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	ComparisonResult cmp;
 	const MathStructure *max = NULL;
 	vector<const MathStructure*> unsolveds;
@@ -1884,7 +1884,7 @@ int MaxFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 ModeFunction::ModeFunction() : MathFunction("mode", 1) {
 	setArgumentDefinition(1, new VectorArgument(""));
 }
-int ModeFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ModeFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	if(vargs[0].size() <= 0) {
 		return 0;
 	}
@@ -1923,7 +1923,7 @@ RandFunction::RandFunction() : MathFunction("rand", 0, 1) {
 	setArgumentDefinition(1, new IntegerArgument());
 	setDefaultValue(1, "-1"); 
 }
-int RandFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int RandFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	if(vargs[0].number().isZero() || vargs[0].number().isNegative()) {
 		Number nr;
 		nr.setInternal(cln::random_F(cln::cl_float(1)));
@@ -1948,7 +1948,7 @@ DaysFunction::DaysFunction() : MathFunction("days", 2, 4) {
 	setArgumentDefinition(4, new BooleanArgument());				
 	setDefaultValue(3, "1"); 
 }
-int DaysFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int DaysFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int days = daysBetweenDates(vargs[0].symbol(), vargs[1].symbol(), vargs[2].number().intValue(), vargs[3].number().isZero());
 	if(days < 0) {
 		CALCULATOR->error(true, _("Error in date format for function %s()."), name().c_str(), NULL);
@@ -1969,7 +1969,7 @@ YearFracFunction::YearFracFunction() : MathFunction("yearfrac", 2, 4) {
 	setArgumentDefinition(4, new BooleanArgument());		
 	setDefaultValue(3, "1");
 }
-int YearFracFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int YearFracFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	Number yfr = yearsBetweenDates(vargs[0].symbol(), vargs[1].symbol(), vargs[2].number().intValue(), vargs[3].number().isZero());
 	if(yfr.isMinusOne()) {
 		CALCULATOR->error(true, _("Error in date format for function %s()."), name().c_str(), NULL);
@@ -1983,7 +1983,7 @@ WeekFunction::WeekFunction() : MathFunction("week", 0, 2) {
 	setArgumentDefinition(2, new BooleanArgument());	
 	setDefaultValue(1, "today");
 }
-int WeekFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int WeekFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int w = week(vargs[0].symbol(), vargs[1].number().getBoolean());
 	if(w < 0) {
 		return 0;
@@ -1996,7 +1996,7 @@ WeekdayFunction::WeekdayFunction() : MathFunction("weekday", 0, 2) {
 	setArgumentDefinition(2, new BooleanArgument());
 	setDefaultValue(1, "today");
 }
-int WeekdayFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int WeekdayFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int w = weekday(vargs[0].symbol());
 	if(w < 0) {
 		return 0;
@@ -2012,7 +2012,7 @@ YeardayFunction::YeardayFunction() : MathFunction("yearday", 0, 1) {
 	setArgumentDefinition(1, new DateArgument());
 	setDefaultValue(1, "today");
 }
-int YeardayFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int YeardayFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int d = yearday(vargs[0].symbol());
 	if(d < 0) {
 		return 0;
@@ -2024,7 +2024,7 @@ MonthFunction::MonthFunction() : MathFunction("month", 0, 1) {
 	setArgumentDefinition(1, new DateArgument());
 	setDefaultValue(1, "today");
 }
-int MonthFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int MonthFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int year, month, day;
 	if(!s2date(vargs[0].symbol(), year, month, day)) {
 		return 0;
@@ -2036,7 +2036,7 @@ DayFunction::DayFunction() : MathFunction("day", 0, 1) {
 	setArgumentDefinition(1, new DateArgument());
 	setDefaultValue(1, "today");
 }
-int DayFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int DayFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int year, month, day;
 	if(!s2date(vargs[0].symbol(), year, month, day)) {
 		return 0;
@@ -2048,7 +2048,7 @@ YearFunction::YearFunction() : MathFunction("year", 0, 1) {
 	setArgumentDefinition(1, new DateArgument());
 	setDefaultValue(1, "today");
 }
-int YearFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int YearFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int year, month, day;
 	if(!s2date(vargs[0].symbol(), year, month, day)) {
 		return 0;
@@ -2058,7 +2058,7 @@ int YearFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 }
 TimeFunction::TimeFunction() : MathFunction("time", 0) {
 }
-int TimeFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int TimeFunction::calculate(MathStructure &mstruct, const MathStructure&, const EvaluationOptions&) {
 	int hour, min, sec;
 	now(hour, min, sec);
 	Number tnr(sec, 1);
@@ -2132,7 +2132,7 @@ AsciiFunction::AsciiFunction() : MathFunction("code", 1) {
 	arg->setCustomCondition("len(\\x) = 1");
 	setArgumentDefinition(1, arg);
 }
-int AsciiFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int AsciiFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	unsigned char c = (unsigned char) vargs[0].symbol()[0];
 	mstruct.set(c, 1);
 	return 1;
@@ -2145,7 +2145,7 @@ CharFunction::CharFunction() : MathFunction("char", 1) {
 	arg->setMax(&fr);
 	setArgumentDefinition(1, arg);
 }
-int CharFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int CharFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	string str;
 	str += vargs[0].number().intValue();
 	mstruct = str;
@@ -2156,7 +2156,7 @@ ConcatenateFunction::ConcatenateFunction() : MathFunction("concatenate", 1, -1) 
 	setArgumentDefinition(1, new TextArgument());
 	setArgumentDefinition(2, new TextArgument());
 }
-int ConcatenateFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ConcatenateFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	string str;
 	for(size_t i = 0; i < vargs.size(); i++) {
 		str += vargs[i].symbol();
@@ -2167,7 +2167,7 @@ int ConcatenateFunction::calculate(MathStructure &mstruct, const MathStructure &
 LengthFunction::LengthFunction() : MathFunction("len", 1) {
 	setArgumentDefinition(1, new TextArgument());
 }
-int LengthFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int LengthFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct = (int) vargs[0].symbol().length();
 	return 1;
 }
@@ -2194,21 +2194,21 @@ int StripUnitsFunction::calculate(MathStructure &mstruct, const MathStructure &v
 ErrorFunction::ErrorFunction() : MathFunction("error", 1) {
 	setArgumentDefinition(1, new TextArgument());
 }
-int ErrorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ErrorFunction::calculate(MathStructure&, const MathStructure &vargs, const EvaluationOptions&) {
 	CALCULATOR->error(true, vargs[0].symbol().c_str(), NULL);
 	return 1;
 }
 WarningFunction::WarningFunction() : MathFunction("warning", 1) {
 	setArgumentDefinition(1, new TextArgument());
 }
-int WarningFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int WarningFunction::calculate(MathStructure&, const MathStructure &vargs, const EvaluationOptions&) {
 	CALCULATOR->error(false, vargs[0].symbol().c_str(), NULL);
 	return 1;
 }
 MessageFunction::MessageFunction() : MathFunction("message", 1) {
 	setArgumentDefinition(1, new TextArgument());
 }
-int MessageFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int MessageFunction::calculate(MathStructure&, const MathStructure &vargs, const EvaluationOptions&) {
 	CALCULATOR->message(MESSAGE_INFORMATION, vargs[0].symbol().c_str(), NULL);
 	return 1;
 }
@@ -2271,7 +2271,7 @@ SumFunction::SumFunction() : MathFunction("sum", 3, 4) {
 	setDefaultValue(4, "x");
 	setCondition("\\z >= \\y");
 }
-int SumFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int SumFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 
 	mstruct.clear();
 	Number i_nr(vargs[1].number());
@@ -2299,7 +2299,7 @@ ProductFunction::ProductFunction() : MathFunction("product", 3, 4) {
 	setDefaultValue(4, "x");
 	setCondition("\\z >= \\y");
 }
-int ProductFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ProductFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 
 	mstruct.clear();
 	Number i_nr(vargs[1].number());
@@ -2353,7 +2353,7 @@ ProcessFunction::ProcessFunction() : MathFunction("process", 3, 5) {
 	setArgumentDefinition(5, new SymbolicArgument());
 	setDefaultValue(5, "\"\"");
 }
-int ProcessFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ProcessFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 
 	mstruct = vargs[2];
 	MathStructure mprocess;
@@ -2405,7 +2405,7 @@ ProcessMatrixFunction::ProcessMatrixFunction() : MathFunction("processm", 3, 6) 
 	setArgumentDefinition(6, new SymbolicArgument());
 	setDefaultValue(6, "\"\"");
 }
-int ProcessMatrixFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ProcessMatrixFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 
 	mstruct = vargs[2];
 	MathStructure mprocess;
@@ -2563,7 +2563,7 @@ int SelectFunction::calculate(MathStructure &mstruct, const MathStructure &vargs
 IFFunction::IFFunction() : MathFunction("if", 3) {
 	NON_COMPLEX_NUMBER_ARGUMENT(1)
 }
-int IFFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int IFFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	int result = vargs[0].number().getBoolean();
 	if(result) {			
 		mstruct = vargs[1];
@@ -2581,7 +2581,7 @@ LoadFunction::LoadFunction() : MathFunction("load", 1, 3) {
 	setArgumentDefinition(3, new TextArgument());
 	setDefaultValue(3, ",");	
 }
-int LoadFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int LoadFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	string delim = vargs[2].symbol();
 	if(delim == "tab") {
 		delim = "\t";
@@ -2598,7 +2598,7 @@ ExportFunction::ExportFunction() : MathFunction("export", 2, 3) {
 	setArgumentDefinition(3, new TextArgument());
 	setDefaultValue(3, ",");	
 }
-int ExportFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int ExportFunction::calculate(MathStructure&, const MathStructure &vargs, const EvaluationOptions&) {
 	string delim = vargs[2].symbol();
 	if(delim == "tab") {
 		delim = "\t";
@@ -2612,7 +2612,7 @@ int ExportFunction::calculate(MathStructure &mstruct, const MathStructure &vargs
 TitleFunction::TitleFunction() : MathFunction("title", 1) {
 	setArgumentDefinition(1, new ExpressionItemArgument());
 }
-int TitleFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int TitleFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	ExpressionItem *item = CALCULATOR->getExpressionItem(vargs[0].symbol());
 	if(!item) {
 		CALCULATOR->error(true, _("Object %s does not exist."), vargs[0].symbol().c_str(), NULL);
@@ -2629,7 +2629,7 @@ SaveFunction::SaveFunction() : MathFunction("save", 2, 4) {
 	setDefaultValue(3, "Temporary");
 	setDefaultValue(4, "");	
 }
-int SaveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int SaveFunction::calculate(MathStructure&, const MathStructure &vargs, const EvaluationOptions&) {
 	CALCULATOR->addVariable(new KnownVariable(vargs[2].symbol(), vargs[1].symbol(), vargs[0], vargs[3].symbol()));
 	CALCULATOR->saveFunctionCalled();
 	return 1;
@@ -2783,8 +2783,8 @@ int SolveMultipleFunction::calculate(MathStructure &mstruct, const MathStructure
 	
 	if(vargs[1].size() < 1) return 1;
 	
-	bool eleft[vargs[0].size()];
-	for(size_t i = 0; i < vargs[0].size(); i++) eleft[i] = true;
+	vector<bool> eleft;
+	eleft.resize(vargs[0].size(), true);
 	vector<size_t> eorder;
 	bool b = false;
 	for(size_t i = 0; i < vargs[1].size(); i++) {

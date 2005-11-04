@@ -1182,7 +1182,7 @@ bool Number::recip() {
 	removeFloatZeroPart();
 	return true;
 }
-bool Number::raise(const Number &o, int solution) {
+bool Number::raise(const Number &o, int) {
 	if(o.isInfinity()) return false;
 	if(isInfinite()) {	
 		if(o.isNegative()) {

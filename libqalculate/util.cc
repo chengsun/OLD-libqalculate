@@ -451,11 +451,6 @@ string i2s(unsigned long int value) {
 	string stmp = buffer;
 	return stmp;
 }
-string i2s(unsigned long long int value) {
-	sprintf(buffer, "%llu", value);
-	string stmp = buffer;
-	return stmp;
-}
 const char *b2yn(bool b, bool capital) {
 	if(capital) {
 		if(b) return _("Yes");

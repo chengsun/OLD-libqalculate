@@ -123,43 +123,43 @@ void UnknownVariable::setAssumptions(Assumptions *ass) {
 Assumptions *UnknownVariable::assumptions() {
 	return o_assumption;
 }
-bool UnknownVariable::representsPositive(bool allow_units) { 
+bool UnknownVariable::representsPositive(bool) { 
 	if(o_assumption) return o_assumption->isPositive();
 	return CALCULATOR->defaultAssumptions()->isPositive();
 }
-bool UnknownVariable::representsNegative(bool allow_units) { 
+bool UnknownVariable::representsNegative(bool) { 
 	if(o_assumption) return o_assumption->isNegative();
 	return CALCULATOR->defaultAssumptions()->isNegative();
 }
-bool UnknownVariable::representsNonNegative(bool allow_units) { 
+bool UnknownVariable::representsNonNegative(bool) { 
 	if(o_assumption) return o_assumption->isNonNegative();
 	return CALCULATOR->defaultAssumptions()->isNonNegative();
 }
-bool UnknownVariable::representsNonPositive(bool allow_units) { 
+bool UnknownVariable::representsNonPositive(bool) { 
 	if(o_assumption) return o_assumption->isNonPositive();
 	return CALCULATOR->defaultAssumptions()->isNonPositive();
 }
-bool UnknownVariable::representsInteger(bool allow_units) { 
+bool UnknownVariable::representsInteger(bool) { 
 	if(o_assumption) return o_assumption->isInteger();
 	return CALCULATOR->defaultAssumptions()->isInteger();
 }
-bool UnknownVariable::representsNumber(bool allow_units) { 
+bool UnknownVariable::representsNumber(bool) { 
 	if(o_assumption) return o_assumption->isNumber();
 	return CALCULATOR->defaultAssumptions()->isNumber();
 }
-bool UnknownVariable::representsRational(bool allow_units) { 
+bool UnknownVariable::representsRational(bool) { 
 	if(o_assumption) return o_assumption->isRational();
 	return CALCULATOR->defaultAssumptions()->isRational();
 }
-bool UnknownVariable::representsReal(bool allow_units) { 
+bool UnknownVariable::representsReal(bool) { 
 	if(o_assumption) return o_assumption->isReal();
 	return CALCULATOR->defaultAssumptions()->isReal();
 }
-bool UnknownVariable::representsComplex(bool allow_units) { 
+bool UnknownVariable::representsComplex(bool) { 
 	if(o_assumption) return o_assumption->isComplex();
 	return CALCULATOR->defaultAssumptions()->isComplex();
 }
-bool UnknownVariable::representsNonZero(bool allow_units) { 
+bool UnknownVariable::representsNonZero(bool) { 
 	if(o_assumption) return o_assumption->isNonZero();
 	return CALCULATOR->defaultAssumptions()->isNonZero();
 }
@@ -285,8 +285,8 @@ DynamicVariable::~DynamicVariable() {
 void DynamicVariable::set(const ExpressionItem *item) {
 	ExpressionItem::set(item);
 }
-void DynamicVariable::set(const MathStructure &o) {}
-void DynamicVariable::set(string expression_) {}
+void DynamicVariable::set(const MathStructure&) {}
+void DynamicVariable::set(string) {}
 const MathStructure &DynamicVariable::get() {
 	if(calculated_precision != CALCULATOR->getPrecision() || !mstruct) {
 		mstruct = new MathStructure();

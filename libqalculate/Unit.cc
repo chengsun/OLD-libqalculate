@@ -105,10 +105,10 @@ bool Unit::isUsedByOtherUnits() const {
 string Unit::print(bool plural_, bool short_, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
 	return preferredName(short_, use_unicode, plural_, false, can_display_unicode_string_function, can_display_unicode_string_arg).name;
 }
-const string &Unit::plural(bool return_singular_if_no_plural, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
+const string &Unit::plural(bool, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
 	return preferredName(false, use_unicode, true, false, can_display_unicode_string_function, can_display_unicode_string_arg).name;
 }
-const string &Unit::singular(bool return_short_if_no_singular, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
+const string &Unit::singular(bool, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
 	return preferredName(false, use_unicode, false, false, can_display_unicode_string_function, can_display_unicode_string_arg).name;
 }
 const string &Unit::shortName(bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
@@ -117,10 +117,10 @@ const string &Unit::shortName(bool use_unicode, bool (*can_display_unicode_strin
 Unit* Unit::baseUnit() const {
 	return (Unit*) this;
 }
-MathStructure &Unit::baseValue(MathStructure &mvalue, MathStructure &mexp) const {
+MathStructure &Unit::baseValue(MathStructure &mvalue, MathStructure&) const {
 	return mvalue;
 }
-MathStructure &Unit::convertToBase(MathStructure &mvalue, MathStructure &mexp) const {
+MathStructure &Unit::convertToBase(MathStructure &mvalue, MathStructure&) const {
 	return mvalue;
 }
 MathStructure &Unit::baseValue(MathStructure &mvalue) const {
@@ -144,7 +144,7 @@ int Unit::type() const {
 int Unit::subtype() const {
 	return SUBTYPE_BASE_UNIT;
 }
-bool Unit::isChildOf(Unit *u) const {
+bool Unit::isChildOf(Unit*) const {
 	return false;
 }
 bool Unit::isParentOf(Unit *u) const {
@@ -491,14 +491,14 @@ void AliasUnit_Composite::set(Unit *u, int exp_, Prefix *prefix_) {
 	setExponent(exp_);
 	prefixv = (Prefix*) prefix_;
 }
-MathStructure &AliasUnit_Composite::firstBaseValue(MathStructure &mvalue, MathStructure &mexp) const {
+MathStructure &AliasUnit_Composite::firstBaseValue(MathStructure &mvalue, MathStructure&) const {
 	//mexp.divide(exp);		
 	//MathStructure mstruct(1, 1);
 //	mstruct.raise(mexp);
 	//mvalue.multiply(mstruct);
 	return mvalue;
 }
-MathStructure &AliasUnit_Composite::convertToFirstBase(MathStructure &mvalue, MathStructure &mexp) const {
+MathStructure &AliasUnit_Composite::convertToFirstBase(MathStructure &mvalue, MathStructure&) const {
 //	mexp.multiply(exp);
 	//MathStructure mstruct(1, 1);
 //	mstruct.add(exp, RAISE);
@@ -548,7 +548,7 @@ void CompositeUnit::add(Unit *u, int exp_, Prefix *prefix) {
 	updateNames();
 }
 Unit *CompositeUnit::get(size_t index, int *exp_, Prefix **prefix) const {
-	if(index >= 0 && index < units.size()) {
+	if(index < units.size()) {
 		if(exp_) *exp_ = units[index]->firstBaseExp();
 		if(prefix) *prefix = (Prefix*) units[index]->prefix();
 		return (Unit*) units[index]->firstBaseUnit();
@@ -556,12 +556,12 @@ Unit *CompositeUnit::get(size_t index, int *exp_, Prefix **prefix) const {
 	return NULL;
 }
 void CompositeUnit::setExponent(size_t index, int exp_) {
-	if(index >= 0 && index < units.size()) {
+	if(index < units.size()) {
 		units[index]->setExponent(exp_);
 	}
 }
 void CompositeUnit::setPrefix(size_t index, Prefix *prefix) {
-	if(index >= 0 && index < units.size()) {
+	if(index < units.size()) {
 		units[index]->set(units[index]->firstBaseUnit(), units[index]->firstBaseExp(), prefix);
 	}
 }

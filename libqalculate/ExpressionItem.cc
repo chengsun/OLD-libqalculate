@@ -467,6 +467,6 @@ ExpressionItem *ExpressionItem::getReferencer(size_t index) const {
 	}
 	return NULL;
 }
-bool ExpressionItem::changeReference(ExpressionItem *o_from, ExpressionItem *o_to) {
+bool ExpressionItem::changeReference(ExpressionItem*, ExpressionItem*) {
 	return false;
 }

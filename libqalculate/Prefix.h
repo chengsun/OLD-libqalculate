@@ -78,7 +78,7 @@ class NumberPrefix : public Prefix {
   public:
   	NumberPrefix(const Number &nr, string long_name, string short_name = "", string unicode_name = "");
 	~NumberPrefix();
-	Number setValue(const Number &nr);
+	void setValue(const Number &nr);
 	Number value(const Number &nexp) const;
 	Number value(int iexp) const;
 	Number value() const;

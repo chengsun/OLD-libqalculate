@@ -364,7 +364,7 @@ int DataSet::subtype() const {
 	return SUBTYPE_DATA_SET;
 }
 	
-int DataSet::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int DataSet::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	DataObject *o = getObject(vargs[0]);
 	if(!o) {
 		CALCULATOR->error(true, _("Object %s not available in data set."), vargs[0].symbol().c_str(), NULL);

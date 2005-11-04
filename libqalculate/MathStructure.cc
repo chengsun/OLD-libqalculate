@@ -541,7 +541,7 @@ bool MathStructure::isDivision() const {return m_type == STRUCT_DIVISION;}
 bool MathStructure::isNegate() const {return m_type == STRUCT_NEGATE;}
 bool MathStructure::isInfinity() const {return m_type == STRUCT_NUMBER && o_number.isInfinite();}
 bool MathStructure::isUndefined() const {return m_type == STRUCT_UNDEFINED || (m_type == STRUCT_NUMBER && o_number.isUndefined());}
-bool MathStructure::isInteger() const {return m_type == STRUCT_NUMBER && o_number.isInteger();};
+bool MathStructure::isInteger() const {return m_type == STRUCT_NUMBER && o_number.isInteger();}
 bool MathStructure::isNumber() const {return m_type == STRUCT_NUMBER;}
 bool MathStructure::isZero() const {return m_type == STRUCT_NUMBER && o_number.isZero();}
 bool MathStructure::isOne() const {return m_type == STRUCT_NUMBER && o_number.isOne();}
@@ -2416,7 +2416,9 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 					}
 					if(mstruct[1].hasNegativeSign()) {
 						int ret;
-						bool merged[SIZE]; size_t merges = 0;
+						vector<bool> merged;
+						merged.resize(SIZE, false);
+						size_t merges = 0;
 						for(size_t i = 0; i < SIZE; i++) {
 							if(CHILD(i).isOne()) ret = -1;
 							else ret = CHILD(i).merge_multiplication(mstruct, eo, false);
@@ -4258,7 +4260,7 @@ bool MathStructure::containsAdditionPower() const {
 }
 
 size_t MathStructure::countTotalChilds(bool count_function_as_one) const {
-	if(m_type == STRUCT_FUNCTION || SIZE == 0) return 1;
+	if((m_type == STRUCT_FUNCTION && count_function_as_one) || SIZE == 0) return 1;
 	size_t count = 0;
 	for(size_t i = 0; i < SIZE; i++) {
 		count += CHILD(i).countTotalChilds();
@@ -4855,7 +4857,8 @@ bool MathStructure::factorize(const EvaluationOptions &eo) {
 						}
 					}
 					if(b) {
-						Number factors[degree + 1];
+						vector<Number> factors;
+						factors.resize(degree + 1, Number());
 						factors[0] = CHILD(SIZE - 1).number();
 						vector<int> ps;
 						vector<int> qs;
@@ -5733,7 +5736,7 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 		}
 	}
 }
-void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure *parent, size_t pindex) {
+void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure*, size_t) {
 	switch(m_type) {
 		case STRUCT_DIVISION: {
 			if(po.place_units_separately) {
@@ -6289,7 +6292,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 	}
 }
 
-int namelen(const MathStructure &mstruct, const PrintOptions &po, const InternalPrintStruct &ips, bool *abbreviated = NULL) {
+int namelen(const MathStructure &mstruct, const PrintOptions &po, const InternalPrintStruct&, bool *abbreviated = NULL) {
 	const string *str;
 	switch(mstruct.type()) {
 		case STRUCT_FUNCTION: {
@@ -6321,7 +6324,7 @@ int namelen(const MathStructure &mstruct, const PrintOptions &po, const Internal
 	return str->length();
 }
 
-bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrintStruct &ips, const MathStructure &parent, size_t index, bool flat_division, bool flat_power) const {
+bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrintStruct&, const MathStructure &parent, size_t index, bool flat_division, bool) const {
 	switch(parent.type()) {
 		case STRUCT_MULTIPLICATION: {
 			switch(m_type) {

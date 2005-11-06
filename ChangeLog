@@ -1,3 +1,14 @@
+2005-11-06 Niklas Knutsson  <nq@altern.org>
+
+	* Use quotient rule in differentation to possible get simpler results then if always using the product rule
+	* Fix fetching of exchange rates with gnome-vfs < 2.10
+
+2005-11-05 Niklas Knutsson  <nq@altern.org>
+
+	* Fix (x+1)/x (= 1 + 1/x)
+	* Simplification by combining divisions
+	* Reversed polynomial division (ex. (x+1)/(x^2+2x+1) = 1/(x+1))
+
 2005-11-04 Niklas Knutsson  <nq@altern.org>
 
 	* Compile without warnings with -pedantic and -Wextra

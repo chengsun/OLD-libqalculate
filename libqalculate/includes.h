@@ -359,7 +359,7 @@ static const struct EvaluationOptions {
 	ApproximationMode approximation;
 	bool sync_units, sync_complex_unit_relations, keep_prefixes;
 	bool calculate_variables, calculate_functions, test_comparisons, isolate_x;
-	bool simplify_addition_powers, reduce_divisions, do_polynomial_division;
+	bool simplify_addition_powers, reduce_divisions, do_polynomial_division, merge_divisions;
 	bool allow_complex, allow_infinite;
 	bool assume_denominators_nonzero;
 	bool split_squares;
@@ -367,7 +367,7 @@ static const struct EvaluationOptions {
 	StructuringMode structuring;
 	ParseOptions parse_options;
 	const MathStructure *isolate_var;
-	EvaluationOptions() : approximation(APPROXIMATION_TRY_EXACT), sync_units(true), sync_complex_unit_relations(true), keep_prefixes(false), calculate_variables(true), calculate_functions(true), test_comparisons(true), isolate_x(true), simplify_addition_powers(true), reduce_divisions(true), do_polynomial_division(true), allow_complex(true), allow_infinite(true), assume_denominators_nonzero(false), split_squares(true), auto_post_conversion(POST_CONVERSION_NONE), structuring(STRUCTURING_SIMPLIFY), isolate_var(NULL) {}
+	EvaluationOptions() : approximation(APPROXIMATION_TRY_EXACT), sync_units(true), sync_complex_unit_relations(true), keep_prefixes(false), calculate_variables(true), calculate_functions(true), test_comparisons(true), isolate_x(true), simplify_addition_powers(true), reduce_divisions(true), do_polynomial_division(true), merge_divisions(true), allow_complex(true), allow_infinite(true), assume_denominators_nonzero(false), split_squares(true), auto_post_conversion(POST_CONVERSION_NONE), structuring(STRUCTURING_SIMPLIFY), isolate_var(NULL) {}
 } default_evaluation_options;
 
 extern MathStructure m_undefined, m_empty_vector, m_empty_matrix, m_zero, m_one, m_minus_one;

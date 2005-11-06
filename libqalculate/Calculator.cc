@@ -6876,7 +6876,7 @@ bool Calculator::fetchExchangeRates(int timeout, string wget_args) {
 	string cmdline;
 	if(hasGnomeVFS()) {
 		cmdline = "gnomevfs-copy http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
-		cmdline += " "; cmdline += homedir;
+		cmdline += " "; cmdline += homedir; cmdline += "eurofxref-daily.xml";
 	} else {	
 		cmdline = "wget";
 		cmdline += " "; cmdline += "--timeout="; cmdline += i2s(timeout);

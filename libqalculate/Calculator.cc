@@ -344,10 +344,10 @@ bool Calculator::utf8_pos_is_valid_in_name(char *pos) {
 	if(is_in(ILLEGAL_IN_NAMES, pos[0])) {
 		return false;
 	}
-	if(pos[0] < 0) {
+	if((unsigned char) pos[0] >= 0xC0) {
 		string str;
 		str += pos[0];
-		while(pos[1] < 0) {
+		while((unsigned char) pos[1] >= 0x80 && (unsigned char) pos[1] <= 0xBF) {
 			str += pos[1];
 			pos++;
 		}
@@ -3480,8 +3480,11 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 					}
 				} else if(po.unknowns_enabled && str[str_index] != EXP_CH && str[str_index] != EXP2_CH) {
 					size_t i = 1;
-					while(i <= unit_chars_left && str[str_index + i] < 0) {
+					if(str[str_index + 1] < 0) {
 						i++;
+						while(i <= unit_chars_left && (unsigned char) str[str_index + i] >= 0x80 && (unsigned char) str[str_index + i] <= 0xBF) {
+							i++;
+						}
 					}
 					stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
 					stmp += i2s(addId(new MathStructure(str.substr(str_index, i))));

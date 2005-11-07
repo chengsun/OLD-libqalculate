@@ -2,6 +2,9 @@
 
 	* Use quotient rule in differentation to possible get simpler results then if always using the product rule
 	* Fix fetching of exchange rates with gnome-vfs < 2.10
+	* Fix display of fractions in fractional mode "Decimal (Try Exact)" 
+	* Differentiation fixes
+	* Do unicode stuff correctly (a sequence of unicode characters was sometimes counted as one)
 
 2005-11-05 Niklas Knutsson  <nq@altern.org>
 

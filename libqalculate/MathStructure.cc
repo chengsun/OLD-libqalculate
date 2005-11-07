@@ -4911,7 +4911,7 @@ bool MathStructure::factorize(const EvaluationOptions &eo) {
 								}
 								APPEND(m1);
 								APPEND(m2);
-							}							
+							}
 							return true;
 						}
 					}
@@ -4928,7 +4928,8 @@ bool MathStructure::factorize(const EvaluationOptions &eo) {
 						if(!CHILD(i).isAddition()) {
 							int ret = CHILD(i).merge_multiplication(factor_mstruct, eo);
 							if(ret == 0) {
-								ret = factor_mstruct.merge_multiplication(CHILD(i), eo);
+								MathStructure mchild(CHILD(i));
+								ret = factor_mstruct.merge_multiplication(mchild, eo);
 								if(ret > 0) {
 									CHILD(i) = factor_mstruct;
 								}
@@ -6330,7 +6331,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 		}
 		case STRUCT_POWER: {
 			if(po.preserve_format) break;
-			if((!po.negative_exponents || CHILD(0).isAddition()) && CHILD(1).isNegate() && (!CHILD(0).isVector() || !CHILD(1).isMinusOne())) {
+			if(!po.negative_exponents && CHILD(1).isNegate() && (!CHILD(0).isVector() || !CHILD(1).isMinusOne())) {
 				if(CHILD(1)[0].isOne()) {
 					m_type = STRUCT_INVERSE;
 					ERASE(1);
@@ -6339,7 +6340,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 					transform(STRUCT_INVERSE);
 				}
 				formatsub(po, parent, pindex);
-			} else if(po.halfexp_to_sqrt && ((CHILD(1).isDivision() && CHILD(1)[0].isNumber() && CHILD(1)[0].number().isInteger() && CHILD(1)[1].isNumber() && CHILD(1)[1].number().isTwo()) || (CHILD(1).isNumber() && CHILD(1).number().denominatorIsTwo()) || (CHILD(1).isInverse() && CHILD(1)[0].isNumber() && CHILD(1)[0].number() == 2))) {
+			} else if(po.halfexp_to_sqrt && ((CHILD(1).isDivision() && CHILD(1)[0].isNumber() && CHILD(1)[0].number().isInteger() && CHILD(1)[1].isNumber() && CHILD(1)[1].number().isTwo() && ((!po.negative_exponents && CHILD(0).countChilds() == 0) || CHILD(1)[0].isOne())) || (CHILD(1).isNumber() && CHILD(1).number().denominatorIsTwo() && ((!po.negative_exponents && CHILD(0).countChilds() == 0) || CHILD(1).number().numeratorIsOne())) || (CHILD(1).isInverse() && CHILD(1)[0].isNumber() && CHILD(1)[0].number() == 2))) {
 				if(CHILD(1).isInverse() || (CHILD(1).isDivision() && CHILD(1)[0].number().isOne()) || (CHILD(1).isNumber() && CHILD(1).number().numeratorIsOne())) {
 					m_type = STRUCT_FUNCTION;
 					ERASE(1)
@@ -6411,6 +6412,27 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 					APPEND_NEW(num);
 				}
 				APPEND_NEW(den);
+			} else if(po.number_fraction_format == FRACTION_DECIMAL_EXACT && po.base != BASE_SEXAGESIMAL && po.base != BASE_TIME && o_number.isRational() && !o_number.isInteger() && !o_number.isApproximate()) {
+				string str_den = "";
+				InternalPrintStruct ips_n;
+				if(isApproximate()) ips_n.parent_approximate = true;
+				ips_n.parent_precision = precision();
+				ips_n.den = &str_den;
+				PrintOptions po2 = po;
+				po2.is_approximate = NULL;
+				o_number.print(po2, ips_n);
+				if(!str_den.empty()) {
+					Number num(o_number.numerator());
+					Number den(o_number.denominator());
+					clear(true);
+					if(num.isOne()) {
+						m_type = STRUCT_INVERSE;
+					} else {
+						m_type = STRUCT_DIVISION;
+						APPEND_NEW(num);
+					}
+					APPEND_NEW(den);
+				}
 			} else if(o_number.isComplex()) {
 				if(o_number.hasRealPart()) {
 					Number re(o_number.realPart());
@@ -8355,7 +8377,7 @@ bool MathStructure::differentiate(const MathStructure &x_var, const EvaluationOp
 					if(idiv < 0 && CHILD(i).isPower() && CHILD(i)[1].isNumber() && CHILD(i)[1].number().isNegative()) {
 						idiv = (int) i;
 					}
-					if((idiv >= 0 && (size_t) idiv != i) || i < SIZE - 1) {
+					if((idiv >= 0 && idiv != (int) i) || (idiv < 0 && i < SIZE - 1)) {
 						mstruct.addChild(CHILD(i));
 					}
 				}

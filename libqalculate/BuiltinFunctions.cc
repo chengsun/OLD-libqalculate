@@ -283,8 +283,7 @@ InverseFunction::InverseFunction() : MathFunction("inverse", 1) {
 }
 int InverseFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	mstruct = vargs[0];
-	mstruct.invertMatrix(eo);
-	return !mstruct.isUndefined();;
+	return mstruct.invertMatrix(eo);
 }
 
 ZetaFunction::ZetaFunction() : MathFunction("zeta", 1, 1, SIGN_ZETA) {
@@ -589,11 +588,17 @@ int AbsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 	return -1;
 }
 GcdFunction::GcdFunction() : MathFunction("gcd", 2) {
-	setArgumentDefinition(1, new IntegerArgument());
-	setArgumentDefinition(2, new IntegerArgument());
+/*	setArgumentDefinition(1, new IntegerArgument());
+	setArgumentDefinition(2, new IntegerArgument());*/
 }
 int GcdFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
-	FR_FUNCTION_2(gcd)
+
+	MathStructure m1(vargs[0]), m2(vargs[1]);
+	m1.eval(eo); m2.eval(eo);
+	MathStructure::gcd(m1, m2, mstruct, eo);
+	
+	return 1;
+//	FR_FUNCTION_2(gcd)
 }
 SignumFunction::SignumFunction() : MathFunction("sgn", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false));

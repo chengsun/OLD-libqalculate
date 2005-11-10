@@ -1,3 +1,16 @@
+2005-11-10 Niklas Knutsson  <nq@altern.org>
+
+	* MathStructure gcd() and lcm()
+	* New simplification using factorization and factorization combing denominators
+	* Increment library soname number (QALCULATE_CURRENT)
+
+2005-11-07 Niklas Knutsson  <nq@altern.org>
+
+	* Much more efficient determinant calculation
+	* Fix x*y^-1*y^-1+x*y^-1
+	* Fix cases when (x-1)^-1*(x-1)^-1 not returned (x-1)^-2
+	* Much more efficient inverse matrix calculation
+
 2005-11-06 Niklas Knutsson  <nq@altern.org>
 
 	* Use quotient rule in differentation to possible get simpler results then if always using the product rule

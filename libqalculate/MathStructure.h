@@ -320,9 +320,21 @@ class MathStructure {
 		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo);
 		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo);
 		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo);
+		bool calculateInverse(const EvaluationOptions &eo);
+		bool calculateNegate(const EvaluationOptions &eo);
+		bool calculateRaise(const MathStructure &mexp, const EvaluationOptions &eo);
+		bool calculateMultiply(const MathStructure &mmul, const EvaluationOptions &eo);
+		bool calculateDivide(const MathStructure &mdiv, const EvaluationOptions &eo);
+		bool calculateAdd(const MathStructure &madd, const EvaluationOptions &eo);
+		bool calculateSubtract(const MathStructure &msub, const EvaluationOptions &eo);
 		bool calculateFunctions(const EvaluationOptions &eo, bool recursive = true);
 		MathStructure &eval(const EvaluationOptions &eo = default_evaluation_options);
+		bool simplify(const EvaluationOptions &eo = default_evaluation_options);
 		bool factorize(const EvaluationOptions &eo = default_evaluation_options);
+		bool polynomialDivision(const MathStructure &m1, const MathStructure &m2, MathStructure &mresult, bool allow_remainder = true, const EvaluationOptions &eo = default_evaluation_options);
+		
+		static void gcd(const MathStructure &m1, const MathStructure &m2, MathStructure &mgcd, const EvaluationOptions &eo = default_evaluation_options);
+		static void lcm(const MathStructure &m1, const MathStructure &m2, MathStructure &mlcm, const EvaluationOptions &eo = default_evaluation_options);
 		
 		void addChild(const MathStructure &o);
 		void addChild_nocopy(MathStructure *o);

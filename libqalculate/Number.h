@@ -150,6 +150,8 @@ class Number {
 		bool numeratorIsOne() const;
 		bool isOdd() const;
 		
+		int integerLength() const;
+		
 		bool add(const Number &o);
 		bool subtract(const Number &o);
 		bool multiply(const Number &o);
@@ -171,12 +173,19 @@ class Number {
 		bool ceil(const Number &o);
 		bool trunc(const Number &o);
 		bool mod(const Number &o);
+		bool isqrt();
 		bool round();
 		bool floor();
 		bool ceil();
 		bool trunc();	
 		bool frac();		
 		bool rem(const Number &o);
+		
+		bool smod(const Number &o);
+		bool irem(const Number &o);
+		bool irem(const Number &o, Number &q);
+		bool iquo(const Number &o);
+		bool iquo(const Number &o, Number &r);
 
 		int getBoolean() const;
 		void toBoolean();
@@ -206,6 +215,7 @@ class Number {
 		bool log(const Number &o);
 		bool exp();
 		bool gcd(const Number &o);
+		bool lcm(const Number &o);
 		
 		bool factorial();
 		bool multiFactorial(const Number &o);

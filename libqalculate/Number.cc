@@ -993,8 +993,14 @@ bool Number::numeratorIsOne() const {
 	return !isInfinite() && !isComplex() && !isApproximateType() && cln::numerator(cln::rational(cln::realpart(value))) == 1;
 }
 bool Number::isOdd() const {
-	return isInteger() && oddp(cln::numerator(cln::rational(cln::realpart(value))));
+	return isInteger() && cln::oddp(cln::numerator(cln::rational(cln::realpart(value))));
 }
+
+int Number::integerLength() const {
+	if(isInteger()) return cln::integer_length(cln::numerator(cln::rational(cln::realpart(value))));
+	return 0;
+}
+
 
 bool Number::add(const Number &o) {
 	if(b_inf) return !o.isInfinite();
@@ -1422,7 +1428,7 @@ bool Number::mod(const Number &o) {
 	value = cln::mod(cln::realpart(value), cln::realpart(o.internalNumber()));
 	setPrecisionAndApproximateFrom(o);
 	return true;
-}	
+}
 bool Number::frac() {
 	if(isInfinite() || isComplex()) return false;
 	cl_N whole_value = cln::truncate1(cln::realpart(value));
@@ -1435,6 +1441,51 @@ bool Number::rem(const Number &o) {
 	value = cln::rem(cln::realpart(value), cln::realpart(o.internalNumber()));
 	setPrecisionAndApproximateFrom(o);
 	return true;
+}
+
+bool Number::smod(const Number &o) {
+	if(!isInteger() || !o.isInteger()) return false;
+	const cln::cl_I b2 = cln::ceiling1(cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) >> 1) - 1;
+	value = cln::mod(cln::numerator(cln::rational(cln::realpart(value))) + b2, cln::numerator(cln::rational(cln::realpart(o.internalNumber())))) - b2;
+	setPrecisionAndApproximateFrom(o);
+	return true;
+}	
+bool Number::irem(const Number &o) {
+	if(o.isZero()) return false;
+	if(!isInteger() || !o.isInteger()) return false;
+	value = cln::rem(cln::numerator(cln::rational(cln::realpart(value))), cln::numerator(cln::rational(cln::realpart(o.internalNumber()))));
+	return true;
+}
+bool Number::irem(const Number &o, Number &q) {
+	if(o.isZero()) return false;
+	if(!isInteger() || !o.isInteger()) return false;
+	const cln::cl_I_div_t rem_quo = cln::truncate2(cln::numerator(cln::rational(cln::realpart(value))), cln::numerator(cln::rational(cln::realpart(o.internalNumber()))));
+	q.setInternal(rem_quo.quotient);
+	value = rem_quo.remainder;
+	return true;
+}
+bool Number::iquo(const Number &o) {
+	if(o.isZero()) return false;
+	if(!isInteger() || !o.isInteger()) return false;
+	value = cln::truncate1(cln::numerator(cln::rational(cln::realpart(value))), cln::numerator(cln::rational(cln::realpart(o.internalNumber()))));
+	return true;
+}
+bool Number::iquo(const Number &o, Number &r) {
+	if(o.isZero()) return false;
+	if(!isInteger() || !o.isInteger()) return false;
+	const cln::cl_I_div_t rem_quo = cln::truncate2(cln::numerator(cln::rational(cln::realpart(value))), cln::numerator(cln::rational(cln::realpart(o.internalNumber()))));
+	r.setInternal(rem_quo.remainder);
+	value = rem_quo.quotient;
+	return true;
+}
+bool Number::isqrt() {
+	if(isInteger()) {
+		cln::cl_I iroot;
+		cln::isqrt(cln::numerator(cln::rational(cln::realpart(value))), &iroot);
+		value = iroot;
+		return true;
+	}
+	return false;
 }
 
 int Number::getBoolean() const {
@@ -1695,7 +1746,7 @@ bool Number::gcd(const Number &o) {
 	if(!isInteger() || !o.isInteger()) {
 		return false;
 	}
-	if(isZero() || o.isZero()) {
+	if(isZero() && o.isZero()) {
 		clear(); 
 		return true;
 	}
@@ -1704,6 +1755,13 @@ bool Number::gcd(const Number &o) {
 	value = cln::gcd(num, num_o);
 	setPrecisionAndApproximateFrom(o);
 	return true;
+}
+bool Number::lcm(const Number &o) {
+	if(isInteger() && o.isInteger()) {
+		value = cln::lcm(cln::numerator(cln::rational(cln::realpart(value))), cln::numerator(cln::rational(cln::realpart(o.internalNumber()))));
+		return true;
+	}
+	return multiply(o);
 }
 
 bool Number::factorial() {

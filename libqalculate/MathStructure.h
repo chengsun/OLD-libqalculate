@@ -319,12 +319,17 @@ class MathStructure {
 		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo);
 		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo);
 		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo);
-		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo);
+		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo, bool recursive = true);
 		bool calculateInverse(const EvaluationOptions &eo);
 		bool calculateNegate(const EvaluationOptions &eo);
+		bool calculateRaiseExponent(const EvaluationOptions &eo);
 		bool calculateRaise(const MathStructure &mexp, const EvaluationOptions &eo);
+		bool calculateMultiplyLast(const EvaluationOptions &eo);
+		bool calculateMultiplyIndex(size_t index, const EvaluationOptions &eo);
 		bool calculateMultiply(const MathStructure &mmul, const EvaluationOptions &eo);
 		bool calculateDivide(const MathStructure &mdiv, const EvaluationOptions &eo);
+		bool calculateAddLast(const EvaluationOptions &eo);
+		bool calculateAddIndex(size_t index, const EvaluationOptions &eo);
 		bool calculateAdd(const MathStructure &madd, const EvaluationOptions &eo);
 		bool calculateSubtract(const MathStructure &msub, const EvaluationOptions &eo);
 		bool calculateFunctions(const EvaluationOptions &eo, bool recursive = true);
@@ -455,7 +460,16 @@ class MathStructure {
 		const MathStructure &find_x_var() const;
 		bool isolate_x(const EvaluationOptions &eo, const MathStructure &x_var = m_undefined);
 		
-		
+
+//polynomials
+
+		bool isRationalPolynomial() const;
+		const Number &overallCoefficient() const;
+		const Number &degree(const MathStructure &xvar) const;
+		const Number &ldegree(const MathStructure &xvar) const;
+		void lcoefficient(const MathStructure &xvar, MathStructure &mcoeff) const;
+		void coefficient(const MathStructure &xvar, const Number &pownr, MathStructure &mcoeff) const;
+		Number maxCoefficient();
 
 };
 

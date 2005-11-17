@@ -1042,7 +1042,6 @@ int SinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 		mstruct.convert(CALCULATOR->getRadUnit());
 		mstruct /= CALCULATOR->getRadUnit();
 	}
-
 	int errors = 0;
 	if(eo.approximation == APPROXIMATION_TRY_EXACT) {
 		EvaluationOptions eo2 = eo;
@@ -1053,7 +1052,6 @@ int SinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 	} else {
 		mstruct.eval(eo);
 	}
-
 	bool b = false;
 	if(mstruct.isVariable() && mstruct.variable() == CALCULATOR->v_pi) {
 		mstruct.clear();

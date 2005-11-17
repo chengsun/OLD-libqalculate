@@ -141,6 +141,7 @@ bool Calculator::delDefaultStringAlternative(string replacement, string standard
 Calculator *calculator;
 
 MathStructure m_undefined, m_empty_vector, m_empty_matrix, m_zero, m_one, m_minus_one;
+Number nr_zero, nr_one, nr_minus_one;
 EvaluationOptions no_evaluation;
 ExpressionName empty_expression_name;
 
@@ -262,6 +263,9 @@ Calculator::Calculator() {
 	m_zero.clear();
 	m_one.set(1, 1);
 	m_minus_one.set(-1, 1);
+	nr_zero.clear();
+	nr_one.set(1, 1);
+	nr_minus_one.set(-1, 1);
 	no_evaluation.approximation = APPROXIMATION_EXACT;
 	no_evaluation.structuring = STRUCTURING_NONE;
 	no_evaluation.sync_units = false;
@@ -4762,7 +4766,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 		xmlFreeDoc(doc);
 		return false;
 	}
-	int version_numbers[] = {0, 9, 0};
+	int version_numbers[] = {0, 9, 1};
 	parse_qalculate_version(version, version_numbers);
 	
 	ParseOptions po;

@@ -1081,6 +1081,7 @@ Argument::Argument(string name_, bool does_test, bool does_error) {
 	b_matrix = false;
 	b_text = false;
 	b_error = does_error;
+	b_rational = false;
 }
 Argument::Argument(const Argument *arg) {
 	b_text = false;
@@ -1098,8 +1099,16 @@ string Argument::printlong() const {
 		str += " ";
 		str += _("that is nonzero");
 	}
-	if(!scondition.empty()) {
+	if(b_rational) {
 		if(!b_zero) {
+			str += " ";
+			str += _("and");
+		}
+		str += " ";
+		str += _("that is rational (polynomial)");
+	} 
+	if(!scondition.empty()) {
+		if(!b_zero || b_rational) {
 			str += " ";
 			str += _("and");
 		}
@@ -1117,6 +1126,7 @@ void Argument::set(const Argument *arg) {
 	b_zero = !arg->zeroForbidden();
 	b_test = arg->tests();
 	b_matrix = arg->matrixAllowed();
+	b_rational = arg->rationalPolynomial();
 }
 bool Argument::test(MathStructure &value, int index, MathFunction *f, const EvaluationOptions &eo) const {
 	if(!b_test) {
@@ -1130,6 +1140,13 @@ bool Argument::test(MathStructure &value, int index, MathFunction *f, const Eval
 			evaled = true;
 		}
 		b = value.representsNonZero();
+	}
+	if(b && b_rational) {
+		if(!evaled) {
+			value.eval(eo);	
+			evaled = true;
+		}
+		b = value.isRationalPolynomial();
 	}
 	if(!b && b_matrix) {
 		if(!evaled && !value.isMatrix()) {
@@ -1323,6 +1340,8 @@ int Argument::type() const {
 }
 bool Argument::matrixAllowed() const {return b_matrix;}
 void Argument::setMatrixAllowed(bool allow_matrix) {b_matrix = allow_matrix;}
+bool Argument::rationalPolynomial() const {return b_rational;}
+void Argument::setRationalPolynomial(bool rational_polynomial) {b_rational = rational_polynomial;}
 
 NumberArgument::NumberArgument(string name_, ArgumentMinMaxPreDefinition minmax, bool does_test, bool does_error) : Argument(name_, does_test, does_error) {
 	fmin = NULL;
@@ -1330,6 +1349,7 @@ NumberArgument::NumberArgument(string name_, ArgumentMinMaxPreDefinition minmax,
 	b_incl_min = true;
 	b_incl_max = true;
 	b_complex = true;
+	b_rational_number = false;
 	switch(minmax) {
 		case ARGUMENT_MIN_MAX_POSITIVE: {
 			fmin = new Number();
@@ -1416,11 +1436,17 @@ bool NumberArgument::complexAllowed() const {
 void NumberArgument::setComplexAllowed(bool allow_complex) {
 	b_complex = allow_complex;
 }
+bool NumberArgument::rationalNumber() const {
+	return b_rational_number;
+}
+void NumberArgument::setRationalNumber(bool rational_number) {
+	b_rational_number = rational_number;
+}
 bool NumberArgument::subtest(MathStructure &value, const EvaluationOptions &eo) const {
 	if(!value.isNumber()) {
 		value.eval(eo);
 	}
-	if(!value.isNumber() || (!b_complex && value.number().isComplex())) {
+	if(!value.isNumber() || (!b_rational_number && !value.number().isRational()) || (!b_complex && value.number().isComplex())) {
 		return false;
 	}
 	if(fmin) {
@@ -1449,6 +1475,7 @@ void NumberArgument::set(const Argument *arg) {
 		b_incl_min = farg->includeEqualsMin();
 		b_incl_max = farg->includeEqualsMax();
 		b_complex = farg->complexAllowed();
+		b_rational_number = farg->rationalNumber();
 		if(fmin) {
 			delete fmin;
 			fmin = NULL;
@@ -1471,7 +1498,9 @@ string NumberArgument::print() const {
 }
 string NumberArgument::subprintlong() const {
 	string str;
-	if(b_complex) {
+	if(b_rational_number) {
+		str += _("a rational number");
+	} else if(b_complex) {
 		str += _("a number");
 	} else {
 		str += _("a real number");

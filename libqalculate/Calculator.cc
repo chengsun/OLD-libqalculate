@@ -1152,6 +1152,7 @@ void Calculator::addBuiltinFunctions() {
 	f_abs = addFunction(new AbsFunction());
 	f_signum = addFunction(new SignumFunction());
 	f_gcd = addFunction(new GcdFunction());
+	f_lcm = addFunction(new LcmFunction());
 	f_round = addFunction(new RoundFunction());
 	f_floor = addFunction(new FloorFunction());
 	f_ceil = addFunction(new CeilFunction());
@@ -1160,6 +1161,15 @@ void Calculator::addBuiltinFunctions() {
 	f_frac = addFunction(new FracFunction());
 	f_rem = addFunction(new RemFunction());
 	f_mod = addFunction(new ModFunction());
+	
+	f_polynomial_unit = addFunction(new PolynomialUnitFunction());
+	f_polynomial_primpart = addFunction(new PolynomialPrimpartFunction());
+	f_polynomial_content = addFunction(new PolynomialContentFunction());
+	f_coeff = addFunction(new CoeffFunction());
+	f_lcoeff = addFunction(new LCoeffFunction());
+	f_tcoeff = addFunction(new TCoeffFunction());
+	f_degree = addFunction(new DegreeFunction());
+	f_ldegree = addFunction(new LDegreeFunction());
 
 	f_re = addFunction(new ReFunction());
 	f_im = addFunction(new ImFunction());

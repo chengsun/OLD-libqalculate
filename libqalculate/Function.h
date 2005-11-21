@@ -150,7 +150,7 @@ class Argument {
   protected:
   
   	string sname, scondition;
-	bool b_zero, b_test, b_matrix, b_text, b_error;
+	bool b_zero, b_test, b_matrix, b_text, b_error, b_rational;
 	virtual bool subtest(MathStructure &value, const EvaluationOptions &eo) const;
 	virtual string subprintlong() const;
 	
@@ -190,6 +190,9 @@ class Argument {
 	bool matrixAllowed() const;
 	void setMatrixAllowed(bool allow_matrix);
 	
+	bool rationalPolynomial() const;
+	void setRationalPolynomial(bool rational_polynomial);
+	
 	virtual bool suggestsQuotes() const;
 	
 	virtual int type() const;
@@ -202,7 +205,7 @@ class NumberArgument : public Argument {
   
 	Number *fmin, *fmax;
 	bool b_incl_min, b_incl_max;
-	bool b_complex;
+	bool b_complex, b_rational_number;
 
   protected:
   
@@ -231,6 +234,8 @@ class NumberArgument : public Argument {
 	
 	bool complexAllowed() const;
 	void setComplexAllowed(bool allow_complex);
+	bool rationalNumber() const;
+	void setRationalNumber(bool rational_number);
 
 	virtual int type() const;
 

@@ -1,3 +1,24 @@
+2005-11-21 Niklas Knutsson  <nq@altern.org>
+
+	* Lots of evaluation and factorization fixes
+	* Pass parent to some functions so the reference can be replaced for the whole child
+	* New MathStructure sorting algorithm using the fact that the structure usually already is well sorted,
+	  reducing the time to factorize (x+y)^50 to a third
+
+2005-11-19 Niklas Knutsson  <nq@altern.org>
+
+	* Add rational polynomial parameter to arguments
+	* Add rational number parameter to number arguments
+	* Add polynomial functions -- coeff(), lcoeff(), pcontent(), degree(), etc.
+	* Fix lcoefficient (confused by l in ldegree mening low and l in coefficient leading)
+	* A more efficient differentiate function for sqrfree
+
+2005-11-18 Niklas Knutsson  <nq@altern.org>
+
+	* Fixes
+	* Determinant from GiNaC
+	* Only use the new inverse function for numeric matrices
+
 2005-11-17 Niklas Knutsson  <nq@altern.org>
 
 	* "borrow" sqrfree factorization and related functions from GiNaC

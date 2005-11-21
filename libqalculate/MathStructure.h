@@ -94,7 +94,7 @@ class MathStructure {
 		
 		void set(const MathStructure &o, bool merge_precision = false);
 		void set_nocopy(MathStructure &o, bool merge_precision = false);
-		void setToChild(size_t index, bool merge_precision = false);
+		void setToChild(size_t index, bool merge_precision = false, MathStructure *mparent = NULL, size_t index_this = 1);
 		void set(int num, int den = 1, int exp10 = 0, bool preserve_precision = false);
 		void set(string sym, bool preserve_precision = false);
 		void set(double float_value, bool preserve_precision = false);
@@ -313,34 +313,32 @@ class MathStructure {
 		
 		void mergePrecision(const MathStructure &o);
 		
-		int merge_addition(MathStructure &mstruct, const EvaluationOptions &eo);
-		int merge_multiplication(MathStructure &mstruct, const EvaluationOptions &eo, bool do_append = true);
-		int merge_power(MathStructure &mstruct, const EvaluationOptions &eo);
-		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo);
-		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo);
-		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo);
-		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo, bool recursive = true);
-		bool calculateInverse(const EvaluationOptions &eo);
-		bool calculateNegate(const EvaluationOptions &eo);
-		bool calculateRaiseExponent(const EvaluationOptions &eo);
-		bool calculateRaise(const MathStructure &mexp, const EvaluationOptions &eo);
-		bool calculateMultiplyLast(const EvaluationOptions &eo);
-		bool calculateMultiplyIndex(size_t index, const EvaluationOptions &eo);
-		bool calculateMultiply(const MathStructure &mmul, const EvaluationOptions &eo);
-		bool calculateDivide(const MathStructure &mdiv, const EvaluationOptions &eo);
-		bool calculateAddLast(const EvaluationOptions &eo);
-		bool calculateAddIndex(size_t index, const EvaluationOptions &eo);
-		bool calculateAdd(const MathStructure &madd, const EvaluationOptions &eo);
-		bool calculateSubtract(const MathStructure &msub, const EvaluationOptions &eo);
+		int merge_addition(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
+		int merge_multiplication(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool do_append = true);
+		int merge_power(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
+		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
+		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
+		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
+		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo, bool recursive = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateMergeIndex(size_t index, const EvaluationOptions &eo, const EvaluationOptions &feo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateInverse(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateNegate(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateRaiseExponent(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateRaise(const MathStructure &mexp, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateMultiplyLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateMultiplyIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateMultiply(const MathStructure &mmul, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateDivide(const MathStructure &mdiv, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateAddLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateAddIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateAdd(const MathStructure &madd, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateSubtract(const MathStructure &msub, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateFunctions(const EvaluationOptions &eo, bool recursive = true);
 		MathStructure &eval(const EvaluationOptions &eo = default_evaluation_options);
-		bool simplify(const EvaluationOptions &eo = default_evaluation_options);
+		bool simplify(const EvaluationOptions &eo = default_evaluation_options, bool unfactorize = true);
 		bool factorize(const EvaluationOptions &eo = default_evaluation_options);
-		bool polynomialDivision(const MathStructure &m1, const MathStructure &m2, MathStructure &mresult, bool allow_remainder = true, const EvaluationOptions &eo = default_evaluation_options);
 		
-		static void gcd(const MathStructure &m1, const MathStructure &m2, MathStructure &mgcd, const EvaluationOptions &eo = default_evaluation_options);
-		static void lcm(const MathStructure &m1, const MathStructure &m2, MathStructure &mlcm, const EvaluationOptions &eo = default_evaluation_options);
-		
+		void swapChilds(size_t index1, size_t index2);
 		void addChild(const MathStructure &o);
 		void addChild_nocopy(MathStructure *o);
 		void delChild(size_t index);
@@ -418,6 +416,9 @@ class MathStructure {
 		void addColumn(const MathStructure &mfill);
 		void resizeMatrix(size_t r, size_t c, const MathStructure &mfill);
 		bool matrixIsSymmetric() const;
+		bool isNumericMatrix() const;
+		int pivot(size_t ro, size_t co, bool symbolic = true);
+		int gaussianElimination(const EvaluationOptions &eo = default_evaluation_options, bool det = false);
 		MathStructure &determinant(MathStructure &mstruct, const EvaluationOptions &eo) const;
 		MathStructure &permanent(MathStructure &mstruct, const EvaluationOptions &eo) const;
 		void setToIdentityMatrix(size_t n);
@@ -442,11 +443,13 @@ class MathStructure {
 		int containsRepresentativeOf(const MathStructure &mstruct, bool check_variables = false, bool check_functions = false) const;
 		int containsType(int mtype, bool structural_only = true, bool check_variables = false, bool check_functions = false) const;
 		int containsRepresentativeOfType(int mtype, bool check_variables = false, bool check_functions = false) const;
+		bool containsOpaqueContents() const;
 		bool containsAdditionPower() const;
 		bool containsUnknowns() const;
 		bool containsDivision() const;
 		void findAllUnknowns(MathStructure &unknowns_vector);
 		bool replace(const MathStructure &mfrom, const MathStructure &mto);
+		bool calculateReplace(const MathStructure &mfrom, const MathStructure &mto, const EvaluationOptions &eo);
 		bool replace(const MathStructure &mfrom1, const MathStructure &mto1, const MathStructure &mfrom2, const MathStructure &mto2);
 		bool removeType(int mtype);
 		
@@ -468,9 +471,18 @@ class MathStructure {
 		const Number &degree(const MathStructure &xvar) const;
 		const Number &ldegree(const MathStructure &xvar) const;
 		void lcoefficient(const MathStructure &xvar, MathStructure &mcoeff) const;
+		void tcoefficient(const MathStructure &xvar, MathStructure &mcoeff) const;
 		void coefficient(const MathStructure &xvar, const Number &pownr, MathStructure &mcoeff) const;
 		Number maxCoefficient();
-
+		static bool polynomialDivide(const MathStructure &mnum, const MathStructure &mden, MathStructure &mquotient, const EvaluationOptions &eo, bool check_args = true);
+		static bool polynomialQuotient(const MathStructure &mnum, const MathStructure &mden, const MathStructure &xvar, MathStructure &mquotient, const EvaluationOptions &eo, bool check_args = true);
+		int polynomialUnit(const MathStructure &xvar) const;
+		void polynomialContent(const MathStructure &xvar, MathStructure &mcontent, const EvaluationOptions &eo) const;
+		void polynomialPrimpart(const MathStructure &xvar, MathStructure &mprim, const EvaluationOptions &eo) const;
+		void polynomialPrimpart(const MathStructure &xvar, const MathStructure &c, MathStructure &mprim, const EvaluationOptions &eo) const;
+		static bool lcm(const MathStructure &m1, const MathStructure &m2, MathStructure &mlcm, const EvaluationOptions &eo, bool check_args = true);
+		static bool gcd(const MathStructure &m1, const MathStructure &m2, MathStructure &mresult, const EvaluationOptions &eo, MathStructure *ca = NULL, MathStructure *cb = NULL, bool check_args = true);
+		
 };
 
 #endif

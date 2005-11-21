@@ -633,6 +633,116 @@
         </argument>
       </function>
     </category>
+    <category>
+      <_title>Polynomials</_title>
+      <builtin_function name="coeff">
+        <_title>Coefficient</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>coeff</_name>
+        </name>
+        <argument index="1">
+          <_title>Polynomial</_title>
+        </argument>
+        <argument index="2">
+          <_title>Number</_title>
+        </argument>
+	<argument index="2">
+          <_title>Variable</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="lcoeff">
+        <_title>Leading Coefficient</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>lcoeff</_name>
+        </name>
+        <argument index="1">
+          <_title>Polynomial</_title>
+        </argument>
+	<argument index="2">
+          <_title>Variable</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="tcoeff">
+        <_title>Trailing Coefficient</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>tcoeff</_name>
+        </name>
+        <argument index="1">
+          <_title>Polynomial</_title>
+        </argument>
+	<argument index="2">
+          <_title>Variable</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="degree">
+        <_title>Degree</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>degree</_name>
+        </name>
+        <argument index="1">
+          <_title>Polynomial</_title>
+        </argument>
+	<argument index="2">
+          <_title>Variable</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="ldegree">
+        <_title>Lowest Degree (Valuation)</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>ldegree</_name>
+        </name>
+        <argument index="1">
+          <_title>Polynomial</_title>
+        </argument>
+	<argument index="2">
+          <_title>Variable</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="pcontent">
+        <_title>Content Part</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>pcontent</_name>
+        </name>
+        <argument index="1">
+          <_title>Polynomial</_title>
+        </argument>
+	<argument index="2">
+          <_title>Variable</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="primpart">
+        <_title>Primitive Part</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>primpart</_name>
+        </name>
+        <argument index="1">
+          <_title>Polynomial</_title>
+        </argument>
+	<argument index="2">
+          <_title>Variable</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="punit">
+        <_title>Unit Part</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>punit</_name>
+        </name>
+        <argument index="1">
+          <_title>Polynomial</_title>
+        </argument>
+	<argument index="2">
+          <_title>Variable</_title>
+        </argument>
+      </builtin_function>
+    </category>
     <builtin_function name="gcd">
       <_title>Greatest Common Divisor</_title>
       <name index="1">
@@ -640,10 +750,23 @@
         <_name>gcd</_name>
       </name>
       <argument index="1">
-        <_title>1st Number</_title>
+        <_title>1st Value</_title>
       </argument>
       <argument index="2">
-        <_title>2nd Number</_title>
+        <_title>2nd Value</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="lcm">
+      <_title>Least Common Multiplier</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>lcm</_name>
+      </name>
+      <argument index="1">
+        <_title>1st Value</_title>
+      </argument>
+      <argument index="2">
+        <_title>2nd Value</_title>
       </argument>
     </builtin_function>
     <category>

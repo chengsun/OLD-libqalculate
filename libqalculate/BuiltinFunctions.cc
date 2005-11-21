@@ -26,6 +26,7 @@
 #define NON_COMPLEX_NUMBER_ARGUMENT(i)				NumberArgument *arg_non_complex##i = new NumberArgument(); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
 #define NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR(i)			NumberArgument *arg_non_complex##i = new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
 #define NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR_NONZERO(i)		NumberArgument *arg_non_complex##i = new NumberArgument("", ARGUMENT_MIN_MAX_NONZERO, true, false); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
+#define RATIONAL_POLYNOMIAL_ARGUMENT(i)				Argument *arg_poly##i = new Argument(); arg_poly##i->setRationalPolynomial(true); setArgumentDefinition(i, arg_poly##i);
 
 
 VectorFunction::VectorFunction() : MathFunction("vector", -1) {
@@ -588,17 +589,24 @@ int AbsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 	return -1;
 }
 GcdFunction::GcdFunction() : MathFunction("gcd", 2) {
-/*	setArgumentDefinition(1, new IntegerArgument());
-	setArgumentDefinition(2, new IntegerArgument());*/
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	RATIONAL_POLYNOMIAL_ARGUMENT(2)
 }
 int GcdFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
-
-	MathStructure m1(vargs[0]), m2(vargs[1]);
-	m1.eval(eo); m2.eval(eo);
-	MathStructure::gcd(m1, m2, mstruct, eo);
-	
-	return 1;
-//	FR_FUNCTION_2(gcd)
+	if(MathStructure::gcd(vargs[0], vargs[1], mstruct, eo)) {	
+		return 1;
+	}
+	return 0;
+}
+LcmFunction::LcmFunction() : MathFunction("lcm", 2) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	RATIONAL_POLYNOMIAL_ARGUMENT(2)
+}
+int LcmFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	if(MathStructure::lcm(vargs[0], vargs[1], mstruct, eo)) {
+		return 1;
+	}
+	return 0;
 }
 SignumFunction::SignumFunction() : MathFunction("sgn", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false));
@@ -713,6 +721,81 @@ ModFunction::ModFunction() : MathFunction("mod", 2) {
 int ModFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION_2(mod)
 }
+
+PolynomialUnitFunction::PolynomialUnitFunction() : MathFunction("punit", 1, 2) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	setArgumentDefinition(2, new SymbolicArgument());
+	setDefaultValue(2, "x");
+}
+int PolynomialUnitFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	mstruct.set(vargs[0].polynomialUnit(vargs[1]), 0);
+	return 1;
+}
+PolynomialPrimpartFunction::PolynomialPrimpartFunction() : MathFunction("primpart", 1, 2) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	setArgumentDefinition(2, new SymbolicArgument());
+	setDefaultValue(2, "x");
+}
+int PolynomialPrimpartFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	vargs[0].polynomialPrimpart(vargs[1], mstruct, eo);
+	return 1;
+}
+PolynomialContentFunction::PolynomialContentFunction() : MathFunction("pcontent", 1, 2) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	setArgumentDefinition(2, new SymbolicArgument());
+	setDefaultValue(2, "x");
+}
+int PolynomialContentFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	vargs[0].polynomialContent(vargs[1], mstruct, eo);
+	return 1;
+}
+CoeffFunction::CoeffFunction() : MathFunction("coeff", 2, 3) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_NONNEGATIVE));
+	setArgumentDefinition(3, new SymbolicArgument());
+	setDefaultValue(3, "x");
+}
+int CoeffFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	vargs[0].coefficient(vargs[2], vargs[1].number(), mstruct);
+	return 1;
+}
+LCoeffFunction::LCoeffFunction() : MathFunction("lcoeff", 1, 2) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	setArgumentDefinition(2, new SymbolicArgument());
+	setDefaultValue(2, "x");
+}
+int LCoeffFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	vargs[0].lcoefficient(vargs[1], mstruct);
+	return 1;
+}
+TCoeffFunction::TCoeffFunction() : MathFunction("tcoeff", 1, 2) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	setArgumentDefinition(2, new SymbolicArgument());
+	setDefaultValue(2, "x");
+}
+int TCoeffFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	vargs[0].tcoefficient(vargs[1], mstruct);
+	return 1;
+}
+DegreeFunction::DegreeFunction() : MathFunction("degree", 1, 2) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	setArgumentDefinition(2, new SymbolicArgument());
+	setDefaultValue(2, "x");
+}
+int DegreeFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	mstruct = vargs[0].degree(vargs[1]);
+	return 1;
+}
+LDegreeFunction::LDegreeFunction() : MathFunction("ldegree", 1, 2) {
+	RATIONAL_POLYNOMIAL_ARGUMENT(1)
+	setArgumentDefinition(2, new SymbolicArgument());
+	setDefaultValue(2, "x");
+}
+int LDegreeFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	mstruct = vargs[0].ldegree(vargs[1]);
+	return 1;
+}
+
 
 ImFunction::ImFunction() : MathFunction("im", 1) {
 	setArgumentDefinition(1, new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false));

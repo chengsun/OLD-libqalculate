@@ -1,3 +1,11 @@
+2005-11-23 Niklas Knutsson  <nq@altern.org>
+
+	* More fixes (I'm not very good at keeping track of them)
+
+2005-11-22 Niklas Knutsson  <nq@altern.org>
+
+	* Preserve factorization print option (for (3/4*(x+1))/(y+1))
+
 2005-11-21 Niklas Knutsson  <nq@altern.org>
 
 	* Lots of evaluation and factorization fixes

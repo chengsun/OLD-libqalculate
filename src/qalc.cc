@@ -34,9 +34,10 @@ EvaluationOptions evalops, saved_evalops;
 AssumptionNumberType saved_assumption_type;
 AssumptionSign saved_assumption_sign;
 int saved_precision;
-FILE *view_pipe_r, *view_pipe_w;
-pthread_t view_thread;
-pthread_attr_t view_thread_attr;
+FILE *view_pipe_r, *view_pipe_w, *command_pipe_r, *command_pipe_w;
+pthread_t view_thread, command_thread;
+pthread_attr_t view_thread_attr, command_thread_attr;
+bool command_aborted = false, command_thread_started;
 bool b_busy = false;
 string expression_str;
 bool expression_executed = false;
@@ -47,7 +48,9 @@ struct timeval timeout;
 char buffer[1000];
 
 void *view_proc(void *pipe);
+void *command_proc(void *pipe);
 void execute_expression(bool goto_input = true);
+void execute_command(int command_type);
 void load_preferences();
 bool save_preferences(bool mode = false);
 bool save_mode();
@@ -58,6 +61,13 @@ void result_format_updated();
 void result_action_executed();
 void result_prefix_changed(Prefix *prefix = NULL);
 void expression_format_updated();
+
+FILE *cfile;
+
+enum {
+	COMMAND_FACTORIZE,
+	COMMAND_SIMPLIFY
+};
 
 #define EQUALS_IGNORECASE_AND_LOCAL(x,y,z)	(equalsIgnoreCase(x, y) || equalsIgnoreCase(x, z))
 
@@ -258,15 +268,17 @@ int enable_unicode = -1;
 
 void handle_exit() {
 	if(enable_unicode >= 0) {
-		printops.use_unicode_signs = !enable_unicode;
+		printops.use_unicode_signs = enable_unicode;
 	} 
-	if(save_mode_on_exit) {
-		save_mode();
-	} else {
-		save_preferences();
-	}
-	if(save_defs_on_exit) {
-		save_defs();
+	if(!cfile) {
+		if(save_mode_on_exit) {
+			save_mode();
+		} else {
+			save_preferences();
+		}
+		if(save_defs_on_exit) {
+			save_defs();
+		}
 	}
 	pthread_cancel(view_thread);
 	CALCULATOR->terminateThreads();
@@ -457,6 +469,21 @@ void set_option(string str) {
 			evalops.auto_post_conversion = (AutoPostConversion) v;
 			expression_format_updated();
 		}
+	} else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "algebra mode", _("algebra mode"))) {
+		int v = -1;
+		if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "none", _("none"))) v = STRUCTURING_NONE;
+		else if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "simplify", _("simplify"))) v = STRUCTURING_SIMPLIFY;
+		else if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "factorize", _("factorize"))) v = STRUCTURING_FACTORIZE;
+		else if(svalue.find_first_not_of(SPACES NUMBERS) == string::npos) {
+			v = s2i(svalue);
+		}
+		if(v < 0 || v > 2) {
+			PUTS_UNICODE(_("Illegal value."));
+		} else {
+			evalops.structuring = (StructuringMode) v;
+			printops.allow_factorization = (evalops.structuring == STRUCTURING_FACTORIZE);
+			expression_format_updated();
+		}
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "exact", _("exact"))) {
 		int v = s2b(svalue); 
 		if(v < 0) {
@@ -588,6 +615,10 @@ int main (int argc, char *argv[]) {
 	string calc_arg;
 	vector<string> set_option_strings;
 	bool calc_arg_begun = false;
+	string command_file;
+	cfile = NULL;
+	bool batch = false;
+	printops.use_unicode_signs = false;
 	for(int i = 1; i < argc; i++) {
 		if(calc_arg_begun) {
 			calc_arg += " ";
@@ -600,6 +631,8 @@ int main (int argc, char *argv[]) {
 			fputs("\t", stdout); PUTS_UNICODE(_("turn on/off unicode support"));
 			fputs("\n\t-set", stdout); fputs(" \"", stdout); FPUTS_UNICODE(_("OPTION"), stdout); fputs(" ", stdout); FPUTS_UNICODE(_("VALUE"), stdout); fputs("\"\n", stdout);
 			fputs("\t", stdout); PUTS_UNICODE(_("as set command in interactive program session (ex. -set \"base 16\")"));
+			fputs("\n\t-f, -file", stdout); fputs(" ", stdout); FPUTS_UNICODE(_("FILE"), stdout); fputs("\n", stdout);
+			fputs("\t", stdout); PUTS_UNICODE(_("executes commands from a file first"));
 			puts("");
 			PUTS_UNICODE(_("The program will start in interactive mode if no expression is specified."));
 			puts("");
@@ -614,6 +647,14 @@ int main (int argc, char *argv[]) {
 				set_option_strings.push_back(argv[i]);
 			} else {
 				puts(_("No option and value specified for set command."));
+			}
+		} else if(!calc_arg_begun && (strcmp(argv[i], "-file") == 0 || strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0)) {
+			i++;
+			if(i < argc) {
+				command_file = argv[i];
+				remove_blank_ends(command_file);
+			} else {
+				puts(_("No file specified command."));
 			}
 		} else {
 			if(strlen(argv[i]) >= 2 && ((argv[i][0] == '\"' && argv[i][strlen(argv[i] - 1)] == '\"') || (argv[i][0] == '\'' && argv[i][strlen(argv[i] - 1)] == '\''))) {
@@ -663,7 +704,7 @@ int main (int argc, char *argv[]) {
 #endif
 
 	//exchange rates
-	if(first_qalculate_run && canfetch) {
+	if(first_qalculate_run && canfetch && command_file.empty()) {
 		if(ask_question(_("You need the download exchange rates to be able to convert between different currencies.\nYou can later get current exchange rates with the \"exchange rates\" command.\nDo you want to fetch exchange rates now from the Internet (default yes)?"))) {
 			CALCULATOR->fetchExchangeRates(5);
 		}
@@ -706,10 +747,28 @@ int main (int argc, char *argv[]) {
 	pthread_attr_init(&view_thread_attr);
 	pthread_create(&view_thread, &view_thread_attr, view_proc, view_pipe_r);
 	
+	int pipe_wr2[] = {0, 0};
+	pipe(pipe_wr2);
+	command_pipe_r = fdopen(pipe_wr2[0], "r");
+	command_pipe_w = fdopen(pipe_wr2[1], "w");
+	pthread_attr_init(&command_thread_attr);
+	command_thread_started = false;
+	
 	timeout.tv_sec = 0;
 	timeout.tv_usec = 100000;
 
-	if(!calc_arg.empty()) {
+	if(!command_file.empty()) {
+		if(command_file == "-") {
+			cfile = stdin;
+		} else {
+			cfile = fopen(command_file.c_str(), "r");
+			if(!cfile) {
+				printf(_("Could not open \"%s\".\n"), command_file.c_str());
+			}
+		}
+	}
+
+	if(!cfile && !calc_arg.empty()) {
 		if(!printops.use_unicode_signs && contains_unicode_char(calc_arg.c_str())) {
 			gchar *gstr = g_locale_to_utf8(calc_arg.c_str(), -1, NULL, NULL, NULL);
 			if(gstr) {
@@ -746,35 +805,83 @@ int main (int argc, char *argv[]) {
 	size_t slen, ispace;
 	
 	while(true) {
-#ifdef HAVE_LIBREADLINE
-		rlbuffer = readline("> ");
-		if(rlbuffer == NULL) break;
-		if(!printops.use_unicode_signs && contains_unicode_char(rlbuffer)) {
-			gchar *gstr = g_locale_to_utf8(rlbuffer, -1, NULL, NULL, NULL);
-			if(gstr) {
-				str = gstr;
-				g_free(gstr);
-			} else {
-				str = rlbuffer;
+		if(cfile) {
+			if(!fgets(buffer, 1000, cfile)) {
+				if(batch) {
+					break;
+				} else {
+					if(cfile != stdin) {
+						fclose(cfile);
+					}
+					cfile = NULL;
+					if(!calc_arg.empty()) {
+						if(!printops.use_unicode_signs && contains_unicode_char(calc_arg.c_str())) {
+							gchar *gstr = g_locale_to_utf8(calc_arg.c_str(), -1, NULL, NULL, NULL);
+							if(gstr) {
+								expression_str = gstr;
+								g_free(gstr);
+							} else {
+								expression_str = calc_arg;
+							}
+						} else {
+							expression_str = calc_arg;
+						}
+						size_t index = expression_str.find_first_of(ID_WRAPS);
+						if(index != string::npos) {
+							printf(_("Illegal character, \'%c\', in expression."), expression_str[index]);
+							puts("");
+						} else {
+							execute_expression(false);
+						}
+						pthread_cancel(view_thread);
+						CALCULATOR->terminateThreads();
+						return 0;
+					}
+					continue;
+				}
 			}
-		} else {
-			str = rlbuffer;
-		}
-#else
-		fputs("> ", stdout);
-		fgets(buffer, 1000, stdin);
-		if(!printops.use_unicode_signs && contains_unicode_char(buffer)) {
-			gchar *gstr = g_locale_to_utf8(buffer, -1, NULL, NULL, NULL);
-			if(gstr) {
-				str = gstr;
-				g_free(gstr);
-			} else { 
+			if(!printops.use_unicode_signs && contains_unicode_char(buffer)) {
+				gchar *gstr = g_locale_to_utf8(buffer, -1, NULL, NULL, NULL);
+				if(gstr) {
+					str = gstr;
+					g_free(gstr);
+				} else { 
+					str = buffer;
+				}
+			} else {
 				str = buffer;
 			}
 		} else {
-			str = buffer;
-		}
-#endif				
+#ifdef HAVE_LIBREADLINE
+			rlbuffer = readline("> ");
+			if(rlbuffer == NULL) break;
+			if(!printops.use_unicode_signs && contains_unicode_char(rlbuffer)) {
+				gchar *gstr = g_locale_to_utf8(rlbuffer, -1, NULL, NULL, NULL);
+				if(gstr) {
+					str = gstr;
+					g_free(gstr);
+				} else {
+					str = rlbuffer;
+				}
+			} else {
+				str = rlbuffer;
+			}
+#else
+			fputs("> ", stdout);
+			fgets(buffer, 1000, stdin);
+			if(!printops.use_unicode_signs && contains_unicode_char(buffer)) {
+				gchar *gstr = g_locale_to_utf8(buffer, -1, NULL, NULL, NULL);
+				if(gstr) {
+					str = gstr;
+					g_free(gstr);
+				} else { 
+					str = buffer;
+				}
+			} else {
+				str = buffer;
+			}
+#endif	
+		}	
 		slen = str.length();
 		remove_blank_ends(str);
 		ispace = str.find_first_of(SPACES);
@@ -910,14 +1017,22 @@ int main (int argc, char *argv[]) {
 				result_action_executed();
 			}
 		} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "factor", _("factor"))) {
-			mstruct->factorize(evalops);
-			result_action_executed();
+			execute_command(COMMAND_FACTORIZE);
+		} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "simplify", _("simplify"))) {
+			execute_command(COMMAND_SIMPLIFY);
 		} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "mode", _("mode"))) {
 			INIT_SCREEN_CHECK
 			puts(""); CHECK_IF_SCREEN_FILLED
 			int pctl;
 #define PRINT_AND_COLON_TABS(x) FPUTS_UNICODE(x, stdout); pctl = unicode_length_check(x); if(pctl >= 24) fputs("\t", stdout); else if(pctl >= 16) fputs("\t\t", stdout); else if(pctl >= 8) fputs("\t\t\t", stdout); else fputs("\t\t\t\t", stdout);
 			PRINT_AND_COLON_TABS(_("abbreviations")); PUTS_UNICODE(b2oo(printops.abbreviate_names, false)); CHECK_IF_SCREEN_FILLED
+			PRINT_AND_COLON_TABS(_("algebra mode"));
+			switch(evalops.structuring) {
+				case STRUCTURING_NONE: {PUTS_UNICODE(_("none")); break;}
+				case STRUCTURING_SIMPLIFY: {PUTS_UNICODE(_("simplify")); break;}
+				case STRUCTURING_FACTORIZE: {PUTS_UNICODE(_("factorize")); break;}
+			}
+			CHECK_IF_SCREEN_FILLED
 			PRINT_AND_COLON_TABS(_("all prefixes")); PUTS_UNICODE(b2oo(printops.use_all_prefixes, false)); CHECK_IF_SCREEN_FILLED
 			PRINT_AND_COLON_TABS(_("angle unit"));
 			switch(evalops.parse_options.angle_unit) {
@@ -1068,6 +1183,7 @@ int main (int argc, char *argv[]) {
 			FPUTS_UNICODE(_("convert"), stdout); fputs("/", stdout); FPUTS_UNICODE(_("to"), stdout); fputs(" ", stdout); PUTS_UNICODE(_("UNIT"));
 			PUTS_UNICODE(_("exact"));
 			PUTS_UNICODE(_("factor"));
+			PUTS_UNICODE(_("simplify"));
 			PUTS_UNICODE(_("info"));
 			PUTS_UNICODE(_("mode"));
 			FPUTS_UNICODE(_("set"), stdout); fputs(" ", stdout); FPUTS_UNICODE(_("OPTION"), stdout); fputs(" ", stdout); PUTS_UNICODE(_("VALUE"));
@@ -1383,6 +1499,10 @@ int main (int argc, char *argv[]) {
 				puts("");
 				PUTS_UNICODE(_("Factorize the current result."));
 				puts("");
+			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "simplify", _("simplify"))) {
+				puts("");
+				PUTS_UNICODE(_("Simplify the current result."));
+				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "set", _("set"))) {
 				INIT_SCREEN_CHECK
 				int pctl;
@@ -1393,6 +1513,7 @@ int main (int argc, char *argv[]) {
 				CHECK_IF_SCREEN_FILLED_PUTS(_("Available options and accepted values are:"));
 				CHECK_IF_SCREEN_FILLED_PUTS("");
 				STR_AND_TABS(_("abbreviations")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
+				STR_AND_TABS(_("algebra mode")); str += "(0 = "; str += _("none"); str += ", 1 = "; str += _("simplify"); str += ", 2 = "; str += _("factorize");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("all prefixes")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("angle unit")); str += "(0 = "; str += _("none"); str += ", 1 = "; str += _("radians"); str += ", 2 = "; str += _("degrees"); str += ", 3 = "; str += _("gradians");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("approximation")); str += "(0 = "; str += _("exact"); str += ", 1 = "; str += _("try exact"); str += ", 2 = "; str += _("approximate");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
@@ -1479,8 +1600,10 @@ int main (int argc, char *argv[]) {
 				goto show_info;
 			}
 		} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "quit", _("quit")) || EQUALS_IGNORECASE_AND_LOCAL(str, "exit", _("exit"))) {
-#ifdef HAVE_LIBREADLINE				
-			free(rlbuffer);
+#ifdef HAVE_LIBREADLINE
+			if(!cfile) {
+				free(rlbuffer);
+			}
 #endif			
 			break;
 		} else {
@@ -1493,11 +1616,16 @@ int main (int argc, char *argv[]) {
 				execute_expression();
 			}
 		}
-#ifdef HAVE_LIBREADLINE				
-		add_history(rlbuffer);		
-		free(rlbuffer);
+#ifdef HAVE_LIBREADLINE
+		if(!cfile) {		
+			add_history(rlbuffer);		
+			free(rlbuffer);
+		}
 #endif
     	}
+	if(cfile && cfile != stdin) {
+		fclose(cfile);
+	}
 	
 	handle_exit();
 	
@@ -1616,7 +1744,7 @@ void setResult(Prefix *prefix = NULL, bool update_parse = false, bool goto_input
 	}
 	i = 0;
 	
-	if(b_busy) {
+	if(b_busy && !cfile) {
 		FPUTS_UNICODE(_("Processing (press Enter to abort)"), stdout);
 		has_printed = true;
 		fflush(stdout);
@@ -1628,21 +1756,25 @@ void setResult(Prefix *prefix = NULL, bool update_parse = false, bool goto_input
 #endif
 	rtime.tv_nsec = 100000000;
 	while(b_busy) {
-		FD_ZERO(&in_set);
-		FD_SET(STDIN_FILENO, &in_set);
-		if(select(FD_SETSIZE, &in_set, NULL, NULL, &timeout) > 0) {
-#ifdef HAVE_LIBREADLINE		
-			c = rl_read_key();
-#else
-			read(STDIN_FILENO, &c, 1);
-#endif			
-			if(c == '\n') {
-				on_abort_display();
-			}
-		} else {
-			printf(".");
-			fflush(stdout);
+		if(cfile) {
 			nanosleep(&rtime, NULL);
+		} else {
+			FD_ZERO(&in_set);
+			FD_SET(STDIN_FILENO, &in_set);
+			if(select(FD_SETSIZE, &in_set, NULL, NULL, &timeout) > 0) {
+#ifdef HAVE_LIBREADLINE		
+				c = rl_read_key();
+#else
+				read(STDIN_FILENO, &c, 1);
+#endif			
+				if(c == '\n') {
+					on_abort_display();
+				}
+			} else {
+				printf(".");
+				fflush(stdout);
+				nanosleep(&rtime, NULL);
+			}
 		}
 	}
 	
@@ -1684,7 +1816,10 @@ void result_format_updated() {
 	if(expression_executed) setResult(NULL, false);
 }
 void result_action_executed() {
-	if(expression_executed) setResult(NULL, false);
+	if(expression_executed) {
+		printops.allow_factorization = (evalops.structuring == STRUCTURING_FACTORIZE);
+		setResult(NULL, false);
+	}
 }
 void result_prefix_changed(Prefix *prefix) {
 	if(expression_executed) setResult(prefix, false);
@@ -1692,6 +1827,137 @@ void result_prefix_changed(Prefix *prefix) {
 void expression_format_updated() {
 	if(expression_executed) execute_expression();
 }
+
+void on_abort_command() {
+	pthread_cancel(command_thread);
+	CALCULATOR->restoreState();
+	CALCULATOR->clearBuffers();
+	b_busy = false;
+	command_aborted = true;
+	command_thread_started = false;
+}
+
+void *command_proc(void *pipe) {
+
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);	
+	FILE *command_pipe = (FILE*) pipe;
+	
+	while(true) {
+	
+		void *x = NULL;
+		int command_type;
+		fread(&command_type, sizeof(int), 1, command_pipe);
+		fread(&x, sizeof(void*), 1, command_pipe);
+		switch(command_type) {
+			case COMMAND_FACTORIZE: {
+				((MathStructure*) x)->factorize(evalops);
+				break;
+			}
+			case COMMAND_SIMPLIFY: {
+				((MathStructure*) x)->simplify(evalops);
+				break;
+			}
+		}
+		b_busy = false;
+		
+	}
+	return NULL;
+}
+
+void execute_command(int command_type) {
+
+	b_busy = true;	
+	command_aborted = false;
+	CALCULATOR->saveState();
+
+	if(!command_thread_started) {
+		pthread_create(&command_thread, &command_thread_attr, command_proc, command_pipe_r);
+	}
+
+
+	fwrite(&command_type, sizeof(int), 1, command_pipe_w);
+	MathStructure *mfactor = new MathStructure(*mstruct);
+	fwrite(&mfactor, sizeof(void*), 1, command_pipe_w);
+	
+	fflush(command_pipe_w);
+
+	struct timespec rtime;
+	rtime.tv_sec = 0;
+	rtime.tv_nsec = 10000000;
+	int i = 0;
+	bool has_printed = false;
+	while(b_busy && i < 75) {
+		nanosleep(&rtime, NULL);
+		i++;
+	}
+	i = 0;
+	
+	if(b_busy && !cfile) {
+		switch(command_type) {
+			case COMMAND_FACTORIZE: {
+				FPUTS_UNICODE(_("Factorizing (press Enter to abort)"), stdout);
+				break;
+			}
+			case COMMAND_SIMPLIFY: {
+				FPUTS_UNICODE(_("Simplifying (press Enter to abort)"), stdout);
+				break;
+			}
+		}
+		has_printed = true;
+		fflush(stdout);
+	}
+#ifdef HAVE_LIBREADLINE	
+	int c = 0;
+#else
+	char c = 0;
+#endif
+	rtime.tv_nsec = 100000000;
+	while(b_busy) {
+		if(cfile) {
+			nanosleep(&rtime, NULL);
+		} else {
+			FD_ZERO(&in_set);
+			FD_SET(STDIN_FILENO, &in_set);
+			if(select(FD_SETSIZE, &in_set, NULL, NULL, &timeout) > 0) {
+#ifdef HAVE_LIBREADLINE		
+				c = rl_read_key();
+#else
+				read(STDIN_FILENO, &c, 1);
+#endif			
+				if(c == '\n') {
+					on_abort_command();
+				}
+			} else {
+				printf(".");
+				fflush(stdout);
+				nanosleep(&rtime, NULL);
+			}
+		}
+	}
+	
+	if(has_printed) printf("\n");
+
+	b_busy = false;
+	
+	if(!command_aborted) {
+		mstruct->unref();
+		mstruct = mfactor;
+		switch(command_type) {
+			case COMMAND_FACTORIZE: {
+				printops.allow_factorization = true;
+				break;
+			}
+			case COMMAND_SIMPLIFY: {
+				printops.allow_factorization = false;
+				break;
+			}
+		}
+		setResult(NULL, false);
+	}
+
+}
+
 
 void execute_expression(bool goto_input) {
 
@@ -1711,7 +1977,7 @@ void execute_expression(bool goto_input) {
 	}
 	i = 0;
 	bool has_printed = false;
-	if(CALCULATOR->busy()) {
+	if(CALCULATOR->busy() && !cfile) {
 		FPUTS_UNICODE(_("Calculating (press Enter to abort)"), stdout);
 		fflush(stdout);
 		has_printed = true;
@@ -1723,21 +1989,25 @@ void execute_expression(bool goto_input) {
 #endif
 	rtime.tv_nsec = 100000000;
 	while(CALCULATOR->busy()) {
-		FD_ZERO(&in_set);
-		FD_SET(STDIN_FILENO, &in_set);
-		if(select(FD_SETSIZE, &in_set, NULL, NULL, &timeout) > 0) {
-#ifdef HAVE_LIBREADLINE		
-			c = rl_read_key();
-#else
-			read(STDIN_FILENO, &c, 1);
-#endif			
-			if(c == '\n') {
-				CALCULATOR->abort();
-			}
-		} else {
-			printf(".");
-			fflush(stdout);
+		if(cfile) {
 			nanosleep(&rtime, NULL);
+		} else {
+			FD_ZERO(&in_set);
+			FD_SET(STDIN_FILENO, &in_set);
+			if(select(FD_SETSIZE, &in_set, NULL, NULL, &timeout) > 0) {
+#ifdef HAVE_LIBREADLINE		
+				c = rl_read_key();
+#else
+				read(STDIN_FILENO, &c, 1);
+#endif			
+				if(c == '\n') {
+					CALCULATOR->abort();
+				}
+			} else {
+				printf(".");
+				fflush(stdout);
+				nanosleep(&rtime, NULL);
+			}
 		}
 	}
 	if(has_printed) printf("\n");
@@ -1751,6 +2021,7 @@ void execute_expression(bool goto_input) {
 	vans[0]->set(*mstruct);
 	
 	result_text = str;
+	printops.allow_factorization = (evalops.structuring == STRUCTURING_FACTORIZE);
 	setResult(NULL, true, goto_input);
 
 }
@@ -1768,6 +2039,7 @@ bool save_mode() {
 void set_saved_mode() {
 	saved_precision = CALCULATOR->getPrecision();
 	saved_printops = printops;
+	saved_printops.allow_factorization = (evalops.structuring == STRUCTURING_FACTORIZE);
 	saved_evalops = evalops;
 	saved_assumption_type = CALCULATOR->defaultAssumptions()->numberType();
 	saved_assumption_sign = CALCULATOR->defaultAssumptions()->sign();
@@ -1805,6 +2077,7 @@ void load_preferences() {
 	printops.lower_case_e = false;
 	printops.division_sign = DIVISION_SIGN_SLASH;
 	printops.multiplication_sign = MULTIPLICATION_SIGN_ASTERISK;
+	printops.allow_factorization = false;
 	
 	evalops.parse_options.limit_implicit_multiplication = false;
 	evalops.approximation = APPROXIMATION_TRY_EXACT;
@@ -1841,7 +2114,7 @@ void load_preferences() {
 	historyfile += "qalc.history";
 	read_history(historyfile.c_str());
 #endif	
-	int version_numbers[] = {0, 8, 0};
+	int version_numbers[] = {0, 9, 1};
 	FILE *file = NULL;
 	filename += "qalc.cfg";
 	file = fopen(filename.c_str(), "r");
@@ -1863,110 +2136,128 @@ void load_preferences() {
 				v = s2i(svalue);
 				if(svar == "version") {
 					parse_qalculate_version(svalue, version_numbers);
-				} else if(svar == "save_mode_on_exit")
+				} else if(svar == "save_mode_on_exit") {
 					save_mode_on_exit = v;
-				else if(svar == "save_definitions_on_exit")
+				} else if(svar == "save_definitions_on_exit") {
 					save_defs_on_exit = v;
-				/*else if(svar == "load_global_definitions")
-					load_global_defs = v;*/
-				else if(svar == "fetch_exchange_rates_at_startup")
+				} else if(svar == "fetch_exchange_rates_at_startup") {
 					fetch_exchange_rates_at_startup = v;
-				else if(svar == "min_deci")
+				} else if(svar == "min_deci") {
 					printops.min_decimals = v;
-				else if(svar == "use_min_deci")
+				} else if(svar == "use_min_deci") {
 					printops.use_min_decimals = v;
-				else if(svar == "max_deci")
+				} else if(svar == "max_deci") {
 					printops.max_decimals = v;
-				else if(svar == "use_max_deci")
+				} else if(svar == "use_max_deci") {
 					printops.use_max_decimals = v;					
-				else if(svar == "precision")
+				} else if(svar == "precision") {
 					CALCULATOR->setPrecision(v);
-				else if(svar == "min_exp")
+				} else if(svar == "min_exp") {
 					printops.min_exp = v;
-				else if(svar == "negative_exponents")
+				} else if(svar == "negative_exponents") {
 					printops.negative_exponents = v;
-				else if(svar == "sort_minus_last")
+				} else if(svar == "sort_minus_last") {
 					printops.sort_options.minus_last = v;
-				else if(svar == "spacious")
+				} else if(svar == "spacious") {
 					printops.spacious = v;	
-				else if(svar == "excessive_parenthesis")
+				} else if(svar == "excessive_parenthesis") {
 					printops.excessive_parenthesis = v;
-				else if(svar == "short_multiplication")
+				} else if(svar == "short_multiplication") {
 					printops.short_multiplication = v;
-				else if(svar == "limit_implicit_multiplication") {
+				} else if(svar == "limit_implicit_multiplication") {
 					evalops.parse_options.limit_implicit_multiplication = v;
 					printops.limit_implicit_multiplication = v;
-				} else if(svar == "place_units_separately")
+				} else if(svar == "place_units_separately") {
 					printops.place_units_separately = v;
-				else if(svar == "use_prefixes")
+				} else if(svar == "use_prefixes") {
 					printops.use_unit_prefixes = v;
-				else if(svar == "number_fraction_format")
-					printops.number_fraction_format = (NumberFractionFormat) v;					
-				else if(svar == "number_base")
+				} else if(svar == "number_fraction_format") {
+					if(v >= FRACTION_DECIMAL && v <= FRACTION_COMBINED) {
+						printops.number_fraction_format = (NumberFractionFormat) v;
+					}
+				} else if(svar == "number_base") {
 					printops.base = v;
-				else if(svar == "number_base_expression")
+				} else if(svar == "number_base_expression") {
 					evalops.parse_options.base = v;	
-				else if(svar == "read_precision")
-					evalops.parse_options.read_precision = (ReadPrecisionMode) v;
-				else if(svar == "assume_denominators_nonzero")
-					evalops.assume_denominators_nonzero = v;	
-				else if(svar == "angle_unit") {
+				} else if(svar == "read_precision") {
+					if(v >= DONT_READ_PRECISION && v <= READ_PRECISION_WHEN_DECIMALS) {
+						evalops.parse_options.read_precision = (ReadPrecisionMode) v;
+					}
+				} else if(svar == "assume_denominators_nonzero") {
+					evalops.assume_denominators_nonzero = v;
+				} else if(svar == "structuring") {
+					if(v >= STRUCTURING_NONE && v <= STRUCTURING_FACTORIZE) {
+						evalops.structuring = (StructuringMode) v;
+						printops.allow_factorization = (evalops.structuring == STRUCTURING_FACTORIZE);
+					}
+				} else if(svar == "angle_unit") {
 					if(version_numbers[0] == 0 && (version_numbers[1] < 7 || (version_numbers[1] == 7 && version_numbers[2] == 0))) {
 						v++;
 					}
-					evalops.parse_options.angle_unit = (AngleUnit) v;
-				} else if(svar == "functions_enabled")
+					if(v >= ANGLE_UNIT_NONE && v <= ANGLE_UNIT_GRADIANS) {
+						evalops.parse_options.angle_unit = (AngleUnit) v;
+					}
+				} else if(svar == "functions_enabled") {
 					evalops.parse_options.functions_enabled = v;
-				else if(svar == "variables_enabled")
+				} else if(svar == "variables_enabled") {
 					evalops.parse_options.variables_enabled = v;
-				else if(svar == "calculate_variables")
+				} else if(svar == "calculate_variables") {
 					evalops.calculate_variables = v;
-				else if(svar == "calculate_functions")
+				} else if(svar == "calculate_functions") {
 					evalops.calculate_functions = v;
-				else if(svar == "sync_units")
+				} else if(svar == "sync_units") {
 					evalops.sync_units = v;
-				else if(svar == "unknownvariables_enabled")
+				} else if(svar == "unknownvariables_enabled") {
 					evalops.parse_options.unknowns_enabled = v;
-				else if(svar == "units_enabled")
+				} else if(svar == "units_enabled") {
 					evalops.parse_options.units_enabled = v;
-				else if(svar == "allow_complex")
+				} else if(svar == "allow_complex") {
 					evalops.allow_complex = v;
-				else if(svar == "allow_infinite")
+				} else if(svar == "allow_infinite") {
 					evalops.allow_infinite = v;
-				else if(svar == "use_short_units")
+				} else if(svar == "use_short_units") {
 					printops.abbreviate_names = v;
-				else if(svar == "abbreviate_names")
+				} else if(svar == "abbreviate_names") {
 					printops.abbreviate_names = v;	
-				else if(svar == "all_prefixes_enabled")
-					printops.use_all_prefixes = v;
-				else if(svar == "denominator_prefix_enabled")
+				} else if(svar == "all_prefixes_enabled") {
+				 	printops.use_all_prefixes = v;
+				} else if(svar == "denominator_prefix_enabled") {
 					printops.use_denominator_prefix = v;
-				else if(svar == "auto_post_conversion")
-					evalops.auto_post_conversion = (AutoPostConversion) v;
-				else if(svar == "use_unicode_signs")
+				} else if(svar == "auto_post_conversion") {
+					if(v >= POST_CONVERSION_NONE && v <= POST_CONVERSION_BASE) {
+						evalops.auto_post_conversion = (AutoPostConversion) v;
+					}
+				} else if(svar == "use_unicode_signs") {
 					printops.use_unicode_signs = v;	
-				else if(svar == "lower_case_numbers")
+				} else if(svar == "lower_case_numbers") {
 					printops.lower_case_numbers = v;
-				else if(svar == "lower_case_e")
+				} else if(svar == "lower_case_e") {
 					printops.lower_case_e = v;
-				else if(svar == "multiplication_sign")
+				} else if(svar == "multiplication_sign") {
 					printops.multiplication_sign = (MultiplicationSign) v;
-				else if(svar == "division_sign")
+				} else if(svar == "division_sign") {
 					printops.division_sign = (DivisionSign) v;
-				else if(svar == "indicate_infinite_series")
+				} else if(svar == "indicate_infinite_series") {
 					printops.indicate_infinite_series = v;
-				else if(svar == "show_ending_zeroes")
+				} else if(svar == "show_ending_zeroes") {
 					printops.show_ending_zeroes = v;
-				else if(svar == "round_halfway_to_even")
+				} else if(svar == "round_halfway_to_even") {
 					printops.round_halfway_to_even = v;	
-				else if(svar == "approximation")
-					evalops.approximation = (ApproximationMode) v;
-				else if(svar == "in_rpn_mode")
+				} else if(svar == "approximation") {
+					if(v >= APPROXIMATION_EXACT && v <= APPROXIMATION_APPROXIMATE) {					
+						evalops.approximation = (ApproximationMode) v;
+					}
+				} else if(svar == "in_rpn_mode") {
 					evalops.parse_options.rpn = v;
-				else if(svar == "default_assumption_type")
-					CALCULATOR->defaultAssumptions()->setNumberType((AssumptionNumberType) v);
-				else if(svar == "default_assumption_sign")
-					CALCULATOR->defaultAssumptions()->setSign((AssumptionSign) v);
+				} else if(svar == "default_assumption_type") {
+					if(v >= ASSUMPTION_NUMBER_NONE && v <= ASSUMPTION_NUMBER_INTEGER) {					
+						CALCULATOR->defaultAssumptions()->setNumberType((AssumptionNumberType) v);
+					}
+				} else if(svar == "default_assumption_sign") {
+					if(v >= ASSUMPTION_SIGN_UNKNOWN && v <= ASSUMPTION_SIGN_NONZERO) {
+						CALCULATOR->defaultAssumptions()->setSign((AssumptionSign) v);
+					}
+				}
 			}
 		}
 	} else {
@@ -2032,6 +2323,7 @@ bool save_preferences(bool mode)
 	fprintf(file, "number_base_expression=%i\n", saved_evalops.parse_options.base);
 	fprintf(file, "read_precision=%i\n", saved_evalops.parse_options.read_precision);
 	fprintf(file, "assume_denominators_nonzero=%i\n", saved_evalops.assume_denominators_nonzero);
+	fprintf(file, "structuring=%i\n", saved_evalops.structuring);
 	fprintf(file, "angle_unit=%i\n", saved_evalops.parse_options.angle_unit);
 	fprintf(file, "functions_enabled=%i\n", saved_evalops.parse_options.functions_enabled);
 	fprintf(file, "variables_enabled=%i\n", saved_evalops.parse_options.variables_enabled);

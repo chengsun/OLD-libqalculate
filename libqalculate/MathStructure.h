@@ -241,6 +241,7 @@ class MathStructure {
 		bool representsReal(bool allow_units = false) const;
 		bool representsComplex(bool allow_units = false) const;
 		bool representsNonZero(bool allow_units = false) const;
+		bool representsZero(bool allow_units = false) const;
 		bool representsEven(bool allow_units = false) const;
 		bool representsOdd(bool allow_units = false) const;
 		bool representsUndefined(bool include_childs = false, bool include_infinite = false) const;
@@ -431,12 +432,12 @@ class MathStructure {
 //units
 
 		int isUnitCompatible(const MathStructure &mstruct);
-		bool syncUnits(bool sync_complex_relations = false);
+		bool syncUnits(bool sync_complex_relations = false, bool *found_complex_relations = NULL, bool calculate_new_functions = false, const EvaluationOptions &feo = default_evaluation_options);
 		bool testDissolveCompositeUnit(Unit *u);
 		bool testCompositeUnit(Unit *u);	
 		bool dissolveAllCompositeUnits();			
-		bool convert(Unit *u, bool convert_complex_relations = false);
-		bool convert(const MathStructure unit_mstruct, bool convert_complex_relations = false);	
+		bool convert(Unit *u, bool convert_complex_relations = false, bool *found_complex_relations = NULL, bool calculate_new_functions = false, const EvaluationOptions &feo = default_evaluation_options);
+		bool convert(const MathStructure unit_mstruct, bool convert_complex_relations = false, bool *found_complex_relations = NULL, bool calculate_new_functions = false, const EvaluationOptions &feo = default_evaluation_options);	
 		
 		
 		int contains(const MathStructure &mstruct, bool structural_only = true, bool check_variables = false, bool check_functions = false) const;
@@ -447,6 +448,7 @@ class MathStructure {
 		bool containsAdditionPower() const;
 		bool containsUnknowns() const;
 		bool containsDivision() const;
+		size_t countFunctions(bool count_subfunctions = true) const;
 		void findAllUnknowns(MathStructure &unknowns_vector);
 		bool replace(const MathStructure &mfrom, const MathStructure &mto);
 		bool calculateReplace(const MathStructure &mfrom, const MathStructure &mto, const EvaluationOptions &eo);

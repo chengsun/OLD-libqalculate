@@ -1,3 +1,14 @@
+2005-11-25 Niklas Knutsson  <nq@altern.org>
+
+	* Update qalc with new factorization and some more
+	* Option for qalc to read commands from a file first
+	* Fix unit comparisons
+	* Fix handling of units with function in relation saved in approximate variable
+
+2005-11-24 Niklas Knutsson  <nq@altern.org>
+
+	* Sort out some power transformations
+
 2005-11-23 Niklas Knutsson  <nq@altern.org>
 
 	* More fixes (I'm not very good at keeping track of them)

@@ -1,3 +1,12 @@
+2005-11-27 Niklas Knutsson  <nq@altern.org>
+
+	* Unknown variable with sign non-negative or non-positive represents real number
+	* Update assumption type after setting sign and vice versa
+
+2005-11-26 Niklas Knutsson  <nq@altern.org>
+
+	* Be more restrictive with unknown variables/symbols with unknown type (might be unit or vector)
+
 2005-11-25 Niklas Knutsson  <nq@altern.org>
 
 	* Update qalc with new factorization and some more

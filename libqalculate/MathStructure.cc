@@ -2504,7 +2504,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 							return 1;
 						}
 					}
-					if(mstruct.isZero() && (!eo.keep_zero_units || !containsType(STRUCT_UNIT, false, true, true))) {
+					if(mstruct.isZero() && (!eo.keep_zero_units || containsRepresentativeOfType(STRUCT_UNIT, true, true) == 0)) {
 						clear(true);
 						MERGE_APPROX_AND_PREC(mstruct)
 						return 1;
@@ -2523,12 +2523,12 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 					return 0;
 				}
 				default: {
-					if(mstruct.isZero() && (!eo.keep_zero_units || !containsType(STRUCT_UNIT, false, true, true)) && !representsUndefined(true, true)) {
+					if(mstruct.isZero() && (!eo.keep_zero_units || containsRepresentativeOfType(STRUCT_UNIT, true, true) == 0) && !representsUndefined(true, true)) {
 						clear(true); 
 						MERGE_APPROX_AND_PREC(mstruct)
 						return 3;
 					}
-					if(isZero() && !mstruct.representsUndefined(true, true) && (!eo.keep_zero_units || !mstruct.containsType(STRUCT_UNIT, false, true, true))) {
+					if(isZero() && !mstruct.representsUndefined(true, true) && (!eo.keep_zero_units || !mstruct.containsRepresentativeOfType(STRUCT_UNIT, true, true))) {
 						MERGE_APPROX_AND_PREC(mstruct)
 						return 2;
 					}
@@ -4020,7 +4020,7 @@ bool MathStructure::calculateFunctions(const EvaluationOptions &eo, bool recursi
 int evalSortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2, const MathStructure &parent);
 int evalSortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2, const MathStructure &parent) {
 	if(parent.isMultiplication()) {
-		if(mstruct1.containsType(STRUCT_VECTOR, false, true, true) != 0 && mstruct2.containsType(STRUCT_VECTOR, false, true, true) != 0) {
+		if(mstruct1.containsRepresentativeOfType(STRUCT_VECTOR, true, true) != 0 && mstruct2.containsRepresentativeOfType(STRUCT_VECTOR, true, true) != 0) {
 			return 0;
 		}
 	}
@@ -4251,7 +4251,7 @@ void MathStructure::evalSort(bool recursive) {
 int sortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2, const MathStructure &parent, const PrintOptions &po);
 int sortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2, const MathStructure &parent, const PrintOptions &po) {
 	if(parent.isMultiplication()) {
-		if(mstruct1.containsType(STRUCT_VECTOR) && mstruct2.containsType(STRUCT_VECTOR)) {
+		if(mstruct1.containsRepresentativeOfType(STRUCT_VECTOR, true, true) != 0 && mstruct2.containsRepresentativeOfType(STRUCT_VECTOR, true, true) != 0) {
 			return 0;
 		}
 	}
@@ -11229,7 +11229,7 @@ bool MathStructure::isolate_x(const EvaluationOptions &eo, const MathStructure &
 			}
 			if(found_1x) return isolate_x(eo, *x_var2);
 		}
-		if(containsType(STRUCT_VECTOR)) return false;
+		if(containsType(STRUCT_VECTOR) != 0) return false;
 		MathStructure x_var(*x_var2);
 		MathStructure msave(*this);
 		if(isolate_x(eo, x_var)) {	
@@ -11829,9 +11829,13 @@ bool MathStructure::isRationalPolynomial() const {
 			return o_number.isRational() && !o_number.isZero();
 		}
 		case STRUCT_MULTIPLICATION: {
+			int vi = 0;
 			for(size_t i = 0; i < SIZE; i++) {
 				if(CHILD(i).isAddition() || CHILD(i).isMultiplication() || !CHILD(i).isRationalPolynomial()) {
 					return false;
+				} else if(CHILD(i).containsRepresentativeOfType(STRUCT_VECTOR, true, true) != 0) {
+					vi++;
+					if(vi == 2) return false;	
 				}
 			}
 			return true;
@@ -11851,7 +11855,7 @@ bool MathStructure::isRationalPolynomial() const {
 		case STRUCT_FUNCTION: {}
 		case STRUCT_VARIABLE: {}
 		case STRUCT_SYMBOLIC: {
-			return !representsUndefined() && !containsType(STRUCT_VECTOR, false, true, true);
+			return !representsUndefined();
 		}
 	}
 	return false;

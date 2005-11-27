@@ -25,16 +25,30 @@ bool Assumptions::isNegative() {return i_sign == ASSUMPTION_SIGN_NEGATIVE || (fm
 bool Assumptions::isNonNegative() {return i_sign == ASSUMPTION_SIGN_NONNEGATIVE || i_sign == ASSUMPTION_SIGN_POSITIVE || (fmin && fmin->isNonNegative());}
 bool Assumptions::isNonPositive() {return i_sign == ASSUMPTION_SIGN_NONPOSITIVE || i_sign == ASSUMPTION_SIGN_NEGATIVE || (fmax && fmax->isNonPositive());}
 bool Assumptions::isInteger() {return i_type >= ASSUMPTION_NUMBER_INTEGER;}
-bool Assumptions::isNumber() {return i_type >= ASSUMPTION_NUMBER_NUMBER || fmin || fmax || isPositive() || isNegative();}
+bool Assumptions::isNumber() {return i_type >= ASSUMPTION_NUMBER_NUMBER;}
 bool Assumptions::isRational() {return i_type >= ASSUMPTION_NUMBER_RATIONAL;}
-bool Assumptions::isReal() {return i_type >= ASSUMPTION_NUMBER_REAL || isPositive() || isNegative();}
+bool Assumptions::isReal() {return i_type >= ASSUMPTION_NUMBER_REAL;}
 bool Assumptions::isComplex() {return i_type == ASSUMPTION_NUMBER_COMPLEX;}
 bool Assumptions::isNonZero() {return i_sign == ASSUMPTION_SIGN_NONZERO || isPositive() || isNegative();}
 
 AssumptionNumberType Assumptions::numberType() {return i_type;}
 AssumptionSign Assumptions::sign() {return i_sign;}
-void Assumptions::setNumberType(AssumptionNumberType ant) {i_type = ant;}
-void Assumptions::setSign(AssumptionSign as) {i_sign = as;}
+void Assumptions::setNumberType(AssumptionNumberType ant) {
+	i_type = ant;
+	if(i_type <= ASSUMPTION_NUMBER_COMPLEX && i_sign != ASSUMPTION_SIGN_NONZERO) {
+		i_sign = ASSUMPTION_SIGN_UNKNOWN;
+	}
+	if(i_type == ASSUMPTION_NUMBER_NONE) {
+		if(fmax) delete fmax;
+		if(fmin) delete fmin;
+	}
+}
+void Assumptions::setSign(AssumptionSign as) {
+	i_sign = as;
+	if(i_type <= ASSUMPTION_NUMBER_COMPLEX && i_sign != ASSUMPTION_SIGN_NONZERO && i_sign != ASSUMPTION_SIGN_UNKNOWN) {
+		i_type = ASSUMPTION_NUMBER_REAL;
+	}
+}
 	
 void Assumptions::setMin(const Number *nmin) {
 	if(!nmin) {
@@ -43,6 +57,7 @@ void Assumptions::setMin(const Number *nmin) {
 		}
 		return;
 	}
+	if(i_type == ASSUMPTION_NUMBER_NONE) i_type = ASSUMPTION_NUMBER_NUMBER;
 	if(!fmin) {
 		fmin = new Number(*nmin);
 	} else {
@@ -65,6 +80,7 @@ void Assumptions::setMax(const Number *nmax) {
 		}
 		return;
 	}
+	if(i_type == ASSUMPTION_NUMBER_NONE) i_type = ASSUMPTION_NUMBER_NUMBER;
 	if(!fmax) {
 		fmax = new Number(*nmax);
 	} else {

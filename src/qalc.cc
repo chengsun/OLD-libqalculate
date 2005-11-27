@@ -1558,6 +1558,12 @@ int main (int argc, char *argv[]) {
 				CHECK_IF_SCREEN_FILLED_PUTS("");
 				CHECK_IF_SCREEN_FILLED_PUTS(_("Example: set base 16."));
 				CHECK_IF_SCREEN_FILLED_PUTS("");
+			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "assume", _("assume"))) {
+				puts("");
+				PUTS_UNICODE(_("Set default assumptions for unknown variables."));
+				string str = "("; str += _("unknown"); str += ", "; str += _("non-zero"); str += ", "; str += _("positive"); str += ", "; str += _("negative"); str += ", "; str += _("non-positive"); str += ", "; str += _("non-negative"); str += " / "; str += _("unknown"); str += ", "; str += _("number"); str += ", "; str += _("complex"); str += ", "; str += _("real"); str += ", "; str += _("rational"); str += ", "; str += _("integer"); str += ")";
+				PUTS_UNICODE(str.c_str());
+				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "save", _("save")) || EQUALS_IGNORECASE_AND_LOCAL(str, "store", _("store"))) {
 				puts("");
 				PUTS_UNICODE(_("Saves the current result in a variable with the specified name. You may optionally also provide a category (default \"Temporary\") and a title."));
@@ -1873,6 +1879,7 @@ void execute_command(int command_type) {
 
 	if(!command_thread_started) {
 		pthread_create(&command_thread, &command_thread_attr, command_proc, command_pipe_r);
+		command_thread_started = true;
 	}
 
 

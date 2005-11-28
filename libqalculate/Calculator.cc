@@ -3001,8 +3001,8 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 //				} else if(compare_name_no_case(XOR_str, str, XOR_str_len, str_index + 1)) {
 				}
 			}
-		} else if(str_index > 0 && po.base >= 2 && po.base <= 10 && is_in(EXPS, str[str_index]) && str_index + 1 < str.length() && is_in(NUMBERS, str[str_index + 1])) {
-			
+		} else if(str_index > 0 && po.base >= 2 && po.base <= 10 && is_in(EXPS, str[str_index]) && str_index + 1 < str.length() && (is_in(NUMBERS, str[str_index + 1]) || (is_in(PLUS MINUS, str[str_index + 1]) && str_index + 2 < str.length() && is_in(NUMBERS, str[str_index + 2])))) {
+			//don't do anything when e is used instead of E for EXP			
 		} else if(po.base >= 2 && po.base <= 10 && is_not_in(NUMBERS NOT_IN_NAMES, str[str_index])) {
 			bool p_mode = false;
 			void *best_p_object = NULL;
@@ -3283,21 +3283,21 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 										break;
 									} else {
 										char c = str[str_index + name_length + i6];
-										if(c == LEFT_PARENTHESIS_CH && i5 != 2) {
-											b = true;
+										if(c == LEFT_PARENTHESIS_CH) {
+											if(i5 < 2) b = true;
+											else i5++;
+										} else if(c == RIGHT_PARENTHESIS_CH) {
+											if(i5 <= 2) b = true;
+											else i5--;
 										} else if(c == ' ') {
-											if(i5 == 2) {
-												b = true;
-											}
-										} else if(i5 == 2 && is_in(OPERATORS, str[str_index + name_length + i6])) {
-											b = true;
-										} else {
+											if(i5 == 2) b = true;
+										} else if(i5 < 2) {
 											i5 = 2;
 										}
 									}
 									i6++;
 								}
-								if(b && i5 == 2) {
+								if(b && i5 >= 2) {
 									stmp2 = str.substr(str_index + name_length, i6 - 1);
 									stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
 									if(b_unended_function && unended_function) {

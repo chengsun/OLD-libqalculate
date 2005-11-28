@@ -1,7 +1,16 @@
+2005-11-28 Niklas Knutsson  <nq@altern.org>
+
+	* Updated function arguments parsing ignoring space after function name and not stopping parsing of
+	  single argument without parentheses until space or right parenthesis without corresponding left parenthesis
+	* Be more strict with 0/x if x is not non-zero
+	* Fix 1E-1 = 1e-1
+
 2005-11-27 Niklas Knutsson  <nq@altern.org>
 
 	* Unknown variable with sign non-negative or non-positive represents real number
 	* Update assumption type after setting sign and vice versa
+	* Assume again when dividing that units do not convert to zero
+	* "Einstein per Meter per Second" => "Einstein per Meter Squared per Second"
 
 2005-11-26 Niklas Knutsson  <nq@altern.org>
 

@@ -2145,7 +2145,7 @@
         </part>
       </unit>
       <unit type="composite">
-        <_title>Einstein per Meter per Second</_title>
+        <_title>Einstein per Meter Squared per Second</_title>
         <name index="1">
           <reference>true</reference>
           <name>einstein_p_sqm_p_s</name>

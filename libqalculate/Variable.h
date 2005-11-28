@@ -116,7 +116,7 @@ class Variable : public ExpressionItem {
 	virtual bool representsNonZero(bool = false) {return false;}
 	virtual bool representsEven(bool = false) {return false;}
 	virtual bool representsOdd(bool = false) {return false;}
-	virtual bool representsUndefined(bool = false, bool = false) {return false;}
+	virtual bool representsUndefined(bool = false, bool = false, bool = false) {return false;}
 	
 };
 
@@ -193,7 +193,7 @@ class KnownVariable : public Variable {
 	virtual bool representsNonZero(bool = false);
 	virtual bool representsEven(bool = false);
 	virtual bool representsOdd(bool = false);
-	virtual bool representsUndefined(bool = false, bool = false);
+	virtual bool representsUndefined(bool = false, bool = false, bool = false);
 
 };
 
@@ -232,7 +232,7 @@ class DynamicVariable : public KnownVariable {
 	virtual bool representsNonZero(bool = false) {return true;}
 	virtual bool representsEven(bool = false) {return false;}
 	virtual bool representsOdd(bool = false) {return false;}
-	virtual bool representsUndefined(bool = false, bool = false) {return false;}
+	virtual bool representsUndefined(bool = false, bool = false, bool = false) {return false;}
 
 };
 

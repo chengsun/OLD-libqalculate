@@ -910,7 +910,7 @@ bool MathStructure::representsOdd(bool allow_units) const {
 		default: {return false;}
 	}
 }
-bool MathStructure::representsUndefined(bool include_childs, bool include_infinite) const {
+bool MathStructure::representsUndefined(bool include_childs, bool include_infinite, bool be_strict) const {
 	switch(m_type) {
 		case STRUCT_NUMBER: {
 			if(include_infinite) {
@@ -919,13 +919,23 @@ bool MathStructure::representsUndefined(bool include_childs, bool include_infini
 			return false;
 		}
 		case STRUCT_UNDEFINED: {return true;}
-		case STRUCT_VARIABLE: {return o_variable->representsUndefined(include_childs, include_infinite);}
-		case STRUCT_POWER: {return (CHILD(0).isZero() && CHILD(1).representsNegative(false)) || (CHILD(0).isInfinity() && CHILD(1).isZero());}
-		case STRUCT_FUNCTION: {return (function_value && function_value->representsUndefined()) || o_function->representsUndefined(*this);}
+		case STRUCT_VARIABLE: {return o_variable->representsUndefined(include_childs, include_infinite, be_strict);}
+		case STRUCT_FUNCTION: {return (function_value && function_value->representsUndefined(include_childs, include_infinite, be_strict)) || o_function->representsUndefined(*this);}
+		case STRUCT_POWER: {
+			if(be_strict) {
+				if((!CHILD(0).representsNonZero(true) && !CHILD(1).representsNonNegative(false)) || (CHILD(0).isInfinity() && !CHILD(1).representsNonZero(true))) {
+					return true;
+				}
+			} else {
+				if((CHILD(0).representsZero(true) && CHILD(1).representsNegative(false)) || (CHILD(0).isInfinity() && CHILD(1).representsZero(true))) {
+					return true;
+				}
+			}
+		}
 		default: {
 			if(include_childs) {
 				for(size_t i = 0; i < SIZE; i++) {
-					if(CHILD(i).representsUndefined(include_childs, include_infinite)) return true;
+					if(CHILD(i).representsUndefined(include_childs, include_infinite, be_strict)) return true;
 				}
 			}
 			return false;
@@ -1816,7 +1826,7 @@ bool reducable(const MathStructure &mnum, const MathStructure &mden, Number &nr)
 			break;
 		}
 		default: {
-			if(mnum.representsNonZero()) {
+			if(mnum.representsNonZero(true)) {
 				bool reduce = true;
 				for(size_t i = 0; i < mden.size() && reduce; i++) {
 					switch(mden[i].type()) {
@@ -2026,12 +2036,12 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 	const MathStructure *mnum = NULL, *mden = NULL;
 	if(eo.reduce_divisions) {
 		if(!isNumber() && mstruct.isPower() && mstruct[0].isAddition() && mstruct[0].size() > 1 && mstruct[1].isNumber() && mstruct[1].number().isMinusOne()) {
-			if((!isPower() || !CHILD(1).hasNegativeSign()) && representsNumber() && mstruct[0].representsNumber() && ((eo.assume_denominators_nonzero && !mstruct[0].representsZero(true)) || mstruct[0].representsNonZero())) {
+			if((!isPower() || !CHILD(1).hasNegativeSign()) && representsNumber() && mstruct[0].representsNumber() && ((eo.assume_denominators_nonzero && !mstruct[0].representsZero(true)) || mstruct[0].representsNonZero(true))) {
 				mnum = this;
 				mden = &mstruct[0];
 			}
 		} else if(!mstruct.isNumber() && isPower() && CHILD(0).isAddition() && CHILD(0).size() > 1 && CHILD(1).isNumber() && CHILD(1).number().isMinusOne()) {
-			if((!mstruct.isPower() || !mstruct[1].hasNegativeSign()) && mstruct.representsNumber() && CHILD(0).representsNumber() && ((eo.assume_denominators_nonzero && !CHILD(0).representsZero(true)) || CHILD(0).representsNonZero())) {
+			if((!mstruct.isPower() || !mstruct[1].hasNegativeSign()) && mstruct.representsNumber() && CHILD(0).representsNumber() && ((eo.assume_denominators_nonzero && !CHILD(0).representsZero(true)) || CHILD(0).representsNonZero(true))) {
 				mnum = &mstruct;
 				mden = &CHILD(0);
 			}
@@ -2278,7 +2288,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 				case STRUCT_POWER: {
 					if(!eo.expand && mstruct[0].isAddition()) return -1;
 					if(mstruct[1].isNumber() && *this == mstruct[0] && addablePower(mstruct, eo)) {
-						if((eo.assume_denominators_nonzero && !representsZero(true)) || representsNonZero() || mstruct[1].representsPositive()) {
+						if((eo.assume_denominators_nonzero && !representsZero(true)) || representsNonZero(true) || mstruct[1].representsPositive()) {
 							if(mparent) {
 								mparent->swapChilds(index_this + 1, index_mstruct + 1);
 								(*mparent)[index_this][1].number()++;
@@ -2404,7 +2414,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 				case STRUCT_POWER: {
 					if(mstruct[1].isNumber()) {
 						if(*this == mstruct[0] && addablePower(mstruct, eo)) {
-							if((eo.assume_denominators_nonzero && !representsZero(true)) || representsNonZero() || mstruct[1].representsPositive()) {
+							if((eo.assume_denominators_nonzero && !representsZero(true)) || representsNonZero(true) || mstruct[1].representsPositive()) {
 								if(mparent) {
 									mparent->swapChilds(index_this + 1, index_mstruct + 1);
 									(*mparent)[index_this][1].number()++;
@@ -2466,8 +2476,8 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 							if(b) b = (mstruct[1].representsInteger() || (mstruct[1].isNumber() && mstruct[1].number().isRational() && mstruct[1].number().denominatorIsEven()));
 						}
 						if(b) {
-							b = (eo.assume_denominators_nonzero && !CHILD(0).representsZero(true)) || CHILD(0).representsNonZero() || (CHILD(1).representsPositive() && mstruct[1].representsPositive()) || (CHILD(1).representsNegative() && mstruct[1].representsNegative());
-						}	
+							b = (eo.assume_denominators_nonzero && !CHILD(0).representsZero(true)) || CHILD(0).representsNonZero(true) || (CHILD(1).representsPositive() && mstruct[1].representsPositive()) || (CHILD(1).representsNegative() && mstruct[1].representsNegative());
+						}
 						if(b) {
 							if(IS_REAL(CHILD(1)) && IS_REAL(mstruct[1])) {
 								CHILD(1).number() += mstruct[1].number();
@@ -2497,14 +2507,14 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 				}
 				default: {
 					if(!mstruct.isNumber() && CHILD(1).isNumber() && CHILD(0) == mstruct && addablePower(*this, eo)) {
-						if((eo.assume_denominators_nonzero && !CHILD(0).representsZero(true)) || CHILD(0).representsNonZero() || CHILD(1).representsPositive()) {
+						if((eo.assume_denominators_nonzero && !CHILD(0).representsZero(true)) || CHILD(0).representsNonZero(true) || CHILD(1).representsPositive()) {
 							CHILD(1).number()++;
 							MERGE_APPROX_AND_PREC(mstruct)
 							calculateRaiseExponent(eo, mparent, index_this);
 							return 1;
 						}
 					}
-					if(mstruct.isZero() && (!eo.keep_zero_units || containsRepresentativeOfType(STRUCT_UNIT, true, true) == 0)) {
+					if(mstruct.isZero() && (!eo.keep_zero_units || containsRepresentativeOfType(STRUCT_UNIT, true, true) == 0) && !representsUndefined(true, true, !eo.assume_denominators_nonzero)) {
 						clear(true);
 						MERGE_APPROX_AND_PREC(mstruct)
 						return 1;
@@ -2523,12 +2533,12 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 					return 0;
 				}
 				default: {
-					if(mstruct.isZero() && (!eo.keep_zero_units || containsRepresentativeOfType(STRUCT_UNIT, true, true) == 0) && !representsUndefined(true, true)) {
+					if(mstruct.isZero() && (!eo.keep_zero_units || containsRepresentativeOfType(STRUCT_UNIT, true, true) == 0) && !representsUndefined(true, true, !eo.assume_denominators_nonzero)) {
 						clear(true); 
 						MERGE_APPROX_AND_PREC(mstruct)
 						return 3;
 					}
-					if(isZero() && !mstruct.representsUndefined(true, true) && (!eo.keep_zero_units || !mstruct.containsRepresentativeOfType(STRUCT_UNIT, true, true))) {
+					if(isZero() && !mstruct.representsUndefined(true, true, !eo.assume_denominators_nonzero) && (!eo.keep_zero_units || !mstruct.containsRepresentativeOfType(STRUCT_UNIT, true, true))) {
 						MERGE_APPROX_AND_PREC(mstruct)
 						return 2;
 					}
@@ -4581,7 +4591,7 @@ bool compare_delete(MathStructure &mnum, MathStructure &mden, bool &erase1, bool
 	erase1 = false;
 	erase2 = false;
 	if(mnum == mden) {
-		if(!(eo.assume_denominators_nonzero && !mnum.representsZero(true)) && !mnum.representsNonZero()) {
+		if(!(eo.assume_denominators_nonzero && !mnum.representsZero(true)) && !mnum.representsNonZero(true)) {
 			if(mnum.isPower()) {
 				mnum.setToChild(1);
 				mden.setToChild(1);
@@ -4615,7 +4625,7 @@ bool compare_delete(MathStructure &mnum, MathStructure &mden, bool &erase1, bool
 				erase1 = true;
 				mexp2->number() -= mexp1->number();
 			} else {
-				if(!(eo.assume_denominators_nonzero && !mbase2->representsZero(true)) && !mbase2->representsNonZero()) {
+				if(!(eo.assume_denominators_nonzero && !mbase2->representsZero(true)) && !mbase2->representsNonZero(true)) {
 					if(mexp2->number().isFraction()) return false;
 					mexp2->number()--;
 					mexp1->number() -= mexp2->number();
@@ -4632,13 +4642,13 @@ bool compare_delete(MathStructure &mnum, MathStructure &mden, bool &erase1, bool
 				(*mbase2)[1].number() -= mexp1->number();
 				return true;
 			}
-			if(!(eo.assume_denominators_nonzero && !mbase2->representsZero(true)) && !mbase2->representsNonZero()) return false;
+			if(!(eo.assume_denominators_nonzero && !mbase2->representsZero(true)) && !mbase2->representsNonZero(true)) return false;
 			mexp1->number()--;
 			erase2 = true;
 			return true;
 		} else if(mexp2) {
 			if(mexp2->number().isFraction()) {
-				if(!(eo.assume_denominators_nonzero && !mbase2->representsZero(true)) && !mbase2->representsNonZero()) return false;
+				if(!(eo.assume_denominators_nonzero && !mbase2->representsZero(true)) && !mbase2->representsNonZero(true)) return false;
 				erase2 = true;
 				mbase1->raise(m_one);
 				(*mbase1)[1].number() -= mexp2->number();
@@ -11388,7 +11398,7 @@ bool MathStructure::isolate_x(const EvaluationOptions &eo, const MathStructure &
 					int index = -1;
 					for(size_t i = 0; i < CHILD(0)[i2].size(); i++) {
 						if(CHILD(0)[i2][i].contains(x_var)) {
-  							if(CHILD(0)[i2][i].isPower() && CHILD(0)[i2][i][1].isNumber() && CHILD(0)[i2][i][1].number().isMinusOne() && ((eo.assume_denominators_nonzero && !CHILD(0)[i2][i][0].representsZero(true)) || CHILD(0)[i2][i][0].representsNonZero())) {
+  							if(CHILD(0)[i2][i].isPower() && CHILD(0)[i2][i][1].isNumber() && CHILD(0)[i2][i][1].number().isMinusOne() && ((eo.assume_denominators_nonzero && !CHILD(0)[i2][i][0].representsZero(true)) || CHILD(0)[i2][i][0].representsNonZero(true))) {
 								index = i;
 								break;
 							}
@@ -11435,7 +11445,7 @@ bool MathStructure::isolate_x(const EvaluationOptions &eo, const MathStructure &
 			bool b = false;
 			for(size_t i = 0; i < CHILD(0).size(); i++) {
 				if(!CHILD(0)[i].contains(x_var)) {
-					if((eo.assume_denominators_nonzero && !CHILD(0)[i].representsZero(true)) || CHILD(0)[i].representsNonZero()) {
+					if((eo.assume_denominators_nonzero && !CHILD(0)[i].representsZero(true)) || CHILD(0)[i].representsNonZero(true)) {
 						bool b2 = false;
 						if(ct_comp != COMPARISON_EQUALS && ct_comp != COMPARISON_NOT_EQUALS) {
 							if(CHILD(0)[i].representsNegative()) {
@@ -11538,7 +11548,7 @@ bool MathStructure::isolate_x(const EvaluationOptions &eo, const MathStructure &
 				if(!CHILD(0)[1].contains(x_var)) {
 					MathStructure mnonzero, mbefore;
 					bool test_nonzero = false;
-					if(!CHILD(0)[1].representsNonNegative() && !CHILD(0)[0].representsNonZero()) {
+					if(!CHILD(0)[1].representsNonNegative() && !CHILD(0)[0].representsNonZero(true)) {
 						if(ct_comp != COMPARISON_EQUALS && ct_comp != COMPARISON_NOT_EQUALS) return false;
 						test_nonzero = true;
 						if(CHILD(0)[1].isNumber()) {
@@ -11582,7 +11592,7 @@ bool MathStructure::isolate_x(const EvaluationOptions &eo, const MathStructure &
 							mnonzero.eval(eo2);
 							if(CALCULATOR->endTemporaryStopMessages() > 0) {
 								return false;
-							} else if(!((eo.assume_denominators_nonzero && !mnonzero.representsZero(true)) || mnonzero.representsNonZero())) {
+							} else if(!((eo.assume_denominators_nonzero && !mnonzero.representsZero(true)) || mnonzero.representsNonZero(true))) {
 								if(eo.assume_denominators_nonzero) {
 									b1 = false;
 								} else {
@@ -11622,7 +11632,7 @@ bool MathStructure::isolate_x(const EvaluationOptions &eo, const MathStructure &
 							mnonzero.eval(eo2);
 							if(CALCULATOR->endTemporaryStopMessages() > 0) {
 								return false;
-							} else if(!((eo.assume_denominators_nonzero && !mnonzero.representsZero(true)) || mnonzero.representsNonZero())) {
+							} else if(!((eo.assume_denominators_nonzero && !mnonzero.representsZero(true)) || mnonzero.representsNonZero(true))) {
 								if(b1 && eo.assume_denominators_nonzero) {
 									b2 = false;
 								} else {
@@ -11668,7 +11678,7 @@ bool MathStructure::isolate_x(const EvaluationOptions &eo, const MathStructure &
 								mnonzero.replace(x_var, CHILD(1));
 								CALCULATOR->beginTemporaryStopMessages();
 								mnonzero.eval(eo2);
-								if(CALCULATOR->endTemporaryStopMessages() == 0 && ((eo.assume_denominators_nonzero && !mnonzero.representsZero(true)) || mnonzero.representsNonZero())) {
+								if(CALCULATOR->endTemporaryStopMessages() == 0 && ((eo.assume_denominators_nonzero && !mnonzero.representsZero(true)) || mnonzero.representsNonZero(true))) {
 									return true;
 								}	
 							}
@@ -11855,7 +11865,7 @@ bool MathStructure::isRationalPolynomial() const {
 		case STRUCT_FUNCTION: {}
 		case STRUCT_VARIABLE: {}
 		case STRUCT_SYMBOLIC: {
-			return !representsUndefined();
+			return !representsUndefined(true, true);
 		}
 	}
 	return false;

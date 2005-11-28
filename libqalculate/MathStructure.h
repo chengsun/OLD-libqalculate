@@ -244,7 +244,7 @@ class MathStructure {
 		bool representsZero(bool allow_units = false) const;
 		bool representsEven(bool allow_units = false) const;
 		bool representsOdd(bool allow_units = false) const;
-		bool representsUndefined(bool include_childs = false, bool include_infinite = false) const;
+		bool representsUndefined(bool include_childs = false, bool include_infinite = false, bool be_strict = false) const;
 	
 		void setApproximate(bool is_approx = true);	
 		bool isApproximate() const;

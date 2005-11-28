@@ -275,7 +275,7 @@ bool KnownVariable::representsComplex(bool allow_units) {return get().represents
 bool KnownVariable::representsNonZero(bool allow_units) {return get().representsNonZero(allow_units);}
 bool KnownVariable::representsEven(bool allow_units) {return get().representsEven(allow_units);}
 bool KnownVariable::representsOdd(bool allow_units) {return get().representsOdd(allow_units);}
-bool KnownVariable::representsUndefined(bool include_childs, bool include_infinite) {return get().representsUndefined(include_childs, include_infinite);}
+bool KnownVariable::representsUndefined(bool include_childs, bool include_infinite, bool be_strict) {return get().representsUndefined(include_childs, include_infinite, be_strict);}
 
 DynamicVariable::DynamicVariable(string cat_, string name_, string title_, bool is_local, bool is_builtin, bool is_active) : KnownVariable(cat_, name_, MathStructure(), title_, is_local, is_builtin, is_active) {
 	mstruct = NULL;

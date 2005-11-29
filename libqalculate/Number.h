@@ -35,12 +35,12 @@ class Number {
 	public:
 	
 		Number();
-		Number(string number, int base = 10, ReadPrecisionMode read_precision = DONT_READ_PRECISION);
+		Number(string number, const ParseOptions &po = default_parse_options);
 		Number(int numerator, int denominator = 1, int exp_10 = 0);
 		Number(const Number &o);
 		virtual ~Number();
 		
-		void set(string number, int base = 10, ReadPrecisionMode read_precision = DONT_READ_PRECISION);
+		void set(string number, const ParseOptions &po = default_parse_options);
 		void set(int numerator, int denominator = 1, int exp_10 = 0);
 		void setInfinity();
 		void setPlusInfinity();

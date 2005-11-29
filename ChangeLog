@@ -1,9 +1,15 @@
+2005-11-29 Niklas Knutsson  <nq@altern.org>
+
+	* Parse -x/y as (-x)/y instead of -(x/y)
+	* Print multiplication in negation with parentheses when excessive parentheses is on
+
 2005-11-28 Niklas Knutsson  <nq@altern.org>
 
 	* Updated function arguments parsing ignoring space after function name and not stopping parsing of
 	  single argument without parentheses until space or right parenthesis without corresponding left parenthesis
 	* Be more strict with 0/x if x is not non-zero
 	* Fix 1E-1 = 1e-1
+	* Calculate as float when 1.0001 > base < 0.9999 and exponent is greater than 10000 or less than -10000
 
 2005-11-27 Niklas Knutsson  <nq@altern.org>
 

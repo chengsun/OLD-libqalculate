@@ -3539,7 +3539,6 @@ bool Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOpti
 		}
 		return false;
 	}
-	string ssave = str;
 	int minus_count = 0;
 	bool has_sign = false, had_non_sign = false;
 	size_t i = 0;
@@ -3567,10 +3566,16 @@ bool Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOpti
 		}
 	}
 	if(str.empty()) {
-		if(minus_count % 2 == 1) {
+		if(minus_count % 2 == 1 && !po.preserve_format) {
 			mstruct->set(-1, 1);
 		} else if(has_sign) {
 			mstruct->set(1, 1);
+			if(po.preserve_format) {
+				while(minus_count > 0) {
+					mstruct->transform(STRUCT_NEGATE);
+					minus_count--;
+				}
+			}
 		}
 		return false;
 	}
@@ -3598,10 +3603,16 @@ bool Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOpti
 	if(po.base >= 2 && po.base <= 10 && (itmp = str.find_first_not_of(NUMBER_ELEMENTS MINUS, 0)) != string::npos) {
 		if(itmp == 0) {
 			error(true, _("\"%s\" is not a valid variable/function/unit."), str.c_str(), NULL);
-			if(minus_count % 2 == 1) {
+			if(minus_count % 2 == 1 && !po.preserve_format) {
 				mstruct->set(-1, 1);
 			} else if(has_sign) {
 				mstruct->set(1, 1);
+				if(po.preserve_format) {
+					while(minus_count > 0) {
+						mstruct->transform(STRUCT_NEGATE);
+						minus_count--;
+					}
+				}
 			}
 			return false;
 		} else {
@@ -3610,7 +3621,7 @@ bool Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOpti
 			str.erase(itmp, str.length() - itmp);
 		}
 	}
-	Number nr(str, po.base, po.read_precision);
+	Number nr(str, po);
 	if(!po.preserve_format && minus_count % 2 == 1) {
 		nr.negate();
 	}
@@ -4108,20 +4119,11 @@ bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		}
 	}
 
-	if((i = str.find_first_of(PLUS MINUS, 0)) != string::npos && i + 1 != str.length()) {
+	if((i = str.find_first_of(PLUS MINUS, 1)) != string::npos && i + 1 != str.length()) {
 		bool b = false, c = false;
 		bool min = false;
 		while(i != string::npos && i + 1 != str.length()) {
-			if(i < 1 || is_not_in(MULTIPLICATION_2 OPERATORS EXPS, str[i - 1])) {
-				if(i < 1 && str.find_first_not_of(MULTIPLICATION_2 OPERATORS EXPS) == string::npos) {
-					if(disable_errors_ref > 0) {
-						stopped_messages_count[disable_errors_ref - 1]++;
-						stopped_warnings_count[disable_errors_ref - 1]++;
-					} else {
-						error(false, _("Misplaced operator(s) \"%s\" ignored"), str.c_str(), NULL);
-					}
-					return b && !c;
-				}
+			if(is_not_in(MULTIPLICATION_2 OPERATORS EXPS, str[i - 1])) {
 				str2 = str.substr(0, i);
 				if(!c && b) {
 					if(min) {
@@ -4232,6 +4234,60 @@ bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 			return true;
 		}
 	}
+
+
+	if(str.empty()) return false;
+	if(str.find_first_not_of(OPERATORS SPACE) == string::npos) {
+		if(disable_errors_ref > 0) {
+			stopped_messages_count[disable_errors_ref - 1]++;
+			stopped_warnings_count[disable_errors_ref - 1]++;
+		} else {
+			error(false, _("Misplaced operator(s) \"%s\" ignored"), str.c_str(), NULL);
+		}
+		return false;
+	}
+	
+	i = 0;
+	bool ret = true;
+	bool has_sign = false;
+	int minus_count = 0;
+	while(i < str.length()) {
+		if(str[i] == MINUS_CH) {
+			has_sign = true;
+			minus_count++;
+			str.erase(i, 1);
+		} else if(str[i] == PLUS_CH) {
+			has_sign = true;
+			str.erase(i, 1);
+		} else if(str[i] == SPACE_CH) {
+			str.erase(i, 1);
+		} else if(is_in(OPERATORS, str[i])) {
+			if(disable_errors_ref > 0) {
+				stopped_messages_count[disable_errors_ref - 1]++;
+				stopped_warnings_count[disable_errors_ref - 1]++;
+			} else {
+				error(false, _("Misplaced '%c' ignored"), str[i], NULL);
+			}
+			str.erase(i, 1);
+		} else {
+			break;
+		}
+	}
+	if(str.empty()) {
+		if(minus_count % 2 == 1 && !po.preserve_format) {
+			mstruct->set(-1, 1);
+		} else if(has_sign) {
+			mstruct->set(1, 1);
+			if(po.preserve_format) {
+				while(minus_count > 0) {
+					mstruct->transform(STRUCT_NEGATE);
+					minus_count--;
+				}
+			}
+		}
+		return false;
+	}
+	
 	if((i = str.find(MULTIPLICATION_2_CH, 1)) != string::npos && i + 1 != str.length()) {
 		bool b = false;
 		while(i != string::npos && i + 1 != str.length()) {
@@ -4247,9 +4303,18 @@ bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		}
 		if(b) {
 			parseAdd(str, mstruct, po, OPERATION_MULTIPLY);
+			if(po.preserve_format) {
+				while(minus_count > 0) {
+					mstruct->transform(STRUCT_NEGATE);
+					minus_count--;
+				}
+			} else if(minus_count % 2 == 1) {
+				mstruct->negate();
+			}
 			return true;
 		}
 	}
+	
 	if((i = str.find(POWER_CH, 1)) != string::npos && i + 1 != str.length()) {
 		str2 = str.substr(0, i);
 		str = str.substr(i + 1, str.length() - (i + 1));		
@@ -4271,9 +4336,17 @@ bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 		parseAdd(str2, mstruct, po);
 		parseAdd(str, mstruct, po, OPERATION_MULTIPLY);
 	} else {
-		return parseNumber(mstruct, str, po);
+		ret = parseNumber(mstruct, str, po);
 	}
-	return true;
+	if(po.preserve_format) {
+		while(minus_count > 0) {
+			mstruct->transform(STRUCT_NEGATE);
+			minus_count--;
+		}
+	} else if(minus_count % 2 == 1) {
+		mstruct->negate();
+	}
+	return ret;
 }
 
 string Calculator::getName(string name, ExpressionItem *object, bool force, bool always_append) {

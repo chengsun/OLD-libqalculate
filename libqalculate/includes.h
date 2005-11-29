@@ -343,7 +343,6 @@ typedef enum {
 	ANGLE_UNIT_GRADIANS
 } AngleUnit;
 
-
 static const struct ParseOptions {
 	bool variables_enabled, functions_enabled, unknowns_enabled, units_enabled;
 	bool rpn;

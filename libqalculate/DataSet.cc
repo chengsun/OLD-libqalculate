@@ -294,11 +294,19 @@ MathStructure *DataProperty::generateStruct(const string &valuestr, int is_appro
 		}
 		case PROPERTY_NUMBER: {
 			if(b_brackets && valuestr.length() > 1 && valuestr[0] == '[' && valuestr[valuestr.length() - 1] == ']') {
-				if((b_approximate && is_approximate < 0) || is_approximate > 0) mstruct = new MathStructure(Number(valuestr.substr(1, valuestr.length() - 2), 10, ALWAYS_READ_PRECISION));
-				else mstruct = new MathStructure(Number(valuestr.substr(1, valuestr.length() - 2)));
+				if((b_approximate && is_approximate < 0) || is_approximate > 0) {
+					ParseOptions po; po.read_precision = ALWAYS_READ_PRECISION;
+					mstruct = new MathStructure(Number(valuestr.substr(1, valuestr.length() - 2), po));
+				} else {
+					mstruct = new MathStructure(Number(valuestr.substr(1, valuestr.length() - 2)));
+				}
 			} else {
-				if((b_approximate && is_approximate < 0) || is_approximate > 0) mstruct = new MathStructure(Number(valuestr, 10, ALWAYS_READ_PRECISION));
-				else mstruct = new MathStructure(Number(valuestr));
+				if((b_approximate && is_approximate < 0) || is_approximate > 0) {
+					ParseOptions po; po.read_precision = ALWAYS_READ_PRECISION;
+					mstruct = new MathStructure(Number(valuestr, po));
+				} else {
+					mstruct = new MathStructure(Number(valuestr));
+				}
 			}
 			break;
 		}

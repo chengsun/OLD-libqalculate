@@ -169,8 +169,8 @@ string printCL_I(cl_I integ, int base = 10, bool display_sign = true, bool displ
 Number::Number() {
 	clear();
 }
-Number::Number(string number, int base, ReadPrecisionMode read_precision) {
-	set(number, base, read_precision);
+Number::Number(string number, const ParseOptions &po) {
+	set(number, po);
 }
 Number::Number(int numerator, int denominator, int exp_10) {
 	set(numerator, denominator, exp_10);
@@ -181,11 +181,11 @@ Number::Number(const Number &o) {
 Number::~Number() {
 }
 
-void Number::set(string number, int base, ReadPrecisionMode read_precision) {
+void Number::set(string number, const ParseOptions &po) {
 
 	b_inf = false; b_pinf = false; b_minf = false; b_approx = false;
 
-	if(base == BASE_ROMAN_NUMERALS) {
+	if(po.base == BASE_ROMAN_NUMERALS) {
 		remove_blanks(number);
 		Number nr;
 		Number cur;
@@ -366,9 +366,9 @@ void Number::set(string number, int base, ReadPrecisionMode read_precision) {
 			values[i].set(nr);
 		}
 		if(error) {
-			PrintOptions po;
-			po.base = BASE_ROMAN_NUMERALS;
-			CALCULATOR->error(false, _("Errors in roman numerals: \"%s\". Interpreted as %s, which should be written as %s."), number.c_str(), nr.print().c_str(), nr.print(po).c_str(), NULL);
+			PrintOptions pro;
+			pro.base = BASE_ROMAN_NUMERALS;
+			CALCULATOR->error(false, _("Errors in roman numerals: \"%s\". Interpreted as %s, which should be written as %s."), number.c_str(), nr.print().c_str(), nr.print(pro).c_str(), NULL);
 		}
 		values.clear();
 		numbers.clear();
@@ -377,6 +377,7 @@ void Number::set(string number, int base, ReadPrecisionMode read_precision) {
 	}
 	cl_I num = 0;
 	cl_I den = 1;
+	int base = po.base;
 	remove_blank_ends(number);
 	if(base == 16 && number.length() >= 2 && number[0] == '0' && (number[1] == 'x' || number[1] == 'X')) {
 		number = number.substr(2, number.length() - 2);
@@ -491,7 +492,7 @@ void Number::set(string number, int base, ReadPrecisionMode read_precision) {
 	} else {
 		value = num / den;
 	}
-	if(read_precision == ALWAYS_READ_PRECISION || (in_decimals && read_precision == READ_PRECISION_WHEN_DECIMALS)) {
+	if(po.read_precision == ALWAYS_READ_PRECISION || (in_decimals && po.read_precision == READ_PRECISION_WHEN_DECIMALS)) {
 		if(base != 10) {
 			Number precmax(10);
 			precmax.raise(readprec);
@@ -1245,12 +1246,16 @@ bool Number::raise(const Number &o, int) {
 		return true;
 	}
 	bool neg = false;
-	if(isNegative() && !o.isComplex() && !o.isApproximate() && !o.numeratorIsEven() && !o.denominatorIsEven()) {
+	if(isNegative() && !o.isComplex() && !o.isApproximateType() && !o.numeratorIsEven() && !o.denominatorIsEven()) {
 		neg = true;
 		value = cln::abs(value);
 	}
 	
-	value = expt(value, o.internalNumber());
+	if(o.isRational() && isRational() && cln::abs(value) < 1.0001 && cln::abs(value) > 0.9999 && value != 1 && value != -1 && (cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) > 10000 || cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) < -10000)) {
+		value = expt(cln::cl_float(cln::realpart(value)), cln::cl_float(cln::realpart(o.internalNumber())));	
+	} else {
+		value = expt(value, o.internalNumber());
+	}
 	
 	if(neg) {
 		value = -value;

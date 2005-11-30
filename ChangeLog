@@ -1,7 +1,15 @@
+2005-11-30 Niklas Knutsson  <nq@altern.org>
+
+	* Only treat e as E if preceded by number
+	* Do not test float number for infinite series
+	* Check factorized numerators and denominators for negative powers
+
 2005-11-29 Niklas Knutsson  <nq@altern.org>
 
 	* Parse -x/y as (-x)/y instead of -(x/y)
 	* Print multiplication in negation with parentheses when excessive parentheses is on
+	* Do not display (x)(y)^z with multiplication sign
+	* Sort x^2*y^3 + 10xy - 3x + 8 instead of x^2*y^3 - 3x + 10xy + 8
 
 2005-11-28 Niklas Knutsson  <nq@altern.org>
 

@@ -72,6 +72,23 @@ void printRecursive(const MathStructure &mstruct) {
 	}
 }
 
+void unnegate_sign(MathStructure &mstruct) {
+	if(mstruct.isNumber()) {
+		mstruct.number().negate();
+	} else if(mstruct.isMultiplication()) {
+		if(mstruct[0].isMinusOne()) {
+			if(mstruct.size() > 2) {
+				mstruct.delChild(1);
+			} else if(mstruct.size() > 1) {
+				mstruct.setToChild(2);
+			} else {
+				mstruct.set(1, 1);
+			}
+		} else {
+			unnegate_sign(mstruct[0]);
+		}
+	}
+}
 
 void MathStructure::mergePrecision(const MathStructure &o) {MERGE_APPROX_AND_PREC(o)}
 
@@ -2286,7 +2303,6 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 					break;
 				}
 				case STRUCT_POWER: {
-					if(!eo.expand && mstruct[0].isAddition()) return -1;
 					if(mstruct[1].isNumber() && *this == mstruct[0] && addablePower(mstruct, eo)) {
 						if((eo.assume_denominators_nonzero && !representsZero(true)) || representsNonZero(true) || mstruct[1].representsPositive()) {
 							if(mparent) {
@@ -2301,6 +2317,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 							return 1;
 						}
 					}
+					if(!eo.expand && mstruct[0].isAddition()) return -1;
 					if(mstruct[1].hasNegativeSign()) {
 						int ret;
 						vector<bool> merged;
@@ -4315,7 +4332,8 @@ int sortCompare(const MathStructure &mstruct1, const MathStructure &mstruct2, co
 					if(i2 != 0) return i2;
 				}
 				if(mstruct1.size() - start == mstruct2.size() - start2) return 0;
-				return -1;
+				if(parent.isMultiplication()) return -1;
+				else return 1;
 			} else {
 				i2 = sortCompare(mstruct1[start], mstruct2, parent, po);
 				if(i2 != 0) return i2;
@@ -4758,12 +4776,9 @@ bool factor1(const MathStructure &mstruct, MathStructure &mnum, MathStructure &m
 					}
 					if(mstruct[i][1].isMinusOne()) {
 						mden[mden.size() - 1] = mstruct[i][0];
-					} else if(mstruct[i][1].isNumber()) {
-						mden[mden.size() - 1] = mstruct[i];
-						mden[mden.size() - 1][1].number().negate();
 					} else {
 						mden[mden.size() - 1] = mstruct[i];
-						mden[mden.size() - 1][1][0].number().negate();
+						unnegate_sign(mden[mden.size() - 1][1]);
 					}
 					mnum[mnum.size() - 1].set(1, 1);
 				} else {
@@ -4805,22 +4820,16 @@ bool factor1(const MathStructure &mstruct, MathStructure &mnum, MathStructure &m
 					if(mden.isUndefined()) {
 						if(mstruct[i][1].isMinusOne()) {
 							mden = mstruct[i][0];
-						} else if(mstruct[i][1].isNumber()) {
-							mden = mstruct[i];
-							mden[1].number().negate();
 						} else {
 							mden = mstruct[i];
-							mden[1][0].number().negate();
+							unnegate_sign(mden[1]);
 						}
 					} else {
 						if(mstruct[i][1].isMinusOne()) {
 							mden.multiply(mstruct[i][0], true);
-						} else if(mstruct[i][1].isNumber()) {
-							mden.multiply(mstruct[i], true);
-							mden[mden.size() - 1][1].number().negate();
 						} else {
 							mden.multiply(mstruct[i], true);
-							mden[mden.size() - 1][1][0].number().negate();
+							unnegate_sign(mden[mden.size() - 1][1]);
 						}
 					}
 				} else {
@@ -4831,13 +4840,58 @@ bool factor1(const MathStructure &mstruct, MathStructure &mnum, MathStructure &m
 					}
 				}
 			}
-		}		
+		}
+		mden.calculatesub(eo, eo, false);
 	}
 	if(!mnum.isUndefined() && !mden.isUndefined()) {
-		mnum.factorize(eo);
-		mden.factorize(eo);
-		mnum.evalSort(true);
-		mden.evalSort(true);
+		while(true) {
+			mnum.factorize(eo);
+			mnum.evalSort(true);
+			if(mnum.isMultiplication()) {
+				for(size_t i = 0; i < mnum.size(); ) {
+					if(mnum[i].isPower() && mnum[i][1].hasNegativeSign()) {
+						if(mnum[i][1].isMinusOne()) {
+							mnum[i][0].ref();
+							mden.multiply_nocopy(&mnum[i][0], true);
+						} else {
+							mnum[i].ref();
+							mden.multiply_nocopy(&mnum[i], true);
+							unnegate_sign(mden[mden.size() - 1][1]);
+						}
+						mden.calculateMultiplyLast(eo);
+						mnum.delChild(i + 1);
+					} else {
+						i++;
+					}
+				}
+				if(mnum.size() == 0) mnum.set(1, 1);
+				else if(mnum.size() == 1) mnum.setToChild(1);
+			}
+			mden.factorize(eo);			
+			mden.evalSort(true);
+			bool b = false;
+			if(mden.isMultiplication()) {
+				for(size_t i = 0; i < mden.size(); ) {
+					if(mden[i].isPower() && mden[i][1].hasNegativeSign()) {
+						MathStructure *mden_inv = new MathStructure(mden[i]);
+						if(mden_inv->calculateInverse(eo)) {
+							mnum.multiply_nocopy(mden_inv, true);
+							mnum.calculateMultiplyLast(eo);
+							mden.delChild(i + 1);
+							b = true;
+						} else {
+							mden_inv->unref();
+							i++;
+						}
+					} else {
+						i++;
+					}
+				}
+				if(mden.size() == 0) mden.set(1, 1);
+				else if(mden.size() == 1) mden.setToChild(1);
+			}
+			if(!b) break;
+		}
 		bool erase1, erase2, b;
 		if(mnum.isMultiplication()) {
 			for(int i = 0; i < (int) mnum.size(); i++) {
@@ -8891,7 +8945,7 @@ int MathStructure::neededMultiplicationSign(const PrintOptions &po, const Intern
 		case STRUCT_INVERSE: {}
 		case STRUCT_DIVISION: {if(flat_division) return MULTIPLICATION_SIGN_OPERATOR; return MULTIPLICATION_SIGN_SPACE;}
 		case STRUCT_ADDITION: {return MULTIPLICATION_SIGN_OPERATOR;}
-		case STRUCT_POWER: {return CHILD(0).neededMultiplicationSign(po, ips, parent, index, CHILD(0).needsParenthesis(po, ips, *this, 1, flat_division, flat_power), par_prev, flat_division, flat_power);}
+		case STRUCT_POWER: {return CHILD(0).neededMultiplicationSign(po, ips, parent, index, par, par_prev, flat_division, flat_power);}
 		case STRUCT_NEGATE: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_BITWISE_AND: {return MULTIPLICATION_SIGN_OPERATOR;}
 		case STRUCT_BITWISE_OR: {return MULTIPLICATION_SIGN_OPERATOR;}
@@ -8990,7 +9044,7 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 					else print_str += "*";
 					if(po.spacious) print_str += " ";
 				} else if(i > 0) {
-					switch(CHILD(i).neededMultiplicationSign(po, ips_n, *this, i + 1, ips_n.wrap, par_prev, true, true)) {
+					switch(CHILD(i).neededMultiplicationSign(po, ips_n, *this, i + 1, ips_n.wrap || (CHILD(i).isPower() && CHILD(i)[0].needsParenthesis(po, ips_n, CHILD(i), 1, true, true)), par_prev, true, true)) {
 						case MULTIPLICATION_SIGN_SPACE: {print_str += " "; break;}
 						case MULTIPLICATION_SIGN_OPERATOR: {
 							if(po.spacious) {

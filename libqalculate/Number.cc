@@ -1251,10 +1251,18 @@ bool Number::raise(const Number &o, int) {
 		value = cln::abs(value);
 	}
 	
-	if(o.isRational() && isRational() && cln::abs(value) < 1.0001 && cln::abs(value) > 0.9999 && value != 1 && value != -1 && (cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) > 10000 || cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) < -10000)) {
-		value = expt(cln::cl_float(cln::realpart(value)), cln::cl_float(cln::realpart(o.internalNumber())));	
+	cln::cl_RA dmax = 1;
+	if(PRECISION >= 14) {
+		dmax = dmax / 10;
+	} else if(PRECISION >= 5) {
+		dmax = dmax / 10000;
 	} else {
-		value = expt(value, o.internalNumber());
+		dmax = dmax / 100000;
+	}
+	if(o.isRational() && isRational() && cln::abs(value) <= 1 + dmax && cln::abs(value) >= 1 - dmax && value != 1 && value != -1 && (cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) > 10000 || cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) < -10000)) {
+		value = cln::expt(cln::cl_float(cln::realpart(value)), cln::cl_float(cln::realpart(o.internalNumber())));	
+	} else {
+		value = cln::expt(value, o.internalNumber());
 	}
 	
 	if(neg) {
@@ -2361,6 +2369,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 		str += ")";
 	} else {
 		if(base != BASE_ROMAN_NUMERALS && (isApproximateType() || po.number_fraction_format == FRACTION_DECIMAL || po.number_fraction_format == FRACTION_DECIMAL_EXACT)) {
+
 			cln::cl_I num, d = cln::denominator(cln::rational(cln::realpart(value))), remainder = 0, remainder2 = 0, exp = 0;
 			cln::cl_I_div_t div;
 			bool neg = cln::minusp(cln::realpart(value));
@@ -2450,8 +2459,9 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 				started = true;
 			}
 			if(!exact && po.use_max_decimals && po.max_decimals >= 0 && precision2 > po.max_decimals - expo) precision2 = po.max_decimals - expo;
+			bool try_infinite_series = po.indicate_infinite_series && !isApproximateType();
 			while(!exact && precision2 > 0) {
-				if(po.indicate_infinite_series && !infinite_series) {
+				if(try_infinite_series) {
 					remainders.push_back(remainder);
 				}
 				remainder = remainder * base;
@@ -2468,10 +2478,11 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 				}
 				l10++;
 				remainder = remainder2;
-				if(po.indicate_infinite_series && !exact && !infinite_series) {
+				if(try_infinite_series && !exact) {
 					for(size_t i = 0; i < remainders.size(); i++) {
 						if(remainders[i] == remainder) {
 							infinite_series = true;
+							try_infinite_series = false;
 							break;
 						}
 					}

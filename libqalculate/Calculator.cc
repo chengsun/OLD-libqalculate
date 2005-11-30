@@ -3001,7 +3001,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 //				} else if(compare_name_no_case(XOR_str, str, XOR_str_len, str_index + 1)) {
 				}
 			}
-		} else if(str_index > 0 && po.base >= 2 && po.base <= 10 && is_in(EXPS, str[str_index]) && str_index + 1 < str.length() && (is_in(NUMBERS, str[str_index + 1]) || (is_in(PLUS MINUS, str[str_index + 1]) && str_index + 2 < str.length() && is_in(NUMBERS, str[str_index + 2])))) {
+		} else if(str_index > 0 && po.base >= 2 && po.base <= 10 && is_in(EXPS, str[str_index]) && str_index + 1 < str.length() && (is_in(NUMBERS, str[str_index + 1]) || (is_in(PLUS MINUS, str[str_index + 1]) && str_index + 2 < str.length() && is_in(NUMBERS, str[str_index + 2]))) && is_in(NUMBER_ELEMENTS, str[str_index - 1])) {
 			//don't do anything when e is used instead of E for EXP			
 		} else if(po.base >= 2 && po.base <= 10 && is_not_in(NUMBERS NOT_IN_NAMES, str[str_index])) {
 			bool p_mode = false;

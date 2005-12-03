@@ -2764,6 +2764,28 @@ SolveFunction::SolveFunction() : MathFunction("solve", 1, 2) {
 	setArgumentDefinition(2, new SymbolicArgument());
 	setDefaultValue(2, "x");
 }
+bool is_comparison_structure(const MathStructure &mstruct, const MathStructure &xvar, bool *bce = NULL, bool do_bce_or = false);
+bool is_comparison_structure(const MathStructure &mstruct, const MathStructure &xvar, bool *bce, bool do_bce_or) {
+	if(mstruct.isComparison()) {
+		if(bce) *bce = mstruct.comparisonType() == COMPARISON_EQUALS;
+		return mstruct[0] == xvar;
+	}
+	if(bce && do_bce_or && mstruct.isLogicalOr()) {
+		*bce = true;
+		for(size_t i = 0; i < mstruct.size(); i++) {
+			bool bcei = false;
+			if(!is_comparison_structure(mstruct[i], xvar, &bcei, false)) return false;
+			if(!bcei) *bce = false;
+		}
+		return true;
+	}
+	if(bce) *bce = false;
+	if(!mstruct.isLogicalAnd() && !mstruct.isLogicalOr()) return false;
+	for(size_t i = 0; i < mstruct.size(); i++) {
+		if(!is_comparison_structure(mstruct[i], xvar)) return false;
+	}
+	return true;
+}
 int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 
 	mstruct = vargs[0];
@@ -2772,13 +2794,24 @@ int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 	eo2.isolate_var = &vargs[1];
 	mstruct.eval(eo2);
 
-	bool is_comparison = mstruct.isComparison();
-	if(is_comparison) {
+	bool is_comparison = false;
+	if(mstruct.isComparison()) {
+		is_comparison = true;
 		if(mstruct[0] == vargs[1]) {
 			if(mstruct.comparisonType() == COMPARISON_EQUALS) {
-				MathStructure msave(mstruct[1]);
-				mstruct = msave;	
+				mstruct.setToChild(2);	
 			}
+			return 1;
+		}
+	} else if(mstruct.isLogicalAnd()) {
+		if(is_comparison_structure(mstruct, vargs[1])) return 1;
+	} else if(mstruct.isLogicalOr()) {
+		bool bce = true;
+		if(is_comparison_structure(mstruct, vargs[1], &bce, true)) {
+			if(bce) {
+				for(size_t i = 0; i < mstruct.size(); i++) mstruct[i].setToChild(2);
+			}
+			mstruct.setType(STRUCT_VECTOR);
 			return 1;
 		}
 	}
@@ -2795,7 +2828,7 @@ int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 			assumptions_added = true;
 		}
 	} else {
-		CALCULATOR->defaultAssumptions();
+		assumptions = CALCULATOR->defaultAssumptions();
 	}
 	
 	if(assumptions->sign() != ASSUMPTION_SIGN_UNKNOWN) {
@@ -2803,21 +2836,36 @@ int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 		assumptions->setSign(ASSUMPTION_SIGN_UNKNOWN);
 		MathStructure mstruct2(vargs[0]);
 		mstruct2.eval(eo2);
+		bool b = false;
 		if(mstruct2.isComparison()) {
 			if(mstruct2[0] == vargs[1]) {
 				if(mstruct2.comparisonType() == COMPARISON_EQUALS) {
-					MathStructure msave(mstruct2[1]);
-					mstruct = msave;	
+					mstruct = mstruct2[1];
 				} else {
 					mstruct = mstruct2;
 				}
-				CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
-				assumptions->setSign(as);
-				if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);
-				return 1;
+				b = true;
+				
+			}
+		} else if(mstruct2.isLogicalAnd()) {
+			if(is_comparison_structure(mstruct2, vargs[1])) b = true;
+		} else if(mstruct2.isLogicalOr()) {
+			bool bce = true;
+			if(is_comparison_structure(mstruct2, vargs[1], &bce, true)) {
+				mstruct = mstruct2;
+				if(bce) {
+					for(size_t i = 0; i < mstruct.size(); i++) mstruct[i].setToChild(2);
+				}
+				mstruct.setType(STRUCT_VECTOR);
+				b = true;
 			}
 		}
 		assumptions->setSign(as);
+		if(b) {
+			CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+			if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);				
+			return 1;
+		}
 	}
 	if(assumptions->numberType() != ASSUMPTION_NUMBER_NONE) {
 		AssumptionNumberType ant = assumptions->numberType();
@@ -2826,23 +2874,37 @@ int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 		assumptions->setSign(ASSUMPTION_SIGN_UNKNOWN);
 		MathStructure mstruct2(vargs[0]);
 		mstruct2.eval(eo2);
+		bool b = false;
 		if(mstruct2.isComparison()) {
 			if(mstruct2[0] == vargs[1]) {
 				if(mstruct2.comparisonType() == COMPARISON_EQUALS) {
-					MathStructure msave(mstruct2[1]);
-					mstruct = msave;	
+					mstruct = mstruct2[1];
 				} else {
 					mstruct = mstruct2;
 				}
-				CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed type and sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
-				assumptions->setNumberType(ant);
-				assumptions->setSign(as);
-				if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);
-				return 1;
+				b = true;
+				
+			}
+		} else if(mstruct2.isLogicalAnd()) {
+			if(is_comparison_structure(mstruct2, vargs[1])) b = true;
+		} else if(mstruct2.isLogicalOr()) {
+			bool bce = true;
+			if(is_comparison_structure(mstruct2, vargs[1], &bce, true)) {
+				mstruct = mstruct2;
+				if(bce) {
+					for(size_t i = 0; i < mstruct.size(); i++) mstruct[i].setToChild(2);
+				}
+				mstruct.setType(STRUCT_VECTOR);
+				b = true;
 			}
 		}
 		assumptions->setNumberType(ant);
 		assumptions->setSign(as);
+		if(b) {
+			CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed type and sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+			if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);
+			return 1;
+		}
 	}
 	
 	if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);

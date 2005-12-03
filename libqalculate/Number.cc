@@ -993,6 +993,9 @@ bool Number::numeratorIsEven() const {
 bool Number::numeratorIsOne() const {
 	return !isInfinite() && !isComplex() && !isApproximateType() && cln::numerator(cln::rational(cln::realpart(value))) == 1;
 }
+bool Number::numeratorIsMinusOne() const {
+	return !isInfinite() && !isComplex() && !isApproximateType() && cln::numerator(cln::rational(cln::realpart(value))) == -1;
+}
 bool Number::isOdd() const {
 	return isInteger() && cln::oddp(cln::numerator(cln::rational(cln::realpart(value))));
 }

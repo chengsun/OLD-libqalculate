@@ -1,3 +1,14 @@
+2005-12-03 Niklas Knutsson  <nq@altern.org>
+
+	* Isolate x using AND and OR instead of vector
+	* Enhanced inequalities handling in isolate x
+	* Simplify AND and OR with comparisons (ex x < 5 && x < 3 = x < 3)
+
+2005-12-01 Niklas Knutsson  <nq@altern.org>
+
+	* Incorporate ginac sqrfree updates between version 1.2.3 and 1.3.3
+	* Assorted fixes
+
 2005-11-30 Niklas Knutsson  <nq@altern.org>
 
 	* Only treat e as E if preceded by number

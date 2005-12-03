@@ -148,6 +148,7 @@ class Number {
 		bool denominatorIsTwo() const;
 		bool numeratorIsEven() const;
 		bool numeratorIsOne() const;
+		bool numeratorIsMinusOne() const;
 		bool isOdd() const;
 		
 		int integerLength() const;

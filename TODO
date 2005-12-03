@@ -4,6 +4,7 @@
 * Plot-functions
 * Replace pointers to unit when unit type has changed (a different object must be created)
 * Sort out percentile and provide alternative methods
+* Return a range when appropriate for comparisons (ex. (2x-3)/(x-1)+x-3 > 0 => (x > 0 && x < 1, x > 2) instead of (x > 0, x > 2))
 
 * More functions
 * More units
@@ -13,6 +14,4 @@
 * Sane and stable API
 * API documentation
 
-* Better graphs/charts (do not use gnuplot)
 * Script/code plugins for advanced functions
-* Gnome/KDE applets

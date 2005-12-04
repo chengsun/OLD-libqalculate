@@ -231,6 +231,7 @@ class MathStructure {
 		
 		bool hasNegativeSign() const;
 		
+		bool representsBoolean() const;
 		bool representsPositive(bool allow_units = false) const;
 		bool representsNegative(bool allow_units = false) const;
 		bool representsNonNegative(bool allow_units = false) const;
@@ -319,15 +320,35 @@ class MathStructure {
 		int merge_power(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
 		int merge_logical_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
 		int merge_logical_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
+		int merge_logical_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
 		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
 		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
 		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
 		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo, bool recursive = true, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateMergeIndex(size_t index, const EvaluationOptions &eo, const EvaluationOptions &feo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalOrLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalOrIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalOr(const MathStructure &mor, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalXorLast(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalXor(const MathStructure &mxor, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalAndLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalAndIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalAnd(const MathStructure &mand, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateLogicalNot(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseNot(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateInverse(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateNegate(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateRaiseExponent(const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateRaise(const MathStructure &mexp, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseOrLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseOrIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseOr(const MathStructure &mor, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseXorLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseXorIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseXor(const MathStructure &mxor, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseAndLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseAndIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		bool calculateBitwiseAnd(const MathStructure &mand, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateMultiplyLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateMultiplyIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateMultiply(const MathStructure &mmul, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
@@ -465,7 +486,7 @@ class MathStructure {
 		bool integrate(const MathStructure &x_var, const EvaluationOptions &eo);
 		
 		const MathStructure &find_x_var() const;
-		bool isolate_x(const EvaluationOptions &eo, const MathStructure &x_var = m_undefined);
+		bool isolate_x(const EvaluationOptions &eo, const MathStructure &x_var = m_undefined, bool check_result = false);
 		
 
 //polynomials

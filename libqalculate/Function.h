@@ -114,6 +114,7 @@ class MathFunction : public ExpressionItem {
 	virtual bool representsEven(const MathStructure&, bool = false) const {return false;}
 	virtual bool representsOdd(const MathStructure&, bool = false) const {return false;}
 	virtual bool representsUndefined(const MathStructure&) const {return false;}
+	virtual bool representsBoolean(const MathStructure&) const {return false;}
 	
 };
 

@@ -21,6 +21,15 @@
 						x(); \
 						x(const x *function) {set(function);} \
 						ExpressionItem *copy() const {return new x(this);} \
+					};
+					
+#define DECLARE_BUILTIN_FUNCTION_B(x)	class x : public MathFunction { \
+					  public: \
+						int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);  \
+						x(); \
+						x(const x *function) {set(function);} \
+						ExpressionItem *copy() const {return new x(this);} \
+						bool representsBoolean(const MathStructure&) const {return true;}\
 					};					
 
 #define DECLARE_BUILTIN_FUNCTION_R(x)	class x : public MathFunction { \
@@ -94,9 +103,9 @@ DECLARE_BUILTIN_FUNCTION_R(MultiFactorialFunction)
 DECLARE_BUILTIN_FUNCTION(BinomialFunction)
 
 DECLARE_BUILTIN_FUNCTION(BitXorFunction)
-DECLARE_BUILTIN_FUNCTION(XorFunction)
-DECLARE_BUILTIN_FUNCTION(OddFunction)
-DECLARE_BUILTIN_FUNCTION(EvenFunction)
+DECLARE_BUILTIN_FUNCTION_B(XorFunction)
+DECLARE_BUILTIN_FUNCTION_B(OddFunction)
+DECLARE_BUILTIN_FUNCTION_B(EvenFunction)
 DECLARE_BUILTIN_FUNCTION(ShiftFunction)
 
 DECLARE_BUILTIN_FUNCTION_R(AbsFunction)

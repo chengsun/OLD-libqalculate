@@ -1,8 +1,14 @@
+2005-12-04 Niklas Knutsson  <nq@altern.org>
+
+	* Isolate x updates
+	* Put AND within OR (to get nicer inequalities)
+
 2005-12-03 Niklas Knutsson  <nq@altern.org>
 
 	* Isolate x using AND and OR instead of vector
 	* Enhanced inequalities handling in isolate x
 	* Simplify AND and OR with comparisons (ex x < 5 && x < 3 = x < 3)
+	* Display "x < 3 && x > 1" as "1 < x < 3"
 
 2005-12-01 Niklas Knutsson  <nq@altern.org>
 

@@ -31,7 +31,7 @@ string result_text, parsed_text;
 bool load_global_defs, fetch_exchange_rates_at_startup, first_time, first_qalculate_run, save_mode_on_exit, save_defs_on_exit;
 PrintOptions printops, saved_printops;
 EvaluationOptions evalops, saved_evalops;
-AssumptionNumberType saved_assumption_type;
+AssumptionType saved_assumption_type;
 AssumptionSign saved_assumption_sign;
 int saved_precision;
 FILE *view_pipe_r, *view_pipe_w, *command_pipe_r, *command_pipe_w;
@@ -154,20 +154,22 @@ void set_assumption(const string &str, bool first_of_two = false) {
 		if(first_of_two) {
 			CALCULATOR->defaultAssumptions()->setSign(ASSUMPTION_SIGN_UNKNOWN);
 		} else {
-			CALCULATOR->defaultAssumptions()->setNumberType(ASSUMPTION_NUMBER_NONE);
+			CALCULATOR->defaultAssumptions()->setType(ASSUMPTION_TYPE_NONE);
 		}
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "none", _("none"))) {
-		CALCULATOR->defaultAssumptions()->setNumberType(ASSUMPTION_NUMBER_NONE);
+		CALCULATOR->defaultAssumptions()->setType(ASSUMPTION_TYPE_NONE);
+	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "non-matrix", _("non-matrix"))) {
+		CALCULATOR->defaultAssumptions()->setType(ASSUMPTION_TYPE_NONMATRIX);
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "complex", _("complex"))) {
-		CALCULATOR->defaultAssumptions()->setNumberType(ASSUMPTION_NUMBER_COMPLEX);
+		CALCULATOR->defaultAssumptions()->setType(ASSUMPTION_TYPE_COMPLEX);
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "real", _("real"))) {
-		CALCULATOR->defaultAssumptions()->setNumberType(ASSUMPTION_NUMBER_REAL);
+		CALCULATOR->defaultAssumptions()->setType(ASSUMPTION_TYPE_REAL);
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "number", _("number"))) {
-		CALCULATOR->defaultAssumptions()->setNumberType(ASSUMPTION_NUMBER_NUMBER);
+		CALCULATOR->defaultAssumptions()->setType(ASSUMPTION_TYPE_NUMBER);
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "rational", _("rational"))) {
-		CALCULATOR->defaultAssumptions()->setNumberType(ASSUMPTION_NUMBER_RATIONAL);
+		CALCULATOR->defaultAssumptions()->setType(ASSUMPTION_TYPE_RATIONAL);
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "integer", _("integer"))) {
-		CALCULATOR->defaultAssumptions()->setNumberType(ASSUMPTION_NUMBER_INTEGER);
+		CALCULATOR->defaultAssumptions()->setType(ASSUMPTION_TYPE_INTEGER);
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "non-zero", _("non-zero"))) {
 		CALCULATOR->defaultAssumptions()->setSign(ASSUMPTION_SIGN_NONZERO);
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "positive", _("positive"))) {
@@ -1059,13 +1061,14 @@ int main (int argc, char *argv[]) {
 				case ASSUMPTION_SIGN_NONZERO: {value = _("non-zero"); break;}
 				default: {}
 			}
-			if(!value.empty() && !CALCULATOR->defaultAssumptions()->numberType() == ASSUMPTION_NUMBER_NONE) value += " ";
-			switch(CALCULATOR->defaultAssumptions()->numberType()) {
-				case ASSUMPTION_NUMBER_INTEGER: {value += _("integer"); break;}
-				case ASSUMPTION_NUMBER_RATIONAL: {value += _("rational"); break;}
-				case ASSUMPTION_NUMBER_REAL: {value += _("real"); break;}
-				case ASSUMPTION_NUMBER_COMPLEX: {value += _("complex"); break;}
-				case ASSUMPTION_NUMBER_NUMBER: {value += _("number"); break;}
+			if(!value.empty() && !CALCULATOR->defaultAssumptions()->type() == ASSUMPTION_TYPE_NONE) value += " ";
+			switch(CALCULATOR->defaultAssumptions()->type()) {
+				case ASSUMPTION_TYPE_INTEGER: {value += _("integer"); break;}
+				case ASSUMPTION_TYPE_RATIONAL: {value += _("rational"); break;}
+				case ASSUMPTION_TYPE_REAL: {value += _("real"); break;}
+				case ASSUMPTION_TYPE_COMPLEX: {value += _("complex"); break;}
+				case ASSUMPTION_TYPE_NUMBER: {value += _("number"); break;}
+				case ASSUMPTION_TYPE_NONMATRIX: {value += _("non-matrix"); break;}
 				default: {}
 			}
 			if(value.empty()) value = _("unknown");
@@ -1459,13 +1462,14 @@ int main (int argc, char *argv[]) {
 									case ASSUMPTION_SIGN_NONZERO: {value = _("non-zero"); break;}
 									default: {}
 								}
-								if(!value.empty() && !((UnknownVariable*) v)->assumptions()->numberType() == ASSUMPTION_NUMBER_NONE) value += " ";
-								switch(((UnknownVariable*) v)->assumptions()->numberType()) {
-									case ASSUMPTION_NUMBER_INTEGER: {value += _("integer"); break;}
-									case ASSUMPTION_NUMBER_RATIONAL: {value += _("rational"); break;}
-									case ASSUMPTION_NUMBER_REAL: {value += _("real"); break;}
-									case ASSUMPTION_NUMBER_COMPLEX: {value += _("complex"); break;}
-									case ASSUMPTION_NUMBER_NUMBER: {value += _("number"); break;}
+								if(!value.empty() && !((UnknownVariable*) v)->assumptions()->type() == ASSUMPTION_TYPE_NONE) value += " ";
+								switch(((UnknownVariable*) v)->assumptions()->type()) {
+									case ASSUMPTION_TYPE_INTEGER: {value += _("integer"); break;}
+									case ASSUMPTION_TYPE_RATIONAL: {value += _("rational"); break;}
+									case ASSUMPTION_TYPE_REAL: {value += _("real"); break;}
+									case ASSUMPTION_TYPE_COMPLEX: {value += _("complex"); break;}
+									case ASSUMPTION_TYPE_NUMBER: {value += _("number"); break;}
+									case ASSUMPTION_TYPE_NONMATRIX: {value += _("non-matrix"); break;}
 									default: {}
 								}
 								if(value.empty()) value = _("unknown");
@@ -1561,7 +1565,7 @@ int main (int argc, char *argv[]) {
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "assume", _("assume"))) {
 				puts("");
 				PUTS_UNICODE(_("Set default assumptions for unknown variables."));
-				string str = "("; str += _("unknown"); str += ", "; str += _("non-zero"); str += ", "; str += _("positive"); str += ", "; str += _("negative"); str += ", "; str += _("non-positive"); str += ", "; str += _("non-negative"); str += " / "; str += _("unknown"); str += ", "; str += _("number"); str += ", "; str += _("complex"); str += ", "; str += _("real"); str += ", "; str += _("rational"); str += ", "; str += _("integer"); str += ")";
+				string str = "("; str += _("unknown"); str += ", "; str += _("non-zero"); str += ", "; str += _("positive"); str += ", "; str += _("negative"); str += ", "; str += _("non-positive"); str += ", "; str += _("non-negative"); str += " / "; str += _("unknown"); str += ", "; str += _("non-matrix"); str += ", "; str += _("number"); str += ", "; str += _("complex"); str += ", "; str += _("real"); str += ", "; str += _("rational"); str += ", "; str += _("integer"); str += ")";
 				PUTS_UNICODE(str.c_str());
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "save", _("save")) || EQUALS_IGNORECASE_AND_LOCAL(str, "store", _("store"))) {
@@ -2048,7 +2052,7 @@ void set_saved_mode() {
 	saved_printops = printops;
 	saved_printops.allow_factorization = (evalops.structuring == STRUCTURING_FACTORIZE);
 	saved_evalops = evalops;
-	saved_assumption_type = CALCULATOR->defaultAssumptions()->numberType();
+	saved_assumption_type = CALCULATOR->defaultAssumptions()->type();
 	saved_assumption_sign = CALCULATOR->defaultAssumptions()->sign();
 }
 
@@ -2257,8 +2261,11 @@ void load_preferences() {
 				} else if(svar == "in_rpn_mode") {
 					evalops.parse_options.rpn = v;
 				} else if(svar == "default_assumption_type") {
-					if(v >= ASSUMPTION_NUMBER_NONE && v <= ASSUMPTION_NUMBER_INTEGER) {					
-						CALCULATOR->defaultAssumptions()->setNumberType((AssumptionNumberType) v);
+					if(v >= ASSUMPTION_TYPE_NONE && v <= ASSUMPTION_TYPE_INTEGER) {
+						if(v == ASSUMPTION_TYPE_NONE && version_numbers[0] == 0 && (version_numbers[1] < 9 || (version_numbers[1] == 9 && version_numbers[2] == 0))) {
+							v = ASSUMPTION_TYPE_NONMATRIX;
+						}
+						CALCULATOR->defaultAssumptions()->setType((AssumptionType) v);
 					}
 				} else if(svar == "default_assumption_sign") {
 					if(v >= ASSUMPTION_SIGN_UNKNOWN && v <= ASSUMPTION_SIGN_NONZERO) {
@@ -2347,7 +2354,7 @@ bool save_preferences(bool mode)
 	fprintf(file, "approximation=%i\n", saved_evalops.approximation);	
 	fprintf(file, "in_rpn_mode=%i\n", saved_evalops.parse_options.rpn);
 	fprintf(file, "limit_implicit_multiplication=%i\n", evalops.parse_options.limit_implicit_multiplication);
-	fprintf(file, "default_assumption_type=%i\n", CALCULATOR->defaultAssumptions()->numberType());
+	fprintf(file, "default_assumption_type=%i\n", CALCULATOR->defaultAssumptions()->type());
 	fprintf(file, "default_assumption_sign=%i\n", CALCULATOR->defaultAssumptions()->sign());
 	
 	fclose(file);

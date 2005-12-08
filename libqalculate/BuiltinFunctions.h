@@ -30,7 +30,28 @@
 						x(const x *function) {set(function);} \
 						ExpressionItem *copy() const {return new x(this);} \
 						bool representsBoolean(const MathStructure&) const {return true;}\
-					};					
+					};
+					
+#define DECLARE_BUILTIN_FUNCTION_PI(x)	class x : public MathFunction { \
+					  public: \
+						int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);  \
+						x(); \
+						x(const x *function) {set(function);} \
+						ExpressionItem *copy() const {return new x(this);} \
+						bool representsInteger(const MathStructure&, bool) const {return true;}\
+						bool representsPositive(const MathStructure&, bool) const {return true;}\
+					};
+
+#define DECLARE_BUILTIN_FUNCTION_RPI(x)	class x : public MathFunction { \
+					  public: \
+						int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);  \
+						x(); \
+						x(const x *function) {set(function);} \
+						ExpressionItem *copy() const {return new x(this);} \
+						bool representsReal(const MathStructure&, bool) const;\
+						bool representsInteger(const MathStructure&) const;\
+						bool representsNonNegative(const MathStructure&) const;\
+					};															
 
 #define DECLARE_BUILTIN_FUNCTION_R(x)	class x : public MathFunction { \
 					  public: \
@@ -77,17 +98,17 @@ DECLARE_BUILTIN_FUNCTION(LimitsFunction)
 DECLARE_BUILTIN_FUNCTION(RankFunction)
 DECLARE_BUILTIN_FUNCTION(SortFunction)
 DECLARE_BUILTIN_FUNCTION(ComponentFunction)
-DECLARE_BUILTIN_FUNCTION(ComponentsFunction)
+DECLARE_BUILTIN_FUNCTION_PI(ComponentsFunction)
 
 DECLARE_BUILTIN_FUNCTION(MatrixFunction)
 DECLARE_BUILTIN_FUNCTION(MergeVectorsFunction)
 DECLARE_BUILTIN_FUNCTION(MatrixToVectorFunction)
 DECLARE_BUILTIN_FUNCTION(AreaFunction)
-DECLARE_BUILTIN_FUNCTION(RowsFunction)
-DECLARE_BUILTIN_FUNCTION(ColumnsFunction)
+DECLARE_BUILTIN_FUNCTION_PI(RowsFunction)
+DECLARE_BUILTIN_FUNCTION_PI(ColumnsFunction)
 DECLARE_BUILTIN_FUNCTION(RowFunction)
 DECLARE_BUILTIN_FUNCTION(ColumnFunction)
-DECLARE_BUILTIN_FUNCTION(ElementsFunction)
+DECLARE_BUILTIN_FUNCTION_PI(ElementsFunction)
 DECLARE_BUILTIN_FUNCTION(ElementFunction)
 DECLARE_BUILTIN_FUNCTION(TransposeFunction)
 DECLARE_BUILTIN_FUNCTION(IdentityFunction)
@@ -116,6 +137,8 @@ DECLARE_BUILTIN_FUNCTION_R(RoundFunction)
 DECLARE_BUILTIN_FUNCTION_R(FloorFunction)
 DECLARE_BUILTIN_FUNCTION_R(CeilFunction)
 DECLARE_BUILTIN_FUNCTION_R(TruncFunction)
+DECLARE_BUILTIN_FUNCTION(NumeratorFunction)
+DECLARE_BUILTIN_FUNCTION(DenominatorFunction)
 DECLARE_BUILTIN_FUNCTION(IntFunction)
 DECLARE_BUILTIN_FUNCTION(FracFunction)
 DECLARE_BUILTIN_FUNCTION(RemFunction)
@@ -165,7 +188,7 @@ DECLARE_BUILTIN_FUNCTION(PercentileFunction)
 DECLARE_BUILTIN_FUNCTION(MinFunction)
 DECLARE_BUILTIN_FUNCTION(MaxFunction)
 DECLARE_BUILTIN_FUNCTION(ModeFunction)
-DECLARE_BUILTIN_FUNCTION(RandFunction)
+DECLARE_BUILTIN_FUNCTION_RPI(RandFunction)
 
 DECLARE_BUILTIN_FUNCTION(DaysFunction)
 DECLARE_BUILTIN_FUNCTION(YearFracFunction)
@@ -183,10 +206,10 @@ DECLARE_BUILTIN_FUNCTION(HexFunction)
 DECLARE_BUILTIN_FUNCTION(BaseFunction)
 DECLARE_BUILTIN_FUNCTION(RomanFunction)
 
-DECLARE_BUILTIN_FUNCTION(AsciiFunction)
+DECLARE_BUILTIN_FUNCTION_PI(AsciiFunction)
 DECLARE_BUILTIN_FUNCTION(CharFunction)
 
-DECLARE_BUILTIN_FUNCTION(LengthFunction)
+DECLARE_BUILTIN_FUNCTION_PI(LengthFunction)
 DECLARE_BUILTIN_FUNCTION(ConcatenateFunction)
 
 DECLARE_BUILTIN_FUNCTION(ReplaceFunction)

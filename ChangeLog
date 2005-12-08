@@ -1,3 +1,13 @@
+2005-12-06 Niklas Knutsson  <nq@altern.org>
+
+	* New assumption type "non-matrix" for unknowns with commutative multiplication
+	* Finish isolate x / solve changes
+
+2005-12-06 Niklas Knutsson  <nq@altern.org>
+
+	* Isolate x and solve fixes
+	* Fix matrix multiplication
+
 2005-12-04 Niklas Knutsson  <nq@altern.org>
 
 	* Isolate x updates

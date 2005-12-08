@@ -28,7 +28,6 @@ enum {
 	STRUCT_FUNCTION,
 	STRUCT_VARIABLE,
 	STRUCT_VECTOR,
-	STRUCT_ALTERNATIVES,
 	STRUCT_BITWISE_AND,
 	STRUCT_BITWISE_OR,
 	STRUCT_BITWISE_XOR,
@@ -72,6 +71,8 @@ class MathStructure {
 		MathStructure *function_value;
 		
 		ComparisonType ct_comp;
+		
+		bool isolate_x_sub(const EvaluationOptions &eo, EvaluationOptions &eo2, const MathStructure &x_var);
 	
 	public:
 
@@ -246,6 +247,7 @@ class MathStructure {
 		bool representsEven(bool allow_units = false) const;
 		bool representsOdd(bool allow_units = false) const;
 		bool representsUndefined(bool include_childs = false, bool include_infinite = false, bool be_strict = false) const;
+		bool representsNonMatrix() const;
 	
 		void setApproximate(bool is_approx = true);	
 		bool isApproximate() const;
@@ -392,8 +394,6 @@ class MathStructure {
 		const MathStructure *exponent() const;
 		MathStructure *base();
 		MathStructure *exponent();
-		
-		void addAlternative(const MathStructure &o);		
 
 		int type() const;
 		
@@ -487,6 +487,7 @@ class MathStructure {
 		
 		const MathStructure &find_x_var() const;
 		bool isolate_x(const EvaluationOptions &eo, const MathStructure &x_var = m_undefined, bool check_result = false);
+		bool isolate_x(const EvaluationOptions &eo, const EvaluationOptions &feo, const MathStructure &x_var = m_undefined, bool check_result = false);
 		
 
 //polynomials

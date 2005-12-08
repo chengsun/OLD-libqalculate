@@ -101,20 +101,21 @@ class MathFunction : public ExpressionItem {
 	MathStructure produceVector(const MathStructure &vargs, int begin = -1, int end = -1);
 	MathStructure produceArgumentsVector(const MathStructure &vargs, int begin = -1, int end = -1);
 	
-	virtual bool representsPositive(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsNegative(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsNonNegative(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsNonPositive(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsInteger(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsNumber(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsRational(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsReal(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsComplex(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsNonZero(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsEven(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsOdd(const MathStructure&, bool = false) const {return false;}
-	virtual bool representsUndefined(const MathStructure&) const {return false;}
-	virtual bool representsBoolean(const MathStructure&) const {return false;}
+	virtual bool representsPositive(const MathStructure&, bool = false) const;
+	virtual bool representsNegative(const MathStructure&, bool = false) const;
+	virtual bool representsNonNegative(const MathStructure&, bool = false) const;
+	virtual bool representsNonPositive(const MathStructure&, bool = false) const;
+	virtual bool representsInteger(const MathStructure&, bool = false) const;
+	virtual bool representsNumber(const MathStructure&, bool = false) const;
+	virtual bool representsRational(const MathStructure&, bool = false) const;
+	virtual bool representsReal(const MathStructure&, bool = false) const;
+	virtual bool representsComplex(const MathStructure&, bool = false) const;
+	virtual bool representsNonZero(const MathStructure&, bool = false) const;
+	virtual bool representsEven(const MathStructure&, bool = false) const;
+	virtual bool representsOdd(const MathStructure&, bool = false) const;
+	virtual bool representsUndefined(const MathStructure&) const;
+	virtual bool representsBoolean(const MathStructure&) const;
+	virtual bool representsNonMatrix(const MathStructure&) const;
 	
 };
 

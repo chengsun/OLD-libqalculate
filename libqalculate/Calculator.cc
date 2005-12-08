@@ -278,7 +278,7 @@ Calculator::Calculator() {
 	save_printoptions.short_multiplication = false;
 
 	default_assumptions = new Assumptions;
-	default_assumptions->setNumberType(ASSUMPTION_NUMBER_REAL);
+	default_assumptions->setType(ASSUMPTION_TYPE_REAL);
 	default_assumptions->setSign(ASSUMPTION_SIGN_NONZERO);
 	
 	u_rad = NULL; u_gra = NULL; u_deg = NULL;
@@ -1174,6 +1174,8 @@ void Calculator::addBuiltinFunctions() {
 	f_re = addFunction(new ReFunction());
 	f_im = addFunction(new ImFunction());
 	//f_arg = addFunction(new ArgFunction());
+	f_numerator = addFunction(new NumeratorFunction());
+	f_denominator = addFunction(new DenominatorFunction());	
 
 	f_sqrt = addFunction(new SqrtFunction());
 	f_sq = addFunction(new SquareFunction());
@@ -2055,7 +2057,6 @@ MathStructure Calculator::convertToBestUnit(const MathStructure &mstruct, const 
 		case STRUCT_LOGICAL_AND: {}
 		case STRUCT_LOGICAL_NOT: {}
 		case STRUCT_COMPARISON: {}
-		case STRUCT_ALTERNATIVES: {}
 		case STRUCT_FUNCTION: {}
 		case STRUCT_VECTOR: {}
 		case STRUCT_ADDITION: {
@@ -4901,7 +4902,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					done_something = true;
 				}
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "function")) {
-				if(version_numbers[1] < 6 || version_numbers[2] < 3) {
+				if(VERSION_BEFORE(0, 6, 3)) {
 					XML_GET_STRING_FROM_PROP(cur, "name", name)
 				} else {
 					name = "";
@@ -5278,7 +5279,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					done_something = true;
 				}
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "unknown")) {
-				if(version_numbers[1] < 6 || version_numbers[2] < 3) {
+				if(VERSION_BEFORE(0, 6, 3)) {
 					XML_GET_STRING_FROM_PROP(cur, "name", name)
 				} else {
 					name = "";
@@ -5296,12 +5297,19 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					if(!xmlStrcmp(child->name, (const xmlChar*) "type")) {
 						XML_GET_STRING_FROM_TEXT(child, stmp);
 						if(!((UnknownVariable*) v)->assumptions()) ((UnknownVariable*) v)->setAssumptions(new Assumptions());
-						if(stmp == "integer") ((UnknownVariable*) v)->assumptions()->setNumberType(ASSUMPTION_NUMBER_INTEGER);
-						else if(stmp == "rational") ((UnknownVariable*) v)->assumptions()->setNumberType(ASSUMPTION_NUMBER_RATIONAL);
-						else if(stmp == "real") ((UnknownVariable*) v)->assumptions()->setNumberType(ASSUMPTION_NUMBER_REAL);
-						else if(stmp == "complex") ((UnknownVariable*) v)->assumptions()->setNumberType(ASSUMPTION_NUMBER_COMPLEX);
-						else if(stmp == "number") ((UnknownVariable*) v)->assumptions()->setNumberType(ASSUMPTION_NUMBER_NUMBER);
-						else if(stmp == "none") ((UnknownVariable*) v)->assumptions()->setNumberType(ASSUMPTION_NUMBER_NONE);
+						if(stmp == "integer") ((UnknownVariable*) v)->assumptions()->setType(ASSUMPTION_TYPE_INTEGER);
+						else if(stmp == "rational") ((UnknownVariable*) v)->assumptions()->setType(ASSUMPTION_TYPE_RATIONAL);
+						else if(stmp == "real") ((UnknownVariable*) v)->assumptions()->setType(ASSUMPTION_TYPE_REAL);
+						else if(stmp == "complex") ((UnknownVariable*) v)->assumptions()->setType(ASSUMPTION_TYPE_COMPLEX);
+						else if(stmp == "number") ((UnknownVariable*) v)->assumptions()->setType(ASSUMPTION_TYPE_NUMBER);
+						else if(stmp == "non-matrix") ((UnknownVariable*) v)->assumptions()->setType(ASSUMPTION_TYPE_NONMATRIX);
+						else if(stmp == "none") {
+							if(VERSION_BEFORE(0, 9, 1)) {
+								((UnknownVariable*) v)->assumptions()->setType(ASSUMPTION_TYPE_NONMATRIX);
+							} else {
+								((UnknownVariable*) v)->assumptions()->setType(ASSUMPTION_TYPE_NONE);
+							}
+						}
 					} else if(!xmlStrcmp(child->name, (const xmlChar*) "sign")) {
 						XML_GET_STRING_FROM_TEXT(child, stmp);
 						if(!((UnknownVariable*) v)->assumptions()) ((UnknownVariable*) v)->setAssumptions(new Assumptions());
@@ -5332,7 +5340,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					v->setChanged(false);
 				}
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "variable")) {
-				if(version_numbers[1] < 6 || version_numbers[2] < 3) {
+				if(VERSION_BEFORE(0, 6, 3)) {
 					XML_GET_STRING_FROM_PROP(cur, "name", name)
 				} else {
 					name = "";
@@ -5395,7 +5403,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "unit")) {
 				XML_GET_STRING_FROM_PROP(cur, "type", type)
 				if(type == "base") {	
-					if(version_numbers[1] < 6 || version_numbers[2] < 3) {
+					if(VERSION_BEFORE(0, 6, 3)) {
 						XML_GET_STRING_FROM_PROP(cur, "name", name)
 					} else {
 						name = "";
@@ -5411,12 +5419,12 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					while(child != NULL) {
 						if(!xmlStrcmp(child->name, (const xmlChar*) "system")) {	
 							XML_DO_FROM_TEXT(child, u->setSystem)
-						} else if((version_numbers[1] < 6 || version_numbers[2] < 3) && !xmlStrcmp(child->name, (const xmlChar*) "singular")) {
+						} else if((VERSION_BEFORE(0, 6, 3)) && !xmlStrcmp(child->name, (const xmlChar*) "singular")) {
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, singular, best_singular, next_best_singular)
 							if(!unitNameIsValid(singular, version_numbers, is_user_defs)) {
 								singular = "";
 							}
-						} else if((version_numbers[1] < 6 || version_numbers[2] < 3) && !xmlStrcmp(child->name, (const xmlChar*) "plural") && !xmlGetProp(child, (xmlChar*) "index")) {
+						} else if((VERSION_BEFORE(0, 6, 3)) && !xmlStrcmp(child->name, (const xmlChar*) "plural") && !xmlGetProp(child, (xmlChar*) "index")) {
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, plural, best_plural, next_best_plural)
 							if(!unitNameIsValid(plural, version_numbers, is_user_defs)) {
 								plural = "";
@@ -5440,7 +5448,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 					}
 					done_something = true;
 				} else if(type == "alias") {	
-					if(version_numbers[1] < 6 || version_numbers[2] < 3) {
+					if(VERSION_BEFORE(0, 6, 3)) {
 						XML_GET_STRING_FROM_PROP(cur, "name", name)
 					} else {
 						name = "";
@@ -5486,12 +5494,12 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							}
 						} else if(!xmlStrcmp(child->name, (const xmlChar*) "system")) {
 							XML_GET_STRING_FROM_TEXT(child, usystem);
-						} else if((version_numbers[1] < 6 || version_numbers[2] < 3) && !xmlStrcmp(child->name, (const xmlChar*) "singular")) {	
+						} else if((VERSION_BEFORE(0, 6, 3)) && !xmlStrcmp(child->name, (const xmlChar*) "singular")) {	
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, singular, best_singular, next_best_singular)
 							if(!unitNameIsValid(singular, version_numbers, is_user_defs)) {
 								singular = "";
 							}
-						} else if((version_numbers[1] < 6 || version_numbers[2] < 3) && !xmlStrcmp(child->name, (const xmlChar*) "plural") && !xmlGetProp(child, (xmlChar*) "index")) {	
+						} else if((VERSION_BEFORE(0, 6, 3)) && !xmlStrcmp(child->name, (const xmlChar*) "plural") && !xmlGetProp(child, (xmlChar*) "index")) {	
 							XML_GET_LOCALE_STRING_FROM_TEXT(child, plural, best_plural, next_best_plural)
 							if(!unitNameIsValid(plural, version_numbers, is_user_defs)) {
 								plural = "";
@@ -5526,7 +5534,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 						done_something = true;	
 					}
 				} else if(type == "composite") {
-					if(version_numbers[1] < 6 || version_numbers[2] < 3) {
+					if(VERSION_BEFORE(0, 6, 3)) {
 						XML_GET_STRING_FROM_PROP(cur, "name", name)
 					} else {
 						name = "";
@@ -5965,28 +5973,32 @@ int Calculator::saveVariables(const char* file_name, bool save_global) {
 						if(variables[i]->precision() > 0) xmlNewProp(newnode2, (xmlChar*) "precision", (xmlChar*) i2s(variables[i]->precision()).c_str());
 					} else {
 						if(((UnknownVariable*) variables[i])->assumptions()) {
-							switch(((UnknownVariable*) variables[i])->assumptions()->numberType()) {
-								case ASSUMPTION_NUMBER_INTEGER: {
+							switch(((UnknownVariable*) variables[i])->assumptions()->type()) {
+								case ASSUMPTION_TYPE_INTEGER: {
 									newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "type", (xmlChar*) "integer");
 									break;
 								}
-								case ASSUMPTION_NUMBER_RATIONAL: {
+								case ASSUMPTION_TYPE_RATIONAL: {
 									newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "type", (xmlChar*) "rational");
 									break;
 								}
-								case ASSUMPTION_NUMBER_REAL: {
+								case ASSUMPTION_TYPE_REAL: {
 									newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "type", (xmlChar*) "real");
 									break;
 								}
-								case ASSUMPTION_NUMBER_COMPLEX: {
+								case ASSUMPTION_TYPE_COMPLEX: {
 									newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "type", (xmlChar*) "complex");
 									break;
 								}
-								case ASSUMPTION_NUMBER_NUMBER: {
+								case ASSUMPTION_TYPE_NUMBER: {
 									newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "type", (xmlChar*) "number");
 									break;
 								}
-								case ASSUMPTION_NUMBER_NONE: {
+								case ASSUMPTION_TYPE_NONMATRIX: {
+									newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "type", (xmlChar*) "non-matrix");
+									break;
+								}
+								case ASSUMPTION_TYPE_NONE: {
 									newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "type", (xmlChar*) "none");
 									break;
 								}

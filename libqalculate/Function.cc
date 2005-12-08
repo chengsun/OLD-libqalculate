@@ -469,53 +469,8 @@ MathStructure MathFunction::calculate(MathStructure &vargs, const EvaluationOpti
 			itmp++;
 		}
 		MathStructure mstruct;
-		bool b = false;
-		for(size_t i = 0; i < vargs.size(); i++) {
-			if(vargs[i].type() == STRUCT_ALTERNATIVES) {
-				b = true;
-				break;
-			}
-		} 
-		if(b) {
-			vector<size_t> solutions;
-			solutions.reserve(vargs.size());
-			for(size_t i = 0; i < vargs.size(); i++) {
-				solutions.push_back(0);
-			}
-			b = true;
-			while(true) {
-				MathStructure vargs_copy(vargs);
-				for(size_t i = 0; i < vargs_copy.size(); i++) {
-					if(vargs_copy[i].type() == STRUCT_ALTERNATIVES) {
-						if(!b && solutions[i] < vargs_copy[i].countChilds()) {
-							vargs_copy[i] = vargs_copy[i].getChild(solutions[i] + 1);
-							solutions[i]++;
-							b = true;
-						} else {
-							solutions[i] = 0;
-							vargs_copy[i] = vargs_copy[i].getChild(solutions[i] + 1);
-						}
-					}
-				}
-				if(!b) break;
-				MathStructure mstruct2;
-				if(!testArguments(vargs_copy) || calculate(mstruct2, vargs_copy, eo) < 1) {
-					mstruct2 = createFunctionMathStructureFromVArgs(vargs_copy);
-				} else {
-					if(precision() < 0) mstruct2.setPrecision(precision());
-					if(isApproximate()) mstruct2.setApproximate();
-				}
-				if(mstruct.isZero()) {
-					mstruct = mstruct2;
-				} else {
-					mstruct.addAlternative(mstruct2);
-				}
-				b = false;	 			
-			}
-		} else {
-			if(!testArguments(vargs) || calculate(mstruct, vargs, eo) < 1) {
-				return createFunctionMathStructureFromVArgs(vargs);
-			}
+		if(!testArguments(vargs) || calculate(mstruct, vargs, eo) < 1) {
+			return createFunctionMathStructureFromVArgs(vargs);
 		}
 		if(precision() < 0) mstruct.setPrecision(precision());
 		if(isApproximate()) mstruct.setApproximate();
@@ -653,6 +608,21 @@ MathStructure MathFunction::produceArgumentsVector(const MathStructure &vargs, i
 	MathStructure mstruct;
 	return vargs.getRange(begin, end, mstruct);
 }
+bool MathFunction::representsPositive(const MathStructure&, bool) const {return false;}
+bool MathFunction::representsNegative(const MathStructure&, bool) const {return false;}
+bool MathFunction::representsNonNegative(const MathStructure &vargs, bool allow_units) const {return representsPositive(vargs, allow_units);}
+bool MathFunction::representsNonPositive(const MathStructure &vargs, bool allow_units) const {return representsNegative(vargs, allow_units);}
+bool MathFunction::representsInteger(const MathStructure &vargs, bool allow_units) const {return representsBoolean(vargs) || representsEven(vargs, allow_units) || representsOdd(vargs, allow_units);}
+bool MathFunction::representsNumber(const MathStructure &vargs, bool allow_units) const {return representsReal(vargs, allow_units) || representsComplex(vargs, allow_units);}
+bool MathFunction::representsRational(const MathStructure &vargs, bool allow_units) const {return representsInteger(vargs, allow_units);}
+bool MathFunction::representsReal(const MathStructure &vargs, bool allow_units) const {return representsRational(vargs, allow_units);}
+bool MathFunction::representsComplex(const MathStructure&, bool) const {return false;}
+bool MathFunction::representsNonZero(const MathStructure &vargs, bool allow_units) const {return representsPositive(vargs, allow_units) || representsNegative(vargs, allow_units);}
+bool MathFunction::representsEven(const MathStructure&, bool) const {return false;}
+bool MathFunction::representsOdd(const MathStructure&, bool) const {return false;}
+bool MathFunction::representsUndefined(const MathStructure&) const {return false;}
+bool MathFunction::representsBoolean(const MathStructure&) const {return false;}
+bool MathFunction::representsNonMatrix(const MathStructure &vargs) const {return representsNumber(vargs, true);}
 
 UserFunction::UserFunction(string cat_, string name_, string eq_, bool is_local, int argc_, string title_, string descr_, int max_argc_, bool is_active) : MathFunction(name_, argc_, max_argc_, cat_, title_, descr_, is_active) {
 	b_local = is_local;

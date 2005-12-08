@@ -25,13 +25,14 @@
 					};
 
 typedef enum {
-	ASSUMPTION_NUMBER_NONE = 0,
-	ASSUMPTION_NUMBER_NUMBER = 1,
-	ASSUMPTION_NUMBER_COMPLEX = 2,
-	ASSUMPTION_NUMBER_REAL = 3,
-	ASSUMPTION_NUMBER_RATIONAL = 4,
-	ASSUMPTION_NUMBER_INTEGER = 5
-} AssumptionNumberType;
+	ASSUMPTION_TYPE_NONE = 0,
+	ASSUMPTION_TYPE_NONMATRIX = 1,
+	ASSUMPTION_TYPE_NUMBER = 2,
+	ASSUMPTION_TYPE_COMPLEX = 3,
+	ASSUMPTION_TYPE_REAL = 4,
+	ASSUMPTION_TYPE_RATIONAL = 5,
+	ASSUMPTION_TYPE_INTEGER = 6
+} AssumptionType;
 
 typedef enum {
 	ASSUMPTION_SIGN_UNKNOWN,
@@ -52,7 +53,7 @@ class Assumptions {
 
   protected:
   
-	AssumptionNumberType i_type;
+	AssumptionType i_type;
 	AssumptionSign i_sign;
 	Number *fmin, *fmax;
 	bool b_incl_min, b_incl_max;
@@ -72,10 +73,11 @@ class Assumptions {
 	bool isReal();
 	bool isComplex();
 	bool isNonZero();
+	bool isNonMatrix();
 	
-	AssumptionNumberType numberType();
+	AssumptionType type();
 	AssumptionSign sign();
-	void setNumberType(AssumptionNumberType ant);
+	void setType(AssumptionType ant);
 	void setSign(AssumptionSign as);
 	
 	void setMin(const Number *nmin);	
@@ -118,6 +120,7 @@ class Variable : public ExpressionItem {
 	virtual bool representsOdd(bool = false) {return false;}
 	virtual bool representsUndefined(bool = false, bool = false, bool = false) {return false;}
 	virtual bool representsBoolean() {return false;}
+	virtual bool representsNonMatrix() {return false;}
 	
 };
 
@@ -150,6 +153,7 @@ class UnknownVariable : public Variable {
 	virtual bool representsReal(bool = false);
 	virtual bool representsComplex(bool = false);
 	virtual bool representsNonZero(bool = false);
+	virtual bool representsNonMatrix();
 	
 };
 
@@ -196,6 +200,7 @@ class KnownVariable : public Variable {
 	virtual bool representsOdd(bool = false);
 	virtual bool representsUndefined(bool = false, bool = false, bool = false);
 	virtual bool representsBoolean();
+	virtual bool representsNonMatrix();
 
 };
 
@@ -236,6 +241,7 @@ class DynamicVariable : public KnownVariable {
 	virtual bool representsOdd(bool = false) {return false;}
 	virtual bool representsUndefined(bool = false, bool = false, bool = false) {return false;}
 	virtual bool representsBoolean() {return false;}
+	virtual bool representsNonMatrix() {return true;}
 
 };
 

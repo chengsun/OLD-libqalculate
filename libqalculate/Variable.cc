@@ -17,36 +17,37 @@
 #include "MathStructure.h"
 #include "Number.h"
 
-Assumptions::Assumptions() : i_type(ASSUMPTION_NUMBER_NONE), i_sign(ASSUMPTION_SIGN_UNKNOWN), fmin(NULL), fmax(NULL), b_incl_min(true), b_incl_max(true) {}
+Assumptions::Assumptions() : i_type(ASSUMPTION_TYPE_NONE), i_sign(ASSUMPTION_SIGN_UNKNOWN), fmin(NULL), fmax(NULL), b_incl_min(true), b_incl_max(true) {}
 Assumptions::~Assumptions() {}
 
 bool Assumptions::isPositive() {return i_sign == ASSUMPTION_SIGN_POSITIVE || (fmin && (fmin->isPositive() || (!b_incl_min && fmin->isNonNegative())));}
 bool Assumptions::isNegative() {return i_sign == ASSUMPTION_SIGN_NEGATIVE || (fmax && (fmax->isNegative() || (!b_incl_max && fmax->isNonPositive())));}
 bool Assumptions::isNonNegative() {return i_sign == ASSUMPTION_SIGN_NONNEGATIVE || i_sign == ASSUMPTION_SIGN_POSITIVE || (fmin && fmin->isNonNegative());}
 bool Assumptions::isNonPositive() {return i_sign == ASSUMPTION_SIGN_NONPOSITIVE || i_sign == ASSUMPTION_SIGN_NEGATIVE || (fmax && fmax->isNonPositive());}
-bool Assumptions::isInteger() {return i_type >= ASSUMPTION_NUMBER_INTEGER;}
-bool Assumptions::isNumber() {return i_type >= ASSUMPTION_NUMBER_NUMBER;}
-bool Assumptions::isRational() {return i_type >= ASSUMPTION_NUMBER_RATIONAL;}
-bool Assumptions::isReal() {return i_type >= ASSUMPTION_NUMBER_REAL;}
-bool Assumptions::isComplex() {return i_type == ASSUMPTION_NUMBER_COMPLEX;}
+bool Assumptions::isInteger() {return i_type >= ASSUMPTION_TYPE_INTEGER;}
+bool Assumptions::isNumber() {return i_type >= ASSUMPTION_TYPE_NUMBER;}
+bool Assumptions::isRational() {return i_type >= ASSUMPTION_TYPE_RATIONAL;}
+bool Assumptions::isReal() {return i_type >= ASSUMPTION_TYPE_REAL;}
+bool Assumptions::isComplex() {return i_type == ASSUMPTION_TYPE_COMPLEX;}
 bool Assumptions::isNonZero() {return i_sign == ASSUMPTION_SIGN_NONZERO || isPositive() || isNegative();}
+bool Assumptions::isNonMatrix() {return i_type >= ASSUMPTION_TYPE_NONMATRIX;}
 
-AssumptionNumberType Assumptions::numberType() {return i_type;}
+AssumptionType Assumptions::type() {return i_type;}
 AssumptionSign Assumptions::sign() {return i_sign;}
-void Assumptions::setNumberType(AssumptionNumberType ant) {
+void Assumptions::setType(AssumptionType ant) {
 	i_type = ant;
-	if(i_type <= ASSUMPTION_NUMBER_COMPLEX && i_sign != ASSUMPTION_SIGN_NONZERO) {
+	if(i_type <= ASSUMPTION_TYPE_COMPLEX && i_sign != ASSUMPTION_SIGN_NONZERO) {
 		i_sign = ASSUMPTION_SIGN_UNKNOWN;
 	}
-	if(i_type == ASSUMPTION_NUMBER_NONE) {
+	if(i_type <= ASSUMPTION_TYPE_NONMATRIX) {
 		if(fmax) delete fmax;
 		if(fmin) delete fmin;
 	}
 }
 void Assumptions::setSign(AssumptionSign as) {
 	i_sign = as;
-	if(i_type <= ASSUMPTION_NUMBER_COMPLEX && i_sign != ASSUMPTION_SIGN_NONZERO && i_sign != ASSUMPTION_SIGN_UNKNOWN) {
-		i_type = ASSUMPTION_NUMBER_REAL;
+	if(i_type <= ASSUMPTION_TYPE_COMPLEX && i_sign != ASSUMPTION_SIGN_NONZERO && i_sign != ASSUMPTION_SIGN_UNKNOWN) {
+		i_type = ASSUMPTION_TYPE_REAL;
 	}
 }
 	
@@ -57,7 +58,7 @@ void Assumptions::setMin(const Number *nmin) {
 		}
 		return;
 	}
-	if(i_type == ASSUMPTION_NUMBER_NONE) i_type = ASSUMPTION_NUMBER_NUMBER;
+	if(i_type <= ASSUMPTION_TYPE_NONMATRIX) i_type = ASSUMPTION_TYPE_NUMBER;
 	if(!fmin) {
 		fmin = new Number(*nmin);
 	} else {
@@ -80,7 +81,7 @@ void Assumptions::setMax(const Number *nmax) {
 		}
 		return;
 	}
-	if(i_type == ASSUMPTION_NUMBER_NONE) i_type = ASSUMPTION_NUMBER_NUMBER;
+	if(i_type <= ASSUMPTION_TYPE_NONMATRIX) i_type = ASSUMPTION_TYPE_NUMBER;
 	if(!fmax) {
 		fmax = new Number(*nmax);
 	} else {
@@ -178,6 +179,10 @@ bool UnknownVariable::representsComplex(bool) {
 bool UnknownVariable::representsNonZero(bool) { 
 	if(o_assumption) return o_assumption->isNonZero();
 	return CALCULATOR->defaultAssumptions()->isNonZero();
+}
+bool UnknownVariable::representsNonMatrix() { 
+	if(o_assumption) return o_assumption->isNonMatrix();
+	return CALCULATOR->defaultAssumptions()->isNonMatrix();
 }
 
 KnownVariable::KnownVariable(string cat_, string name_, const MathStructure &o, string title_, bool is_local, bool is_builtin, bool is_active) : Variable(cat_, name_, title_, is_local, is_builtin, is_active) {
@@ -277,6 +282,7 @@ bool KnownVariable::representsEven(bool allow_units) {return get().representsEve
 bool KnownVariable::representsOdd(bool allow_units) {return get().representsOdd(allow_units);}
 bool KnownVariable::representsUndefined(bool include_childs, bool include_infinite, bool be_strict) {return get().representsUndefined(include_childs, include_infinite, be_strict);}
 bool KnownVariable::representsBoolean() {return get().representsBoolean();}
+bool KnownVariable::representsNonMatrix() {return get().representsNonMatrix();}
 
 DynamicVariable::DynamicVariable(string cat_, string name_, string title_, bool is_local, bool is_builtin, bool is_active) : KnownVariable(cat_, name_, MathStructure(), title_, is_local, is_builtin, is_active) {
 	mstruct = NULL;

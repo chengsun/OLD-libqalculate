@@ -26,6 +26,7 @@
 #define NON_COMPLEX_NUMBER_ARGUMENT(i)				NumberArgument *arg_non_complex##i = new NumberArgument(); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
 #define NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR(i)			NumberArgument *arg_non_complex##i = new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
 #define NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR_NONZERO(i)		NumberArgument *arg_non_complex##i = new NumberArgument("", ARGUMENT_MIN_MAX_NONZERO, true, false); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
+#define RATIONAL_NUMBER_ARGUMENT_NO_ERROR(i)			NumberArgument *arg_rational##i = new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false); arg_rational##i->setRationalNumber(true); setArgumentDefinition(i, arg_rational##i);
 #define RATIONAL_POLYNOMIAL_ARGUMENT(i)				Argument *arg_poly##i = new Argument(); arg_poly##i->setRationalPolynomial(true); setArgumentDefinition(i, arg_poly##i);
 
 
@@ -524,26 +525,48 @@ int XorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 }
 
 OddFunction::OddFunction() : MathFunction("odd", 1) {
-	setArgumentDefinition(1, new IntegerArgument());
+	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
 }
-int OddFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	if(vargs[0].number().isOdd()) {
+int OddFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	if(vargs[0].representsOdd()) {
 		mstruct.set(1, 1);
-	} else {
+		return 1;
+	} else if(vargs[0].representsEven()) {
 		mstruct.clear();
+		return 1;
 	}
-	return 1;
+	mstruct = vargs[0];
+	mstruct.eval(eo);
+	if(mstruct.representsOdd()) {
+		mstruct.set(1, 1);
+		return 1;
+	} else if(mstruct.representsEven()) {
+		mstruct.clear();
+		return 1;
+	}
+	return -1;
 }
 EvenFunction::EvenFunction() : MathFunction("even", 1) {
-	setArgumentDefinition(1, new IntegerArgument());
+	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_NONE, false, false));
 }
-int EvenFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	if(vargs[0].number().isEven()) {
+int EvenFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	if(vargs[0].representsEven()) {
 		mstruct.set(1, 1);
-	} else {
+		return 1;
+	} else if(vargs[0].representsOdd()) {
 		mstruct.clear();
+		return 1;
 	}
-	return 1;
+	mstruct = vargs[0];
+	mstruct.eval(eo);
+	if(mstruct.representsEven()) {
+		mstruct.set(1, 1);
+		return 1;
+	} else if(mstruct.representsOdd()) {
+		mstruct.clear();
+		return 1;
+	}
+	return -1;
 }
 ShiftFunction::ShiftFunction() : MathFunction("shift", 2) {
 	setArgumentDefinition(1, new IntegerArgument());
@@ -706,6 +729,43 @@ IntFunction::IntFunction() : MathFunction("int", 1) {
 }
 int IntFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	FR_FUNCTION(trunc)
+}
+NumeratorFunction::NumeratorFunction() : MathFunction("numerator", 1) {
+	NumberArgument *arg_rational_1 = new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false, false); 
+	arg_rational_1->setRationalNumber(true); 
+	setArgumentDefinition(1, arg_rational_1);
+}
+int NumeratorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	if(vargs[0].isNumber()) {
+		if(vargs[0].number().isInteger()) {
+			mstruct = vargs[0];
+			return 1;
+		} else if(vargs[0].number().isRational()) {
+			mstruct.set(vargs[0].number().numerator());
+			return 1;
+		}
+		return 0;
+	} else if(vargs[0].representsInteger()) {
+		mstruct = vargs[0];
+		return 1;
+	}
+	mstruct = vargs[0];
+	mstruct.eval(eo);
+	if(mstruct.representsInteger()) {
+		return 1;
+	} else if(mstruct.isNumber() && mstruct.number().isRational()) {
+		Number nr(mstruct.number().numerator());
+		mstruct.set(nr);
+		return 1;
+	}
+	return -1;
+}
+DenominatorFunction::DenominatorFunction() : MathFunction("denominator", 1) {
+	RATIONAL_NUMBER_ARGUMENT_NO_ERROR(1)
+}
+int DenominatorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	mstruct.set(vargs[0].number().denominator());
+	return 1;
 }
 RemFunction::RemFunction() : MathFunction("rem", 2) {
 	NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR(1)
@@ -2021,6 +2081,9 @@ int RandFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 	}
 	return 1;
 }
+bool RandFunction::representsReal(const MathStructure&, bool) const {return true;}
+bool RandFunction::representsInteger(const MathStructure &vargs) const {return vargs.size() > 0 && vargs[0].isNumber() && vargs[0].number().isPositive();}
+bool RandFunction::representsNonNegative(const MathStructure&) const {return true;}
 
 DaysFunction::DaysFunction() : MathFunction("days", 2, 4) {
 	setArgumentDefinition(1, new DateArgument());
@@ -2767,8 +2830,8 @@ SolveFunction::SolveFunction() : MathFunction("solve", 1, 2) {
 bool is_comparison_structure(const MathStructure &mstruct, const MathStructure &xvar, bool *bce = NULL, bool do_bce_or = false);
 bool is_comparison_structure(const MathStructure &mstruct, const MathStructure &xvar, bool *bce, bool do_bce_or) {
 	if(mstruct.isComparison()) {
-		if(bce) *bce = mstruct.comparisonType() == COMPARISON_EQUALS;
-		return mstruct[0] == xvar;
+		if(bce) *bce = mstruct.comparisonType() == COMPARISON_EQUALS && mstruct[0] == xvar;
+		return true;
 	}
 	if(bce && do_bce_or && mstruct.isLogicalOr()) {
 		*bce = true;
@@ -2780,17 +2843,23 @@ bool is_comparison_structure(const MathStructure &mstruct, const MathStructure &
 		return true;
 	}
 	if(bce) *bce = false;
-	if(!mstruct.isLogicalAnd() && !mstruct.isLogicalOr()) return false;
-	for(size_t i = 0; i < mstruct.size(); i++) {
-		if(!is_comparison_structure(mstruct[i], xvar)) return false;
+	if(mstruct.isLogicalAnd()) {
+		for(size_t i = 0; i < mstruct.size(); i++) {
+			if(is_comparison_structure(mstruct[i], xvar)) return true;
+		}
+		return true;
+	} else if(mstruct.isLogicalOr()) {
+		for(size_t i = 0; i < mstruct.size(); i++) {
+			if(!is_comparison_structure(mstruct[i], xvar)) return false;
+		}
+		return true;
 	}
-	return true;
+	return false;
 }
 int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 
 	mstruct = vargs[0];
 	EvaluationOptions eo2 = eo;
-	eo2.assume_denominators_nonzero = false;
 	eo2.isolate_var = &vargs[1];
 	mstruct.eval(eo2);
 
@@ -2823,7 +2892,7 @@ int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 		if(!assumptions) {
 			assumptions = new Assumptions();
 			assumptions->setSign(CALCULATOR->defaultAssumptions()->sign());
-			assumptions->setNumberType(CALCULATOR->defaultAssumptions()->numberType());
+			assumptions->setType(CALCULATOR->defaultAssumptions()->type());
 			((UnknownVariable*) vargs[1].variable())->setAssumptions(assumptions);
 			assumptions_added = true;
 		}
@@ -2867,9 +2936,9 @@ int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 			return 1;
 		}
 	}
-	if(assumptions->numberType() != ASSUMPTION_NUMBER_NONE) {
-		AssumptionNumberType ant = assumptions->numberType();
-		assumptions->setNumberType(ASSUMPTION_NUMBER_NONE);
+	if(assumptions->type() > ASSUMPTION_TYPE_NONMATRIX) {
+		AssumptionType ant = assumptions->type();
+		assumptions->setType(ASSUMPTION_TYPE_NONMATRIX);
 		AssumptionSign as = assumptions->sign();
 		assumptions->setSign(ASSUMPTION_SIGN_UNKNOWN);
 		MathStructure mstruct2(vargs[0]);
@@ -2898,7 +2967,7 @@ int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 				b = true;
 			}
 		}
-		assumptions->setNumberType(ant);
+		assumptions->setType(ant);
 		assumptions->setSign(as);
 		if(b) {
 			CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed type and sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);

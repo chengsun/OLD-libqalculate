@@ -1,4 +1,9 @@
-2005-12-06 Niklas Knutsson  <nq@altern.org>
+2005-12-09 Niklas Knutsson  <nq@altern.org>
+
+	* Fix isolate x with "x^2 > -5" and similar
+	* Do not calculate y in "x && y" and "x || y" if x is false or true, respectively
+
+2005-12-08 Niklas Knutsson  <nq@altern.org>
 
 	* New assumption type "non-matrix" for unknowns with commutative multiplication
 	* Finish isolate x / solve changes

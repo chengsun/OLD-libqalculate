@@ -1016,7 +1016,7 @@ bool Number::add(const Number &o) {
 	}
 	if(b_minf) return !o.isPlusInfinity();
 	if(b_pinf) return !o.isMinusInfinity();
-	if(o.isInfinity()) {
+	if(o.isPlusInfinity()) {
 		b_pinf = true;
 		value = 0;
 		setPrecisionAndApproximateFrom(o);

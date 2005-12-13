@@ -1,3 +1,17 @@
+2005-12-13 Niklas Knutsson  <nq@altern.org>
+
+	* Isolate x fixes
+	* Fix merging of common factor with multiplication
+
+2005-12-12 Niklas Knutsson  <nq@altern.org>
+
+	* Assume that simple unit relations do not negate	
+	* Fix ?+(+infinity)
+
+2005-12-11 Niklas Knutsson  <nq@altern.org>
+
+	* Fix non-commutative multiplication (multiplication with possible matrices)
+
 2005-12-09 Niklas Knutsson  <nq@altern.org>
 
 	* Fix isolate x with "x^2 > -5" and similar

@@ -317,15 +317,15 @@ class MathStructure {
 		
 		void mergePrecision(const MathStructure &o);
 		
-		int merge_addition(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
-		int merge_multiplication(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool do_append = true);
-		int merge_power(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
-		int merge_logical_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
-		int merge_logical_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
-		int merge_logical_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
-		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
-		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
-		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2);
+		int merge_addition(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_multiplication(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false, bool do_append = true);
+		int merge_power(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_logical_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_logical_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_logical_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
 		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo, bool recursive = true, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateMergeIndex(size_t index, const EvaluationOptions &eo, const EvaluationOptions &feo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateLogicalOrLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);

@@ -1,3 +1,13 @@
+2005-12-19 Niklas Knutsson  <nq@altern.org>
+
+	* Various fixes and enhancements
+
+2005-12-14 Niklas Knutsson  <nq@altern.org>
+
+	* Fix ln(e^x)
+	* Isolate x in log(x) for inequalities
+	* Factorize x^2-y^2 and x^3-y^3
+
 2005-12-13 Niklas Knutsson  <nq@altern.org>
 
 	* Isolate x fixes

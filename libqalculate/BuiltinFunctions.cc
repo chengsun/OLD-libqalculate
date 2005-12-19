@@ -763,7 +763,7 @@ int NumeratorFunction::calculate(MathStructure &mstruct, const MathStructure &va
 DenominatorFunction::DenominatorFunction() : MathFunction("denominator", 1) {
 	RATIONAL_NUMBER_ARGUMENT_NO_ERROR(1)
 }
-int DenominatorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+int DenominatorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	mstruct.set(vargs[0].number().denominator());
 	return 1;
 }
@@ -1012,7 +1012,7 @@ int LogFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 	} else if(mstruct.isPower()) {
 		if(mstruct[0].isVariable() && mstruct[0].variable() == CALCULATOR->v_e) {
 			if(mstruct[1].representsReal()) {
-				mstruct = mstruct[1];
+				mstruct.setToChild(2, true);
 				b = true;
 			}
 		} else if(mstruct[1].representsPositive() || (mstruct[1].representsNegative() && mstruct[0].representsPositive())) {
@@ -2856,136 +2856,392 @@ bool is_comparison_structure(const MathStructure &mstruct, const MathStructure &
 	}
 	return false;
 }
+
+MathStructure *solve_handle_logical_and(MathStructure &mstruct, MathStructure **mtruefor, ComparisonType ct, bool &b_partial, const MathStructure &vargs) {
+	MathStructure *mcondition = NULL;
+	for(size_t i2 = 0; i2 < mstruct.size(); ) {
+		if(ct == COMPARISON_EQUALS) {
+			if(mstruct[i2].isComparison() && ct == mstruct[i2].comparisonType() && mstruct[i2][0].contains(vargs[1])) {
+				if(mstruct[i2][0] == vargs[1]) {
+					if(mstruct.size() == 2) {
+						if(i2 == 0) {
+							mstruct[1].ref();
+							mcondition = &mstruct[1];
+						} else {
+							mstruct[0].ref();
+							mcondition = &mstruct[0];
+						}
+					} else {
+						mcondition = new MathStructure();
+						mcondition->set_nocopy(mstruct);
+						mcondition->delChild(i2 + 1);
+					}
+					mstruct.setToChild(i2 + 1, true);
+					break;
+				} else {
+					b_partial = true;
+					i2++;
+				}
+			} else {
+				i2++;
+			}
+		} else {
+			if(mstruct[i2].isComparison() && mstruct[i2][0].contains(vargs[1])) {
+				i2++;												
+			} else {
+				mstruct[i2].ref();
+				if(mcondition) {									
+					mcondition->add_nocopy(&mstruct[i2], OPERATION_LOGICAL_AND, true);
+				} else {
+					mcondition = &mstruct[i2];
+				}
+				mstruct.delChild(i2 + 1);
+			}
+		}
+	}
+	if(ct == COMPARISON_EQUALS) {
+		if(mstruct.isLogicalAnd()) {
+			MathStructure *mtmp = new MathStructure();
+			mtmp->set_nocopy(mstruct);
+			if(!(*mtruefor)) {
+				*mtruefor = mtmp;
+			} else {
+				(*mtruefor)->add_nocopy(mtmp, OPERATION_LOGICAL_OR, true);
+			}
+			mstruct.clear(true);
+		}
+	} else {
+		if(mstruct.size() == 1) {
+			mstruct.setToChild(1, true);
+			if(ct != COMPARISON_EQUALS) mstruct.setProtected();
+		} else if(mstruct.size() == 0) {
+			mstruct.clear(true);
+			if(!(*mtruefor)) {
+				*mtruefor = mcondition;
+			} else {
+				(*mtruefor)->add_nocopy(mcondition, OPERATION_LOGICAL_OR, true);
+			}
+			mcondition = NULL;
+		} else if(ct != COMPARISON_EQUALS) {
+			for(size_t i = 0; i < mstruct.size(); i++) {
+				mstruct[i].setProtected();
+			}
+		}
+	}
+	return mcondition;
+}
+
 int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 
-	mstruct = vargs[0];
-	EvaluationOptions eo2 = eo;
-	eo2.isolate_var = &vargs[1];
-	mstruct.eval(eo2);
-
-	bool is_comparison = false;
-	if(mstruct.isComparison()) {
-		is_comparison = true;
-		if(mstruct[0] == vargs[1]) {
-			if(mstruct.comparisonType() == COMPARISON_EQUALS) {
-				mstruct.setToChild(2);	
-			}
-			return 1;
-		}
-	} else if(mstruct.isLogicalAnd()) {
-		if(is_comparison_structure(mstruct, vargs[1])) return 1;
-	} else if(mstruct.isLogicalOr()) {
-		bool bce = true;
-		if(is_comparison_structure(mstruct, vargs[1], &bce, true)) {
-			if(bce) {
-				for(size_t i = 0; i < mstruct.size(); i++) mstruct[i].setToChild(2);
-			}
-			mstruct.setType(STRUCT_VECTOR);
-			return 1;
-		}
-	}
+	int itry = 0;	
+	int ierror = 0;
+	int first_error = 0;
 	
 	Assumptions *assumptions = NULL;
-	bool assumptions_added = false;
-	if(vargs[1].isVariable() && vargs[1].variable()->subtype() == SUBTYPE_UNKNOWN_VARIABLE) {
-		assumptions = ((UnknownVariable*) vargs[1].variable())->assumptions();
-		if(!assumptions) {
-			assumptions = new Assumptions();
-			assumptions->setSign(CALCULATOR->defaultAssumptions()->sign());
-			assumptions->setType(CALCULATOR->defaultAssumptions()->type());
-			((UnknownVariable*) vargs[1].variable())->setAssumptions(assumptions);
-			assumptions_added = true;
-		}
-	} else {
-		assumptions = CALCULATOR->defaultAssumptions();
-	}
+	bool assumptions_added = false;	
+	AssumptionSign as = ASSUMPTION_SIGN_UNKNOWN;
+	AssumptionType at = ASSUMPTION_TYPE_NONMATRIX;
+	MathStructure msave;
+	string strueforall;
+
+	while(true) {
 	
-	if(assumptions->sign() != ASSUMPTION_SIGN_UNKNOWN) {
-		AssumptionSign as = assumptions->sign();
-		assumptions->setSign(ASSUMPTION_SIGN_UNKNOWN);
-		MathStructure mstruct2(vargs[0]);
-		mstruct2.eval(eo2);
-		bool b = false;
-		if(mstruct2.isComparison()) {
-			if(mstruct2[0] == vargs[1]) {
-				if(mstruct2.comparisonType() == COMPARISON_EQUALS) {
-					mstruct = mstruct2[1];
-				} else {
-					mstruct = mstruct2;
-				}
-				b = true;
-				
-			}
-		} else if(mstruct2.isLogicalAnd()) {
-			if(is_comparison_structure(mstruct2, vargs[1])) b = true;
-		} else if(mstruct2.isLogicalOr()) {
-			bool bce = true;
-			if(is_comparison_structure(mstruct2, vargs[1], &bce, true)) {
-				mstruct = mstruct2;
-				if(bce) {
-					for(size_t i = 0; i < mstruct.size(); i++) mstruct[i].setToChild(2);
-				}
-				mstruct.setType(STRUCT_VECTOR);
-				b = true;
+		if(itry == 1) {
+			if(ierror == 1) {
+				CALCULATOR->error(true, _("No comparison (equality or inequality) to solve. The entered expression to solve is not correct (ex. \"x + 5 = 3\" is correct)"), NULL);
+				return -1;
+			} else {
+				first_error = ierror;
+				msave = mstruct;
 			}
 		}
-		assumptions->setSign(as);
-		if(b) {
-			CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
-			if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);				
-			return 1;
-		}
-	}
-	if(assumptions->type() > ASSUMPTION_TYPE_NONMATRIX) {
-		AssumptionType ant = assumptions->type();
-		assumptions->setType(ASSUMPTION_TYPE_NONMATRIX);
-		AssumptionSign as = assumptions->sign();
-		assumptions->setSign(ASSUMPTION_SIGN_UNKNOWN);
-		MathStructure mstruct2(vargs[0]);
-		mstruct2.eval(eo2);
-		bool b = false;
-		if(mstruct2.isComparison()) {
-			if(mstruct2[0] == vargs[1]) {
-				if(mstruct2.comparisonType() == COMPARISON_EQUALS) {
-					mstruct = mstruct2[1];
-				} else {
-					mstruct = mstruct2;
+		
+		itry++;
+		
+		if(itry == 2) {
+			if(vargs[1].isVariable() && vargs[1].variable()->subtype() == SUBTYPE_UNKNOWN_VARIABLE) {
+				assumptions = ((UnknownVariable*) vargs[1].variable())->assumptions();
+				if(!assumptions) {
+					assumptions = new Assumptions();
+					assumptions->setSign(CALCULATOR->defaultAssumptions()->sign());
+					assumptions->setType(CALCULATOR->defaultAssumptions()->type());
+					((UnknownVariable*) vargs[1].variable())->setAssumptions(assumptions);
+					assumptions_added = true;
 				}
-				b = true;
-				
+			} else {
+				assumptions = CALCULATOR->defaultAssumptions();
 			}
-		} else if(mstruct2.isLogicalAnd()) {
-			if(is_comparison_structure(mstruct2, vargs[1])) b = true;
-		} else if(mstruct2.isLogicalOr()) {
-			bool bce = true;
-			if(is_comparison_structure(mstruct2, vargs[1], &bce, true)) {
-				mstruct = mstruct2;
-				if(bce) {
-					for(size_t i = 0; i < mstruct.size(); i++) mstruct[i].setToChild(2);
-				}
-				mstruct.setType(STRUCT_VECTOR);
-				b = true;
+			if(assumptions->sign() != ASSUMPTION_SIGN_UNKNOWN) {			
+				as = assumptions->sign();
+				assumptions->setSign(ASSUMPTION_SIGN_UNKNOWN);
+			} else {
+				itry++;
 			}
 		}
-		assumptions->setType(ant);
-		assumptions->setSign(as);
-		if(b) {
-			CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed type and sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+		if(itry == 3) {
+			if(assumptions->type() > ASSUMPTION_TYPE_NONMATRIX) {
+				at = assumptions->type();
+				assumptions->setType(ASSUMPTION_TYPE_NONMATRIX);
+				as = assumptions->sign();
+				assumptions->setSign(ASSUMPTION_SIGN_UNKNOWN);
+			} else {
+				itry++;
+			}
+		}
+		
+		if(itry > 3) {
+			if(as != ASSUMPTION_SIGN_UNKNOWN) assumptions->setSign(as);
+			if(at > ASSUMPTION_TYPE_NONMATRIX) assumptions->setType(at);
 			if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);
-			return 1;
+			switch(first_error) {
+				case 2: {
+					CALCULATOR->error(true, _("The comparison is true for all %s (with current assumptions)."), vargs[1].print().c_str(), NULL);
+					break;
+				}
+				case 3: {
+					CALCULATOR->error(true, _("No possible solution was found (with current assumptions)."), NULL);
+					break;
+				}
+				case 4: {
+					CALCULATOR->error(true, _("Was unable to completely isolate %s."), vargs[1].print().c_str(), NULL);
+					break;
+				}
+				case 7: {					
+					CALCULATOR->error(false, _("The comparison is true for all %s if %s."), vargs[1].print().c_str(), strueforall.c_str(), NULL);
+					break;
+				}
+				default: {
+					CALCULATOR->error(true, _("Was unable to isolate %s."), vargs[1].print().c_str(), NULL);
+					break;
+				}
+			}
+			mstruct = msave;
+			return -1;
 		}
-	}
+
+		ComparisonType ct;
 	
-	if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);
+		bool b = false;
+		bool b_partial = false;
+
+		if(vargs[0].isComparison()) {
+			ct = vargs[0].comparisonType();
+			mstruct = vargs[0];
+			b = true;
+		} else if(vargs[0].isLogicalAnd() && vargs[0].size() > 0 && vargs[0][0].isComparison()) {
+			ct = vargs[0][0].comparisonType();
+			mstruct = vargs[0];
+			b = true;
+		} else if(vargs[0].isVariable() && vargs[0].variable()->isKnown() && (eo.approximation != APPROXIMATION_EXACT || !vargs[0].variable()->isApproximate()) && ((KnownVariable*) vargs[0].variable())->get().isComparison()) {
+			mstruct = ((KnownVariable*) vargs[0].variable())->get();
+			ct = vargs[0].comparisonType();
+			b = true;
+		} else {
+			EvaluationOptions eo2 = eo;
+			eo2.test_comparisons = false;
+			eo2.assume_denominators_nonzero = false;
+			eo2.isolate_x = false;
+			mstruct = vargs[0];
+			mstruct.eval(eo2);
+			if(mstruct.isComparison()) {
+				ct = mstruct.comparisonType();
+				b = true;
+			} else if(mstruct.isLogicalAnd() && mstruct.size() > 0 && mstruct[0].isComparison()) {
+				ct = mstruct[0].comparisonType();
+				b = true;
+			}
+		}	
+
+		if(!b) {		
+			ierror = 1;
+			continue;
+		}
 	
-	if(!is_comparison) {
-		CALCULATOR->error(true, _("No comparison to solve. The reason might be:\n\n1. The entered expression to solve is not correct (ex. \"x + 5 = 3\" is correct)\n\n2. The expression evaluates FALSE. There is no valid solution with the current assumptions (ex. \"x = -5\" with x assumed positive).\n\n3. The expression evaluates TRUE (ex. \"2x = 2x\")"), NULL);
-	} else {
-		CALCULATOR->error(true, _("Unable to isolate %s."), vargs[1].print().c_str(), NULL);
+		EvaluationOptions eo2 = eo;
+		eo2.isolate_var = &vargs[1];
+		eo2.isolate_x = true;
+		eo2.test_comparisons = true;
+		mstruct.eval(eo2);
+
+		if(mstruct.isOne()) {		
+			ierror = 2;
+			continue;
+		} else if(mstruct.isZero()) {		
+			ierror = 3;
+			continue;
+		}
+	
+		PrintOptions po;
+		po.spell_out_logical_operators = true;
+	
+		if(mstruct.isComparison()) {
+			if((ct == COMPARISON_EQUALS && mstruct.comparisonType() != COMPARISON_EQUALS) || !mstruct.contains(vargs[1])) {
+				if(itry == 1) {
+					mstruct.format(po);
+					strueforall = mstruct.print(po);
+				}
+				ierror = 7;
+				continue;
+			} else if(ct == COMPARISON_EQUALS && mstruct[0] != vargs[1]) {
+				ierror = 4;
+				continue;
+			}
+			if(ct == COMPARISON_EQUALS) {
+				mstruct.setToChild(2, true);
+			} else {
+				mstruct.setProtected();
+			}
+			if(itry > 1) {
+				assumptions->setSign(as);
+				if(itry == 2) {
+					CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+				} else if(itry == 3) {
+					assumptions->setType(at);
+					CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed type and sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+				}
+				if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);
+			}
+			return 1;
+		} else if(mstruct.isLogicalAnd()) {
+			MathStructure *mtruefor = NULL;
+			bool b_partial;
+			MathStructure mcopy(mstruct);
+			MathStructure *mcondition = solve_handle_logical_and(mstruct, &mtruefor, ct, b_partial, vargs);
+			if((!mstruct.isComparison() && !mstruct.isLogicalAnd()) || (ct == COMPARISON_EQUALS && (!mstruct.isComparison() || mstruct.comparisonType() != COMPARISON_EQUALS || mstruct[0] != vargs[1])) || !mstruct.contains(vargs[1])) {
+				if(mtruefor) delete mtruefor;
+				if(mcondition) delete mcondition;
+				if(b_partial) {
+					ierror = 4;
+				} else {
+					ierror = 5;
+				}
+				mstruct = mcopy;
+				continue;
+			}
+			if(itry > 1) {
+				assumptions->setSign(as);
+				if(itry == 2) {
+					CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+				} else if(itry == 3) {
+					assumptions->setType(at);
+					CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed type and sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+				}
+				if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);
+			}			
+			if(mcondition) {
+				mcondition->format(po);
+				CALCULATOR->error(false, _("The solution requires that %s."), mcondition->print(po).c_str(), NULL);
+				delete mcondition;
+			}
+			if(mtruefor) {
+				mtruefor->format(po);
+				CALCULATOR->error(false, _("The comparison is true for all %s if %s."), vargs[1].print().c_str(), mtruefor->print(po).c_str(), NULL);
+				delete mtruefor;
+			}
+			if(ct == COMPARISON_EQUALS) mstruct.setToChild(2, true);
+			return 1;
+		} else if(mstruct.isLogicalOr()) {
+			MathStructure mcopy(mstruct);
+			MathStructure *mtruefor = NULL;
+			vector<MathStructure*> mconditions;
+			for(size_t i = 0; i < mstruct.size(); ) {
+				MathStructure *mcondition = NULL;
+				bool b_and = false;
+				if(mstruct[i].isLogicalAnd()) {
+					mcondition = solve_handle_logical_and(mstruct[i], &mtruefor, ct, b_partial, vargs);	
+					b_and = true;
+				}
+				if(!mstruct[i].isZero()) {
+					for(size_t i2 = 0; i2 < i; i2++) {
+						if(mstruct[i2] == mstruct[i]) {
+							mstruct[i].clear();
+							if(mcondition && mconditions[i2]) {
+								mconditions[i2]->add_nocopy(mcondition, OPERATION_LOGICAL_OR, true);
+							}
+							break;
+						}
+					}
+				}	
+				bool b_del = false;		
+				if((!mstruct[i].isComparison() && !mstruct[i].isLogicalAnd()) || (ct == COMPARISON_EQUALS && (!mstruct[i].isComparison() || mstruct[i].comparisonType() != COMPARISON_EQUALS)) || !mstruct[i].contains(vargs[1])) {
+					b_del = true;
+				} else if(ct == COMPARISON_EQUALS && mstruct[i][0] != vargs[1]) {
+					b_partial = true;
+					b_del = true;
+				}
+				if(b_del) {
+					if(!mstruct[i].isZero()) {
+						mstruct[i].ref();
+						if(!mtruefor) {
+							mtruefor = &mstruct[i];
+						} else {
+							mtruefor->add_nocopy(&mstruct[i], OPERATION_LOGICAL_OR, true);
+						}
+					}
+					mstruct.delChild(i + 1);
+				} else {
+					mconditions.push_back(mcondition);
+					if(!b_and && ct != COMPARISON_EQUALS) mstruct[i].setProtected();
+					i++;
+				}
+			}
+			if(ct == COMPARISON_EQUALS) {
+				for(size_t i = 0; i < mstruct.size(); i++) {
+					mstruct[i].setToChild(2, true);
+				}
+			}
+			if(mstruct.size() == 1) {
+				mstruct.setToChild(1, true);
+			} else if(mstruct.size() == 0) {
+				if(mtruefor) delete mtruefor;
+				if(b_partial) ierror = 4;
+				else ierror = 5;
+				mstruct = mcopy;
+				continue;
+			} else {
+				mstruct.setType(STRUCT_VECTOR);
+			}
+			if(itry > 1) {
+				assumptions->setSign(as);
+				if(itry == 2) {
+					CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+				} else if(itry == 3) {
+					assumptions->setType(at);
+					CALCULATOR->error(false, _("Was unable to isolate %s with the current assumptions. The assumed type and sign was therefor temporarily set as unknown."), vargs[1].print().c_str(), NULL);
+				}
+				if(assumptions_added) ((UnknownVariable*) vargs[1].variable())->setAssumptions(NULL);
+			}
+			
+			if(mconditions.size() == 1) {
+				if(mconditions[0]) {
+					mconditions[0]->format(po);
+					CALCULATOR->error(false, _("The solution requires that %s."), mconditions[0]->print(po).c_str(), NULL);
+					delete mconditions[0];
+				}
+			} else {
+				string sconditions;
+				for(size_t i = 0; i < mconditions.size(); i++) {
+					if(mconditions[i]) {
+						mconditions[i]->format(po);
+						CALCULATOR->error(false, _("Solution %s requires that %s."), i2s(i + 1).c_str(), mconditions[i]->print(po).c_str(), NULL);
+						delete mconditions[i];
+					}				
+				}
+			}
+			if(mtruefor) {
+				mtruefor->format(po);
+				CALCULATOR->error(false, _("The comparison is true for all %s if %s."), vargs[1].print().c_str(), mtruefor->print(po).c_str(), NULL);
+				delete mtruefor;
+			}
+			return 1;
+		} else {
+			ierror = 6;
+		}
 	}
 	return -1;
 	
 }
+
 SolveMultipleFunction::SolveMultipleFunction() : MathFunction("multisolve", 2) {
 	setArgumentDefinition(1, new VectorArgument());
 	VectorArgument *arg = new VectorArgument();
@@ -3049,8 +3305,19 @@ int SolveMultipleFunction::calculate(MathStructure &mstruct, const MathStructure
 					return 0;
 				}
 			}
+		} else if(msolve.isLogicalOr()) {
+			for(size_t i2 = 0; i2 < msolve.size(); i2++) {
+				if(!msolve[i2].isComparison() || msolve[i2].comparisonType() != COMPARISON_EQUALS || msolve[i2][0] != vargs[1][i]) {
+					CALCULATOR->error(true, _("Unable to isolate %s."), vargs[1][i].print().c_str(), NULL);
+					return 0;
+				} else {
+					msolve[i2].setToChild(2, true);
+				}
+			}
+			msolve.setType(STRUCT_VECTOR);
+			mstruct.addItem(msolve);
 		} else {
-			CALCULATOR->error(true, _("No comparison to solve. The reason might be:\n\n1. The entered expression to solve is not correct (ex. \"x + 5 = 3\" is correct)\n\n2. The expression evaluates FALSE. There is no valid solution with the current assumptions (ex. \"x = -5\" with x assumed positive).\n\n3. The expression evaluates TRUE (ex. \"2x = 2x\")"), NULL);
+			CALCULATOR->error(true, _("Unable to isolate %s."), vargs[1][i].print().c_str(), NULL);
 			return 0;
 		}
 		for(size_t i2 = 0; i2 < i; i2++) {

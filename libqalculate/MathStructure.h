@@ -71,6 +71,7 @@ class MathStructure {
 		MathStructure *function_value;
 		
 		ComparisonType ct_comp;
+		bool b_protected;
 		
 		bool isolate_x_sub(const EvaluationOptions &eo, EvaluationOptions &eo2, const MathStructure &x_var);
 	
@@ -109,6 +110,9 @@ class MathStructure {
 		void clear(bool preserve_precision = false);
 		void clearVector(bool preserve_precision = false);
 		void clearMatrix(bool preserve_precision = false);
+		
+		void setProtected(bool do_protect = true);
+		bool isProtected() const;
 		
 		void operator = (const MathStructure &o);
 		void operator = (const Number &o);
@@ -365,6 +369,7 @@ class MathStructure {
 		bool factorize(const EvaluationOptions &eo = default_evaluation_options);
 		
 		void swapChilds(size_t index1, size_t index2);
+		void childToFront(size_t index);
 		void addChild(const MathStructure &o);
 		void addChild_nocopy(MathStructure *o);
 		void delChild(size_t index);
@@ -403,7 +408,7 @@ class MathStructure {
 		void setPrefixes(const PrintOptions &po = default_print_options, MathStructure *parent = NULL, size_t pindex = 0);
 		void prefixCurrencies();
 		void format(const PrintOptions &po = default_print_options);
-		void formatsub(const PrintOptions &po = default_print_options, MathStructure *parent = NULL, size_t pindex = 0);
+		void formatsub(const PrintOptions &po = default_print_options, MathStructure *parent = NULL, size_t pindex = 0, bool recursive = true);
 		void postFormatUnits(const PrintOptions &po = default_print_options, MathStructure *parent = NULL, size_t pindex = 0);
 		void unformat(const EvaluationOptions &eo = default_evaluation_options);
 		bool needsParenthesis(const PrintOptions &po, const InternalPrintStruct &ips, const MathStructure &parent, size_t index, bool flat_division = true, bool flat_power = true) const;

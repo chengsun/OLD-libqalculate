@@ -362,14 +362,14 @@ static const struct EvaluationOptions {
 	bool calculate_variables, calculate_functions, test_comparisons, isolate_x;
 	bool expand, reduce_divisions;
 	bool allow_complex, allow_infinite;
-	bool assume_denominators_nonzero;
+	bool assume_denominators_nonzero, warn_about_denominators_assumed_nonzero;
 	bool split_squares;
 	bool keep_zero_units;
 	AutoPostConversion auto_post_conversion;
 	StructuringMode structuring;
 	ParseOptions parse_options;
 	const MathStructure *isolate_var;
-	EvaluationOptions() : approximation(APPROXIMATION_TRY_EXACT), sync_units(true), sync_complex_unit_relations(true), keep_prefixes(false), calculate_variables(true), calculate_functions(true), test_comparisons(true), isolate_x(true), expand(true), reduce_divisions(true), allow_complex(true), allow_infinite(true), assume_denominators_nonzero(false), split_squares(true), keep_zero_units(true), auto_post_conversion(POST_CONVERSION_NONE), structuring(STRUCTURING_SIMPLIFY), isolate_var(NULL) {}
+	EvaluationOptions() : approximation(APPROXIMATION_TRY_EXACT), sync_units(true), sync_complex_unit_relations(true), keep_prefixes(false), calculate_variables(true), calculate_functions(true), test_comparisons(true), isolate_x(true), expand(true), reduce_divisions(true), allow_complex(true), allow_infinite(true), assume_denominators_nonzero(false), warn_about_denominators_assumed_nonzero(false), split_squares(true), keep_zero_units(true), auto_post_conversion(POST_CONVERSION_NONE), structuring(STRUCTURING_SIMPLIFY), isolate_var(NULL) {}
 } default_evaluation_options;
 
 extern MathStructure m_undefined, m_empty_vector, m_empty_matrix, m_zero, m_one, m_minus_one;

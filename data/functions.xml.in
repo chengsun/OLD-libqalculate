@@ -523,6 +523,26 @@
           <_title>Number</_title>
         </argument>
       </builtin_function>
+      <builtin_function name="numerator">
+        <_title>Numerator</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>numerator</_name>
+        </name>
+        <argument index="1">
+          <_title>Number</_title>
+        </argument>
+      </builtin_function>
+      <builtin_function name="denominator">
+        <_title>Denominator</_title>
+        <name index="1">
+          <reference>true</reference>
+          <_name>denominator</_name>
+        </name>
+        <argument index="1">
+          <_title>Number</_title>
+        </argument>
+      </builtin_function>
       <builtin_function name="rem">
         <_title>Remainder</_title>
         <name index="1">

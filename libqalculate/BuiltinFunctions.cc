@@ -1347,9 +1347,9 @@ int CosFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 	} else if(mstruct.isMultiplication() && mstruct.size() == 2 && mstruct[0].isNumber() && mstruct[1].isVariable() && mstruct[1].variable() == CALCULATOR->v_pi) {
 		if(mstruct[0].number().isInteger()) {
 			if(mstruct[0].number().isEven()) {
-				mstruct = -1;
-			} else {
 				mstruct = 1;
+			} else {
+				mstruct = -1;
 			}
 			b = true;
 		} else if(!mstruct[0].number().isComplex() && !mstruct[0].number().isInfinite()) {
@@ -3282,7 +3282,6 @@ int SolveMultipleFunction::calculate(MathStructure &mstruct, const MathStructure
 	for(size_t i = 0; i < eorder.size(); i++) {
 		MathStructure msolve(vargs[0][eorder[i]]);
 		EvaluationOptions eo2 = eo;
-		eo2.assume_denominators_nonzero = false;
 		eo2.isolate_var = &vargs[1][i];
 		for(size_t i2 = 0; i2 < i; i2++) {
 			msolve.replace(vargs[1][i2], mstruct[i2]);

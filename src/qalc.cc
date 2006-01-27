@@ -313,9 +313,9 @@ int countRows(const char *str, int cols) {
 }
 
 #ifdef HAVE_LIBREADLINE
-#	define CHECK_IF_SCREEN_FILLED rcount++; if(rcount + 3 >= rows) {FPUTS_UNICODE(_("\nPress Enter to continue."), stdout); fflush(stdout); rl_read_key(); puts(""); rcount = 1;}
-#	define CHECK_IF_SCREEN_FILLED_PUTS(x) rcount += countRows(x, cols); if(rcount + 2 >= rows) {FPUTS_UNICODE(_("\nPress Enter to continue."), stdout); fflush(stdout); rl_read_key(); puts(""); rcount = 1;} PUTS_UNICODE(x);
-#	define INIT_SCREEN_CHECK int rows, cols, rcount = 0; rl_get_screen_size(&rows, &cols);
+#	define CHECK_IF_SCREEN_FILLED if(!cfile) {rcount++; if(rcount + 3 >= rows) {FPUTS_UNICODE(_("\nPress Enter to continue."), stdout); fflush(stdout); rl_read_key(); puts(""); rcount = 1;}}
+#	define CHECK_IF_SCREEN_FILLED_PUTS(x) if(!cfile) {rcount += countRows(x, cols); if(rcount + 2 >= rows) {FPUTS_UNICODE(_("\nPress Enter to continue."), stdout); fflush(stdout); rl_read_key(); puts(""); rcount = 1;}} PUTS_UNICODE(x);
+#	define INIT_SCREEN_CHECK int rows, cols, rcount = 0; if(!cfile) rl_get_screen_size(&rows, &cols);
 #else
 #	define CHECK_IF_SCREEN_FILLED
 #	define CHECK_IF_SCREEN_FILLED_PUTS(x) PUTS_UNICODE(x);
@@ -364,9 +364,9 @@ void set_option(string str) {
 		}
 	} else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "assumptions", _("assumptions"))) {
 		size_t i = svalue.find_first_of(SPACES);
-		if(i != string::npos) {
-			set_assumption(svalue.substr(i + 1, svalue.length() - (i + 1)), true);
-			set_assumption(svalue.substr(0, i), false);
+		if(i != string::npos) {			
+			set_assumption(svalue.substr(0, i), true);
+			set_assumption(svalue.substr(i + 1, svalue.length() - (i + 1)), false);
 		} else {
 			set_assumption(svalue, false);
 		}
@@ -379,6 +379,7 @@ void set_option(string str) {
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "infinite numbers", _("infinite numbers"))) SET_BOOL_E(evalops.allow_infinite)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "show negative exponents", _("show negative exponents"))) SET_BOOL_D(printops.negative_exponents)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "assume nonzero denominators", _("assume nonzero denominators"))) SET_BOOL_E(evalops.assume_denominators_nonzero)
+	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "warn nonzero denominators", _("warn nonzero denominators"))) SET_BOOL_E(evalops.warn_about_denominators_assumed_nonzero)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "prefixes", _("prefixes"))) SET_BOOL_D(printops.use_unit_prefixes)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "denominator prefixes", _("denominator prefixes"))) SET_BOOL_D(printops.use_denominator_prefix)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "place units separately", _("place units separately"))) SET_BOOL_D(printops.place_units_separately)
@@ -656,7 +657,7 @@ int main (int argc, char *argv[]) {
 				command_file = argv[i];
 				remove_blank_ends(command_file);
 			} else {
-				puts(_("No file specified command."));
+				puts(_("No file specified."));
 			}
 		} else {
 			if(strlen(argv[i]) >= 2 && ((argv[i][0] == '\"' && argv[i][strlen(argv[i] - 1)] == '\"') || (argv[i][0] == '\'' && argv[i][strlen(argv[i] - 1)] == '\''))) {
@@ -1052,6 +1053,7 @@ int main (int argc, char *argv[]) {
 			}
 			CHECK_IF_SCREEN_FILLED
 			PRINT_AND_COLON_TABS(_("assume nonzero denominators")); PUTS_UNICODE(b2oo(evalops.assume_denominators_nonzero, false)); CHECK_IF_SCREEN_FILLED
+			PRINT_AND_COLON_TABS(_("warn nonzero denominators")); PUTS_UNICODE(b2oo(evalops.warn_about_denominators_assumed_nonzero, false)); CHECK_IF_SCREEN_FILLED
 			string value;
 			switch(CALCULATOR->defaultAssumptions()->sign()) {
 				case ASSUMPTION_SIGN_POSITIVE: {value = _("positive"); break;}
@@ -1522,6 +1524,7 @@ int main (int argc, char *argv[]) {
 				STR_AND_TABS(_("angle unit")); str += "(0 = "; str += _("none"); str += ", 1 = "; str += _("radians"); str += ", 2 = "; str += _("degrees"); str += ", 3 = "; str += _("gradians");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("approximation")); str += "(0 = "; str += _("exact"); str += ", 1 = "; str += _("try exact"); str += ", 2 = "; str += _("approximate");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("assume nonzero denominators")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
+				STR_AND_TABS(_("warn nonzero denominators")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("assumptions")); str += "("; str += _("unknown"); str += ", "; str += _("non-zero"); str += ", "; str += _("positive"); str += ", "; str += _("negative"); str += ", "; str += _("non-positive"); str += ", "; str += _("non-negative"); str += " / "; str += _("unknown"); str += ", "; str += _("number"); str += ", "; str += _("complex"); str += ", "; str += _("real"); str += ", "; str += _("rational"); str += ", "; str += _("integer"); str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("autoconversion")); str += "(0 = "; str += _("none"); str += ", 1 = "; str += _("best"); str += ", 2 = "; str += _("base");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("base")); str += "(2 - 36"; str += ", "; str += _("bin"); str += ", "; str += _("oct"); str += ", "; str += _("dec"); str += ", "; str += _("hex"); str += ", "; str += _("sex"); str += ", "; str += _("time"); str += ", "; str += _("roman"); str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
@@ -2100,7 +2103,8 @@ void load_preferences() {
 	evalops.allow_complex = true;
 	evalops.allow_infinite = true;
 	evalops.auto_post_conversion = POST_CONVERSION_NONE;
-	evalops.assume_denominators_nonzero = false;
+	evalops.assume_denominators_nonzero = true;
+	evalops.warn_about_denominators_assumed_nonzero = true;
 	evalops.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
 	
 	save_mode_on_exit = true;
@@ -2195,7 +2199,12 @@ void load_preferences() {
 						evalops.parse_options.read_precision = (ReadPrecisionMode) v;
 					}
 				} else if(svar == "assume_denominators_nonzero") {
+					if(version_numbers[0] == 0 && (version_numbers[1] < 9 || (version_numbers[1] == 9 && version_numbers[2] == 0))) {
+						v = true;
+					}
 					evalops.assume_denominators_nonzero = v;
+				} else if(svar == "warn_about_denominators_assumed_nonzero") {
+					evalops.warn_about_denominators_assumed_nonzero = v;
 				} else if(svar == "structuring") {
 					if(v >= STRUCTURING_NONE && v <= STRUCTURING_FACTORIZE) {
 						evalops.structuring = (StructuringMode) v;
@@ -2269,6 +2278,9 @@ void load_preferences() {
 					}
 				} else if(svar == "default_assumption_sign") {
 					if(v >= ASSUMPTION_SIGN_UNKNOWN && v <= ASSUMPTION_SIGN_NONZERO) {
+						if(v == ASSUMPTION_SIGN_NONZERO && version_numbers[0] == 0 && (version_numbers[1] < 9 || (version_numbers[1] == 9 && version_numbers[2] == 0))) {
+							v = ASSUMPTION_SIGN_UNKNOWN;
+						}
 						CALCULATOR->defaultAssumptions()->setSign((AssumptionSign) v);
 					}
 				}
@@ -2337,6 +2349,7 @@ bool save_preferences(bool mode)
 	fprintf(file, "number_base_expression=%i\n", saved_evalops.parse_options.base);
 	fprintf(file, "read_precision=%i\n", saved_evalops.parse_options.read_precision);
 	fprintf(file, "assume_denominators_nonzero=%i\n", saved_evalops.assume_denominators_nonzero);
+	fprintf(file, "warn_about_denominators_assumed_nonzero=%i\n", saved_evalops.warn_about_denominators_assumed_nonzero);
 	fprintf(file, "structuring=%i\n", saved_evalops.structuring);
 	fprintf(file, "angle_unit=%i\n", saved_evalops.parse_options.angle_unit);
 	fprintf(file, "functions_enabled=%i\n", saved_evalops.parse_options.functions_enabled);

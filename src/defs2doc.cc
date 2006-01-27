@@ -471,13 +471,14 @@ void print_variable(Variable *v) {
 					case ASSUMPTION_SIGN_NONZERO: {value = _("non-zero"); break;}
 					default: {}
 				}
-				if(!value.empty() && !((UnknownVariable*) v)->assumptions()->numberType() == ASSUMPTION_NUMBER_NONE) value += " ";
-				switch(((UnknownVariable*) v)->assumptions()->numberType()) {
-					case ASSUMPTION_NUMBER_INTEGER: {value += _("integer"); break;}
-					case ASSUMPTION_NUMBER_RATIONAL: {value += _("rational"); break;}
-					case ASSUMPTION_NUMBER_REAL: {value += _("real"); break;}
-					case ASSUMPTION_NUMBER_COMPLEX: {value += _("complex"); break;}
-					case ASSUMPTION_NUMBER_NUMBER: {value += _("number"); break;}
+				if(!value.empty() && !((UnknownVariable*) v)->assumptions()->type() == ASSUMPTION_TYPE_NONE) value += " ";
+				switch(((UnknownVariable*) v)->assumptions()->type()) {
+					case ASSUMPTION_TYPE_INTEGER: {value += _("integer"); break;}
+					case ASSUMPTION_TYPE_RATIONAL: {value += _("rational"); break;}
+					case ASSUMPTION_TYPE_REAL: {value += _("real"); break;}
+					case ASSUMPTION_TYPE_COMPLEX: {value += _("complex"); break;}
+					case ASSUMPTION_TYPE_NUMBER: {value += _("number"); break;}
+					case ASSUMPTION_TYPE_NONMATRIX: {value += _("non-matrix"); break;}
 					default: {}
 				}
 				if(value.empty()) value = _("unknown");
@@ -543,7 +544,7 @@ void print_unit(Unit *u) {
 		fputs("</row>\n", ufile);
 }
 
-int main (int argc, char *argv[]) {
+int main(int, char *[]) {
 
 	
 #ifdef ENABLE_NLS

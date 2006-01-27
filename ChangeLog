@@ -1,6 +1,11 @@
+2005-12-20 Niklas Knutsson  <nq@altern.org>
+
+	* Warn about denominators assumed non-zero option
+
 2005-12-19 Niklas Knutsson  <nq@altern.org>
 
 	* Various fixes and enhancements
+	* Update Swedish translation
 
 2005-12-14 Niklas Knutsson  <nq@altern.org>
 

@@ -279,7 +279,7 @@ Calculator::Calculator() {
 
 	default_assumptions = new Assumptions;
 	default_assumptions->setType(ASSUMPTION_TYPE_REAL);
-	default_assumptions->setSign(ASSUMPTION_SIGN_NONZERO);
+	default_assumptions->setSign(ASSUMPTION_SIGN_UNKNOWN);
 	
 	u_rad = NULL; u_gra = NULL; u_deg = NULL;
 	
@@ -2384,7 +2384,7 @@ void Calculator::nameChanged(ExpressionItem *item, bool new_item) {
 	for(size_t i2 = 1; i2 <= item->countNames(); i2++) {
 		l2 = item->getName(i2).name.length();
 		if(l2 > UFV_LENGTHS) {
-			size_t i = 0, l;
+			size_t i = 0, l = 0;
 			for(vector<void*>::iterator it = ufvl.begin(); ; ++it) {
 				if(it != ufvl.end()) {
 					if(ufvl_t[i] == 'v')
@@ -3012,14 +3012,14 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 			size_t best_pnl = 0;
 			bool moved_forward = false;
 			const string *found_function_name = NULL;
-			bool case_sensitive;
+			bool case_sensitive = false;
 			size_t found_function_name_length = 0;
 			void *found_function = NULL, *object = NULL;
 			int vt2 = -1;
 			size_t ufv_index;
 			size_t name_length;
 			size_t vt3 = 0;
-			char ufvt;
+			char ufvt = 0;
 			size_t last_name_char = str.find_first_of(NOT_IN_NAMES, str_index + 1);
 			if(last_name_char == string::npos) {
 				last_name_char = str.length() - 1;

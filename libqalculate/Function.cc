@@ -1671,7 +1671,7 @@ string TextArgument::print() const {return _("text");}
 string TextArgument::subprintlong() const {return _("a text string");}
 bool TextArgument::suggestsQuotes() const {return false;}
 
-DateArgument::DateArgument(string name_, bool does_test, bool does_error) : Argument(name_, does_test, does_error) { b_text = true;}
+DateArgument::DateArgument(string name_, bool does_test, bool does_error) : Argument(name_, does_test, does_error) {b_text = true;}
 DateArgument::DateArgument(const DateArgument *arg) {set(arg); b_text = true;}
 DateArgument::~DateArgument() {}
 bool DateArgument::subtest(MathStructure &value, const EvaluationOptions &eo) const {

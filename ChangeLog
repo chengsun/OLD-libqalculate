@@ -1,3 +1,11 @@
+2005-01-30 Niklas Knutsson  <nq@altern.org>
+
+	* isodate(), localdate(), timestamp(), stamptodate() functions
+
+2005-01-27 Niklas Knutsson  <nq@altern.org>
+
+	* cos(x*pi*rad) equals 1 if x is even, not -1
+
 2005-12-20 Niklas Knutsson  <nq@altern.org>
 
 	* Warn about denominators assumed non-zero option

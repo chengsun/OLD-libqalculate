@@ -2046,6 +2046,34 @@
         <_name>time</_name>
       </name>
     </builtin_function>
+    <builtin_function name="isodate">
+      <_title>Standard Date Format</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>isodate</_name>
+      </name>
+    </builtin_function>
+    <builtin_function name="localdate">
+      <_title>Local Date Format</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>localdate</_name>
+      </name>
+    </builtin_function>
+    <builtin_function name="timestamp">
+      <_title>Date to Unix Timestamp</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>timestamp</_name>
+      </name>
+    </builtin_function>
+    <builtin_function name="stamptodate">
+      <_title>Unix Timestamp to Date</_title>
+      <name index="1">
+        <reference>true</reference>
+        <_name>stamptodate</_name>
+      </name>
+    </builtin_function>
   </category>
   <category>
     <_title>Utilities</_title>

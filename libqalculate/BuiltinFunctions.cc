@@ -19,6 +19,8 @@
 #include "Variable.h"
 
 #include <sstream>
+#include <glib.h>
+#include <time.h>
 
 #define FR_FUNCTION(FUNC)	Number nr(vargs[0].number()); if(!nr.FUNC() || (eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) || (!eo.allow_complex && nr.isComplex() && !vargs[0].number().isComplex()) || (!eo.allow_infinite && nr.isInfinite() && !vargs[0].number().isInfinite())) {return 0;} else {mstruct.set(nr); return 1;}
 #define FR_FUNCTION_2(FUNC)	Number nr(vargs[0].number()); if(!nr.FUNC(vargs[1].number()) || (eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) || (!eo.allow_complex && nr.isComplex() && !vargs[0].number().isComplex() && !vargs[1].number().isComplex()) || (!eo.allow_infinite && nr.isInfinite() && !vargs[0].number().isInfinite() && !vargs[1].number().isInfinite())) {return 0;} else {mstruct.set(nr); return 1;}
@@ -2084,6 +2086,97 @@ int RandFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 bool RandFunction::representsReal(const MathStructure&, bool) const {return true;}
 bool RandFunction::representsInteger(const MathStructure &vargs) const {return vargs.size() > 0 && vargs[0].isNumber() && vargs[0].number().isPositive();}
 bool RandFunction::representsNonNegative(const MathStructure&) const {return true;}
+
+ISODateFunction::ISODateFunction() : MathFunction("isodate", 0, 1) {
+	setArgumentDefinition(1, new DateArgument());
+	setDefaultValue(1, "today");
+}
+int ISODateFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	GDate *gtime = g_date_new();
+	string str = vargs[0].symbol();
+	remove_blank_ends(str);
+	if(str == _("today") || str == "today") {
+		g_date_set_time(gtime, time(NULL));
+	} else {
+		g_date_set_parse(gtime, str.c_str());
+	}
+	gchar *gstr = (gchar*) malloc(sizeof(gchar) * 100);
+	g_date_strftime(gstr, 100, "%F", gtime);
+	mstruct.set(gstr);
+	g_date_free(gtime);
+	g_free(gstr);
+	return 1;
+}
+LocalDateFunction::LocalDateFunction() : MathFunction("localdate", 0, 1) {
+	setArgumentDefinition(1, new DateArgument());
+	setDefaultValue(1, "today");
+}
+int LocalDateFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	GDate *gtime = g_date_new();
+	string str = vargs[0].symbol();
+	remove_blank_ends(str);
+	if(str == _("today") || str == "today") {
+		g_date_set_time(gtime, time(NULL));
+	} else {
+		g_date_set_parse(gtime, str.c_str());
+	}
+	gchar *gstr = (gchar*) malloc(sizeof(gchar) * 100);
+	g_date_strftime(gstr, 100, "%x", gtime);
+	mstruct.set(gstr);
+	g_date_free(gtime);
+	g_free(gstr);
+	return 1;
+}
+TimestampFunction::TimestampFunction() : MathFunction("timestamp", 0, 1) {
+	setArgumentDefinition(1, new DateArgument());
+	setDefaultValue(1, "now");
+}
+int TimestampFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {	
+	string str = vargs[0].symbol();
+	remove_blank_ends(str);
+	if(str == _("now") || str == "now") {
+		mstruct.number().setInternal(time(NULL));
+		return 1;
+	}
+	GDate *gtime = g_date_new();
+	if(str == _("today") || str == "today") {
+		g_date_set_time(gtime, time(NULL));
+	} else {
+		g_date_set_parse(gtime, str.c_str());
+	}
+	gchar *gstr = (gchar*) malloc(sizeof(gchar) * 100);
+	g_date_strftime(gstr, 100, "%s", gtime);
+	Number nr(gstr);
+	g_date_free(gtime);
+	g_free(gstr);
+	if(nr.isMinusOne()) {
+		CALCULATOR->error(true, _("The timestamp value for the date %s is too large or small for %s()."), vargs[0].print().c_str(), preferredDisplayName().name.c_str(), NULL);
+		return 0;
+	}
+	mstruct.set(nr);	
+	return 1;
+}
+TimestampToDateFunction::TimestampToDateFunction() : MathFunction("stamptodate", 1) {
+	setArgumentDefinition(1, new IntegerArgument());
+}
+int TimestampToDateFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {	
+	cln::cl_I i = cln::numerator(cln::rational(cln::realpart(vargs[0].number().internalNumber())));
+	GTime ti = 0;
+	if(i > long(LONG_MAX)) {
+		return 0;
+	} else if(i < long(LONG_MIN)) {
+		return 0;
+	}
+	ti = (GTime) cln::cl_I_to_long(i);
+	GDate *gtime = g_date_new();
+	g_date_set_time(gtime, ti);
+	gchar *gstr = (gchar*) malloc(sizeof(gchar) * 100);
+	g_date_strftime(gstr, 100, "%F", gtime);
+	mstruct.set(gstr);
+	g_date_free(gtime);
+	g_free(gstr);
+	return 1;
+}
 
 DaysFunction::DaysFunction() : MathFunction("days", 2, 4) {
 	setArgumentDefinition(1, new DateArgument());

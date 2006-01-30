@@ -69,8 +69,11 @@ bool s2date(string str, GDate *gtime) {
 int week(string str, bool start_sunday) {
 	remove_blank_ends(str);
 	GDate *gtime = g_date_new();
-	bool b;
+	bool b = false;
 	if(str == _("today") || str == "today") {
+		g_date_set_time(gtime, time(NULL));
+		b = true;
+	} else if(str == _("now") || str == "now") {
 		g_date_set_time(gtime, time(NULL));
 		b = true;
 	} else {
@@ -113,10 +116,13 @@ int week(string str, bool start_sunday) {
 int weekday(string str) {
 	remove_blank_ends(str);
 	GDate *gtime = g_date_new();
-	bool b;
+	bool b = false;
 	if(str == _("today") || str == "today") {
 		g_date_set_time(gtime, time(NULL));
 		b = true;
+	} else if(str == _("now") || str == "now") {
+		g_date_set_time(gtime, time(NULL));
+		b = true;	
 	} else {
 		b = s2date(str, gtime);
 	}
@@ -130,8 +136,11 @@ int weekday(string str) {
 int yearday(string str) {
 	remove_blank_ends(str);
 	GDate *gtime = g_date_new();
-	bool b;
+	bool b = false;
 	if(str == _("today") || str == "today") {
+		g_date_set_time(gtime, time(NULL));
+		b = true;
+	} else if(str == _("now") || str == "now") {
 		g_date_set_time(gtime, time(NULL));
 		b = true;
 	} else {
@@ -149,6 +158,9 @@ bool s2date(string str, int &year, int &month, int &day) {
 	//struct tm time;
 	remove_blank_ends(str);
 	if(str == _("today") || str == "today") {
+		today(year, month, day);
+		return true;
+	} else if(str == _("now") || str == "now") {
 		today(year, month, day);
 		return true;
 	}

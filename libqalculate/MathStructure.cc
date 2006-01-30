@@ -9358,7 +9358,7 @@ bool MathStructure::improve_division_multipliers(const PrintOptions &po) {
 		case STRUCT_MULTIPLICATION: {
 			size_t inum = 0, iden = 0;
 			bool bfrac = false, bint = true, bdiv = false, bnonunitdiv = false;
-			size_t index1, index2;
+			size_t index1 = 0, index2 = 0;
 			bool dofrac = !po.negative_exponents;
 			for(size_t i2 = 0; i2 < SIZE; i2++) {
 				if(CHILD(i2).isPower() && CHILD(i2)[1].isMinusOne()) {

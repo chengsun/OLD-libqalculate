@@ -1210,6 +1210,10 @@ void Calculator::addBuiltinFunctions() {
 	f_mode = addFunction(new ModeFunction());
 	f_rand = addFunction(new RandFunction());
 
+	f_isodate = addFunction(new ISODateFunction());
+	f_localdate = addFunction(new LocalDateFunction());
+	f_timestamp = addFunction(new TimestampFunction());
+	f_stamptodate = addFunction(new TimestampToDateFunction());
 	f_days = addFunction(new DaysFunction());
 	f_yearfrac = addFunction(new YearFracFunction());
 	f_week = addFunction(new WeekFunction());

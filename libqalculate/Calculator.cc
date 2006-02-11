@@ -4854,7 +4854,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 		xmlFreeDoc(doc);
 		return false;
 	}
-	int version_numbers[] = {0, 9, 2};
+	int version_numbers[] = {0, 9, 3};
 	parse_qalculate_version(version, version_numbers);
 	
 	ParseOptions po;
@@ -7041,8 +7041,10 @@ MathStructure Calculator::expressionToPlotVector(string expression, const MathSt
 	else x_mstruct = x_var;
 	EvaluationOptions eo;
 	eo.approximation = APPROXIMATION_APPROXIMATE;
-	eo.parse_options = po;
-	MathStructure y_vector(parse(expression, po).generateVector(x_mstruct, min, max, steps, x_vector, eo));
+	ParseOptions po2 = po;
+	po2.read_precision = DONT_READ_PRECISION;	
+	eo.parse_options = po2;
+	MathStructure y_vector(parse(expression, po2).generateVector(x_mstruct, min, max, steps, x_vector, eo));
 	if(y_vector.size() == 0) {
 		CALCULATOR->error(true, _("Unable to generate plot data with current min, max and sampling rate."), NULL);
 	}
@@ -7052,8 +7054,10 @@ MathStructure Calculator::expressionToPlotVector(string expression, float min, f
 	MathStructure min_mstruct(min), max_mstruct(max);
 	EvaluationOptions eo;
 	eo.approximation = APPROXIMATION_APPROXIMATE;
-	eo.parse_options = po;
-	MathStructure y_vector(expressionToPlotVector(expression, min_mstruct, max_mstruct, steps, x_vector, x_var, po));
+	ParseOptions po2 = po;
+	po2.read_precision = DONT_READ_PRECISION;	
+	eo.parse_options = po2;
+	MathStructure y_vector(expressionToPlotVector(expression, min_mstruct, max_mstruct, steps, x_vector, x_var, po2));
 	y_vector.eval(eo);
 	if(y_vector.size() == 0) {
 		CALCULATOR->error(true, _("Unable to generate plot data with current min, max and sampling rate."), NULL);
@@ -7067,8 +7071,10 @@ MathStructure Calculator::expressionToPlotVector(string expression, const MathSt
 	else x_mstruct = x_var;
 	EvaluationOptions eo;
 	eo.approximation = APPROXIMATION_APPROXIMATE;
-	eo.parse_options = po;
-	MathStructure y_vector(parse(expression, po).generateVector(x_mstruct, min, max, step, x_vector, eo));
+	ParseOptions po2 = po;
+	po2.read_precision = DONT_READ_PRECISION;	
+	eo.parse_options = po2;
+	MathStructure y_vector(parse(expression, po2).generateVector(x_mstruct, min, max, step, x_vector, eo));
 	if(y_vector.size() == 0) {
 		CALCULATOR->error(true, _("Unable to generate plot data with current min, max and step size."), NULL);
 	}
@@ -7078,8 +7084,10 @@ MathStructure Calculator::expressionToPlotVector(string expression, float min, f
 	MathStructure min_mstruct(min), max_mstruct(max), step_mstruct(step);
 	EvaluationOptions eo;
 	eo.approximation = APPROXIMATION_APPROXIMATE;
-	eo.parse_options = po;
-	MathStructure y_vector(expressionToPlotVector(expression, min_mstruct, max_mstruct, step_mstruct, x_vector, x_var, po));
+	ParseOptions po2 = po;
+	po2.read_precision = DONT_READ_PRECISION;	
+	eo.parse_options = po2;
+	MathStructure y_vector(expressionToPlotVector(expression, min_mstruct, max_mstruct, step_mstruct, x_vector, x_var, po2));
 	y_vector.eval(eo);
 	if(y_vector.size() == 0) {
 		CALCULATOR->error(true, _("Unable to generate plot data with current min, max and step size."), NULL);
@@ -7093,8 +7101,10 @@ MathStructure Calculator::expressionToPlotVector(string expression, const MathSt
 	else x_mstruct = x_var;
 	EvaluationOptions eo;
 	eo.approximation = APPROXIMATION_APPROXIMATE;
-	eo.parse_options = po;
-	return parse(expression, po).generateVector(x_mstruct, x_vector, eo).eval(eo);
+	ParseOptions po2 = po;
+	po2.read_precision = DONT_READ_PRECISION;	
+	eo.parse_options = po2;
+	return parse(expression, po2).generateVector(x_mstruct, x_vector, eo).eval(eo);
 }
 
 bool Calculator::plotVectors(plot_parameters *param, const vector<MathStructure> &y_vectors, const vector<MathStructure> &x_vectors, vector<plot_data_parameters*> &pdps, bool persistent) {

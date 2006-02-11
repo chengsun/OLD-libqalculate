@@ -667,7 +667,7 @@
         <argument index="2">
           <_title>Number</_title>
         </argument>
-	<argument index="2">
+	<argument index="3">
           <_title>Variable</_title>
         </argument>
       </builtin_function>

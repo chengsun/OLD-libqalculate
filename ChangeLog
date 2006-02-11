@@ -1,3 +1,7 @@
+2006-02-11 Niklas Knutsson  <nq@altern.org>
+
+	* Do not use "Read Precision" in plot
+
 2005-01-30 Niklas Knutsson  <nq@altern.org>
 
 	* isodate(), localdate(), timestamp(), stamptodate() functions

@@ -278,7 +278,7 @@ string DataProperty::getDisplayString(const string &valuestr) {
 	return str;
 }
 MathStructure *DataProperty::generateStruct(const string &valuestr, int is_approximate) {
-	MathStructure *mstruct;
+	MathStructure *mstruct = NULL;
 	switch(ptype) {
 		case PROPERTY_EXPRESSION: {
 			ParseOptions po;
@@ -509,15 +509,15 @@ bool DataSet::loadObjects(const char *file_name, bool is_user_defs) {
 		version_numbers[i] = s2i(version.substr(0, dot_i));
 		version = version.substr(dot_i + 1, version.length() - (dot_i + 1));
 	}
-	DataObject *o;
+	DataObject *o = NULL;
 	cur = cur->xmlChildrenNode;
 	string str, str2;
 	vector<DataProperty*> lang_status_p;
 	vector<int> lang_status;
-	int ils;
-	int i_approx;
-	bool cmp;
-	bool b, old_object;
+	int ils = 0;
+	int i_approx = 0;
+	bool cmp = false;
+	bool b = false, old_object = false;
 	size_t objects_before = objects.size();
 	vector<DataProperty*> p_refs;
 	vector<string> s_refs;

@@ -16,6 +16,10 @@
 
 #include <cln/cln.h>
 
+#define EQUALS_PRECISION_DEFAULT 	-1
+#define EQUALS_PRECISION_LOWEST		-2
+#define EQUALS_PRECISION_HIGHEST	-3
+
 class Number {
 	
 	private:
@@ -136,7 +140,9 @@ class Number {
 		bool hasPositiveSign() const;
 		bool equalsZero() const;
 		bool equals(const Number &o) const;
+		bool equalsApproximately(const Number &o, int prec) const;
 		ComparisonResult compare(const Number &o) const;
+		ComparisonResult compareApproximately(const Number &o, int prec = EQUALS_PRECISION_LOWEST) const;
 		ComparisonResult compareImaginaryParts(const Number &o) const;
 		ComparisonResult compareRealParts(const Number &o) const;
 		bool isGreaterThan(const Number &o) const;
@@ -158,7 +164,7 @@ class Number {
 		bool multiply(const Number &o);
 		bool divide(const Number &o);
 		bool recip();
-		bool raise(const Number &o, int solution = 1);
+		bool raise(const Number &o, bool try_exact = true);
 		bool exp10(const Number &o);
 		bool exp2(const Number &o);
 		bool exp10();

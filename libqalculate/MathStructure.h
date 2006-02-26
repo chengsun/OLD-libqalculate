@@ -318,6 +318,7 @@ class MathStructure {
 		bool equals(string sym) const;
 		
 		ComparisonResult compare(const MathStructure &o) const;
+		ComparisonResult compareApproximately(const MathStructure &o) const;
 		
 		void mergePrecision(const MathStructure &o);
 		

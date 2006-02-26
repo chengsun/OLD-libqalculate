@@ -20,6 +20,11 @@
 #define REAL_PRECISION_FLOAT_RE(x)		cln::cl_float(cln::realpart(x), cln::float_format(PRECISION + 1))
 #define REAL_PRECISION_FLOAT_IM(x)		cln::cl_float(cln::imagpart(x), cln::float_format(PRECISION + 1))
 #define REAL_PRECISION_FLOAT(x)			cln::cl_float(x, cln::float_format(PRECISION + 1))
+#define MIN_PRECISION_FLOAT_RE(x)		cln::cl_float(cln::realpart(x), cln::float_format(cln::float_format_lfloat_min + 1))
+#define MIN_PRECISION_FLOAT_IM(x)		cln::cl_float(cln::imagpart(x), cln::float_format(cln::float_format_lfloat_min + 1))
+#define MIN_PRECISION_FLOAT(x)			cln::cl_float(x, cln::float_format(cln::float_format_lfloat_min + 1))
+
+#define CANNOT_FLOAT(x, p)			(((cln::plusp(cln::realpart(x)) && (cln::realpart(x) > cln::cl_float(cln::most_positive_float(cln::float_format(p)), cln::default_float_format) || cln::realpart(x) < cln::cl_float(cln::least_positive_float(cln::float_format(p)), cln::default_float_format))) || (cln::minusp(cln::realpart(x)) && (cln::realpart(x) < cln::cl_float(cln::most_negative_float(cln::float_format(p)), cln::default_float_format) || cln::realpart(x) > cln::cl_float(cln::least_negative_float(cln::float_format(p)), cln::default_float_format)))))
 
 using namespace cln;
 
@@ -756,11 +761,20 @@ bool Number::hasImaginaryPart() const {
 }
 void Number::removeFloatZeroPart() {
 	if(!isInfinite() && isApproximateType() && !cln::zerop(cln::imagpart(value))) {
-		cl_F f_value = REAL_PRECISION_FLOAT_RE(value) + REAL_PRECISION_FLOAT_IM(value);
-		if(REAL_PRECISION_FLOAT(f_value) == REAL_PRECISION_FLOAT_RE(value)) {
-			value = cln::realpart(value);
-		} else if(REAL_PRECISION_FLOAT(f_value) == REAL_PRECISION_FLOAT_IM(value)) {
-			value = cln::complex(0, cln::imagpart(value));
+		if(PRECISION < cln::float_format_lfloat_min) {
+			cl_F f_value = MIN_PRECISION_FLOAT_RE(value) + MIN_PRECISION_FLOAT_IM(value);
+			if(MIN_PRECISION_FLOAT(f_value) == MIN_PRECISION_FLOAT_RE(value)) {
+				value = cln::realpart(value);
+			} else if(MIN_PRECISION_FLOAT(f_value) == MIN_PRECISION_FLOAT_IM(value)) {
+				value = cln::complex(0, cln::imagpart(value));
+			}
+		} else {
+			cl_F f_value = REAL_PRECISION_FLOAT_RE(value) + REAL_PRECISION_FLOAT_IM(value);
+			if(REAL_PRECISION_FLOAT(f_value) == REAL_PRECISION_FLOAT_RE(value)) {
+				value = cln::realpart(value);
+			} else if(REAL_PRECISION_FLOAT(f_value) == REAL_PRECISION_FLOAT_IM(value)) {
+				value = cln::complex(0, cln::imagpart(value));
+			}
 		}
 	}
 }
@@ -771,8 +785,16 @@ void Number::testApproximate() {
 	}
 }
 void Number::testInteger() {
-	if(isApproximateType() && !isInfinite() && !isComplex() && cln::zerop(cln::truncate2(REAL_PRECISION_FLOAT_RE(value)).remainder)) {
-		value = cln::round1(cln::realpart(value));
+	if(isApproximateType() && !isInfinite() && !isComplex()) {
+		if(PRECISION < cln::float_format_lfloat_min) {
+			if(cln::zerop(cln::truncate2(MIN_PRECISION_FLOAT_RE(value)).remainder)) {
+				value = cln::round1(cln::realpart(value));
+			}
+		} else {
+			if(cln::zerop(cln::truncate2(REAL_PRECISION_FLOAT_RE(value)).remainder)) {
+				value = cln::round1(cln::realpart(value));
+			}
+		}
 	}
 }
 void Number::setPrecisionAndApproximateFrom(const Number &o) {
@@ -867,28 +889,178 @@ bool Number::hasPositiveSign() const {
 bool Number::equalsZero() const {
 	if(isZero()) return true;
 	if(isApproximateType() && !isComplex()) {
-		return REAL_PRECISION_FLOAT_RE(value + 1) == cln::cl_float(1, cln::float_format(PRECISION + 1));
+		if(PRECISION < cln::float_format_lfloat_min) {
+			return MIN_PRECISION_FLOAT_RE(value + 1) == cln::cl_float(1, cln::float_format(cln::float_format_lfloat_min + 1));
+		} else {
+			return REAL_PRECISION_FLOAT_RE(value + 1) == cln::cl_float(1, cln::float_format(PRECISION + 1));
+		}
 	}
 	return false;
 }
 bool Number::equals(const Number &o) const {
 	if(b_inf) return false;
-	//if(b_pinf) return o.isPlusInfinity();
-	//if(b_minf) return o.isMinusInfinity();
 	if(b_pinf) return false;
 	if(b_minf) return false;
 	if(o.isInfinite()) return false;
-	if(isApproximateType() || o.isApproximateType()) {
-		if(!isComplex() && !o.isComplex()) {
-			return REAL_PRECISION_FLOAT_RE(value) == REAL_PRECISION_FLOAT_RE(o.internalNumber());
-		} else if(isComplex() && o.isComplex()) {
-			if(REAL_PRECISION_FLOAT_RE(value) != REAL_PRECISION_FLOAT_RE(o.internalNumber())) return false;
-			return REAL_PRECISION_FLOAT_IM(value) == REAL_PRECISION_FLOAT_IM(o.internalNumber());
-		} else {
-			return false;
-		}
-	}
 	return value == o.internalNumber();
+}
+bool Number::equalsApproximately(const Number &o, int prec) const {
+	if(b_inf) return false;
+	if(b_pinf) return false;
+	if(b_minf) return false;
+	if(o.isInfinite()) return false;
+	if(value == o.internalNumber()) return true;
+	if(isComplex() != o.isComplex()) return false;
+	if(isComplex()) {
+		return realPart().equalsApproximately(o.realPart(), prec) && imaginaryPart().equalsApproximately(o.imaginaryPart(), prec);
+	}
+	bool prec_choosen = prec >= 0;
+	if(prec == EQUALS_PRECISION_LOWEST) {
+		prec = PRECISION;
+		if(i_precision >= 0 && i_precision < prec) prec = i_precision;
+		if(o.precision() >= 0 && o.precision() < prec) prec = o.precision();
+	} else if(prec == EQUALS_PRECISION_HIGHEST) {
+		prec = i_precision;
+		if(o.precision() >= 0 && o.precision() > prec) prec = o.precision();
+		if(prec < 0) prec = PRECISION;
+	} else if(prec == EQUALS_PRECISION_DEFAULT) {
+		prec = PRECISION;
+	}
+	/*if(isApproximateType() && o.isApproximateType()) {
+		if(prec >= cln::float_format_lfloat_min) {
+			return cln::cl_float(cln::realpart(value), cln::float_format(prec + 1)) == cln::cl_float(cln::realpart(o.internalNumber()), cln::float_format(prec + 1));
+		}
+		string str1, str2;
+		std::ostringstream s1, s2;
+		s1 << value;
+		s2 << o.internalNumber();
+		str1 = s1.str();
+		str2 = s2.str();
+		for(size_t i = str1.length() - 1, i2 = str2.length() - 1; ; i--, i2--) {
+			if(is_not_in("0123456789.", str1[i])) {
+				if(is_in("0123456789.", str2[i2])) return false;
+				break;
+			}
+			if(is_not_in("0123456789.", str2[i2])) {
+				if(is_in("0123456789.", str1[i])) return false;
+				break;
+			}
+			if(str1[i] != str2[i2]) return false;
+		}
+		for(size_t i = 0; i < str1.length() && i < str2.length() && (int) i <= prec; i++) {
+			if(str1[i] != str2[i]) return false;
+			if(str1[i] == '.') prec++;
+		}
+		return true;
+	}*/
+	if(prec_choosen || isApproximate() || o.isApproximate()) {		
+		cln::cl_R diff = cln::realpart(value) - cln::realpart(o.internalNumber());
+		if(cln::zerop(diff)) return true;
+		cln::cl_R val;
+		bool first_greatest = true;
+		if(diff < 0) {
+			first_greatest = false;
+			diff = -diff;
+			val = cln::realpart(o.internalNumber());
+		} else {
+			val = cln::realpart(value);
+		}		
+		val = val / diff;
+		cln::cl_I precval = cln::expt_pos(cln::cl_I(10), cln::cl_I(prec));
+		val = val / precval;
+		if(val > 3) return true;
+		cl_RA tenth = 1;
+		tenth = tenth / 10;
+		if(val < tenth) return false;
+		
+		cln::cl_R remainder1, remainder2;
+		if(first_greatest) {
+			remainder1 = cln::realpart(value);
+			remainder2 = cln::realpart(o.internalNumber());
+		} else {
+			remainder2 = cln::realpart(value);
+			remainder1 = cln::realpart(o.internalNumber());
+		}
+		cln::cl_R_div_t divt1, divt2;
+		bool started = false, oneup = false;
+		while(prec >= 0) {
+			divt1 = cln::truncate2(remainder1);
+			divt2 = cln::truncate2(remainder2);
+			if(prec == 0) {
+				if(oneup) {
+					return divt1.quotient < 5 && divt2.quotient >= 5;
+				} else {
+					return (divt1.quotient >= 5) == (divt2.quotient >= 5);
+				}
+			}
+			if(started) {
+				prec--;
+				if(oneup && (divt1.quotient != 0 || divt2.quotient != 9)) return false;
+				if(!oneup && divt1.quotient != divt2.quotient) {
+					if(divt1.quotient == divt2.quotient + 1) {
+						oneup = true;
+					} else {
+						return false;
+					}
+				}
+			} else if(!cln::zerop(divt1.quotient)) {
+				started = true;
+				if(divt1.quotient < 10) {
+					prec--;
+					if(divt1.quotient != divt2.quotient) {
+						if(divt2.quotient == 1) {
+							oneup = true;
+						} else {
+							return false;
+						}
+					}
+				} else {
+					std::ostringstream s1;
+					s1 << divt1.quotient;
+					if(divt1.quotient == divt2.quotient) {
+						prec -= s1.str().length();
+					} else {
+						std::ostringstream s2;
+						s2 << divt2.quotient;
+						string str1 = s1.str();
+						string str2 = s2.str();						
+						if(str1.length() != str2.length()) {
+							if(str1.length() == str2.length() + 1 && str1[0] == '1') {
+								oneup = true;
+								prec--;
+								str1.erase(str1.begin());
+							} else {
+								return false;
+							}
+						}
+						for(size_t i = 0; i < str1.length(); i++) {							
+							if(oneup && (str1[i] != '0' || str2[i] != '9')) return false;
+							if(!oneup && str1[i] != str2[i]) {
+								if(str1[i] == str2[i] + 1) {
+									oneup = true;
+								} else {
+									return false;
+								}
+							}
+							prec--;
+							if(prec == 0) {
+								if(oneup) {
+									return i + 1 < str1.length() && str1[i + 1] < '5' && str2[i + 1] >= '5';
+								} else {
+									return i == str1.length() - 1 || (str1[i + 1] >= '5') == (str2[i + 1] >= '5');
+								}
+							}
+						}
+					}
+				}
+			}
+			if(cln::zerop(remainder1) && cln::zerop(remainder2)) return !oneup;
+			remainder1 = divt1.remainder * 10;
+			remainder2 = divt2.remainder * 10;
+		}
+		return false;
+	}
+	return false;
 }
 ComparisonResult Number::compare(const Number &o) const {
 	if(b_inf || o.isInfinity()) return COMPARISON_RESULT_UNKNOWN;
@@ -902,20 +1074,37 @@ ComparisonResult Number::compare(const Number &o) const {
 	}
 	if(o.isPlusInfinity()) return COMPARISON_RESULT_GREATER;
 	if(o.isMinusInfinity()) return COMPARISON_RESULT_LESS;
+	if(equals(o)) return COMPARISON_RESULT_EQUAL;
 	if(!isComplex() && !o.isComplex()) {
-		int i;
-		if(isApproximate() || o.isApproximate()) {
-			i = cln::compare(REAL_PRECISION_FLOAT_RE(o.internalNumber()), REAL_PRECISION_FLOAT_RE(value));
-			
-		} else {
-			i = cln::compare(cln::realpart(o.internalNumber()), cln::realpart(value));
-		}
+		int i = cln::compare(cln::realpart(o.internalNumber()), cln::realpart(value));
 		if(i == 0) return COMPARISON_RESULT_EQUAL;
 		else if(i == -1) return COMPARISON_RESULT_LESS;
 		else if(i == 1) return COMPARISON_RESULT_GREATER;
 		return COMPARISON_RESULT_UNKNOWN;
-	} else {
-		if(equals(o)) return COMPARISON_RESULT_EQUAL;
+	} else {		
+		return COMPARISON_RESULT_NOT_EQUAL;
+	}
+}
+ComparisonResult Number::compareApproximately(const Number &o, int prec) const {
+	if(b_inf || o.isInfinity()) return COMPARISON_RESULT_UNKNOWN;
+	if(b_pinf) {
+		if(o.isPlusInfinity()) return COMPARISON_RESULT_EQUAL;
+		else return COMPARISON_RESULT_LESS;
+	}
+	if(b_minf) {
+		if(o.isMinusInfinity()) return COMPARISON_RESULT_EQUAL;
+		else return COMPARISON_RESULT_GREATER;
+	}
+	if(o.isPlusInfinity()) return COMPARISON_RESULT_GREATER;
+	if(o.isMinusInfinity()) return COMPARISON_RESULT_LESS;
+	if(equalsApproximately(o, prec)) return COMPARISON_RESULT_EQUAL;
+	if(!isComplex() && !o.isComplex()) {
+		int i = cln::compare(cln::realpart(o.internalNumber()), cln::realpart(value));
+		if(i == 0) return COMPARISON_RESULT_EQUAL;
+		else if(i == -1) return COMPARISON_RESULT_LESS;
+		else if(i == 1) return COMPARISON_RESULT_GREATER;
+		return COMPARISON_RESULT_UNKNOWN;
+	} else {		
 		return COMPARISON_RESULT_NOT_EQUAL;
 	}
 }
@@ -938,18 +1127,12 @@ bool Number::isGreaterThan(const Number &o) const {
 	if(o.isMinusInfinity()) return true;
 	if(b_pinf) return true;
 	if(isComplex() || o.isComplex()) return false;
-	if(isApproximateType() || o.isApproximateType()) {
-		return REAL_PRECISION_FLOAT_RE(value) > REAL_PRECISION_FLOAT_RE(o.internalNumber());
-	}
 	return cln::realpart(value) > cln::realpart(o.internalNumber());
 }
 bool Number::isLessThan(const Number &o) const {
 	if(o.isMinusInfinity() || o.isInfinity() || b_inf || b_pinf) return false;
 	if(b_minf || o.isPlusInfinity()) return true;
 	if(isComplex() || o.isComplex()) return false;
-	if(isApproximateType() || o.isApproximateType()) {
-		return REAL_PRECISION_FLOAT_RE(value) < REAL_PRECISION_FLOAT_RE(o.internalNumber());
-	}
 	return cln::realpart(value) < cln::realpart(o.internalNumber());
 }
 bool Number::isGreaterThanOrEqualTo(const Number &o) const {
@@ -957,26 +1140,18 @@ bool Number::isGreaterThanOrEqualTo(const Number &o) const {
 	if(b_minf) return o.isMinusInfinity();
 	if(b_pinf) return true;
 	if(!isComplex() && !o.isComplex()) {
-		if(isApproximateType() || o.isApproximateType()) {
-			return REAL_PRECISION_FLOAT_RE(value) >= REAL_PRECISION_FLOAT_RE(o.internalNumber());
-		}
 		return cln::realpart(value) >= cln::realpart(o.internalNumber());
-	} else {
-		return equals(o);
 	}
+	return false;
 }
 bool Number::isLessThanOrEqualTo(const Number &o) const {
 	if(b_inf || o.isInfinity()) return false;
 	if(b_pinf) return o.isPlusInfinity();
 	if(b_minf) return true;
 	if(!isComplex() && !o.isComplex()) {
-		if(isApproximateType() || o.isApproximateType()) {
-			return REAL_PRECISION_FLOAT_RE(value) <= REAL_PRECISION_FLOAT_RE(o.internalNumber());
-		}
 		return cln::realpart(value) <= cln::realpart(o.internalNumber());
-	} else {
-		return equals(o);
 	}
+	return false;
 }
 bool Number::isEven() const {
 	return isInteger() && cln::evenp(cln::numerator(cln::rational(cln::realpart(value))));
@@ -1029,18 +1204,10 @@ bool Number::add(const Number &o) {
 		return true;
 	}
 	if(isApproximateType() || o.isApproximateType()) {
-		if(!isComplex() && !o.isComplex()) {
-			if(REAL_PRECISION_FLOAT_RE(value) == -REAL_PRECISION_FLOAT_RE(o.internalNumber())) {
-				value = 0;
-				setPrecisionAndApproximateFrom(o);
-				return true;
-			}
-		} else if(isComplex() && o.isComplex()) {
-			if(REAL_PRECISION_FLOAT_RE(value) == -REAL_PRECISION_FLOAT_RE(o.internalNumber()) && REAL_PRECISION_FLOAT_IM(value) == -REAL_PRECISION_FLOAT_IM(o.internalNumber())) {
-				value = 0;
-				setPrecisionAndApproximateFrom(o);
-				return true;
-			}
+		if(equalsApproximately(-o, EQUALS_PRECISION_HIGHEST)) {
+			value = 0;
+			setPrecisionAndApproximateFrom(o);
+			return true;
 		}
 	}
 	value = value + o.internalNumber();
@@ -1048,6 +1215,7 @@ bool Number::add(const Number &o) {
 	setPrecisionAndApproximateFrom(o);
 	return true;
 }
+
 bool Number::subtract(const Number &o) {
 	if(b_inf) {
 		return !o.isInfinite();
@@ -1075,18 +1243,10 @@ bool Number::subtract(const Number &o) {
 		return true;
 	}
 	if(isApproximateType() || o.isApproximateType()) {
-		if(!isComplex() && !o.isComplex()) {
-			if(REAL_PRECISION_FLOAT_RE(value) == REAL_PRECISION_FLOAT_RE(o.internalNumber())) {
-				value = 0;
-				setPrecisionAndApproximateFrom(o);
-				return true;
-			}
-		} else if(isComplex() && o.isComplex()) {
-			if(REAL_PRECISION_FLOAT_RE(value) == REAL_PRECISION_FLOAT_RE(o.internalNumber()) && REAL_PRECISION_FLOAT_IM(value) == REAL_PRECISION_FLOAT_IM(o.internalNumber())) {
-				value = 0;
-				setPrecisionAndApproximateFrom(o);
-				return true;
-			}
+		if(equalsApproximately(o, EQUALS_PRECISION_LOWEST)) {
+			value = 0;
+			setPrecisionAndApproximateFrom(o);
+			return true;
 		}
 	}
 	value = value - o.internalNumber();
@@ -1192,7 +1352,7 @@ bool Number::recip() {
 	removeFloatZeroPart();
 	return true;
 }
-bool Number::raise(const Number &o, int) {
+bool Number::raise(const Number &o, bool try_exact) {
 	if(o.isInfinity()) return false;
 	if(isInfinite()) {	
 		if(o.isNegative()) {
@@ -1255,19 +1415,12 @@ bool Number::raise(const Number &o, int) {
 	}
 	
 	cln::cl_RA dmax = 1;
-	if(PRECISION >= 14) {
-		dmax = dmax / 10;
-	} else if(PRECISION >= 5) {
-		dmax = dmax / 10000;
-	} else {
-		dmax = dmax / 100000;
-	}
-	if(o.isRational() && isRational() && cln::abs(value) <= 1 + dmax && cln::abs(value) >= 1 - dmax && value != 1 && value != -1 && (cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) > 10000 || cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) < -10000)) {
-		value = cln::expt(cln::cl_float(cln::realpart(value)), cln::cl_float(cln::realpart(o.internalNumber())));	
+	dmax = dmax / 10;
+	if(o.isRational() && isRational() && (!try_exact || (cln::abs(value) <= 1 + dmax && cln::abs(value) >= 1 - dmax)) && value != 1 && value != -1 && (cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) > 10000 || cln::numerator(cln::rational(cln::realpart(o.internalNumber()))) < -10000)) {
+		value = cln::expt(cln::cl_float(cln::realpart(value)), cln::cl_float(cln::realpart(o.internalNumber())));
 	} else {
 		value = cln::expt(value, o.internalNumber());
 	}
-	
 	if(neg) {
 		value = -value;
 	}
@@ -2047,10 +2200,13 @@ string Number::printImaginaryDenominator(int base, bool display_sign, bool displ
 }
 
 string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) const {
-	if(isApproximateType() && !isInfinite() && !isComplex() && cln::zerop(cln::truncate2(REAL_PRECISION_FLOAT_RE(value)).remainder)) {
-		Number nr_copy(*this);
-		nr_copy.testInteger();
-		return nr_copy.print(po, ips);
+	if(isApproximateType() && !isInfinite() && !isComplex()) {
+		if((PRECISION < cln::float_format_lfloat_min && cln::zerop(cln::truncate2(MIN_PRECISION_FLOAT_RE(value)).remainder))
+		|| (PRECISION >= cln::float_format_lfloat_min && cln::zerop(cln::truncate2(REAL_PRECISION_FLOAT_RE(value)).remainder))) {
+			Number nr_copy(*this);
+			nr_copy.testInteger();
+			return nr_copy.print(po, ips);
+		}
 	}
 	if(ips.minus) *ips.minus = false;
 	if(ips.exp_minus) *ips.exp_minus = false;
@@ -2311,7 +2467,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			}
 		}
 		if(!exact && po.is_approximate) *po.is_approximate = true;
-		if(po.show_ending_zeroes && (isApproximate() || !exact || ips.parent_approximate) && (!po.use_max_decimals || po.max_decimals > decimals)) {
+		if(po.show_ending_zeroes && (isApproximate() || !exact || ips.parent_approximate) && (!po.use_max_decimals || po.max_decimals < 0 || po.max_decimals > decimals)) {
 			if(base != 10) {
 				Number precmax(10);
 				precmax.raise(precision);
@@ -2326,7 +2482,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			} else if(precision > 0) {
 				str += po.decimalpoint();
 			}
-			for(; precision > 0 && (!po.use_max_decimals || po.max_decimals > decimals); precision--) {
+			for(; precision > 0 && (!po.use_max_decimals || po.max_decimals < 0 || po.max_decimals > decimals); precision--) {
 				decimals++;
 				str += "0";
 			}
@@ -2574,14 +2730,14 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			if(str[str.length() - 1] == po.decimalpoint()[0]) {
 				str.erase(str.end() - 1);
 			}
-			if(po.show_ending_zeroes && !infinite_series && (isApproximate() || !exact || ips.parent_approximate) && (!po.use_max_decimals || po.max_decimals > decimals)) {
+			if(po.show_ending_zeroes && !infinite_series && (isApproximate() || !exact || ips.parent_approximate) && (!po.use_max_decimals || po.max_decimals < 0 || po.max_decimals > decimals)) {
 				precision -= str.length();
 				if(decimals > 0) {
 					precision += 1;
 				} else if(precision > 0) {
 					str += po.decimalpoint();
 				}
-				for(; precision > 0 && (!po.use_max_decimals || po.max_decimals > decimals); precision--) {
+				for(; precision > 0 && (!po.use_max_decimals || po.max_decimals < 0 || po.max_decimals > decimals); precision--) {
 					decimals++;
 					str += "0";
 				}

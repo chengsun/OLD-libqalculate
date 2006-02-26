@@ -1668,6 +1668,35 @@ ComparisonResult MathStructure::compare(const MathStructure &o) const {
 	else if(mtest.representsNonNegative(true)) {if(incomp) return COMPARISON_RESULT_NOT_EQUAL; return COMPARISON_RESULT_EQUAL_OR_GREATER;}
 	return COMPARISON_RESULT_UNKNOWN;
 }
+ComparisonResult MathStructure::compareApproximately(const MathStructure &o) const {
+	if(isNumber() && o.isNumber()) {
+		return o_number.compareApproximately(o.number());
+	}
+	if(equals(o)) return COMPARISON_RESULT_EQUAL;
+	if(o.representsReal(true) && representsComplex(true)) return COMPARISON_RESULT_NOT_EQUAL;
+	if(representsReal(true) && o.representsComplex(true)) return COMPARISON_RESULT_NOT_EQUAL;
+	MathStructure mtest(*this);
+	mtest -= o;
+	EvaluationOptions eo = default_evaluation_options;
+	eo.approximation = APPROXIMATION_APPROXIMATE;
+	mtest.calculatesub(eo, eo);
+	bool incomp = false;
+	if(mtest.isAddition()) {
+		for(size_t i = 1; i < mtest.size(); i++) {
+			if(mtest[i - 1].isUnitCompatible(mtest[i]) == 0) {
+				incomp = true;
+				break;
+			}
+		}
+	}
+	if(mtest.isZero()) return COMPARISON_RESULT_EQUAL;
+	else if(mtest.representsPositive(true)) {if(incomp) return COMPARISON_RESULT_NOT_EQUAL; return COMPARISON_RESULT_LESS;}
+	else if(mtest.representsNegative(true)) {if(incomp) return COMPARISON_RESULT_NOT_EQUAL; return COMPARISON_RESULT_GREATER;}
+	else if(mtest.representsNonZero(true)) return COMPARISON_RESULT_NOT_EQUAL;
+	else if(mtest.representsNonPositive(true)) {if(incomp) return COMPARISON_RESULT_NOT_EQUAL; return COMPARISON_RESULT_EQUAL_OR_LESS;}
+	else if(mtest.representsNonNegative(true)) {if(incomp) return COMPARISON_RESULT_NOT_EQUAL; return COMPARISON_RESULT_EQUAL_OR_GREATER;}
+	return COMPARISON_RESULT_UNKNOWN;
+}
 
 int MathStructure::merge_addition(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent, size_t index_this, size_t index_mstruct, bool reversed) {
 	if(mstruct.type() == STRUCT_NUMBER && m_type == STRUCT_NUMBER) {
@@ -2839,7 +2868,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 int MathStructure::merge_power(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent, size_t index_this, size_t index_mstruct, bool) {
 	if(mstruct.type() == STRUCT_NUMBER && m_type == STRUCT_NUMBER) {
 		Number nr(o_number);
-		if(nr.raise(mstruct.number()) && (eo.approximation == APPROXIMATION_APPROXIMATE || !nr.isApproximate() || o_number.isApproximate() || mstruct.number().isApproximate()) && (eo.allow_complex || !nr.isComplex() || o_number.isComplex() || mstruct.number().isComplex()) && (eo.allow_infinite || !nr.isInfinite() || o_number.isInfinite() || mstruct.number().isInfinite())) {
+		if(nr.raise(mstruct.number(), eo.approximation != APPROXIMATION_APPROXIMATE) && (eo.approximation == APPROXIMATION_APPROXIMATE || !nr.isApproximate() || o_number.isApproximate() || mstruct.number().isApproximate()) && (eo.allow_complex || !nr.isComplex() || o_number.isComplex() || mstruct.number().isComplex()) && (eo.allow_infinite || !nr.isInfinite() || o_number.isInfinite() || mstruct.number().isInfinite())) {
 			if(o_number == nr) {
 				o_number = nr;
 				numberUpdated();
@@ -4584,7 +4613,7 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 				CHILDREN_UPDATED;
 			}			
 			if(CHILD(0).isNumber() && CHILD(1).isNumber()) {
-				ComparisonResult cr = CHILD(1).number().compare(CHILD(0).number());
+				ComparisonResult cr = CHILD(1).number().compareApproximately(CHILD(0).number());
 				if(cr == COMPARISON_RESULT_UNKNOWN) {
 					break;
 				}

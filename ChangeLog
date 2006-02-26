@@ -1,3 +1,14 @@
+2006-02-26 Niklas Knutsson  <nq@altern.org>
+
+	* Approximate comparison
+	* Avoid floating point overflow and underflow by not lowering precision in comparison
+	  and always using long floats
+	* Use floating point raise more often in approximate mode
+
+2006-02-21 Niklas Knutsson  <nq@altern.org>
+
+	* Fix show ending zeroes when max decimals is set to off by a max value below zero
+
 2006-02-11 Niklas Knutsson  <nq@altern.org>
 
 	* Do not use "Read Precision" in plot

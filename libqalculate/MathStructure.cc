@@ -6395,6 +6395,25 @@ bool MathStructure::simplify(const EvaluationOptions &eo, bool unfactorize) {
 	return false;
 }
 
+void clean_multiplications(MathStructure &mstruct);
+void clean_multiplications(MathStructure &mstruct) {
+	if(mstruct.isMultiplication()) {
+		for(size_t i = 0; i < mstruct.size(); i++) {
+			if(mstruct[i].isMultiplication()) {
+				size_t i2 = 0;
+				for(; i2 < mstruct[i + i2].size(); i2++) {
+					mstruct[i][i2].ref();
+					mstruct.insertChild_nocopy(&mstruct[i][i2], i + i2);
+				}
+				mstruct.delChild(i + i2);
+			}
+		}
+	}
+	for(size_t i = 0; i < mstruct.size(); i++) {
+		clean_multiplications(mstruct[i]);
+	}
+}
+
 MathStructure &MathStructure::eval(const EvaluationOptions &eo) {
 	unformat(eo);
 	bool found_complex_relations = false;
@@ -6490,8 +6509,10 @@ MathStructure &MathStructure::eval(const EvaluationOptions &eo) {
 	}
 	if(eo.structuring == STRUCTURING_SIMPLIFY) {
 		simplify(eo2, false);
+		clean_multiplications(*this);
 	} else if(eo.structuring == STRUCTURING_FACTORIZE) {
 		factorize(eo2);
+		clean_multiplications(*this);
 	}
 	return *this;
 }

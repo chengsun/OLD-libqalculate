@@ -1,3 +1,9 @@
+2006-03-13 Niklas Knutsson  <nq@altern.org>
+
+	* Approximate comparison fixes
+	* Add PrintOptions->restrict_to_parent_precision (default true)
+	* Do not produce a result with multiplications inside multiplications (fixes prefixes with simplification)
+
 2006-02-26 Niklas Knutsson  <nq@altern.org>
 
 	* Approximate comparison

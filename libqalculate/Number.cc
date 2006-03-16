@@ -982,26 +982,33 @@ bool Number::equalsApproximately(const Number &o, int prec) const {
 			remainder1 = cln::realpart(o.internalNumber());
 		}
 		cln::cl_R_div_t divt1, divt2;
-		bool started = false, oneup = false;
+		bool started = false, oneup = false, even = false;
 		while(prec >= 0) {
 			divt1 = cln::truncate2(remainder1);
 			divt2 = cln::truncate2(remainder2);
 			if(prec == 0) {
 				if(oneup) {
-					return divt1.quotient < 5 && divt2.quotient >= 5;
+					if(even) return divt1.quotient < 5 && divt2.quotient > 5;
+					else return divt1.quotient <= 5 && divt2.quotient >= 5;
 				} else {
-					return (divt1.quotient >= 5) == (divt2.quotient >= 5);
+					if(even) return (divt1.quotient > 5) == (divt2.quotient > 5);
+					else return (divt1.quotient >= 5) == (divt2.quotient >= 5);
 				}
 			}
 			if(started) {
 				prec--;
 				if(oneup && (divt1.quotient != 0 || divt2.quotient != 9)) return false;
-				if(!oneup && divt1.quotient != divt2.quotient) {
-					if(divt1.quotient == divt2.quotient + 1) {
-						oneup = true;
-					} else {
-						return false;
+				if(oneup) {
+					even = false;
+				} else {
+					if(divt1.quotient != divt2.quotient) {
+						if(divt1.quotient == divt2.quotient + 1) {
+							oneup = true;							
+						} else {
+							return false;
+						}
 					}
+					even = cln::evenp(divt2.quotient);
 				}
 			} else if(!cln::zerop(divt1.quotient)) {
 				started = true;
@@ -1034,20 +1041,27 @@ bool Number::equalsApproximately(const Number &o, int prec) const {
 							}
 						}
 						for(size_t i = 0; i < str1.length(); i++) {							
-							if(oneup && (str1[i] != '0' || str2[i] != '9')) return false;
-							if(!oneup && str1[i] != str2[i]) {
-								if(str1[i] == str2[i] + 1) {
-									oneup = true;
-								} else {
-									return false;
+							if(oneup && (str1[i] != '0' || str2[i] != '9')) return false;							
+							if(oneup) {
+								even = false;
+							} else {
+								if(str1[i] != str2[i]) {
+									if(str1[i] == str2[i] + 1) {								
+										oneup = true;
+									} else {
+										return false;
+									}
 								}
+								even = str2[i] == '0' || str2[i] == '2' || str2[i] == '4' || str2[i] == '6' || str2[i] == '8';
 							}
 							prec--;
 							if(prec == 0) {
 								if(oneup) {
-									return i + 1 < str1.length() && str1[i + 1] < '5' && str2[i + 1] >= '5';
+									if(even) return i + 1 < str1.length() && str1[i + 1] < '5' && str2[i + 1] > '5';
+									else return i + 1 < str1.length() && str1[i + 1] <= '5' && str2[i + 1] >= '5';
 								} else {
-									return i == str1.length() - 1 || (str1[i + 1] >= '5') == (str2[i + 1] >= '5');
+									if(even) return i == str1.length() - 1 || (str1[i + 1] > '5') == (str2[i + 1] > '5');
+									else return i == str1.length() - 1 || (str1[i + 1] >= '5') == (str2[i + 1] >= '5');
 								}
 							}
 						}
@@ -1204,7 +1218,7 @@ bool Number::add(const Number &o) {
 		return true;
 	}
 	if(isApproximateType() || o.isApproximateType()) {
-		if(equalsApproximately(-o, EQUALS_PRECISION_HIGHEST)) {
+		if(equalsApproximately(-o, EQUALS_PRECISION_DEFAULT)) {
 			value = 0;
 			setPrecisionAndApproximateFrom(o);
 			return true;
@@ -1243,7 +1257,7 @@ bool Number::subtract(const Number &o) {
 		return true;
 	}
 	if(isApproximateType() || o.isApproximateType()) {
-		if(equalsApproximately(o, EQUALS_PRECISION_LOWEST)) {
+		if(equalsApproximately(o, EQUALS_PRECISION_DEFAULT)) {
 			value = 0;
 			setPrecisionAndApproximateFrom(o);
 			return true;
@@ -2290,7 +2304,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 	
 	int precision = PRECISION;
 	if(b_approx && i_precision > 0 && i_precision < PRECISION) precision = i_precision;
-	if(ips.parent_precision > 0 && ips.parent_precision < precision) precision = ips.parent_precision;
+	if(po.restrict_to_parent_precision && ips.parent_precision > 0 && ips.parent_precision < precision) precision = ips.parent_precision;
 	
 	if(isComplex()) {
 		bool bre = hasRealPart();
@@ -2361,7 +2375,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 		}
 
 		if(po.min_exp < 0) {
-			if(expo > -precision && expo < precision) { 
+			if((expo > -precision && expo < precision) || (expo < 3 && expo > -3 && PRECISION >= 3)) { 
 				expo = 0;
 			}
 		} else if(po.min_exp != 0) {
@@ -2401,7 +2415,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 					rerun = true;
 					goto integer_rerun;
 				}
-			} else if(precision2 < 0 && (expo > 0 || isApproximate() || ips.parent_approximate)) {
+			} else if(precision2 < 0 && (expo > 0 || isApproximate() || (ips.parent_approximate && po.restrict_to_parent_precision))) {
 				cln::cl_RA_div_t div = cln::floor2(ivalue / cln::expt_pos(cln::cl_I(base), -precision2));
 				if(!cln::zerop(div.remainder)) {
 					ivalue = div.quotient;
@@ -2467,7 +2481,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			}
 		}
 		if(!exact && po.is_approximate) *po.is_approximate = true;
-		if(po.show_ending_zeroes && (isApproximate() || !exact || ips.parent_approximate) && (!po.use_max_decimals || po.max_decimals < 0 || po.max_decimals > decimals)) {
+		if(po.show_ending_zeroes && (isApproximate() || !exact || (ips.parent_approximate && po.restrict_to_parent_precision)) && (!po.use_max_decimals || po.max_decimals < 0 || po.max_decimals > decimals)) {
 			if(base != 10) {
 				Number precmax(10);
 				precmax.raise(precision);
@@ -2566,7 +2580,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 				} else {
 					expo = str.length() - 1;
 					if(po.min_exp < 0) {
-						if(expo > -precision && expo < precision) { 
+						if((expo > -precision && expo < precision) || (expo < 3 && expo > -3 && PRECISION >= 3)) { 
 							expo = 0;
 						}
 					} else if(po.min_exp != 0) {
@@ -2678,7 +2692,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			if(base == 10) {
 				expo = str.length() - l10 - 1;
 				if(po.min_exp < 0) {
-					if(expo > -precision && expo < precision) { 
+					if((expo > -precision && expo < precision) || (expo < 3 && expo > -3 && PRECISION >= 3)) { 
 						expo = 0;
 					}
 				} else if(po.min_exp != 0) {
@@ -2730,7 +2744,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			if(str[str.length() - 1] == po.decimalpoint()[0]) {
 				str.erase(str.end() - 1);
 			}
-			if(po.show_ending_zeroes && !infinite_series && (isApproximate() || !exact || ips.parent_approximate) && (!po.use_max_decimals || po.max_decimals < 0 || po.max_decimals > decimals)) {
+			if(po.show_ending_zeroes && !infinite_series && (isApproximate() || !exact || (ips.parent_approximate && po.restrict_to_parent_precision)) && (!po.use_max_decimals || po.max_decimals < 0 || po.max_decimals > decimals)) {
 				precision -= str.length();
 				if(decimals > 0) {
 					precision += 1;

@@ -1699,10 +1699,7 @@ void *view_proc(void *pipe) {
 			po.short_multiplication = false;
 			po.excessive_parenthesis = true;
 			po.improve_division_multipliers = false;
-			/*PrintOptions po = printops;
-			po.short_multiplication = false;
-			po.excessive_parenthesis = true;
-			po.improve_division_multipliers = false;*/
+			po.restrict_to_parent_precision = false;
 			MathStructure mp(*((MathStructure*) x));
 			fread(&po.is_approximate, sizeof(bool*), 1, view_pipe);
 			mp.format(po);

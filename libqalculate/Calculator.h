@@ -16,33 +16,72 @@
 #include <libqalculate/util.h>
 #include <pthread.h>
 
+/** @file */
+
 typedef vector<Prefix*> p_type;
 
+/** Parameters passed to plotting functions. */
 struct plot_parameters {
+	/// Title label.
 	string title;
-	string y_label, x_label;
+	/// Y-axis label.
+	string y_label;
+	/// X-axis label.
+	string x_label;
+	/// Image to save plot to. If empty shows plot in a window on the screen.
 	string filename;
+	/// The image type to save as. Set to PLOT_FILETYPE_AUTO to guess from file extension.
 	PlotFileType filetype;
+	/// Font used for text
 	string font;
+	/// Set to true for colored plot, false for monochrome. Default: true
 	bool color;
-	bool auto_y_min, auto_x_min;
-	bool auto_y_max, auto_x_max;
-	float y_min, x_min;
-	float y_max, x_max;
-	bool y_log, x_log;
-	int y_log_base, x_log_base;
+	/// If the minimum y-axis value shall be set automatically (otherwise uses y_min). Default: true
+	bool auto_y_min;
+	/// If the minimum x-axis value shall be set automatically (otherwise uses x_min). Default: true
+	bool auto_x_min;
+	/// If the maximum y-axis value shall be set automatically (otherwise uses y_max). Default: true
+	bool auto_y_max;
+	/// If the maximum x-axis value shall be set automatically (otherwise uses x_max). Default: true
+	bool auto_x_max;
+	/// Minimum y-axis value.
+	float y_min;
+	/// Minimum x-axis value.
+	float x_min;
+	/// Maximum y-axis value.
+	float y_max;
+	/// Maximum x-axis value.
+	float x_max;
+	/// If a logarithimic scale shall be used for the y-axis. Default: false
+	bool y_log;
+	/// If a logarithimic scale shall be used for the x-axis. Default: false
+	bool x_log;
+	/// Logarithimic base for the y-axis. Default: 10
+	int y_log_base;
+	/// Logarithimic base for the x-axis. Default: 10
+	int x_log_base;
+	/// If  a grid shall be shown in the plot. Default: false
 	bool grid;
+	/// Width of lines. Default: 2
 	int linewidth;
+	/// If the plot shall be surrounded by borders on all sides (not just axis). Default: false
 	bool show_all_borders;
+	/// Where the plot legend shall be placed. Default: PLOT_LEGEND_TOP_RIGHT
 	PlotLegendPlacement legend_placement;
 	plot_parameters();
 };
 
+/** Parameters for plot data series. */
 struct plot_data_parameters {
+	/// Title label.
 	string title;
+	/// Plot smoothing.
 	PlotSmoothing smoothing;
+	/// Plot style
 	PlotStyle style;
+	/// Use scale on second y-axis
 	bool yaxis2;
+	/// Use scale on second x-axis
 	bool xaxis2;
 	plot_data_parameters();
 };
@@ -53,6 +92,7 @@ typedef enum {
 	MESSAGE_ERROR
 } MessageType;
 
+/// A message with information to the user. Primarily used for errors and warnings.
 class CalculatorMessage {
   protected:
 	string smessage;
@@ -91,6 +131,15 @@ struct Element {
 
 #define UFV_LENGTHS	20
 
+/// The almighty calculator class.
+/** The calculator class is responsible for loading functions, variables and units, and keeping track of them, as well as parsing expressions and much more. A calculator object must be created before any other Qalculate! class is used. There should never be more than one calculator object, accessed with CALCULATOR. 
+*
+* A simple application using libqalculate need only create a calculator object, perhaps load definitions (functions, variables, units, etc.) and use the calculate function as follows:
+* new Calculator();
+* CALCULATOR->loadGlobalDefinitions();
+* CALCULATOR->loadLocalDefinitions();
+* MathStructure result = CALCULATOR->calculate("1 + 1");
+*/
 class Calculator {
 
   protected:
@@ -220,19 +269,54 @@ class Calculator {
 	MathStructure *getId(size_t id);	
 	void delId(size_t id);
 
+	/** Returns variable for an index (starting at zero). All variables can be traversed by starting at index zero and increasing the index until NULL is returned.
+	*
+	* @param index Index of variable.
+	* @returns Variable for index or NULL if not found.
+	*/
 	Variable *getVariable(size_t index) const;
+	/** Returns unit for an index (starting at zero). All units can be traversed by starting at index zero and increasing the index until NULL is returned.
+	*
+	* @param index Index of unit.
+	* @returns Unit for index or NULL if not found.
+	*/
 	Unit *getUnit(size_t index) const;	
+	/** Returns function for an index (starting at zero). All functions can be traversed by starting at index zero and increasing the index until NULL is returned.
+	*
+	* @param index Index of function.
+	* @returns Function for index or NULL if not found.
+	*/
 	MathFunction *getFunction(size_t index) const;	
 	
+	/** Set assumptions for objects without own assumptions (unknown variables and symbols).
+	*/
 	void setDefaultAssumptions(Assumptions *ass);
+	/** Returns the default assumptions for objects without own assumptions (unknown variables and symbols).
+	*/
 	Assumptions *defaultAssumptions();
 	
+	/** Returns the gradians unit.
+	*/
 	Unit *getGraUnit();
+	/** Returns the radians unit.
+	*/
 	Unit *getRadUnit();
+	/** Returns the degrees unit.
+	*/
 	Unit *getDegUnit();
 
+	/** Returns prefix for an index (starting at zero). All prefixes can be traversed by starting at index zero and increasing the index until NULL is returned.
+	*
+	* @param index Index of prefix.
+	* @returns Prefix for index or NULL if not found.
+	*/
 	Prefix *getPrefix(size_t index) const;	
-	Prefix *getPrefix(string name_) const;		
+	/** Returns prefix with provided name.
+	*
+	* @param name_ Name of prefix to retrieve.
+	* @returns Prefix with provided name or NULL if not found.
+	*/
+	Prefix *getPrefix(string name_) const;
 	DecimalPrefix *getExactDecimalPrefix(int exp10, int exp = 1) const;
 	BinaryPrefix *getExactBinaryPrefix(int exp2, int exp = 1) const;
 	Prefix *getExactPrefix(const Number &o, int exp = 1) const;				
@@ -245,19 +329,33 @@ class Calculator {
 	Prefix *addPrefix(Prefix *p);
 	void prefixNameChanged(Prefix *p, bool new_item = false);	
 
+	/** Set default precision for approximate calculations.
+	*
+	* @param precision Precision.
+	*/
 	void setPrecision(int precision = DEFAULT_PRECISION);
+	/** Returns default precision for approximate calculations.
+	*/
 	int getPrecision() const;
 
+	/** Returns the preferred decimal point character.
+	*/
 	const string &getDecimalPoint() const;
+	/** Returns the preferred comma character for separating arguments.
+	*/
 	const string &getComma() const;	
 	void setLocale();
 	void unsetLocale();
 	string localToString() const;
 	
+	/** Unload all non-builtin variables. */
 	void resetVariables();
+	/** Unload all non-builtin functions. */
 	void resetFunctions();	
-	void resetUnits();		
-	void reset();		
+	/** Unload all non-builtin units. */
+	void resetUnits();
+	/** Unload all non-builtin variables, functions and units. */	
+	void reset();
 	void addBuiltinVariables();	
 	void addBuiltinFunctions();
 	void addBuiltinUnits();	
@@ -276,6 +374,12 @@ class Calculator {
 	MathStructure calculate(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
 	string printMathStructureTimeOut(const MathStructure &mstruct, int usecs = 100000, const PrintOptions &op = default_print_options);
 	
+	/** Parse an expression and place in a MathStructure object.
+	*
+	* @param str Expression
+	* @param po Parse options.
+	* @returns MathStructure with result of parse.
+	*/
 	MathStructure parse(string str, const ParseOptions &po = default_parse_options);
 	void parse(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
 	bool parseNumber(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
@@ -330,10 +434,26 @@ class Calculator {
 	MathFunction* getFunction(string name_);	
 	MathFunction* getActiveFunction(string name_);	
 	void error(bool critical, const char *TEMPLATE,...);
+	/** Put a message in the message queue. 
+	*/
 	void message(MessageType mtype, const char *TEMPLATE,...);
+	/** Returns the first message in queue.
+	*/
 	CalculatorMessage *message();
+	/** Removes the first message in queue and returns the next.
+	*/
 	CalculatorMessage *nextMessage();
+	/** Tests if a name is valid for a variable.
+	*
+	* @param name_ Variable name.
+	* @returns true if the name is valid for a variable.
+	*/
 	bool variableNameIsValid(const string &name_);
+	/** Tests if a name is valid for a variable.
+	*
+	* @param name_ Variable name.
+	* @returns true if the name is valid for a variable.
+	*/
 	bool variableNameIsValid(const char *name_);
 	bool variableNameIsValid(const char *name_, int version_numbers[3], bool is_user_defs);
 	bool variableNameIsValid(const string &name_, int version_numbers[3], bool is_user_defs);
@@ -347,13 +467,22 @@ class Calculator {
 	bool unitNameIsValid(const char *name_);
 	bool unitNameIsValid(const char *name_, int version_numbers[3], bool is_user_defs);
 	bool unitNameIsValid(const string &name_, int version_numbers[3], bool is_user_defs);
-	string convertToValidUnitName(string name_);		
+	string convertToValidUnitName(string name_);
+	/** Checks if a name is used by another object which is not allowed to have the same name.
+	*
+	* @param name Name.
+	* @param object Object to exclude from check.
+	* @returns true if the name is used.
+	*/
 	bool nameTaken(string name, ExpressionItem *object = NULL);
 	bool variableNameTaken(string name, Variable *object = NULL);
 	bool unitNameTaken(string name, Unit *object = NULL);
 	bool functionNameTaken(string name, MathFunction *object = NULL);
 	bool unitIsUsedByOtherUnits(const Unit *u) const;	
 	string getName(string name = "", ExpressionItem *object = NULL, bool force = false, bool always_append = false);
+
+	/** @name Functions for loading and saving definitions. */
+	//@{
 	bool loadGlobalDefinitions();
 	bool loadGlobalDefinitions(string filename);
 	bool loadGlobalPrefixes();
@@ -371,20 +500,63 @@ class Calculator {
 	int saveUnits(const char *file_name, bool save_global = false);	
 	int saveFunctions(const char *file_name, bool save_global = false);
 	int saveDataSets(const char *file_name, bool save_global = false);
+	//@}
+
 	bool importCSV(MathStructure &mstruct, const char *file_name, int first_row = 1, string delimiter = ",", vector<string> *headers = NULL);
 	bool importCSV(const char *file_name, int first_row = 1, bool headers = true, string delimiter = ",", bool to_matrix = false, string name = "", string title = "", string category = "");
 	bool exportCSV(const MathStructure &mstruct, const char *file_name, string delimiter = ",");
 	int testCondition(string expression);
 	
+	/** @name Functions for exchange rates. */
+	//@{
+	/** Checks if gnomevfs-copy or wget is available for downloading exchange rates from the Internet.
+	*
+	* @returns true if gnomevfs-copy or wget was found.
+	*/
 	bool canFetch();
+	/** Checks if gnomevfs-copy available.
+	*
+	* @returns true if gnomevfs-copy was found.
+	*/
 	bool hasGnomeVFS();
+	/** Load saved (local) currency units and exchange rates.
+	*
+	* @returns true if operation successful.
+	*/
 	bool loadExchangeRates();
+	/** Name of the exchange rates file on local disc.
+	*
+	* @returns name of local exchange rates file.
+	*/
 	string getExchangeRatesFileName();
+	/** Url of the exchange rates file on the Internet.
+	*
+	* @returns Url of exchange rates file.
+	*/
 	string getExchangeRatesUrl();
+	/** Download current exchange rates from the Internet to local disc.
+	*
+	* @param timeout Timeout for donwload try (only used by wget)
+	* @param wget_args Extra arguments to pass to wget.
+	* @returns true if operation was successful.
+	*/
 	bool fetchExchangeRates(int timeout, string wget_args);
+	/** Download current exchange rates from the Internet to local disc with default wget arguments.
+	*
+	* @param timeout Timeout for donwload try (only used by wget)
+	* @returns true if operation was successful.
+	*/
 	bool fetchExchangeRates(int timeout = 15);
+	/** Returns true if the exchange rates on local disc is older than one week. */
 	bool checkExchangeRatesDate();
-	
+	//@}
+
+	/** @name Functions for plotting */
+	//@{
+	/** Checks if gnuplot is available.
+	*
+	* @returns true if gnuplot was found.
+	*/
 	bool canPlot();
 	MathStructure expressionToPlotVector(string expression, const MathStructure &min, const MathStructure &max, int steps, MathStructure *x_vector = NULL, string x_var = "\\x", const ParseOptions &po = default_parse_options);
 	MathStructure expressionToPlotVector(string expression, float min, float max, int steps, MathStructure *x_vector = NULL, string x_var = "\\x", const ParseOptions &po = default_parse_options);
@@ -395,6 +567,7 @@ class Calculator {
 	bool invokeGnuplot(string commands, string commandline_extra = "", bool persistent = false);
 	bool closeGnuplot();
 	bool gnuplotOpen();
+	//@}
 		
 };
 

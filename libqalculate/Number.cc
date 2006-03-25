@@ -574,6 +574,7 @@ void Number::setMinusInfinity() {
 	value = 0;
 	i_precision = -1;
 }
+
 void Number::clear() {
 	b_inf = false; b_pinf = false; b_minf = false; b_approx = false;
 	value = 0;

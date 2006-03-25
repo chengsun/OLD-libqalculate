@@ -14,16 +14,36 @@
 
 #include <libqalculate/includes.h>
 
-/**
-* Base class for functions, variables and units.
-*/
 
+/// A name for an expression item (function, variable or unit)
+/** An expression name has a text string representing a name and boolean values describing the names properties.
+*/
 struct ExpressionName {
 	
-	bool abbreviation, suffix, unicode, plural, reference, avoid_input, case_sensitive;
+	/** If the name is an abbreviation. */
+	bool abbreviation;
+	/** If the name has a suffix. If set to true, the part of the name after an underscore should be treated as a suffix. */
+	bool suffix;
+	/** If the name contains unicode characters. */
+	bool unicode;
+	/** If the name is in plural form. */
+	bool plural;
+	/** If the name shall be used as a fixed reference. If this is set to true, the name will kept as it is in addition to translations of it. */
+	bool reference;
+	/** If the name is unsuitable for user input. */
+	bool avoid_input;
+	/** If the name is case sensitive. The default behavior is that abbreviations are case sensitive and other names are not. */
+	bool case_sensitive;
+	/** The name. */
 	string name;
 	
+	/** Create an empty expression name. All properties are set to false.
+	*/
 	ExpressionName();
+	/** Create an expression name. All properties are set to false, unless the name only has one character in which case abbreviation and case_sesnsitive is set to true.
+	*
+	* @param sname The name.
+	*/
 	ExpressionName(string sname);
 	
 	void operator = (const ExpressionName &ename);
@@ -32,6 +52,9 @@ struct ExpressionName {
 	
 };
 
+/// Abstract base class for functions, variables and units.
+/** 
+*/
 class ExpressionItem {
 
   protected:

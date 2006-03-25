@@ -21,6 +21,7 @@ enum {
 #include <libqalculate/ExpressionItem.h>
 #include <libqalculate/includes.h>
 
+/// A unit for measurement.
 class Unit : public ExpressionItem {
 
   protected:
@@ -38,10 +39,19 @@ class Unit : public ExpressionItem {
 	virtual ExpressionItem *copy() const;
 	virtual void set(const ExpressionItem *item);
 
+	/** Returns if the unit is part of the SI standard.
+	*
+	* @returns true if the unit is part of the SI standard.
+	*/
 	bool isSIUnit() const;
+	/** State that the unit is part of the SI standard. */
 	void setAsSIUnit();
 	void setSystem(string s_system);
 	const string &system() const;
+	/** Returns if the unit is a currency (Euro is base unit).
+	*
+	* @returns true if the unit is a currency.
+	*/
 	bool isCurrency() const;
 	void setPlural(string name_, bool force = true);
 	void setSingular(string name_, bool force = true);

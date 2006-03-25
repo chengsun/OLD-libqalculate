@@ -24,6 +24,8 @@
 						ExpressionItem *copy() const {return new x(this);} \
 					};
 
+/** Type assumption.
+*/
 typedef enum {
 	ASSUMPTION_TYPE_NONE = 0,
 	ASSUMPTION_TYPE_NONMATRIX = 1,
@@ -34,6 +36,8 @@ typedef enum {
 	ASSUMPTION_TYPE_INTEGER = 6
 } AssumptionType;
 
+/** Signedness assumption.
+*/
 typedef enum {
 	ASSUMPTION_SIGN_UNKNOWN,
 	ASSUMPTION_SIGN_POSITIVE,
@@ -49,6 +53,9 @@ enum {
 	SUBTYPE_KNOWN_VARIABLE
 };
 
+/// An assumption about an unknown mathematical value.
+/** Assumptions have a type and a sign. The type describes the type of the value -- if it represents a number or something else, and what type of number is represented. The sign restricts the signedness of a number. The sign generally only applies the assumptions representing a number. The assumption class also includes max and min values, which however are not used anywhere yet.
+*/
 class Assumptions {
 
   protected:
@@ -91,7 +98,9 @@ class Assumptions {
 	
 };
 
-
+/// Abstract base class for variables.
+/** A variable is an alpha-numerical representation of a known or unknown value.
+*/
 class Variable : public ExpressionItem {
 
   public:
@@ -124,6 +133,9 @@ class Variable : public ExpressionItem {
 	
 };
 
+/// A variable with unknown value.
+/** Unknown variables have an associated assumption object.
+*/
 class UnknownVariable : public Variable {
 
   protected:
@@ -132,14 +144,38 @@ class UnknownVariable : public Variable {
   
   public:
 
+	/** Create an unknown.
+	*
+	* @param cat_ Category that the variable belongs to.
+	* @param name_ Initial name of the variable.
+	* @param title_ Descriptive name.
+	* @param is_local If the variable is local/user-defined or global.
+	* @param is_builtin If the variable is builtin and not modifiable.
+	* @param is_active If the variable is active and can be used in expressions.
+	*/
 	UnknownVariable(string cat_, string name_, string title_ = "", bool is_local = true, bool is_builtin = false, bool is_active = true);
+	/** Create an empty unknown variable.
+	*/
 	UnknownVariable();
+	/** Create a copy of an unknown variable.
+	*
+	* @param variable Unknown variable to copy.
+	*/
 	UnknownVariable(const UnknownVariable *variable);
 	virtual ~UnknownVariable();
 	virtual ExpressionItem *copy() const;
 	virtual void set(const ExpressionItem *item);
 	bool isKnown() const {return false;}
+	
+	/** Sets the assumptions of the unknown variable.
+	*
+	* @param ass Assumptions.
+	*/
 	void setAssumptions(Assumptions *ass);
+	/** Returns the assumptions of the unknown variable.
+	*
+	* @returns Assumptions of the unknown variable.
+	*/
 	Assumptions *assumptions();
 	int subtype() const {return SUBTYPE_UNKNOWN_VARIABLE;}
 
@@ -157,6 +193,11 @@ class UnknownVariable : public Variable {
 	
 };
 
+/// A variable with a known value.
+/** Known variables have an associated value. The value can be a simple number or a full mathematical expression. The known variable class is used both for variable values and constants.
+*
+* The value can be provided as an expression in the form of a text string or as a mathematical value in the form of an object of the MathStructure class. The text string is transformed when needed, which saves time when loading many variable definitions which might not be used, at least not immediately.
+*/
 class KnownVariable : public Variable {
 
   protected:
@@ -168,22 +209,68 @@ class KnownVariable : public Variable {
 
   public:
   
+	/** Create a known variable with a value. 
+	*
+	* @param cat_ Category that the variable belongs to.
+	* @param name_ Initial name of the variable.
+	* @param o Value.
+	* @param title_ Descriptive name.
+	* @param is_local If the variable is local/user-defined or global.
+	* @param is_builtin If the variable is builtin and not modifiable.
+	* @param is_active If the variable is active and can be used in expressions.
+	*/
 	KnownVariable(string cat_, string name_, const MathStructure &o, string title_ = "", bool is_local = true, bool is_builtin = false, bool is_active = true);
+	/** Create a known variable with an text string expression.
+	*
+	* @param cat_ Category that the variable belongs to.
+	* @param name_ Initial name of the variable.
+	* @param expression_ Expression.
+	* @param title_ Descriptive name.
+	* @param is_local If the variable is local/user-defined or global.
+	* @param is_builtin If the variable is builtin and not modifiable.
+	* @param is_active If the variable is active and can be used in expressions.
+	*/
 	KnownVariable(string cat_, string name_, string expression_, string title_ = "", bool is_local = true, bool is_builtin = false, bool is_active = true);	
+	/** Create an empty known variable. Primarily for internal use.
+	*/
 	KnownVariable();
+	/** Create a copy of a known variable.
+	*
+	* @param variable Known variable to copy.
+	*/
 	KnownVariable(const KnownVariable *variable);
 	virtual ~KnownVariable();
 
 	virtual ExpressionItem *copy() const;
 	virtual void set(const ExpressionItem *item);
 	bool isKnown() const {return true;}
+	/** Returns if the variable has an text string expression instead of a value.
+	*
+	* @returns True if the variable has an expression instead of a value.
+	*/
 	virtual bool isExpression() const;
+	/** Returns the variable's string expression or an empty string if it has not got an expression.
+	*
+	* @returns The variable's expression.
+	*/
 	virtual string expression() const;
 	int subtype() const {return SUBTYPE_KNOWN_VARIABLE;}
 
+	/** Sets the value of the variable. If expression is set, it is cleared.
+	*
+	* @param o Value.
+	*/
 	virtual void set(const MathStructure &o);
+	/** Sets the text string expression of the variable. The value is cleared.
+	*
+	* @param expression_ Expression.
+	*/
 	virtual void set(string expression_);	
 
+	/** Returns the value of the variable. If no value is set or parsed and an expression is set, the expression is parsed and resulting value returned.
+	*
+	* @returns The value of the variable..
+	*/
 	virtual const MathStructure &get();
 	
 	virtual bool representsPositive(bool = false);
@@ -204,6 +291,9 @@ class KnownVariable : public Variable {
 
 };
 
+/// Abstract base class for variables with a value which is recalculated when the precision has changed.
+/**
+*/
 class DynamicVariable : public KnownVariable {
 
   protected:
@@ -223,8 +313,12 @@ class DynamicVariable : public KnownVariable {
 	const MathStructure &get();
 	
 	void set(const MathStructure &o);
-	void set(string expression);	
+	void set(string expression_);
 	
+	/** Returns the precision of the calculated value.
+	*
+	* @returns Precision of the calculated value or zero if the value has not yet been calculated.
+	*/
 	int calculatedPrecision() const;
 	
 	virtual bool representsPositive(bool = false) {return true;}
@@ -245,9 +339,13 @@ class DynamicVariable : public KnownVariable {
 
 };
 
+/// Dynamic variable for Pi
 DECLARE_BUILTIN_VARIABLE(PiVariable)
+/// Dynamic variable for e, the base of natural logarithms
 DECLARE_BUILTIN_VARIABLE(EVariable)
+/// Dynamic variable for Euler's constant
 DECLARE_BUILTIN_VARIABLE(EulerVariable)
+/// Dynamic variable for Catalan's constant
 DECLARE_BUILTIN_VARIABLE(CatalanVariable)
 
 

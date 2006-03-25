@@ -50,7 +50,9 @@ enum {
 	SUBTYPE_DATA_SET
 };
 
-
+/// Abstract base class for mathematical functions.
+/**
+*/
 class MathFunction : public ExpressionItem {
 
   protected:
@@ -82,20 +84,66 @@ class MathFunction : public ExpressionItem {
 	virtual MathStructure parse(const string &eq, const ParseOptions &po = default_parse_options);
 	virtual int parse(MathStructure &mstruct, const string &eq, const ParseOptions &po = default_parse_options);
 	virtual MathStructure calculate(MathStructure &vargs, const EvaluationOptions &eo = default_evaluation_options);	
-	virtual int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);	
+	virtual int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);
+	/** Returns the functions condition expression.
+	*
+	* @returns The function's condition expression 
+	*/
 	string condition() const;
+	/** Print the function's condition expression with argument names.
+	*
+	* @returns The printed condition 
+	*/
 	string printCondition();
+	/** Sets the functions condition expression.
+	*
+	* @param expression The function's new condition expression 
+	*/
 	void setCondition(string expression);
+	/** Test if arguments fulfil the function's condition expression.
+	*
+	* @param vargs Vector with arguments.
+	* @returns true if the arguments fulfil the function's condition expression 
+	*/
 	bool testCondition(const MathStructure &vargs);
+	/** Returns the maximum number of arguments that the function accepts or -1 if the number of arguments is unlimited.
+	*/
 	int args() const;
-	int minargs() const;	
-	int maxargs() const;		
+	/** Returns the minimum number of arguments for the function.
+	*/
+	int minargs() const;
+	/** Returns the maximum number of arguments that the function accepts or -1 if the number of arguments is unlimited.
+	*/
+	int maxargs() const;
+	/** Parses arguments from a text string and places them in a vector. The text string should be a comma separated list of arguments.
+	*	
+	* @param str The argument string to parse.
+	* @param vargs Vector to store parsed arguments in.
+	* @param po Parse options.
+	* @returns The number of parsed arguments.
+	*/
 	int args(const string &str, MathStructure &vargs, const ParseOptions &po = default_parse_options);
+	/** Returns the index of the last argument definition.
+	*
+	* @returns The index of the last argument definition 
+	*/
 	size_t lastArgumentDefinitionIndex() const;
+	/** Returns the argument definition for an argument index.
+	*
+	* @param index Argument index.
+	* @returns The argument definition for the index or NULL if no the argument was not defined for the index 
+	*/
 	Argument *getArgumentDefinition(size_t index);
+	/** Removes all argument definitions for the function.
+	*/
 	void clearArgumentDefinitions();
+	/** Set the argument definition for an argument index.
+	*
+	* @param index Argument index.
+	* @param argdef A newly allocated argument definition 
+	*/
 	void setArgumentDefinition(size_t index, Argument *argdef);
-	int stringArgs(const string &str, vector<string> &svargs);		
+	int stringArgs(const string &str, vector<string> &svargs);
 	void setDefaultValue(size_t arg_, string value_);
 	const string &getDefaultValue(size_t arg_) const;	
 	MathStructure produceVector(const MathStructure &vargs, int begin = -1, int end = -1);
@@ -119,6 +167,9 @@ class MathFunction : public ExpressionItem {
 	
 };
 
+/// A user defined mathematical function.
+/** User functions are functions defined using an expression.
+*/
 class UserFunction : public MathFunction {
   protected:
   
@@ -147,6 +198,9 @@ class UserFunction : public MathFunction {
 	int subtype() const;
 };
 
+/// A free argument.
+/** Free arguments accepts any value.
+*/
 class Argument {
 
   protected:
@@ -201,6 +255,9 @@ class Argument {
 
 };
 
+/// A numerical argument.
+/**
+*/
 class NumberArgument : public Argument {
 
   protected:
@@ -243,6 +300,9 @@ class NumberArgument : public Argument {
 
 };
 
+/// An integer argument.
+/**
+*/
 class IntegerArgument : public Argument {
 
   protected:
@@ -274,6 +334,9 @@ class IntegerArgument : public Argument {
 
 };
 
+/// A symbolic argument.
+/**
+*/
 class SymbolicArgument : public Argument {
 
   protected:
@@ -291,6 +354,9 @@ class SymbolicArgument : public Argument {
 	virtual string print() const;
 };
 
+/// A text argument.
+/**
+*/
 class TextArgument : public Argument {
 
   protected:
@@ -309,6 +375,9 @@ class TextArgument : public Argument {
 	virtual bool suggestsQuotes() const;
 };
 
+/// A date argument.
+/**
+*/
 class DateArgument : public Argument {
 
   protected:
@@ -325,6 +394,10 @@ class DateArgument : public Argument {
 	virtual Argument *copy() const;
 	virtual string print() const;
 };
+
+/// A vector argument.
+/**
+*/
 class VectorArgument : public Argument {
 
   protected:
@@ -349,6 +422,10 @@ class VectorArgument : public Argument {
 	size_t countArguments() const;
 	Argument *getArgument(size_t index) const;
 };
+
+/// A matrix argument.
+/**
+*/
 class MatrixArgument : public Argument {
 
   protected:
@@ -368,6 +445,10 @@ class MatrixArgument : public Argument {
 	virtual Argument *copy() const;
 	virtual string print() const;
 };
+
+/// Argument for functions, variables and units.
+/** Text string representing a function, variable or unit name.
+*/
 class ExpressionItemArgument : public Argument {
 
   protected:
@@ -384,6 +465,9 @@ class ExpressionItemArgument : public Argument {
 	virtual Argument *copy() const;
 	virtual string print() const;
 };
+/// A function argument.
+/**
+*/
 class FunctionArgument : public Argument {
 
   protected:
@@ -400,6 +484,10 @@ class FunctionArgument : public Argument {
 	virtual Argument *copy() const;
 	virtual string print() const;
 };
+
+/// A boolean argument.
+/** Accepts zero or one.
+*/
 class BooleanArgument : public Argument {
 
   protected:
@@ -416,6 +504,7 @@ class BooleanArgument : public Argument {
 	virtual Argument *copy() const;
 	virtual string print() const;
 };
+
 class UnitArgument : public Argument {
 
   protected:
@@ -483,6 +572,9 @@ class FileArgument : public Argument {
 	virtual string print() const;
 };
 
+/// A set of accepted arguments.
+/** This is used when several different type of argments shall be accepted by a function.
+*/
 class ArgumentSet : public Argument {
 
   protected:

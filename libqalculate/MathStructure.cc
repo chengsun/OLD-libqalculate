@@ -608,7 +608,7 @@ ComparisonType MathStructure::comparisonType() const {
 void MathStructure::setComparisonType(ComparisonType comparison_type) {
 	ct_comp = comparison_type;
 }
-void MathStructure::setType(int mtype) {
+void MathStructure::setType(StructureType mtype) {
 	m_type = mtype;
 }
 Unit *MathStructure::unit() const {
@@ -1106,7 +1106,7 @@ void MathStructure::setPrecision(int prec) {
 	if(i_precision > 0) b_approx = true;
 }
 
-void MathStructure::transform(int mtype, const MathStructure &o) {
+void MathStructure::transform(StructureType mtype, const MathStructure &o) {
 	MathStructure *struct_this = new MathStructure();
 	struct_this->set_nocopy(*this);
 	clear(true);
@@ -1114,7 +1114,7 @@ void MathStructure::transform(int mtype, const MathStructure &o) {
 	APPEND_POINTER(struct_this);
 	APPEND(o);
 }
-void MathStructure::transform(int mtype, const Number &o) {
+void MathStructure::transform(StructureType mtype, const Number &o) {
 	MathStructure *struct_this = new MathStructure();
 	struct_this->set_nocopy(*this);
 	clear(true);
@@ -1122,7 +1122,7 @@ void MathStructure::transform(int mtype, const Number &o) {
 	APPEND_POINTER(struct_this);
 	APPEND_NEW(o);
 }
-void MathStructure::transform(int mtype, int i) {
+void MathStructure::transform(StructureType mtype, int i) {
 	MathStructure *struct_this = new MathStructure();
 	struct_this->set_nocopy(*this);
 	clear(true);
@@ -1130,7 +1130,7 @@ void MathStructure::transform(int mtype, int i) {
 	APPEND_POINTER(struct_this);
 	APPEND_POINTER(new MathStructure(i, 1));
 }
-void MathStructure::transform(int mtype, Unit *u) {
+void MathStructure::transform(StructureType mtype, Unit *u) {
 	MathStructure *struct_this = new MathStructure();
 	struct_this->set_nocopy(*this);
 	clear(true);
@@ -1138,7 +1138,7 @@ void MathStructure::transform(int mtype, Unit *u) {
 	APPEND_POINTER(struct_this);
 	APPEND_NEW(u);
 }
-void MathStructure::transform(int mtype, Variable *v) {
+void MathStructure::transform(StructureType mtype, Variable *v) {
 	MathStructure *struct_this = new MathStructure();
 	struct_this->set_nocopy(*this);
 	clear(true);
@@ -1146,7 +1146,7 @@ void MathStructure::transform(int mtype, Variable *v) {
 	APPEND_POINTER(struct_this);
 	APPEND_NEW(v);
 }
-void MathStructure::transform(int mtype, string sym) {
+void MathStructure::transform(StructureType mtype, string sym) {
 	MathStructure *struct_this = new MathStructure();
 	struct_this->set_nocopy(*this);
 	clear(true);
@@ -1154,7 +1154,7 @@ void MathStructure::transform(int mtype, string sym) {
 	APPEND_POINTER(struct_this);
 	APPEND_NEW(sym);
 }
-void MathStructure::transform_nocopy(int mtype, MathStructure *o) {
+void MathStructure::transform_nocopy(StructureType mtype, MathStructure *o) {
 	MathStructure *struct_this = new MathStructure();
 	struct_this->set_nocopy(*this);
 	clear(true);
@@ -1162,7 +1162,7 @@ void MathStructure::transform_nocopy(int mtype, MathStructure *o) {
 	APPEND_POINTER(struct_this);
 	APPEND_POINTER(o);
 }
-void MathStructure::transform(int mtype) {
+void MathStructure::transform(StructureType mtype) {
 	MathStructure *struct_this = new MathStructure();
 	struct_this->set_nocopy(*this);
 	clear(true);
@@ -9229,7 +9229,7 @@ MathStructure *MathStructure::exponent() {
 	return NULL;
 }
 
-int MathStructure::type() const {
+StructureType MathStructure::type() const {
 	return m_type;
 }
 void MathStructure::unformat(const EvaluationOptions &eo) {
@@ -12424,7 +12424,7 @@ int MathStructure::containsRepresentativeOf(const MathStructure &mstruct, bool c
 	return ret;
 }
 
-int MathStructure::containsType(int mtype, bool structural_only, bool check_variables, bool check_functions) const {
+int MathStructure::containsType(StructureType mtype, bool structural_only, bool check_variables, bool check_functions) const {
 	if(m_type == mtype) return 1;
 	if(structural_only) {
 		for(size_t i = 0; i < SIZE; i++) {
@@ -12457,7 +12457,7 @@ int MathStructure::containsType(int mtype, bool structural_only, bool check_vari
 		return ret;
 	}
 }
-int MathStructure::containsRepresentativeOfType(int mtype, bool check_variables, bool check_functions) const {
+int MathStructure::containsRepresentativeOfType(StructureType mtype, bool check_variables, bool check_functions) const {
 	if(m_type == mtype) return 1;
 	int ret = 0;
 	if(m_type != STRUCT_FUNCTION) {
@@ -12585,7 +12585,7 @@ bool MathStructure::replace(const MathStructure &mfrom1, const MathStructure &mt
 	}
 	return b;
 }
-bool MathStructure::removeType(int mtype) {
+bool MathStructure::removeType(StructureType mtype) {
 	if(m_type == mtype || (m_type == STRUCT_POWER && CHILD(0).type() == mtype)) {
 		set(1);
 		return true;

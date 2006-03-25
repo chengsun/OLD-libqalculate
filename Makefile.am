@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = libqalculate src data po po-defs
+SUBDIRS = libqalculate src data po po-defs docs
 
 EXTRA_DIST = \
 	autogen.sh \

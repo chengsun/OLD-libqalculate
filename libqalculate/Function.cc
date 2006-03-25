@@ -1286,18 +1286,34 @@ void Argument::setCustomCondition(string condition) {
 string Argument::getCustomCondition() const {
 	return scondition;
 }
+/** Returns if a value of zero is forbidden for the argument.
+*
+* @returns true if a value of zero is forbidden.
+*/
 bool Argument::zeroForbidden() const {
 	return !b_zero;
 }
+/** Set if a value of zero shall be forbidden for the argument.
+*
+* @param forbid_zero If zero shall be forbidden.
+*/
 void Argument::setZeroForbidden(bool forbid_zero) {
 	b_zero = !forbid_zero;
 }
+/** Returns if the value for the argument will be tested. If not, the argument only works as an suggestion and any value is allowed.
+*
+* @returns true if the argument value will be tested.
+*/
 bool Argument::tests() const {
 	return b_test;
 }
 void Argument::setTests(bool does_test) {
 	b_test = does_test;
 }
+/** Returns if an error message will be presented to the user if the value for the argument is not allowed.
+*
+* @returns true if error messages will be shown.
+*/
 bool Argument::alerts() const {
 	return b_error;
 }

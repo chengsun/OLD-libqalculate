@@ -12,7 +12,9 @@
 #ifndef INCLUDES_H
 #define INCLUDES_H
 
+/// \cond
 using namespace std;
+/// \endcond
 
 #include <vector>
 #include <string>
@@ -241,8 +243,11 @@ typedef enum {
 	FRACTION_COMBINED
 } NumberFractionFormat;
 
+/// Options for ordering the parts of a mathematical expression/result before display
 static const struct SortOptions {
+	/// Put currency units before quantity. Default: true
 	bool prefix_currencies;
+	/// If true, avoid placing negative terms first. Default: true
 	bool minus_last;
 	SortOptions() : prefix_currencies(true), minus_last(true) {}
 } default_sort_options;
@@ -259,44 +264,71 @@ typedef enum {
 	DIVISION_SIGN_DIVISION
 } DivisionSign;
 
+/// Options for formatting and display of mathematical structures/results.
 static const struct PrintOptions {
 	int min_exp;
+	/// Number base for displaying numbers. Default: 10
 	int base;
-	bool lower_case_numbers;
+	/// Use lower case for non-numeric characters for bases > 10. Default: false
+	bool lower_case_numbers;	
 	bool lower_case_e;
 	NumberFractionFormat number_fraction_format;
 	bool indicate_infinite_series, show_ending_zeroes;
-	bool abbreviate_names, use_reference_names;
+	/// Abbreviate names of variables, units, functions etc. Default: true
+	bool abbreviate_names;
+	bool use_reference_names;
 	bool place_units_separately;
+	/// Use prefixes for units when appropriate. Default: true
 	bool use_unit_prefixes;
+	/// Use prefixes for currencies if unit prefixes are om. Default: false
 	bool use_prefixes_for_currencies;
+	/// Use all decimal SI prefixes. If false, prefixes which is not a multiple of thousand (centi, deci, deka, hekto) will not be used automatically. Default: false
 	bool use_all_prefixes;
+	/// If set to true, prefixes will be split between numerator and denominator in a unit expression (millimeter per kilogram instead of micrometer per gram). Default: true
 	bool use_denominator_prefix;
+	/// If true, negative exponents will be used instead of division (5/x^2 becomes 5*x^-2). Default: false
 	bool negative_exponents;
+	/// Avoid using multiplication sign, when appropriate. Default: true
 	bool short_multiplication;
 	bool limit_implicit_multiplication;
+	/// If it is not necessary that the displayed expression can be parsed correctly. Default: false
 	bool allow_non_usable;
+	/// If unicode signs can be displayed. Default: false
 	bool use_unicode_signs;
+	/// Sign used for display of multiplication. Default: MULTIPLICATION_SIGN_DOT
 	MultiplicationSign multiplication_sign;
+	/// Sign used for display of division. Default: DIVISION_SIGN_DIVISION_SLASH
 	DivisionSign division_sign;
+	/// If space will be used to make the output look nicer. Default: true
 	bool spacious;
+	/// Use parentheses even when not necessary. Default: false
 	bool excessive_parenthesis;
+	/// Transform raised to 1/2 to square root function. Default: true
 	bool halfexp_to_sqrt;
+	/// Minimum number of decimals to display for numbers. Default: 0
 	int min_decimals;
+	/// Maximum number of decimals to display for numbers. A negative value disables the limit. Default: -1
 	int max_decimals;
+	/// Enable use of min_decimals. False is equivalent to a min_decimals value of zero. Default: true
 	bool use_min_decimals;
+	/// Enable use of max_decimals. False is equivalent to a negative max_decimals value. Default: true
 	bool use_max_decimals;
+	/// If true round halfway numbers to nearest even number, otherwise round upwards. Default: false
 	bool round_halfway_to_even;
 	bool improve_division_multipliers;
+	/// Force use of a specific prefix for units if not NULL.
 	Prefix *prefix;
+	/// If not NULL will be set to true if the output is approximate.
 	bool *is_approximate;
 	SortOptions sort_options;
 	string comma_sign, decimalpoint_sign;
 	bool (*can_display_unicode_string_function) (const char*, void*);
 	void *can_display_unicode_string_arg;
+	/// Replace underscores in names with spaces, unless name has suffix. Default: false
 	bool hide_underscore_spaces;
 	bool preserve_format;
 	bool allow_factorization;
+	/// If logical operators will be spelled as AND and OR instead of && and ||. Default: false
 	bool spell_out_logical_operators;
 	bool restrict_to_parent_precision;
 	PrintOptions() : min_exp(EXP_PRECISION), base(BASE_DECIMAL), lower_case_numbers(false), lower_case_e(false), number_fraction_format(FRACTION_DECIMAL), indicate_infinite_series(false), show_ending_zeroes(false), abbreviate_names(true), use_reference_names(false), place_units_separately(true), use_unit_prefixes(true), use_prefixes_for_currencies(false), use_all_prefixes(false), use_denominator_prefix(true), negative_exponents(false), short_multiplication(true), limit_implicit_multiplication(false), allow_non_usable(false), use_unicode_signs(false), multiplication_sign(MULTIPLICATION_SIGN_DOT), division_sign(DIVISION_SIGN_DIVISION_SLASH), spacious(true), excessive_parenthesis(false), halfexp_to_sqrt(true), min_decimals(0), max_decimals(-1), use_min_decimals(true), use_max_decimals(true), round_halfway_to_even(false), improve_division_multipliers(true), prefix(NULL), is_approximate(NULL), can_display_unicode_string_function(NULL), can_display_unicode_string_arg(NULL), hide_underscore_spaces(false), preserve_format(false), allow_factorization(false), spell_out_logical_operators(false), restrict_to_parent_precision(true) {}
@@ -345,30 +377,67 @@ typedef enum {
 	ANGLE_UNIT_GRADIANS
 } AngleUnit;
 
+/// Options for parsing expressions.
 static const struct ParseOptions {
-	bool variables_enabled, functions_enabled, unknowns_enabled, units_enabled;
+	/// If variables will be parsed. Default: true
+	bool variables_enabled;
+	/// If functions will be parsed. Default: true
+	bool functions_enabled;
+	/// If left-over characters will be parsed as symbols. Default: true
+	bool unknowns_enabled;
+	/// If units will be parsed. Default: true
+	bool units_enabled;
+	/// If Reverse Polish Notation syntax will be used. Default: false
 	bool rpn;
+	/// Base of parsed numbers. Default: 10
 	int base;
 	bool limit_implicit_multiplication;
 	ReadPrecisionMode read_precision;
+	/// Default angle unit for trigonometric functions. Default: ANGLE_UNIT_NONE
 	AngleUnit angle_unit;
 	MathStructure *unended_function;
+	/// Preserve the expression structure as much as possible. Default: false
 	bool preserve_format;
 	ParseOptions() : variables_enabled(true), functions_enabled(true), unknowns_enabled(true), units_enabled(true), rpn(false), base(BASE_DECIMAL), limit_implicit_multiplication(false), read_precision(DONT_READ_PRECISION), angle_unit(ANGLE_UNIT_NONE), unended_function(NULL), preserve_format(false) {}
 } default_parse_options;
 
+/// Options for calculation.
 static const struct EvaluationOptions {
 	ApproximationMode approximation;
-	bool sync_units, sync_complex_unit_relations, keep_prefixes;
-	bool calculate_variables, calculate_functions, test_comparisons, isolate_x;
-	bool expand, reduce_divisions;
-	bool allow_complex, allow_infinite;
-	bool assume_denominators_nonzero, warn_about_denominators_assumed_nonzero;
+	/// If units will be synced/converted to allow evaluation (ex. 1 min + 1 s=60 s+ 1 s = 61 s). Default: true
+	bool sync_units;
+	/// If units with complex/non-linear relations (ex. degress celsius and fahrenheit) will synced/converted. Default: true
+	bool sync_complex_unit_relations;
+	/// If unit prefixes in original expression will be kept. Default: false
+	bool keep_prefixes;
+	/// If known variables will be replaced by their value. Default: true
+	bool calculate_variables;
+	/// If functions will be calculated. Default: true
+	bool calculate_functions;
+	/// If comparisons will be evaluated (ex. 5>2 => 1). Default: true
+	bool test_comparisons;
+	/// If a varaible will be isolated to the left side in equations/comparisons (ex. x+y=2 => x=2-y). Default: true
+	bool  isolate_x;
+	/// If factors (and bases) containing addition will be expanded (ex. z(x+y)=zx+zy). Default: true
+	bool expand;
+	bool reduce_divisions;
+	/// If complex numbers will be used for evaluation. Default: true
+	bool allow_complex;
+	/// If infinite numbers will be used for evaluation. Default: true
+	bool allow_infinite;
+	/// If simplification will be made easier by assuming that denominators with unknown value not is zero. Default: false
+	bool assume_denominators_nonzero;
+	/// Warn if a denominator with unknown value was assumed non-zero (with assume_denominators_nonzero set to true) to allow simplification. Default: false
+	bool warn_about_denominators_assumed_nonzero;
+	/// If powers with exponent 1/2 that only have an approximate result will be split to the least base (sqrt(8) = 2 * sqrt(2)). Default: true
 	bool split_squares;
+	/// If units with zero quantity will be preserved. Default: true
 	bool keep_zero_units;
 	AutoPostConversion auto_post_conversion;
 	StructuringMode structuring;
+	/// Options for parsing of expression.
 	ParseOptions parse_options;
+	/// If set will decide which variable to isolate in an equation.
 	const MathStructure *isolate_var;
 	EvaluationOptions() : approximation(APPROXIMATION_TRY_EXACT), sync_units(true), sync_complex_unit_relations(true), keep_prefixes(false), calculate_variables(true), calculate_functions(true), test_comparisons(true), isolate_x(true), expand(true), reduce_divisions(true), allow_complex(true), allow_infinite(true), assume_denominators_nonzero(false), warn_about_denominators_assumed_nonzero(false), split_squares(true), keep_zero_units(true), auto_post_conversion(POST_CONVERSION_NONE), structuring(STRUCTURING_SIMPLIFY), isolate_var(NULL) {}
 } default_evaluation_options;

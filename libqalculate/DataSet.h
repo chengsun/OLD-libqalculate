@@ -17,6 +17,8 @@
 
 typedef Sgi::vector<DataProperty*>::iterator DataObjectPropertyIter;
 
+/// A a data set object.
+/** Data objects consists property-value pairs. */
 class DataObject {
 
   protected:
@@ -30,17 +32,51 @@ class DataObject {
 	bool b_uchanged;
 	
   public:
-  
+ 
+	/** Create a data object.
+	*
+	* @param parent_set Data set that the object will belong to.
+	*/
 	DataObject(DataSet *parent_set);
 
+	/** Unset (erase value) a property.
+	*
+	* @param property Property to unset.
+	*/
 	void eraseProperty(DataProperty *property);
+	/** Set value for a property.
+	*
+	* @param property Property to set (must belong to parent data set).
+	* @param s_vale Value for the property.
+	* @param is_approximate If the value is approximate. 1 for approximate, 0 for exact, -1 for property default.
+	*/
 	void setProperty(DataProperty *property, string s_value, int is_approximate = -1);
 	void setNonlocalizedKeyProperty(DataProperty *property, string s_value);
 	
+	/** Returns parsed value for a property. Parses the text string value if not parsed before 
+	*
+	* @param property Property to read.
+	* @returns Parsed value or NULL if property value is not set.
+	*/
 	const MathStructure *getPropertyStruct(DataProperty *property);
+	/** Returns unparsed value for a property.
+	*
+	* @param property Property to read.
+	* @returns Unparsed value or empty string if property value is not set.
+	*/
 	const string &getProperty(DataProperty *property, int *is_approximate = NULL);
 	const string &getNonlocalizedKeyProperty(DataProperty *property);
+	/** Returns value for a property in a format suitable for use in expressions with unit appended.
+	*
+	* @param property Property to read.
+	* @returns Value in input format or empty string if property value is not set.
+	*/
 	string getPropertyInputString(DataProperty *property);
+	/** Returns value for a property in a format suitable for display with unit appended.
+	*
+	* @param property Property to read.
+	* @returns Value in display format or empty string if property value is not set.
+	*/
 	string getPropertyDisplayString(DataProperty *property);
 	
 	bool isUserModified() const;
@@ -56,6 +92,8 @@ typedef enum {
 	PROPERTY_STRING
 } PropertyType;
 
+/// A data set property.
+/** Property definitions for use with data set objects. */
 class DataProperty {
 
   protected:
@@ -70,7 +108,13 @@ class DataProperty {
 	bool b_uchanged;
 	
   public:
-  
+
+	/** Create a data property.
+	*
+	* @param s_name Property name (initial) used for reference.
+	* @param s_title Descriptive name/title.
+	* @param s_description Description.
+	*/
 	DataProperty(DataSet *parent_set, string s_name = "", string s_title = "", string s_description = "");
 	DataProperty(const DataProperty &dp);
 	
@@ -117,6 +161,14 @@ class DataProperty {
 typedef vector<DataProperty*>::iterator DataPropertyIter;
 typedef vector<DataObject*>::iterator DataObjectIter;
 
+/// A data set.
+/** This is a simple database class for storage of many grouped values, when ordinary variables is not practical.
+*
+* A data set consists of properties and objects, with values for the properties. Qalculate! includes for example a "Planets" data set with properties such as name, mass, speed and density, and an object for each planet in solar system.
+*
+* A data set is also mathemtical function, dataset(object, property), which retrieves values for objects and properties.
+* Data sets can be saved and loaded from a XML file.
+*/
 class DataSet : public MathFunction {
 
   protected:
@@ -178,6 +230,7 @@ class DataSet : public MathFunction {
 		
 };
 
+/// Data property function argument.
 class DataPropertyArgument : public Argument {
 
   protected:
@@ -200,6 +253,7 @@ class DataPropertyArgument : public Argument {
 	
 };
 
+/// Data object function argument.
 class DataObjectArgument : public Argument {
 
   protected:

@@ -2052,6 +2052,9 @@
         <reference>true</reference>
         <_name>isodate</_name>
       </name>
+       <argument index="1">
+        <_title>Date</_title>
+      </argument>
     </builtin_function>
     <builtin_function name="localdate">
       <_title>Local Date Format</_title>
@@ -2059,6 +2062,9 @@
         <reference>true</reference>
         <_name>localdate</_name>
       </name>
+      <argument index="1">
+        <_title>Date</_title>
+      </argument>
     </builtin_function>
     <builtin_function name="timestamp">
       <_title>Date to Unix Timestamp</_title>
@@ -2066,6 +2072,9 @@
         <reference>true</reference>
         <_name>timestamp</_name>
       </name>
+      <argument index="1">
+        <_title>Date</_title>
+      </argument>
     </builtin_function>
     <builtin_function name="stamptodate">
       <_title>Unix Timestamp to Date</_title>
@@ -2073,6 +2082,9 @@
         <reference>true</reference>
         <_name>stamptodate</_name>
       </name>
+      <argument index="1">
+        <_title>Timestamp</_title>
+      </argument>
     </builtin_function>
   </category>
   <category>

@@ -14,9 +14,12 @@
 
 #include <libqalculate/includes.h>
 
+
+/// \cond
 struct eqstr {
     bool operator()(const char *s1, const char *s2) const;	
 };
+/// \endcond
 
 string& gsub(const string &pattern, const string &sub, string &str);
 string& gsub(const char *pattern, const char *sub, string &str);

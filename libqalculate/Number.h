@@ -20,6 +20,11 @@
 #define EQUALS_PRECISION_LOWEST		-2
 #define EQUALS_PRECISION_HIGHEST	-3
 
+/** 
+* A number.
+*
+* Can be rational, floating, point, complex or infinite. Implimented using CLN numbers.
+ */
 class Number {
 	
 	private:
@@ -38,9 +43,28 @@ class Number {
 
 	public:
 	
+		/**
+		* Constructs a number initialized as zero.
+ 		*/
 		Number();
+		/**
+		* Constructs a number parsing a text string.
+		*
+		* @param number Text string to read number from.
+		* @param po Options for parsing the text string.
+ 		*/
 		Number(string number, const ParseOptions &po = default_parse_options);
+		/**
+		* Constructs a rational number.
+		*
+		* @param numerator
+		* @param denominator
+		* @param exp_10
+ 		*/
 		Number(int numerator, int denominator = 1, int exp_10 = 0);
+		/**
+		* Constructs a copy of a number.
+ 		*/
 		Number(const Number &o);
 		virtual ~Number();
 		
@@ -61,22 +85,68 @@ class Number {
 		const cln::cl_N &internalNumber() const;
 		
 		double floatValue() const;
+		/**
+		* Converts a number to an integer. If the number does not represent an integer it will rounded using round().
+		*
+		* @param overflow If overflow is non-null it will be set to true if the number was to large to fit in an int.
+		* @return Resulting integer.
+ 		*/
 		int intValue(bool *overflow = NULL) const;
 		
+		/** Returns true if the number is approximate.
+		*
+ 		* @return true if the number is approximate.
+ 		*/
 		bool isApproximate() const;
+		/** Returns true if the number has an approximate representation/is of approximate type -- if it is a floating point number. Numbers of approximate type are always approximate, but the reversed relation is not always true.
+		*
+ 		* @return true if the number has an approximate representation.
+ 		*/
 		bool isApproximateType() const;
+		/** Defines the number as approximate or exact. If a number of approximate type is set as exact, it will be converted to a rational number.
+		*
+ 		* @param is_approximate If the number shall be regarded as approximate.
+ 		*/
 		void setApproximate(bool is_approximate = true);
 		
+		/** Returns the.precision of the number.
+		*
+ 		* @return Precision of the number or -1 if the number is exact or the precision has not been set.
+ 		*/
 		int precision() const;
 		void setPrecision(int prec);
 		
 		bool isUndefined() const;
+		/** Returns true if the number is infinity, plus infinity or minus infinity.
+		*
+ 		* @return true if the number is infinite.
+ 		*/
 		bool isInfinite() const;
+		/** Returns true if the number is infinity, if the number is plus or minus infinity (which is not known).
+		*
+ 		* @return true if the number is infinity.
+ 		*/
 		bool isInfinity() const;
+		/** Returns true if the number is plus infinity.
+		*
+ 		* @return true if the number is plus infinity.
+ 		*/
 		bool isPlusInfinity() const;
+		/** Returns true if the number is minus infinity.
+		*
+ 		* @return true if the number is minus infinity.
+ 		*/
 		bool isMinusInfinity() const;
 		
+		/** Returns the real part of the number if it is complex, or a copy if it is real.
+		*
+ 		* @return true if the real part of a complex number.
+ 		*/
 		Number realPart() const;
+		/** Returns the imaginary part as real number of the number if it is complex, or zero if it is real.
+		*
+ 		* @return true if the imaginary part of a complex number.
+ 		*/
 		Number imaginaryPart() const;
 		Number numerator() const;
 		Number denominator() const;
@@ -158,19 +228,75 @@ class Number {
 		bool isOdd() const;
 		
 		int integerLength() const;
-		
+
+		/** Add to the number (x+o).
+		*
+		* @param o Number to add.
+ 		* @return true if the operation was successful.
+ 		*/
 		bool add(const Number &o);
+		/** Subtracts from to the number (x-o).
+		*
+		* @param o Number to subtract.
+ 		* @return true if the operation was successful.
+ 		*/
 		bool subtract(const Number &o);
+		/** Multiply the number (x*o).
+		*
+		* @param o Number to multiply with.
+ 		* @return true if the operation was successful.
+ 		*/
 		bool multiply(const Number &o);
+		/** Divide the number (x/o).
+		*
+		* @param o Number to divide by.
+ 		* @return true if the operation was successful.
+ 		*/
 		bool divide(const Number &o);
+		/** Invert the number (1/x).
+		*
+ 		* @return true if the operation was successful.
+ 		*/
 		bool recip();
+		/** Raise the number (x^o).
+		*
+		* @param o Number to raise to.
+		* @param try_exact If an exact solution should be tried first (might be slow).
+ 		* @return true if the operation was successful.
+ 		*/
 		bool raise(const Number &o, bool try_exact = true);
+		/** Multiply the number with a power of ten (x*10^o).
+		*
+		* @param o Number to raise 10 by.
+ 		* @return true if the operation was successful.
+ 		*/
 		bool exp10(const Number &o);
+		/** Multiply the number with a power of two (x*2^o).
+		*
+		* @param o Number to raise 2 by.
+ 		* @return true if the operation was successful.
+ 		*/
 		bool exp2(const Number &o);
+		/** Set the number to ten raised by the number (10^x).
+		*
+ 		* @return true if the operation was successful.
+ 		*/
 		bool exp10();
+		/** Set the number to two raised by the number (2^x).
+		*
+ 		* @return true if the operation was successful.
+ 		*/
 		bool exp2();
+		/** Raise the number by two (x^2).
+		*
+ 		* @return true if the operation was successful.
+ 		*/
 		bool square();
 		
+		/** Negate the number (-x).
+		*
+ 		* @return true if the operation was successful.
+ 		*/
 		bool negate();
 		void setNegative(bool is_negative);
 		bool abs();
@@ -200,10 +326,22 @@ class Number {
 		void setFalse();
 		void setLogicalNot();
 		
+		/** Set the number to e, the base of natural logarithm, calculated with the current default precision.
+ 		*/
 		void e();
+		/** Set the number to pi, Archimede's constant, calculated with the current default precision.
+ 		*/
 		void pi();
+		/** Set the number to Catalan's constant, calculated with the current default precision.
+ 		*/
 		void catalan();
-		void euler();	
+		/** Set the number to Euler's constant, calculated with the current default precision.
+ 		*/
+		void euler();
+		/** Set the number to Riemann's zeta with the number as integral point. The number must be an integer greater than one.
+		*
+ 		* @return true if the calculation was successful.
+ 		*/
 		bool zeta();			
 		
 		bool sin();

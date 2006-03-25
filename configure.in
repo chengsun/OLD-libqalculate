@@ -227,8 +227,6 @@ AC_DEFINE_UNQUOTED(PACKAGE_LOCALE_DIR, "$PACKAGE_LOCALE_DIR",
 	[The directory in which qalculate's locale data will be stored])
 	 AC_MSG_RESULT("$PACKAGE_LOCALE_DIR")
 
-
-	 
 INTLTOOL_QALCULATE_DEFINITIONS_RULE='%.xml:       %.xml.in       $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po-defs/*.po) ; LC_ALL=C $(INTLTOOL_MERGE) -x -u -c $(top_builddir)/po-defs/.intltool-merge-cache $(top_srcdir)/po-defs $< [$]@' 
 AC_SUBST(INTLTOOL_QALCULATE_DEFINITIONS_RULE)	 
 
@@ -240,9 +238,11 @@ AC_OUTPUT([
   Makefile
   src/Makefile
   libqalculate/Makefile
-  data/Makefile  
+  data/Makefile
   po/Makefile.in
   po-defs/Makefile
+  docs/Makefile
+  docs/reference/Makefile
   libqalculate.pc
 ])
 

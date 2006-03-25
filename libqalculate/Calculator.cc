@@ -3559,6 +3559,8 @@ bool Calculator::parseNumber(MathStructure *mstruct, string str, const ParseOpti
 			str.erase(i, 1);
 		} else if(str[i] == SPACE_CH) {
 			str.erase(i, 1);
+		} else if(str[i] == COMMA_CH && DOT_S == ".") {
+			str.erase(i, 1);
 		} else if(is_in(OPERATORS, str[i])) {
 			if(disable_errors_ref > 0) {
 				stopped_messages_count[disable_errors_ref - 1]++;

@@ -1,3 +1,31 @@
+2006-04-04 Niklas Knutsson  <nq@altern.org>
+
+	* Plugins
+	* True RPN mode
+
+2006-04-03 Niklas Knutsson  <nq@altern.org>
+
+	* Set min and max in argument definition for zeta()
+	* Set exact value for zeta with argument 2, 4, 6, 8 or 10 and set infinity for 1
+
+2006-04-02 Niklas Knutsson  <nq@altern.org>
+
+	* Symmetric matrix => Square matrix
+	* Some text string changes
+	* Accept vectors in elements function
+
+2006-04-01 Niklas Knutsson  <nq@altern.org>
+
+	* Interpret 0x..., 0o... and 0b... as hexadecimal, octal and binary numbers, respectively, when base is decimal
+
+2006-03-29 Niklas Knutsson  <nq@altern.org>
+
+	* Remove deleted data set from the data set list, not only the function list (fix crash on delete and update list view)
+
+2006-03-28 Niklas Knutsson  <nq@altern.org>
+
+	* Fix contains... functions (and thereby integration)
+
 2006-03-25 Niklas Knutsson  <nq@altern.org>
 
 	* Ignore commas in numbers

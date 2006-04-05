@@ -16,11 +16,14 @@
 #include <libqalculate/includes.h>
 #include <libqalculate/Number.h>
 
-enum {
+/** @file */
+
+///Types for prefix classes.
+typedef enum {
 	PREFIX_DECIMAL,
 	PREFIX_BINARY,
 	PREFIX_NUMBER
-};
+} PrefixType;
 
 ///Abstract class for prefixes.
 /** A prefix is prepended to a unit to specificy a quantity multiplicator. A prefix has a numerical value which raised to the units power defines the quantity. In for example the expression "3 kilometers", meter is the unit, 3 is regular quantity, and kilo is a prefix with a value 1000, thus the example equals "3000 meters". If the unit instead had been squared, the value of the prefix would have been raised by two and the total quantity would have been 3.000.000.

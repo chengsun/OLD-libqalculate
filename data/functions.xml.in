@@ -8,9 +8,9 @@
         <reference>true</reference>
         <_name>vector</_name>
       </name>
-      <_description>Returns a vector with listed components.</_description>
+      <_description>Returns a vector with listed elements.</_description>
       <argument index="1">
-        <_title>Components</_title>
+        <_title>Elements</_title>
       </argument>
     </builtin_function>
     <builtin_function name="genvector">
@@ -19,7 +19,7 @@
         <reference>true</reference>
         <_name>genvector</_name>
       </name>
-      <_description>Generates a vector from a function with a variable (default x) running from min to max. The fourth argument is either the requested number of components if the sixth argument is false (default) or the step between each value of the variable.</_description>
+      <_description>Generates a vector from a function with a variable (default x) running from min to max. The fourth argument is either the requested number of elements if the sixth argument is false (default) or the step between each value of the variable.</_description>
       <argument index="1">
         <_title>Function</_title>
       </argument>
@@ -30,7 +30,7 @@
         <_title>Max</_title>
       </argument>
       <argument index="4">
-        <_title>Components / Step size</_title>
+        <_title>Dimension / Step size</_title>
       </argument>
       <argument index="5">
         <_title>Variable</_title>
@@ -59,7 +59,7 @@
         <reference>true</reference>
         <_name>rank</_name>
       </name>
-      <_description>Returns a vector with values of components replaced with their mutual ranks.</_description>
+      <_description>Returns a vector with values of elements replaced with their mutual ranks.</_description>
       <argument index="1">
         <_title>Vector</_title>
       </argument>
@@ -132,7 +132,7 @@
         <reference>true</reference>
         <_name>matrix</_name>
       </name>
-      <_description>Returns a matrix with specified order and listed elements. Omitted elements are set to zero.</_description>
+      <_description>Returns a matrix with specified dimensions and listed elements. Omitted elements are set to zero.</_description>
       <argument index="1">
         <_title>Rows</_title>
       </argument>
@@ -233,9 +233,9 @@
         <reference>true</reference>
         <_name>elements</_name>
       </name>
-      <_description>Returns the number of elements in a matrix.</_description>
+      <_description>Returns the number of elements in a matrix or vector.</_description>
       <argument index="1">
-        <_title>Matrix</_title>
+        <_title>Matrix or Vector</_title>
       </argument>
     </builtin_function>
     <builtin_function name="element">
@@ -2165,7 +2165,7 @@
       </argument>
     </builtin_function>
     <builtin_function name="process">
-      <_title>Process Vector Components</_title>
+      <_title>Process Vector Elements</_title>
       <name index="1">
         <reference>true</reference>
         <_name>process</_name>
@@ -2174,7 +2174,7 @@
         <_title>Function</_title>
       </argument>
       <argument index="2">
-        <_title>Component Variable</_title>
+        <_title>Element Variable</_title>
       </argument>
       <argument index="3">
         <_title>Vector</_title>
@@ -2212,16 +2212,16 @@
       </argument>
     </builtin_function>
     <builtin_function name="csum">
-      <_title>Custom Sum of Components</_title>
+      <_title>Custom Sum of Elements</_title>
       <name index="1">
         <reference>true</reference>
         <_name>csum</_name>
       </name>
       <argument index="1">
-        <_title>First Component</_title>
+        <_title>First Element</_title>
       </argument>
       <argument index="2">
-        <_title>Last Component</_title>
+        <_title>Last Element</_title>
       </argument>
       <argument index="3">
         <_title>Initial Value</_title>
@@ -2233,7 +2233,7 @@
         <_title>Value Variable</_title>
       </argument>
       <argument index="6">
-        <_title>Component Variable</_title>
+        <_title>Element Variable</_title>
       </argument>
       <argument index="7">
         <_title>Vector</_title>
@@ -2246,7 +2246,7 @@
       </argument>
     </builtin_function>
     <builtin_function name="select">
-      <_title>Select Vector Components</_title>
+      <_title>Select Vector Elements</_title>
       <name index="1">
         <reference>true</reference>
         <_name>select</_name>
@@ -2258,7 +2258,7 @@
         <_title>Condition</_title>
       </argument>
       <argument index="3">
-        <_title>Component Variable</_title>
+        <_title>Element Variable</_title>
       </argument>
       <argument index="4">
         <_title>Select first match</_title>

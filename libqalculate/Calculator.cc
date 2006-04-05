@@ -36,6 +36,7 @@
 #include <wait.h>
 #include <queue>
 #include <glib.h>
+#include <dlfcn.h>
 
 #include <cln/cln.h>
 using namespace cln;
@@ -70,8 +71,9 @@ long int usecs, secs, usecs2, usecs3;
 #define ADD_TIME1 gettimeofday(&tvtime, NULL); usecs2 = tvtime.tv_usec - usecs + (tvtime.tv_sec - secs) * 1000000; 
 #define ADD_TIME2 gettimeofday(&tvtime, NULL); usecs3 += tvtime.tv_usec - usecs + (tvtime.tv_sec - secs) * 1000000 - usecs2; */
 
+typedef void (*CREATEPLUG_PROC)();
 
-plot_parameters::plot_parameters() {
+PlotParameters::PlotParameters() {
 	auto_y_min = true;
 	auto_x_min = true;
 	auto_y_max = true;
@@ -86,7 +88,7 @@ plot_parameters::plot_parameters() {
 	show_all_borders = false;
 	legend_placement = PLOT_LEGEND_TOP_RIGHT;
 }
-plot_data_parameters::plot_data_parameters() {
+PlotDataParameters::PlotDataParameters() {
 	yaxis2 = false;
 	xaxis2 = false;
 }
@@ -150,13 +152,22 @@ void *calculate_proc(void *pipe) {
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 	FILE *calculate_pipe = (FILE*) pipe;
 	while(true) {
+		bool b_parse = true;
+		fread(&b_parse, sizeof(bool), 1, calculate_pipe);
 		void *x = NULL;
 		fread(&x, sizeof(void*), 1, calculate_pipe);
 		MathStructure *mstruct = (MathStructure*) x;
-		mstruct->set(_("aborted"));
-		if(CALCULATOR->tmp_parsedstruct) CALCULATOR->tmp_parsedstruct->set(_("aborted"));
-		if(CALCULATOR->tmp_tostruct) CALCULATOR->tmp_tostruct->setUndefined();
-		mstruct->set(CALCULATOR->calculate(CALCULATOR->expression_to_calculate, CALCULATOR->tmp_evaluationoptions, CALCULATOR->tmp_parsedstruct, CALCULATOR->tmp_tostruct, CALCULATOR->tmp_maketodivision));
+		if(b_parse) {
+			mstruct->set(_("aborted"));
+			if(CALCULATOR->tmp_parsedstruct) CALCULATOR->tmp_parsedstruct->set(_("aborted"));
+			if(CALCULATOR->tmp_tostruct) CALCULATOR->tmp_tostruct->setUndefined();
+			mstruct->set(CALCULATOR->calculate(CALCULATOR->expression_to_calculate, CALCULATOR->tmp_evaluationoptions, CALCULATOR->tmp_parsedstruct, CALCULATOR->tmp_tostruct, CALCULATOR->tmp_maketodivision));
+		} else {
+			MathStructure meval(*mstruct);
+			mstruct->set(_("aborted"));
+			meval.eval(CALCULATOR->tmp_evaluationoptions);
+			mstruct->set(meval);
+		}
 		CALCULATOR->b_busy = false;
 	}
 	return NULL;
@@ -1121,7 +1132,7 @@ void Calculator::addBuiltinFunctions() {
 	f_rank = addFunction(new RankFunction());
 	f_limits = addFunction(new LimitsFunction());
 	f_component = addFunction(new ComponentFunction());
-	f_components = addFunction(new ComponentsFunction());
+	f_dimension = addFunction(new DimensionFunction());
 	f_merge_vectors = addFunction(new MergeVectorsFunction());
 	f_matrix = addFunction(new MatrixFunction());
 	f_matrix_to_vector = addFunction(new MatrixToVectorFunction());
@@ -1264,7 +1275,20 @@ void Calculator::addBuiltinFunctions() {
 	f_integrate = addFunction(new IntegrateFunction());
 	f_solve = addFunction(new SolveFunction());
 	f_multisolve = addFunction(new SolveMultipleFunction());
-	
+
+	/*void *plugin = dlopen("/home/nq/Source/qalculate/plugins/pluginfunction.so", RTLD_NOW);
+	if(plugin) {
+		CREATEPLUG_PROC createproc = (CREATEPLUG_PROC) dlsym(plugin, "createPlugin");
+		if (dlerror() != NULL) {
+			dlclose(plugin);
+			printf( "dlsym error\n");
+		} else {
+			createproc();
+		}
+	} else {
+		printf( "dlopen error\n");
+	}*/
+
 }
 void Calculator::addBuiltinUnits() {
 	u_euro = addUnit(new Unit(_("Currency"), "EUR", "euros", "euro", "European Euros", false, true, true));
@@ -1583,6 +1607,200 @@ string Calculator::unlocalizeExpression(string str) const {
 	}
 	return str;
 }
+
+bool Calculator::RPNStackTopEval(int usecs, const EvaluationOptions &eo) {
+	saveState();
+	b_busy = true;
+	if(calculate_thread_stopped) {
+		pthread_create(&calculate_thread, &calculate_thread_attr, calculate_proc, calculate_pipe_r);
+		calculate_thread_stopped = false;
+	}
+	bool had_usecs = usecs > 0;
+	tmp_evaluationoptions = eo;
+	bool b_parse = false;
+	fwrite(&b_parse, sizeof(bool), 1, calculate_pipe_w);
+	void *x = (void*) rpn_stack.back();
+	fwrite(&x, sizeof(void*), 1, calculate_pipe_w);
+	fflush(calculate_pipe_w);
+	struct timespec rtime;
+	rtime.tv_sec = 0;
+	rtime.tv_nsec = 1000000;
+	while(usecs > 0 && b_busy) {
+		nanosleep(&rtime, NULL);
+		usecs -= 1000;
+	}	
+	if(had_usecs && b_busy) {
+		abort();
+		rpn_stack.back()->set(string(_("aborted")));
+		return false;
+	}
+	return true;
+}
+
+bool Calculator::calculateRPN(MathOperation op, int usecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	if(rpn_stack.size() == 0) {
+		MathStructure *mstruct = new MathStructure();
+		mstruct->add(m_zero, op);
+		rpn_stack.push_back(mstruct);
+	} else if(rpn_stack.size() == 1) {
+		MathStructure *mstruct = new MathStructure();
+		mstruct->add_nocopy(rpn_stack.back(), op);
+		rpn_stack.back() = mstruct;
+	} else {
+		rpn_stack[rpn_stack.size() - 2]->add_nocopy(rpn_stack.back(), op);
+		rpn_stack.pop_back();
+	}
+	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	return RPNStackTopEval(usecs, eo);
+}
+bool Calculator::calculateRPN(MathFunction *f, int usecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	if(f->minargs() > 1 || rpn_stack.size() < 1) return false;
+	MathStructure *mstruct = new MathStructure(f, NULL);
+	if(f->args() != 0) {
+		mstruct->addChild_nocopy(rpn_stack.back());
+		if(f->getArgumentDefinition(1) && f->getArgumentDefinition(1)->type() == ARGUMENT_TYPE_ANGLE) {
+			switch(eo.parse_options.angle_unit) {
+				case ANGLE_UNIT_DEGREES: {
+					(*mstruct)[0].multiply(getDegUnit());
+					break;
+				}
+				case ANGLE_UNIT_GRADIANS: {
+					(*mstruct)[0].multiply(getGraUnit());
+					break;
+				}
+				case ANGLE_UNIT_RADIANS: {
+					(*mstruct)[0].multiply(getRadUnit());
+					break;
+				}
+				default: {}
+			}
+		}
+	}
+	rpn_stack.back() = mstruct;
+	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	return RPNStackTopEval(usecs, eo);
+}
+bool Calculator::calculateRPNBitwiseNot(int usecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	if(rpn_stack.size() == 0) {
+		MathStructure *mstruct = new MathStructure();
+		mstruct->setBitwiseNot();
+		rpn_stack.push_back(mstruct);
+	} else {
+		rpn_stack.back()->setBitwiseNot();
+	}
+	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	return RPNStackTopEval(usecs, eo);
+}
+bool Calculator::calculateRPNLogicalNot(int usecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	if(rpn_stack.size() == 0) {
+		MathStructure *mstruct = new MathStructure();
+		mstruct->setLogicalNot();
+		rpn_stack.push_back(mstruct);
+	} else {
+		rpn_stack.back()->setLogicalNot();
+	}
+	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	return RPNStackTopEval(usecs, eo);
+}
+MathStructure *Calculator::calculateRPN(MathOperation op, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	if(rpn_stack.size() == 0) {
+		MathStructure *mstruct = new MathStructure();
+		mstruct->add(m_zero, op);
+		rpn_stack.push_back(mstruct);
+	} else if(rpn_stack.size() == 1) {
+		MathStructure *mstruct = new MathStructure();
+		mstruct->add_nocopy(rpn_stack.back(), op);
+		rpn_stack.back() = mstruct;
+	} else {
+		rpn_stack[rpn_stack.size() - 2]->add_nocopy(rpn_stack.back(), op);
+		rpn_stack.pop_back();
+	}
+	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	rpn_stack.back()->eval(eo);
+	return rpn_stack.back();
+}
+MathStructure *Calculator::calculateRPN(MathFunction *f, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	if(f->minargs() > 1 || rpn_stack.size() < 1) return NULL;
+	MathStructure *mstruct = new MathStructure(f, NULL);
+	if(f->args() != 0) {
+		mstruct->addChild_nocopy(rpn_stack.back());
+		if(f->getArgumentDefinition(1) && f->getArgumentDefinition(1)->type() == ARGUMENT_TYPE_ANGLE) {
+			switch(eo.parse_options.angle_unit) {
+				case ANGLE_UNIT_DEGREES: {
+					(*mstruct)[0].multiply(getDegUnit());
+					break;
+				}
+				case ANGLE_UNIT_GRADIANS: {
+					(*mstruct)[0].multiply(getGraUnit());
+					break;
+				}
+				case ANGLE_UNIT_RADIANS: {
+					(*mstruct)[0].multiply(getRadUnit());
+					break;
+				}
+				default: {}
+			}
+		}
+	}
+	rpn_stack.back() = mstruct;
+	rpn_stack.back() = mstruct;
+	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	mstruct->eval(eo);
+	return rpn_stack.back();
+}
+MathStructure *Calculator::calculateRPNBitwiseNot(const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	if(rpn_stack.size() == 0) {
+		MathStructure *mstruct = new MathStructure();
+		mstruct->setLogicalNot();
+		rpn_stack.push_back(mstruct);
+	} else {
+		rpn_stack.back()->setLogicalNot();
+	}
+	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	rpn_stack.back()->eval(eo);
+	return rpn_stack.back();
+}
+MathStructure *Calculator::calculateRPNLogicalNot(const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	if(rpn_stack.size() == 0) {
+		MathStructure *mstruct = new MathStructure();
+		mstruct->setLogicalNot();
+		rpn_stack.push_back(mstruct);
+	} else {
+		rpn_stack.back()->setLogicalNot();
+	}
+	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	rpn_stack.back()->eval(eo);
+	return rpn_stack.back();
+}
+bool Calculator::RPNStackEnter(string str, int usecs, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
+	MathStructure *mstruct = new MathStructure();
+	rpn_stack.push_back(mstruct);
+	return calculate(mstruct, str, usecs, eo, parsed_struct, to_struct, make_to_division);
+}
+
+void Calculator::RPNStackEnter(MathStructure *mstruct, bool eval) {
+	if(eval) mstruct->eval();
+	rpn_stack.push_back(mstruct);
+}
+void Calculator::RPNStackEnter(string str, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
+	rpn_stack.push_back(new MathStructure(calculate(str, eo, parsed_struct, to_struct, make_to_division)));
+}
+MathStructure *Calculator::getRPNStackTop() const {
+	return rpn_stack.back();
+}
+MathStructure *Calculator::getRPNStackIndex(size_t index) const {
+	return NULL;
+}
+size_t Calculator::RPNStackSize() const {
+	return rpn_stack.size();
+}
+void Calculator::clearRPNStack() {
+	for(size_t i = 0; i < rpn_stack.size(); i++) {
+		rpn_stack[i]->unref();
+	}
+	rpn_stack.clear();
+}
+
 bool Calculator::calculate(MathStructure *mstruct, string str, int usecs, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
 	mstruct->set(string(_("calculating...")));
 	saveState();
@@ -1597,6 +1815,8 @@ bool Calculator::calculate(MathStructure *mstruct, string str, int usecs, const 
 	tmp_parsedstruct = parsed_struct;
 	tmp_tostruct = to_struct;
 	tmp_maketodivision = make_to_division;
+	bool b_parse = true;
+	fwrite(&b_parse, sizeof(bool), 1, calculate_pipe_w);
 	void *x = (void*) mstruct;
 	fwrite(&x, sizeof(void*), 1, calculate_pipe_w);
 	fflush(calculate_pipe_w);
@@ -1761,7 +1981,7 @@ MathStructure Calculator::convert(const MathStructure &mstruct, Unit *to_unit, c
 					break;
 				} 
 				case STRUCT_MULTIPLICATION: {
-					for(size_t i = 1; i <= mstruct_new.countChilds(); i++) {
+					for(size_t i = 1; i <= mstruct_new.countChildren(); i++) {
 						if(mstruct_new.getChild(i)->isUnit() && cu->containsRelativeTo(mstruct_new.getChild(i)->unit())) {
 							b = true;
 							break;
@@ -1902,7 +2122,7 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 							cu_mstruct.raise(b_exp);
 							cu_mstruct = convertToBaseUnits(cu_mstruct);
 							if(cu_mstruct.isMultiplication()) {
-								for(size_t i2 = 1; i2 <= cu_mstruct.countChilds(); i2++) {
+								for(size_t i2 = 1; i2 <= cu_mstruct.countChildren(); i2++) {
 									bu = NULL;
 									if(cu_mstruct.getChild(i2)->isUnit()) {
 										bu = cu_mstruct.getChild(i2)->unit();
@@ -1984,7 +2204,7 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 				cu_mstruct = convertToBaseUnits(cu_mstruct);
 				CompositeUnit *cu2 = new CompositeUnit("", "temporary_composite_convert_to_best_unit");
 				bool b = false;
-				for(size_t i = 1; i <= cu_mstruct.countChilds(); i++) {
+				for(size_t i = 1; i <= cu_mstruct.countChildren(); i++) {
 					if(cu_mstruct.getChild(i)->isUnit()) {
 						b = true;
 						cu2->add(cu_mstruct.getChild(i)->unit());
@@ -2096,7 +2316,7 @@ MathStructure Calculator::convertToBestUnit(const MathStructure &mstruct, const 
 			MathStructure mstruct_new(convertToBaseUnits(mstruct, eo));
 			CompositeUnit *cu = new CompositeUnit("", "temporary_composite_convert_to_best_unit");
 			bool b = false;
-			for(size_t i = 1; i <= mstruct_new.countChilds(); i++) {
+			for(size_t i = 1; i <= mstruct_new.countChildren(); i++) {
 				if(mstruct_new.getChild(i)->isUnit()) {
 					b = true;
 					cu->add(mstruct_new.getChild(i)->unit());
@@ -2142,7 +2362,7 @@ MathStructure Calculator::convertToCompositeUnit(const MathStructure &mstruct, C
 					break;
 				} 
 				case STRUCT_MULTIPLICATION: {
-					for(size_t i = 1; i <= mstruct_new.countChilds(); i++) {
+					for(size_t i = 1; i <= mstruct_new.countChildren(); i++) {
 						if(mstruct_new.getChild(i)->isUnit() && cu->containsRelativeTo(mstruct_new.getChild(i)->unit())) {
 							b = true;
 						}
@@ -2364,6 +2584,14 @@ void Calculator::expressionItemDeleted(ExpressionItem *item) {
 					deleted_functions.push_back((MathFunction*) item);
 					break;
 				}
+			}
+			if(item->subtype() == SUBTYPE_DATA_SET) {
+				for(vector<DataSet*>::iterator it = data_sets.begin(); it != data_sets.end(); ++it) {
+					if(*it == item) {
+						data_sets.erase(it);
+						break;
+					}
+				}	
 			}
 			break;
 		}		
@@ -2814,24 +3042,7 @@ bool compare_name_no_case(const string &name, const string &str, const size_t &n
 	return true;
 }
 
-MathStructure Calculator::parse(string str, const ParseOptions &po) {
-	
-	MathStructure mstruct;
-	parse(&mstruct, str, po);	
-	return mstruct;
-	
-}
-
-void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &parseoptions) {
-
-	ParseOptions po = parseoptions;
-	MathStructure *unended_function = po.unended_function;
-	po.unended_function = NULL;
-
-	mstruct->clear();
-
-	const string *name = NULL;
-	string stmp, stmp2;
+void Calculator::parseSigns(string &str) const {
 	vector<size_t> q_begin;
 	vector<size_t> q_end;
 	size_t quote_index = 0;
@@ -2868,6 +3079,29 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 			}
 		}
 	}
+}
+
+MathStructure Calculator::parse(string str, const ParseOptions &po) {
+	
+	MathStructure mstruct;
+	parse(&mstruct, str, po);	
+	return mstruct;
+	
+}
+
+void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &parseoptions) {
+
+	ParseOptions po = parseoptions;
+	MathStructure *unended_function = po.unended_function;
+	po.unended_function = NULL;
+
+	mstruct->clear();
+
+	const string *name = NULL;
+	string stmp, stmp2;
+
+	parseSigns(str);
+
 	for(size_t str_index = 0; str_index < str.length(); str_index++) {		
 		if(str[str_index] == LEFT_VECTOR_WRAP_CH) {
 			int i4 = 1;
@@ -3009,7 +3243,65 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 				}
 			}
 		} else if(str_index > 0 && po.base >= 2 && po.base <= 10 && is_in(EXPS, str[str_index]) && str_index + 1 < str.length() && (is_in(NUMBERS, str[str_index + 1]) || (is_in(PLUS MINUS, str[str_index + 1]) && str_index + 2 < str.length() && is_in(NUMBERS, str[str_index + 2]))) && is_in(NUMBER_ELEMENTS, str[str_index - 1])) {
-			//don't do anything when e is used instead of E for EXP			
+			//don't do anything when e is used instead of E for EXP
+		} else if(po.base == BASE_DECIMAL && str[str_index] == '0' && (str_index == 0 || is_in(OPERATORS SPACE, str[str_index - 1]))) {
+			if(str_index + 2 < str.length() && (str[str_index + 1] == 'x' || str[str_index + 1] == 'X') && is_in(NUMBERS, str[str_index + 2])) {
+				//hexadecimal number 0x...
+				size_t i = str.find_first_not_of(SPACE NUMBER_ELEMENTS "abcdefABCDEF", str_index + 2);
+				size_t name_length;
+				if(i == string::npos) i = str.length();
+				name_length = i - str_index;
+				ParseOptions po_hex = po;
+				po_hex.base = BASE_HEXADECIMAL;
+				stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
+				MathStructure *mstruct = new MathStructure(Number(str.substr(str_index, i - str_index), po_hex));
+				stmp += i2s(addId(mstruct));
+				stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
+				str.replace(str_index, name_length, stmp);
+				str_index += stmp.length() - 1;
+			} else if(str_index + 2 < str.length() && (str[str_index + 1] == 'b' || str[str_index + 1] == 'B') && is_in("01", str[str_index + 2])) {
+				//binary number 0b...
+				size_t i = str.find_first_not_of(SPACE NUMBER_ELEMENTS, str_index + 2);
+				size_t name_length;
+				if(i == string::npos) i = str.length();
+				name_length = i - str_index;
+				ParseOptions po_bin = po;
+				po_bin.base = BASE_BINARY;
+				stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
+				MathStructure *mstruct = new MathStructure(Number(str.substr(str_index, i - str_index), po_bin));
+				stmp += i2s(addId(mstruct));
+				stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
+				str.replace(str_index, name_length, stmp);
+				str_index += stmp.length() - 1;
+			} else if(str_index + 2 < str.length() && (str[str_index + 1] == 'o' || str[str_index + 1] == 'O') && is_in(NUMBERS, str[str_index + 2])) {
+				//octal number 0o...
+				size_t i = str.find_first_not_of(SPACE NUMBER_ELEMENTS, str_index + 2);
+				size_t name_length;
+				if(i == string::npos) i = str.length();
+				name_length = i - str_index;
+				ParseOptions po_oct = po;
+				po_oct.base = BASE_OCTAL;
+				stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
+				MathStructure *mstruct = new MathStructure(Number(str.substr(str_index, i - str_index), po_oct));
+				stmp += i2s(addId(mstruct));
+				stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
+				str.replace(str_index, name_length, stmp);
+				str_index += stmp.length() - 1;
+			/*} else if(str_index + 1 < str.length() && is_in("123456789", str[str_index + 1])) {
+				//octal number 0...
+				size_t i = str.find_first_not_of(SPACE NUMBER_ELEMENTS, str_index + 1);
+				size_t name_length;
+				if(i == string::npos) i = str.length();
+				name_length = i - str_index;
+				ParseOptions po_oct = po;
+				po_oct.base = BASE_OCTAL;
+				stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
+				MathStructure *mstruct = new MathStructure(Number(str.substr(str_index, i - str_index), po_oct));
+				stmp += i2s(addId(mstruct));
+				stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
+				str.replace(str_index, name_length, stmp);
+				str_index += stmp.length() - 1;*/
+			}
 		} else if(po.base >= 2 && po.base <= 10 && is_not_in(NUMBERS NOT_IN_NAMES, str[str_index])) {
 			bool p_mode = false;
 			void *best_p_object = NULL;
@@ -6786,7 +7078,7 @@ bool Calculator::importCSV(const char *file_name, int first_row, bool headers, s
 					if(to_matrix) {
 						CALCULATOR->parse(&mstruct[rows - 1][column - 1], str1);
 					} else {
-						vectors[column - 1].addItem(CALCULATOR->parse(str1));
+						vectors[column - 1].addChild(CALCULATOR->parse(str1));
 					}
 					column++;
 					if(is_n == string::npos) {
@@ -6795,7 +7087,7 @@ bool Calculator::importCSV(const char *file_name, int first_row, bool headers, s
 				}
 				for(; column <= columns; column++) {
 					if(!to_matrix) {
-						vectors[column - 1].addItem(m_undefined);
+						vectors[column - 1].addChild(m_undefined);
 					}				
 				}
 				v_added = true;
@@ -7111,7 +7403,7 @@ MathStructure Calculator::expressionToPlotVector(string expression, const MathSt
 	return parse(expression, po2).generateVector(x_mstruct, x_vector, eo).eval(eo);
 }
 
-bool Calculator::plotVectors(plot_parameters *param, const vector<MathStructure> &y_vectors, const vector<MathStructure> &x_vectors, vector<plot_data_parameters*> &pdps, bool persistent) {
+bool Calculator::plotVectors(PlotParameters *param, const vector<MathStructure> &y_vectors, const vector<MathStructure> &x_vectors, vector<PlotDataParameters*> &pdps, bool persistent) {
 
 	string filename;
 	string homedir = getLocalDir();
@@ -7123,7 +7415,7 @@ bool Calculator::plotVectors(plot_parameters *param, const vector<MathStructure>
 	string title;
 
 	if(!param) {
-		plot_parameters pp;
+		PlotParameters pp;
 		param = &pp;
 	}
 	
@@ -7358,26 +7650,26 @@ bool Calculator::plotVectors(plot_parameters *param, const vector<MathStructure>
 			plot_data = "";
 			int non_numerical = 0, non_real = 0;
 			string str = "";
-			for(size_t i = 1; i <= y_vectors[serie].components(); i++) {
-				if(serie < x_vectors.size() && !x_vectors[serie].isUndefined() && x_vectors[serie].components() == y_vectors[serie].components()) {
-					if(!x_vectors[serie].getComponent(i)->isNumber()) {
+			for(size_t i = 1; i <= y_vectors[serie].countChildren(); i++) {
+				if(serie < x_vectors.size() && !x_vectors[serie].isUndefined() && x_vectors[serie].countChildren() == y_vectors[serie].countChildren()) {
+					if(!x_vectors[serie].getChild(i)->isNumber()) {
 						non_numerical++;
-						if(non_numerical == 1) str = x_vectors[serie].getComponent(i)->print(po);
-					} else if(!x_vectors[serie].getComponent(i)->number().isReal()) {
+						if(non_numerical == 1) str = x_vectors[serie].getChild(i)->print(po);
+					} else if(!x_vectors[serie].getChild(i)->number().isReal()) {
 						non_real++;
-						if(non_numerical + non_real == 1) str = x_vectors[serie].getComponent(i)->print(po);
+						if(non_numerical + non_real == 1) str = x_vectors[serie].getChild(i)->print(po);
 					}
-					plot_data += x_vectors[serie].getComponent(i)->print(po);
+					plot_data += x_vectors[serie].getChild(i)->print(po);
 					plot_data += " ";
 				}
-				if(!y_vectors[serie].getComponent(i)->isNumber()) {
+				if(!y_vectors[serie].getChild(i)->isNumber()) {
 					non_numerical++;
-					if(non_numerical == 1) str = y_vectors[serie].getComponent(i)->print(po);
-				} else if(!y_vectors[serie].getComponent(i)->number().isReal()) {
+					if(non_numerical == 1) str = y_vectors[serie].getChild(i)->print(po);
+				} else if(!y_vectors[serie].getChild(i)->number().isReal()) {
 					non_real++;
-					if(non_numerical + non_real == 1) str = y_vectors[serie].getComponent(i)->print(po);
+					if(non_numerical + non_real == 1) str = y_vectors[serie].getChild(i)->print(po);
 				}
-				plot_data += y_vectors[serie].getComponent(i)->print(po);
+				plot_data += y_vectors[serie].getChild(i)->print(po);
 				plot_data += "\n";	
 			}
 			if(non_numerical > 0 || non_real > 0) {

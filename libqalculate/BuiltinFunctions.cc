@@ -51,7 +51,7 @@ int MatrixFunction::calculate(MathStructure &mstruct, const MathStructure &vargs
 	size_t r = 1, c = 1;
 	for(size_t i = 0; i < vargs[2].size(); i++) {
 		if(r > rows || c > columns) {
-			CALCULATOR->error(false, _("Too many elements (%s) for the order (%sx%s) of the matrix."), i2s(vargs[2].size()).c_str(), i2s(rows).c_str(), i2s(columns).c_str(), NULL);
+			CALCULATOR->error(false, _("Too many elements (%s) for the dimensions (%sx%s) of the matrix."), i2s(vargs[2].size()).c_str(), i2s(rows).c_str(), i2s(columns).c_str(), NULL);
 			break;
 		}
 		mstruct[r - 1][c - 1] = vargs[i];	
@@ -91,10 +91,10 @@ int MergeVectorsFunction::calculate(MathStructure &mstruct, const MathStructure 
 	for(size_t i = 0; i < vargs.size(); i++) {
 		if(vargs[i].isVector()) {
 			for(size_t i2 = 0; i2 < vargs[i].size(); i2++) {
-				mstruct.addItem(vargs[i][i2]);
+				mstruct.addChild(vargs[i][i2]);
 			}
 		} else {
-			mstruct.addItem(vargs[i]);
+			mstruct.addChild(vargs[i]);
 		}
 	}
 	return 1;
@@ -147,41 +147,60 @@ int ColumnsFunction::calculate(MathStructure &mstruct, const MathStructure &varg
 	return 1;
 }
 ElementsFunction::ElementsFunction() : MathFunction("elements", 1) {
-	setArgumentDefinition(1, new MatrixArgument(""));
-}
-int ElementsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	mstruct = (int) (vargs[0].rows() * vargs[0].columns());
-	return 1;
-}
-ElementFunction::ElementFunction() : MathFunction("element", 3) {
-	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
-	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
-	setArgumentDefinition(3, new MatrixArgument(""));
-}
-int ElementFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	size_t row = (size_t) vargs[0].number().intValue();
-	size_t col = (size_t) vargs[1].number().intValue();
-	bool b = true;
-	if(col > vargs[2].columns()) {
-		CALCULATOR->error(true, _("Column %s does not exist in matrix."), vargs[1].print().c_str(), NULL);
-		b = false;
-	}
-	if(row > vargs[2].rows()) {
-		CALCULATOR->error(true, _("Row %s does not exist in matrix."), vargs[0].print().c_str(), NULL);
-		b = false;
-	}
-	if(b) {
-		const MathStructure *em = vargs[2].getElement(row, col);
-		if(em) mstruct = *em;
-		else b = false;
-	}
-	return b;
-}
-ComponentsFunction::ComponentsFunction() : MathFunction("dimension", 1) {
 	setArgumentDefinition(1, new VectorArgument(""));
 }
-int ComponentsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	mstruct = (int) vargs[0].components();
+int ElementsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	if(vargs[0].isMatrix()) {
+		mstruct = (int) (vargs[0].rows() * vargs[0].columns());
+	} else {
+		mstruct = (int) vargs[0].countChildren();
+	}
+	return 1;
+}
+ElementFunction::ElementFunction() : MathFunction("element", 2, 3) {
+	setArgumentDefinition(1, new VectorArgument(""));
+	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
+	setArgumentDefinition(3, new IntegerArgument(""));
+	setDefaultValue(3, "0");
+}
+int ElementFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	if(vargs[0].isMatrix() && vargs[2].number().isPositive()) {
+		size_t row = (size_t) vargs[1].number().intValue();
+		size_t col = (size_t) vargs[2].number().intValue();
+		bool b = true;
+		if(col > vargs[0].columns()) {
+			CALCULATOR->error(true, _("Column %s does not exist in matrix."), vargs[2].print().c_str(), NULL);
+			b = false;
+		}
+		if(row > vargs[0].rows()) {
+			CALCULATOR->error(true, _("Row %s does not exist in matrix."), vargs[1].print().c_str(), NULL);
+			b = false;
+		}
+		if(b) {
+			const MathStructure *em = vargs[0].getElement(row, col);
+			if(em) mstruct = *em;
+			else b = false;
+		}
+		return b;
+	} else {
+		if(vargs[2].number().isGreaterThan(1)) {
+			CALCULATOR->error(false, _("Argument 3, %s, is ignored for vectors."), getArgumentDefinition(3)->name().c_str(), NULL);
+			return 0;
+		}
+		size_t row = (size_t) vargs[1].number().intValue();
+		if(row > vargs[0].countChildren()) {
+			CALCULATOR->error(true, _("Element %s does not exist in matrix."), vargs[1].print().c_str(), NULL);
+			return 0;
+		}
+		mstruct = *vargs[0].getChild(row);
+		return 1;
+	}
+}
+DimensionFunction::DimensionFunction() : MathFunction("dimension", 1) {
+	setArgumentDefinition(1, new VectorArgument(""));
+}
+int DimensionFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	mstruct = (int) vargs[0].countChildren();
 	return 1;
 }
 ComponentFunction::ComponentFunction() : MathFunction("component", 2) {
@@ -190,11 +209,11 @@ ComponentFunction::ComponentFunction() : MathFunction("component", 2) {
 }
 int ComponentFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	size_t i = (size_t) vargs[0].number().intValue();
-	if(i > vargs[1].components()) {
-		CALCULATOR->error(true, _("Component %s does not exist in vector."), vargs[0].print().c_str(), NULL);
+	if(i > vargs[1].countChildren()) {
+		CALCULATOR->error(true, _("Element %s does not exist in vector."), vargs[0].print().c_str(), NULL);
 		return 0;
 	}
-	mstruct = *vargs[1].getComponent(i);
+	mstruct = *vargs[1].getChild(i);
 	return 1;
 }
 LimitsFunction::LimitsFunction() : MathFunction("limits", 3) {
@@ -228,7 +247,7 @@ IdentityFunction::IdentityFunction() : MathFunction("identity", 1) {
 	ArgumentSet *arg = new ArgumentSet();
 	arg->addArgument(new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 	MatrixArgument *marg = new MatrixArgument();
-	marg->setSymmetricDemanded(true);
+	marg->setSquareDemanded(true);
 	arg->addArgument(marg);
 	setArgumentDefinition(1, arg);
 }
@@ -245,7 +264,7 @@ int IdentityFunction::calculate(MathStructure &mstruct, const MathStructure &var
 }
 DeterminantFunction::DeterminantFunction() : MathFunction("det", 1) {
 	MatrixArgument *marg = new MatrixArgument();
-	marg->setSymmetricDemanded(true);
+	marg->setSquareDemanded(true);
 	setArgumentDefinition(1, marg);
 }
 int DeterminantFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
@@ -254,7 +273,7 @@ int DeterminantFunction::calculate(MathStructure &mstruct, const MathStructure &
 }
 PermanentFunction::PermanentFunction() : MathFunction("permanent", 1) {
 	MatrixArgument *marg = new MatrixArgument();
-	marg->setSymmetricDemanded(true);
+	marg->setSquareDemanded(true);
 	setArgumentDefinition(1, marg);
 }
 int PermanentFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
@@ -272,7 +291,7 @@ int CofactorFunction::calculate(MathStructure &mstruct, const MathStructure &var
 }
 AdjointFunction::AdjointFunction() : MathFunction("adj", 1) {
 	MatrixArgument *marg = new MatrixArgument();
-	marg->setSymmetricDemanded(true);
+	marg->setSquareDemanded(true);
 	setArgumentDefinition(1, marg);
 }
 int AdjointFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
@@ -282,7 +301,7 @@ int AdjointFunction::calculate(MathStructure &mstruct, const MathStructure &varg
 }
 InverseFunction::InverseFunction() : MathFunction("inverse", 1) {
 	MatrixArgument *marg = new MatrixArgument();
-	marg->setSymmetricDemanded(true);
+	marg->setSquareDemanded(true);
 	setArgumentDefinition(1, marg);
 }
 int InverseFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
@@ -291,9 +310,45 @@ int InverseFunction::calculate(MathStructure &mstruct, const MathStructure &varg
 }
 
 ZetaFunction::ZetaFunction() : MathFunction("zeta", 1, 1, SIGN_ZETA) {
-	setArgumentDefinition(1, new IntegerArgument());
+	IntegerArgument *arg = new IntegerArgument();
+	arg->setMin(new Number(1 ,1));
+	Number *nr = new Number();
+	nr->setInternal(long(INT_MAX));
+	arg->setMax(nr);
+	setArgumentDefinition(1, arg);
 }
 int ZetaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	if(vargs[0].number() == 2) {
+		mstruct.set(CALCULATOR->v_pi);
+		mstruct.raise(2);
+		mstruct.divide(6);
+		mstruct.mergePrecision(vargs[0]);
+		return 1;
+	} else if(vargs[0].number() == 4) {
+		mstruct.set(CALCULATOR->v_pi);
+		mstruct.raise(4);
+		mstruct.divide(90);
+		mstruct.mergePrecision(vargs[0]);
+		return 1;
+	} else if(vargs[0].number() == 6) {
+		mstruct.set(CALCULATOR->v_pi);
+		mstruct.raise(6);
+		mstruct.divide(945);
+		mstruct.mergePrecision(vargs[0]);
+		return 1;
+	} else if(vargs[0].number() == 8) {
+		mstruct.set(CALCULATOR->v_pi);
+		mstruct.raise(8);
+		mstruct.divide(9450);
+		mstruct.mergePrecision(vargs[0]);
+		return 1;
+	} else if(vargs[0].number() == 10) {
+		mstruct.set(CALCULATOR->v_pi);
+		mstruct.raise(10);
+		mstruct.divide(9355);
+		mstruct.mergePrecision(vargs[0]);
+		return 1;
+	}
 	FR_FUNCTION(zeta)
 }
 GammaFunction::GammaFunction() : MathFunction("gamma", 1, 1, SIGN_CAPITAL_GAMMA) {
@@ -1913,13 +1968,13 @@ int PercentileFunction::calculate(MathStructure &mstruct, const MathStructure &v
 	} else {
 		Number pfr(vargs[0].number());		
 		pfr /= 100;
-		pfr *= (int) v.components() + 1;
-/*		Number cfr(v->components());		
+		pfr *= (int) v.countChildren() + 1;
+/*		Number cfr(v->countChildren());
 		if(pfr.isZero() || pfr.numerator()->isLessThan(pfr.denominator()) || pfr.isGreaterThan(&cfr)) {
 			CALCULATOR->error(true, _("Not enough samples."), NULL);
 		}*/
 		if(pfr.isInteger()) {
-			mp = v.getComponent((size_t) pfr.intValue());
+			mp = v.getChild((size_t) pfr.intValue());
 			if(!mp) return 0;
 			mstruct = *mp;
 		} else {
@@ -1928,14 +1983,14 @@ int PercentileFunction::calculate(MathStructure &mstruct, const MathStructure &v
 			Number lfr(pfr);
 			lfr.floor();
 			pfr -= lfr;
-			mp = v.getComponent((size_t) ufr.intValue());
+			mp = v.getChild((size_t) ufr.intValue());
 			if(!mp) return 0;
 			MathStructure gap(*mp);
-			mp = v.getComponent((size_t) lfr.intValue());
+			mp = v.getChild((size_t) lfr.intValue());
 			if(!mp) return 0;
 			gap -= *mp;
 			gap *= pfr;
-			mp = v.getComponent((size_t) lfr.intValue());
+			mp = v.getChild((size_t) lfr.intValue());
 			if(!mp) return 0;
 			mstruct = *mp;
 			mstruct += gap;
@@ -1973,9 +2028,9 @@ int MinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 		if(unsolveds.size() > 0) {
 			if(!b) return 0;
 			MathStructure margs; margs.clearVector();
-			margs.addItem(*min);
+			margs.addChild(*min);
 			for(size_t i = 0; i < unsolveds.size(); i++) {
-				margs.addItem(*unsolveds[i]);
+				margs.addChild(*unsolveds[i]);
 			}
 			mstruct.set(this, &margs, NULL);
 			return 1;
@@ -2016,9 +2071,9 @@ int MaxFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 		if(unsolveds.size() > 0) {
 			if(!b) return 0;
 			MathStructure margs; margs.clearVector();
-			margs.addItem(*max);
+			margs.addChild(*max);
 			for(size_t i = 0; i < unsolveds.size(); i++) {
-				margs.addItem(*unsolveds[i]);
+				margs.addChild(*unsolveds[i]);
 			}
 			mstruct.set(this, &margs, NULL);
 			return 1;
@@ -2468,7 +2523,7 @@ int GenerateVectorFunction::calculate(MathStructure &mstruct, const MathStructur
 		bool overflow = false;
 		int steps = vargs[3].number().intValue(&overflow);
 		if(!vargs[3].isNumber() || overflow || steps < 1) {
-			CALCULATOR->error(true, _("The number of requested components in generate vector function must be a positive integer."), NULL);
+			CALCULATOR->error(true, _("The number of requested elements in generate vector function must be a positive integer."), NULL);
 			return 0;
 		}
 		mstruct = vargs[0].generateVector(vargs[4], vargs[1], vargs[2], steps, NULL, eo);
@@ -2717,7 +2772,7 @@ int CustomSumFunction::calculate(MathStructure &mstruct, const MathStructure &va
 	int start = vargs[0].number().intValue();
 	if(start < 1) start = 1;
 	int end = vargs[1].number().intValue();
-	int n = vargs[6].components();
+	int n = vargs[6].countChildren();
 	if(start > n) start = n;
 	if(end < 1 || end > n) end = n;
 	else if(end < start) end = start;	
@@ -3041,7 +3096,7 @@ int SolveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 	
 		if(itry == 1) {
 			if(ierror == 1) {
-				CALCULATOR->error(true, _("No comparison (equality or inequality) to solve. The entered expression to solve is not correct (ex. \"x + 5 = 3\" is correct)"), NULL);
+				CALCULATOR->error(true, _("No equality or inequality to solve. The entered expression to solve is not correct (ex. \"x + 5 = 3\" is correct)"), NULL);
 				return -1;
 			} else {
 				first_error = ierror;
@@ -3391,9 +3446,9 @@ int SolveMultipleFunction::calculate(MathStructure &mstruct, const MathStructure
 				return 0;
 			} else {
 				if(msolve.comparisonType() == COMPARISON_EQUALS) {
-					mstruct.addItem(msolve[1]);
+					mstruct.addChild(msolve[1]);
 				} else {
-					CALCULATOR->error(true, _("Only equals comparison is allowed in the equations in %s()."), preferredName().name.c_str(), NULL);
+					CALCULATOR->error(true, _("Inequalities is not allowed in %s()."), preferredName().name.c_str(), NULL);
 					return 0;
 				}
 			}
@@ -3407,7 +3462,7 @@ int SolveMultipleFunction::calculate(MathStructure &mstruct, const MathStructure
 				}
 			}
 			msolve.setType(STRUCT_VECTOR);
-			mstruct.addItem(msolve);
+			mstruct.addChild(msolve);
 		} else {
 			CALCULATOR->error(true, _("Unable to isolate %s."), vargs[1][i].print().c_str(), NULL);
 			return 0;

@@ -91,39 +91,150 @@ class MathStructure {
 
 		/** @name Constructors */
 		//@{
+		/** Create a new structure, initialized to zero. */
 		MathStructure();
+		/** Create a copy of a structure. Child structures are copied.
+		*
+		* @param o The structure to copy.
+		*/
 		MathStructure(const MathStructure &o);
+		/** Create a new numeric structure (value=num/den*10^exp10). Equivalent to MathStructure(Number(num, den, exp10)). 
+		*
+		* @param num The numerator of the numeric value.
+		* @param den The denominator of the numeric value.
+		* @param exp10 The base 10 exponent of the numeric value.
+		*/
 		MathStructure(int num, int den = 1, int exp10 = 0);
+		/** Create a new symbolic/text structure.
+		*
+		* @param sym Symbolic/text value.
+		*/
 		MathStructure(string sym);
+		/** Create a new numeric structure with floating point value. Uses Number::setFloat().
+		*
+		* @param o Numeric value.
+		*/
 		MathStructure(double float_value);
+		/** Create a new vector.
+		*
+		* @param o The first element (copied) in the vector.
+		* @param ... Elements (copied) in the vector. End with NULL.
+		*/
 		MathStructure(const MathStructure *o, ...);
+		/** Create a new function structure.
+		*
+		* @param o Function value.
+		* @param ... Arguments (copied) to the function. End with NULL.
+		*/
 		MathStructure(MathFunction *o, ...);
+		/** Create a new unit structure.
+		*
+		* @param u The unit value.
+		* @param p Prefix of the unit.
+		*/
 		MathStructure(Unit *u, Prefix *p = NULL);
+		/** Create a new variable structure.
+		*
+		* @param o Variable value.
+		*/
 		MathStructure(Variable *o);
+		/** Create a new numeric structure.
+		*
+		* @param o Numeric value.
+		*/
 		MathStructure(const Number &o);
 		~MathStructure();
 		//@}
 		
 		/** @name Functions/operators for setting type and content */
 		//@{
+		/** Set the structure to a copy of another structure. Child structures are copied.
+		*
+		* @param o The structure to copy.
+		* @param merge_precision Preserve the current precision (unless the new value has a lower precision).
+		*/
 		void set(const MathStructure &o, bool merge_precision = false);
-		void set_nocopy(MathStructure &o, bool merge_precision = false);		
+		/** Set the structure to a copy of another structure. Pointers to child structures are copied.
+		*
+		* @param o The structure to copy.
+		* @param merge_precision Preserve the current precision (unless the new value has a lower precision).
+		*/
+		void set_nocopy(MathStructure &o, bool merge_precision = false);
+		/** Set the structure to a number (num/den*10^exp10). Equivalent to set(Number(num, den, exp10), precerve_precision). 
+		*
+		* @param num The numerator of the new numeric value.
+		* @param den The denominator of the new numeric value.
+		* @param exp10 The base 10 exponent of the new numeric value.
+		* @param preserve_precision Preserve the current precision (unless the new value has a lower precision).
+		*/
 		void set(int num, int den = 1, int exp10 = 0, bool preserve_precision = false);
+		/** Set the structure to a symbolic/text value.
+		*
+		* @param o The new symolic/text value.
+		* @param preserve_precision Preserve the current precision.
+		*/
 		void set(string sym, bool preserve_precision = false);
+		/** Set the structure to a number with a floating point value. Uses Number::setFloat().
+		*
+		* @param o The new numeric value.
+		* @param preserve_precision Preserve the current precision (unless the new value has a lower precision).
+		*/
 		void set(double float_value, bool preserve_precision = false);
+		/** Set the structure to a vector.
+		*
+		* @param o The first element (copied) in the new vector.
+		* @param ... Elements (copied) in the new vector. End with NULL.
+		*/
 		void setVector(const MathStructure *o, ...);
+		/** Set the structure to a mathematical function.
+		*
+		* @param o The new function value.
+		* @param ... Arguments (copied) to the function. End with NULL.
+		*/
 		void set(MathFunction *o, ...);
+		/** Set the structure to a unit.
+		*
+		* @param u The new unit value.
+		* @param p Prefix of the unit.
+		* @param preserve_precision Preserve the current precision (unless the new value has a lower precision).
+		*/
 		void set(Unit *u, Prefix *p = NULL, bool preserve_precision = false);
+		/** Set the structure to a variable.
+		*
+		* @param o The new variable value.
+		* @param preserve_precision Preserve the current precision.
+		*/
 		void set(Variable *o, bool preserve_precision = false);
+		/** Set the structure to a number.
+		*
+		* @param o The new numeric value.
+		* @param preserve_precision Preserve the current precision (unless the new value has a lower precision).
+		*/
 		void set(const Number &o, bool preserve_precision = false);
 		void setInfinity(bool preserve_precision = false);
+		/** Set the value of the structure to undefined.
+		*
+		* @param preserve_precision Preserve the current precision.
+		*/
 		void setUndefined(bool preserve_precision = false);
+		/** Reset the value (to zero) and parameters of the structure.
+		*
+		* @param preserve_precision Preserve the current precision.
+		*/
 		void clear(bool preserve_precision = false);
+		/** Set the structure to an empty vector.
+		*
+		* @param preserve_precision Preserve the current precision.
+		*/
 		void clearVector(bool preserve_precision = false);
+		/** Set the structure to an empty matrix.
+		*
+		* @param preserve_precision Preserve the current precision.
+		*/
 		void clearMatrix(bool preserve_precision = false);
 
 		/** Explicitely sets the type of the structure.
-		* setType() is dangerous and might crash the program if used unwisely
+		* setType() is dangerous and might crash the program if used unwisely.
 		*
 		* @param mtype The new structure type
 		*/
@@ -152,12 +263,29 @@ class MathStructure {
 
 		/** @name Functions for nested structures (power, muliplication, addition, vector, etc) */
 		//@{
+		/** Call this function when you have updated a child. Updates the precision.
+		*
+		* @param index Index (starting at 1) of the updated child.
+		* @recursive If true, do the same for each child of the child.
+		*/
 		void childUpdated(size_t index, bool recursive = false);
+		/** Call this function when you have updated children. Updates the precision.
+		*
+		* @recursive If true, do the same for each child of the children.
+		*/
 		void childrenUpdated(bool recursive = false);
-		const MathStructure &operator [] (size_t index) const;
+		/** Returns a child. Does not check if a child exists at the index.
+		*
+		* @param index Index (starting at zero).
+		*/
 		MathStructure &operator [] (size_t index);
+		/** Returns a child. Does not check if a child exists at the index.
+		*
+		* @param index Index (starting at zero).
+		*/
+		const MathStructure &operator [] (size_t index) const;
 		void setToChild(size_t index, bool merge_precision = false, MathStructure *mparent = NULL, size_t index_this = 1);
-		void swapChilds(size_t index1, size_t index2);
+		void swapChildren(size_t index1, size_t index2);
 		void childToFront(size_t index);
 		void addChild(const MathStructure &o);
 		void addChild_nocopy(MathStructure *o);
@@ -168,8 +296,8 @@ class MathStructure {
 		void setChild_nocopy(MathStructure *o, size_t index = 1);
 		const MathStructure *getChild(size_t index) const;
 		MathStructure *getChild(size_t index);
-		size_t countChilds() const;
-		size_t countTotalChilds(bool count_function_as_one = true) const;
+		size_t countChildren() const;
+		size_t countTotalChildren(bool count_function_as_one = true) const;
 		size_t size() const;
 		//@}
 
@@ -492,12 +620,6 @@ class MathStructure {
 		
 		void resizeVector(size_t i, const MathStructure &mfill);
 
-#define		addItem(o)		addChild(o)
-#define		insertItem(o, i)	insertChild(o, i)
-#define		setItem(o, i)		setChild(o, i)
-#define		items()			countChilds()
-#define		getItem(i)		getChild(i)
-
 		//@}
 		
 
@@ -518,7 +640,7 @@ class MathStructure {
 		void addRow(const MathStructure &mfill);
 		void addColumn(const MathStructure &mfill);
 		void resizeMatrix(size_t r, size_t c, const MathStructure &mfill);
-		bool matrixIsSymmetric() const;
+		bool matrixIsSquare() const;
 		bool isNumericMatrix() const;
 		int pivot(size_t ro, size_t co, bool symbolic = true);
 		int gaussianElimination(const EvaluationOptions &eo = default_evaluation_options, bool det = false);
@@ -530,13 +652,7 @@ class MathStructure {
 		bool adjointMatrix(const EvaluationOptions &eo);
 		bool transposeMatrix();
 		MathStructure &cofactor(size_t r, size_t c, MathStructure &mstruct, const EvaluationOptions &eo) const;
-
-#define		addComponent(o)		addChild(o)
-#define		insertComponent(o, i)	insertChild(o, i)
-#define		setComponent(o, i)	setChild(o, i)
-#define		components()		countChilds()
-#define		getComponent(i)		getChild(i)				
-		
+	
 		//@}
 
 		/** @name Functions for unit conversion */
@@ -580,18 +696,21 @@ class MathStructure {
 		bool differentiate(const MathStructure &x_var, const EvaluationOptions &eo);
 		bool integrate(const MathStructure &x_var, const EvaluationOptions &eo);
 		//@}
-		
-		/** @name Functions for equations */
-		//@{
-		const MathStructure &find_x_var() const;
-		bool isolate_x(const EvaluationOptions &eo, const MathStructure &x_var = m_undefined, bool check_result = false);
-		bool isolate_x(const EvaluationOptions &eo, const EvaluationOptions &feo, const MathStructure &x_var = m_undefined, bool check_result = false);
-		//@}
 
 		/** @name Functions for polynomials */
 		//@{
 		bool simplify(const EvaluationOptions &eo = default_evaluation_options, bool unfactorize = true);
 		bool factorize(const EvaluationOptions &eo = default_evaluation_options);
+		/** If the structure represents a rational polynomial.
+		* This is true for
+		*	- rational numbers;
+		*	- functions, units, variables and symbols that do not represent a matrix or undefined;
+		*	- a power with a positive integer exponent and any of the previous as base;
+		*	- a multiplication with the previous as factors; or
+		*	- an addition with the previous as terms.
+		*
+		* @returns true if structure represents a rational polynomial.
+		*/
 		bool isRationalPolynomial() const;
 		const Number &overallCoefficient() const;
 		const Number &degree(const MathStructure &xvar) const;
@@ -600,15 +719,23 @@ class MathStructure {
 		void tcoefficient(const MathStructure &xvar, MathStructure &mcoeff) const;
 		void coefficient(const MathStructure &xvar, const Number &pownr, MathStructure &mcoeff) const;
 		Number maxCoefficient();
-		static bool polynomialDivide(const MathStructure &mnum, const MathStructure &mden, MathStructure &mquotient, const EvaluationOptions &eo, bool check_args = true);
-		static bool polynomialQuotient(const MathStructure &mnum, const MathStructure &mden, const MathStructure &xvar, MathStructure &mquotient, const EvaluationOptions &eo, bool check_args = true);
 		int polynomialUnit(const MathStructure &xvar) const;
 		void polynomialContent(const MathStructure &xvar, MathStructure &mcontent, const EvaluationOptions &eo) const;
 		void polynomialPrimpart(const MathStructure &xvar, MathStructure &mprim, const EvaluationOptions &eo) const;
 		void polynomialPrimpart(const MathStructure &xvar, const MathStructure &c, MathStructure &mprim, const EvaluationOptions &eo) const;
 		void polynomialUnitContentPrimpart(const MathStructure &xvar, int &munit, MathStructure &mcontent, MathStructure &mprim, const EvaluationOptions &eo) const;
+		//@}
+
+		static bool polynomialDivide(const MathStructure &mnum, const MathStructure &mden, MathStructure &mquotient, const EvaluationOptions &eo, bool check_args = true);
+		static bool polynomialQuotient(const MathStructure &mnum, const MathStructure &mden, const MathStructure &xvar, MathStructure &mquotient, const EvaluationOptions &eo, bool check_args = true);
 		static bool lcm(const MathStructure &m1, const MathStructure &m2, MathStructure &mlcm, const EvaluationOptions &eo, bool check_args = true);
 		static bool gcd(const MathStructure &m1, const MathStructure &m2, MathStructure &mresult, const EvaluationOptions &eo, MathStructure *ca = NULL, MathStructure *cb = NULL, bool check_args = true);
+
+		/** @name Functions for equations */
+		//@{
+		const MathStructure &find_x_var() const;
+		bool isolate_x(const EvaluationOptions &eo, const MathStructure &x_var = m_undefined, bool check_result = false);
+		bool isolate_x(const EvaluationOptions &eo, const EvaluationOptions &feo, const MathStructure &x_var = m_undefined, bool check_result = false);
 		//@}
 		
 };

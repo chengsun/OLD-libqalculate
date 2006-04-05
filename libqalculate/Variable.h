@@ -113,8 +113,14 @@ class Variable : public ExpressionItem {
 	virtual void set(const ExpressionItem *item);
 	virtual int type() const {return TYPE_VARIABLE;}
 	virtual int subtype() const {return SUBTYPE_VARIABLE;}
+	/** Returns if the variable has a known value (as oppossed to assumptions).
+	*
+	* @returns true if the variable is of class KnownVariable, false if UnknownVariable.
+	*/
 	virtual bool isKnown() const = 0;
 
+	/** Returns if the variable represents a positive value.
+	*/
 	virtual bool representsPositive(bool = false) {return false;}
 	virtual bool representsNegative(bool = false) {return false;}
 	virtual bool representsNonNegative(bool = false) {return false;}

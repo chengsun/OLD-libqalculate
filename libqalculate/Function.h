@@ -15,7 +15,10 @@
 #include <libqalculate/ExpressionItem.h>
 #include <libqalculate/includes.h>
 
-enum {
+/** @file */
+
+///Argument types
+typedef enum {
 	ARGUMENT_TYPE_FREE,
 	ARGUMENT_TYPE_SYMBOLIC,
 	ARGUMENT_TYPE_TEXT,
@@ -34,8 +37,9 @@ enum {
 	ARGUMENT_TYPE_SET,
 	ARGUMENT_TYPE_DATA_OBJECT,
 	ARGUMENT_TYPE_DATA_PROPERTY
-};
+} ArgumentType;
 
+///Predefined max and min values for number and integer arguments.
 typedef enum {
 	ARGUMENT_MIN_MAX_NONE,
 	ARGUMENT_MIN_MAX_POSITIVE,
@@ -198,7 +202,7 @@ class UserFunction : public MathFunction {
 	int subtype() const;
 };
 
-/// A free argument.
+/// A mathematical function argument definition with free value and base class for all argument definitions.
 /** Free arguments accepts any value.
 */
 class Argument {
@@ -207,45 +211,145 @@ class Argument {
   
   	string sname, scondition;
 	bool b_zero, b_test, b_matrix, b_text, b_error, b_rational;
+	/** This function is called from Argument::test() and performs validation specific to the argument definition type.
+	* Should be reimplemented by all subclasses.
+	*
+	* @param value Value to test.
+	* @param eo Evaluation options to use if the value needs to be evaluated.
+	* @returns true if the value is valid for the argument definition.
+	*/
 	virtual bool subtest(MathStructure &value, const EvaluationOptions &eo) const;
+	/** This function is called from Argument::printlong() and returns description specific the argument definition type.
+	* Should be reimplemented by all subclasses. For example IntegerArgument::subprintlong() might return "an integer"
+	* and Argument::printlong() might append " that fulfills the condition: even(\x)".
+	*
+	* @returns Long description.
+	*/
 	virtual string subprintlong() const;
 	
   public:
-  
-	Argument(string name_ = "", bool does_test = true, bool does_error = true);	
+
+	/** Creates a new argument definition.
+	*
+	* @param name Name/title of the argument definition.
+	* @param does_test If argument values will be tested.
+	* @param does_error If an error will issued if the value tests false.
+	*/
+	Argument(string name_ = "", bool does_test = true, bool does_error = true);
+	/** Creates a copy of an argument definition.
+	*
+	* @param arg Argument to copy.
+	*/
 	Argument(const Argument *arg);
+	/** Destructor */
 	virtual ~Argument();
 
+	/** Sets the argument to a copy of an argument definition.
+	*
+	* @param arg Argument to copy.
+	*/
 	virtual void set(const Argument *arg);
+	/** Returns a copy of the argument definition.
+	*
+	* @returns A copy.
+	*/
 	virtual Argument *copy() const;
 
+	/** Resturns a short description of the argument definition.
+	* Ex. "number" for NumberArgument.
+	*
+	* @returns Short description.
+	*/
 	virtual string print() const;
+	/** Resturns a long description of the argument definition.
+	* Ex. "A real number > 2".
+	*
+	* @returns Long description.
+	*/
 	string printlong() const;
-	
+
+	/** Tests if a value fulfils the requirements of the argument definition.
+	* The value might change if it has not been fully evaluated.
+	*
+	* @param value Value to test.
+	* @param f Mathematical function that the value is an argument for.
+	* @param eo Evaluation options to use if the value needs to be evaluated.
+	* @returns true if the value is valid for the argument definition.
+	*/
 	bool test(MathStructure &value, int index, MathFunction *f, const EvaluationOptions &eo = default_evaluation_options) const;
-	//virtual MathStructure evaluate(const string &str, bool keep_exact = true) const;
-	virtual void evaluate(MathStructure &mstruct, const EvaluationOptions &eo) const;
+	/** Parses an expression for an argument value.
+	* The default behavior is to use Calculator::parse() directly.
+	*
+	* @param str Expression.
+	* @param po Parse options.
+	* @returns A new mathematical structure with the parsed expression.
+	*/
 	virtual MathStructure parse(const string &str, const ParseOptions &po = default_parse_options) const;
+	/** Parses an expression for an argument value.
+	* The default behavior is to use Calculator::parse() directly.
+	*
+	* @param mstruct Mathematical structure to set with the parsed expression.
+	* @param str Expression.
+	* @param po Parse options.
+	*/
 	virtual void parse(MathStructure *mstruct, const string &str, const ParseOptions &po = default_parse_options) const;
-	
+
+	/** Returns the name/title of the argument definition.
+	*
+	* @returns Name/title.
+	*/
 	string name() const;
+	/** Sets the name/title of the argument definition.
+	*
+	* @param name_ New name/title.
+	*/
 	void setName(string name_);
 
+	/** Sets a custom condition for argument values.
+	* '\x' is replaced by the argument value in the expression.
+	*
+	* @param condition Condition expression.
+	*/
 	void setCustomCondition(string condition);
+	/** Returns the custom condition expression set for argument values.
+	*
+	* @returns Custom condition for argument values.
+	*/
 	string getCustomCondition() const;
-	
+
+	/** If the value for the argument will be tested. If not, the argument only works as an suggestion and any value is allowed.
+	*
+	* @returns true if the argument value will be tested.
+	*/
 	bool tests() const;
 	void setTests(bool does_error);
-	
+
+	/** If an error message will be presented to the user if the value for the argument is not allowed.
+	*
+	* @returns true if error messages will be shown.
+	*/
 	bool alerts() const;
 	void setAlerts(bool does_error);
 
+	/** If an argument value of zero is forbidden.
+	*
+	* @returns true if zero argument value is forbidden.
+	*/
 	bool zeroForbidden() const;
+	/** Sets if a value of zero is forbidden for the argument value.
+	*
+	* @param forbid_zero If zero shall be forbidden.
+	*/	
 	void setZeroForbidden(bool forbid_zero);
 	
 	bool matrixAllowed() const;
 	void setMatrixAllowed(bool allow_matrix);
-	
+
+	/** If only rational polynomials are allowed as argument value.
+	*
+	* @see MathStructure::isRationalPolynomial()
+	* @returns true if only rational polynomials is allowed.
+	*/
 	bool rationalPolynomial() const;
 	void setRationalPolynomial(bool rational_polynomial);
 	
@@ -255,8 +359,8 @@ class Argument {
 
 };
 
-/// A numerical argument.
-/**
+/// A definition for numerical arguments.
+/** These arguments allows numerical values. The value can be restricted to real or rational numbers (defaults to allow all numbers, including complex), and a max and/or min value.
 */
 class NumberArgument : public Argument {
 
@@ -300,8 +404,8 @@ class NumberArgument : public Argument {
 
 };
 
-/// An integer argument.
-/**
+/// A definition for integer arguments.
+/** These arguments allows numerical integer values. The value can be restricted to a max and/or min value.
 */
 class IntegerArgument : public Argument {
 
@@ -311,7 +415,7 @@ class IntegerArgument : public Argument {
 
   protected:
   
-	virtual bool subtest(MathStructure &value, const EvaluationOptions &eo) const;  
+	virtual bool subtest(MathStructure &value, const EvaluationOptions &eo) const;
 	virtual string subprintlong() const;
 
   public:
@@ -335,7 +439,7 @@ class IntegerArgument : public Argument {
 };
 
 /// A symbolic argument.
-/**
+/** Accepts variables and symbolic structures.
 */
 class SymbolicArgument : public Argument {
 
@@ -345,7 +449,7 @@ class SymbolicArgument : public Argument {
 	virtual string subprintlong() const;
 
   public:
-  
+
   	SymbolicArgument(string name_ = "", bool does_test = true, bool does_error = true);
 	SymbolicArgument(const SymbolicArgument *arg);
 	virtual ~SymbolicArgument();
@@ -355,7 +459,7 @@ class SymbolicArgument : public Argument {
 };
 
 /// A text argument.
-/**
+/** Accepts text (symbolic) structures. Argument values are parsed as text, unless surrounded by back slashes (which are then removed). Surrounding Parentheses and first quotation marks are removed.
 */
 class TextArgument : public Argument {
 
@@ -376,7 +480,7 @@ class TextArgument : public Argument {
 };
 
 /// A date argument.
-/**
+/** A text argument representing a date.
 */
 class DateArgument : public Argument {
 
@@ -432,14 +536,14 @@ class MatrixArgument : public Argument {
   
 	virtual bool subtest(MathStructure &value, const EvaluationOptions &eo) const;  
 	virtual string subprintlong() const;
-	bool b_sym;
+	bool b_square;
 
   public:
   
   	MatrixArgument(string name_ = "", bool does_test = true, bool does_error = true);
 	MatrixArgument(const MatrixArgument *arg);
-	virtual bool symmetricDemanded() const;
-	virtual void setSymmetricDemanded(bool sym);
+	virtual bool squareDemanded() const;
+	virtual void setSquareDemanded(bool square);
 	virtual ~MatrixArgument();
 	virtual int type() const;
 	virtual Argument *copy() const;
@@ -536,7 +640,6 @@ class AngleArgument : public Argument {
 	virtual int type() const;
 	virtual Argument *copy() const;
 	virtual string print() const;
-	//virtual MathStructure evaluate(const string &str, bool keep_exact = true) const;
 	virtual void parse(MathStructure *mstruct, const string &str, const ParseOptions &po = default_parse_options) const;
 };
 class VariableArgument : public Argument {

@@ -51,6 +51,11 @@ class DataObject {
 	* @param is_approximate If the value is approximate. 1 for approximate, 0 for exact, -1 for property default.
 	*/
 	void setProperty(DataProperty *property, string s_value, int is_approximate = -1);
+	/** Set an untranslated value for a key property. Used when a text value is translated, but the original value still is needed as a reference key.
+	*
+	* @param property Property to set (must belong to parent data set).
+	* @param s_vale Value for the property.
+	*/
 	void setNonlocalizedKeyProperty(DataProperty *property, string s_value);
 	
 	/** Returns parsed value for a property. Parses the text string value if not parsed before 
@@ -62,9 +67,15 @@ class DataObject {
 	/** Returns unparsed value for a property.
 	*
 	* @param property Property to read.
+	* @param is_approximate If the value is approximate. Is set to 1 for approximate, 0 for exact, -1 for property default, if not NULL.
 	* @returns Unparsed value or empty string if property value is not set.
 	*/
 	const string &getProperty(DataProperty *property, int *is_approximate = NULL);
+	/** Returns unparsed untranslated value for a key property. Used when a text value is translated, but the original value still is needed as a reference key.
+	*
+	* @param property Property to read.
+	* @returns Unparsed untranslated value or empty string if property value is not set.
+	*/
 	const string &getNonlocalizedKeyProperty(DataProperty *property);
 	/** Returns value for a property in a format suitable for use in expressions with unit appended.
 	*

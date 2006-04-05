@@ -465,7 +465,7 @@ MathStructure MathFunction::calculate(MathStructure &vargs, const EvaluationOpti
 	int itmp = vargs.size();
 	if(testArgumentCount(itmp)) {
 		while(itmp < maxargs()) {
-			vargs.addItem(CALCULATOR->parse(default_values[itmp - minargs()]));
+			vargs.addChild(CALCULATOR->parse(default_values[itmp - minargs()]));
 			itmp++;
 		}
 		MathStructure mstruct;
@@ -583,8 +583,8 @@ MathStructure MathFunction::produceVector(const MathStructure &vargs, int begin,
 		end = vargs.size();
 	}
 	if(begin == 1 && vargs.size() == 1) {
-		if(vargs.getComponent(1)->isVector()) {
-			return *vargs.getComponent(1);
+		if(vargs[0].isVector()) {
+			return vargs[0];
 		} else {
 			return vargs;
 		}
@@ -1147,11 +1147,6 @@ bool Argument::test(MathStructure &value, int index, MathFunction *f, const Eval
 	}
 	return true;
 }
-void Argument::evaluate(MathStructure &mstruct, const EvaluationOptions &eo) const {
-	if(type() != ARGUMENT_TYPE_FREE) {
-		mstruct.eval(eo);
-	}
-}
 MathStructure Argument::parse(const string &str, const ParseOptions &po) const {
 	MathStructure mstruct;
 	parse(&mstruct, str, po);
@@ -1286,34 +1281,21 @@ void Argument::setCustomCondition(string condition) {
 string Argument::getCustomCondition() const {
 	return scondition;
 }
-/** Returns if a value of zero is forbidden for the argument.
-*
-* @returns true if a value of zero is forbidden.
-*/
+
 bool Argument::zeroForbidden() const {
 	return !b_zero;
 }
-/** Set if a value of zero shall be forbidden for the argument.
-*
-* @param forbid_zero If zero shall be forbidden.
-*/
 void Argument::setZeroForbidden(bool forbid_zero) {
 	b_zero = !forbid_zero;
 }
-/** Returns if the value for the argument will be tested. If not, the argument only works as an suggestion and any value is allowed.
-*
-* @returns true if the argument value will be tested.
-*/
+
 bool Argument::tests() const {
 	return b_test;
 }
 void Argument::setTests(bool does_test) {
 	b_test = does_test;
 }
-/** Returns if an error message will be presented to the user if the value for the argument is not allowed.
-*
-* @returns true if error messages will be shown.
-*/
+
 bool Argument::alerts() const {
 	return b_error;
 }
@@ -1727,13 +1709,13 @@ bool VectorArgument::subtest(MathStructure &value, const EvaluationOptions &eo) 
 	//}
 	if(!value.isVector()) return false;
 	if(b_argloop && subargs.size() > 0) {
-		for(size_t i = 0; i < value.components(); i++) {
+		for(size_t i = 0; i < value.countChildren(); i++) {
 			if(!subargs[i % subargs.size()]->test(value[i], 1, NULL, eo)) {
 				return false;
 			}
 		}
 	} else {
-		for(size_t i = 0; i < subargs.size() && i < value.components(); i++) {
+		for(size_t i = 0; i < subargs.size() && i < value.countChildren(); i++) {
 			if(!subargs[i]->test(value[i], 1, NULL, eo)) {
 				return false;
 			}
@@ -1787,27 +1769,27 @@ Argument *VectorArgument::getArgument(size_t index) const {
 }
 
 MatrixArgument::MatrixArgument(string name_, bool does_test, bool does_error) : Argument(name_, does_test, does_error) {
-	b_sym = false;
+	b_square = false;
 }
 MatrixArgument::MatrixArgument(const MatrixArgument *arg) {
 	set(arg);
-	b_sym = arg->symmetricDemanded();
+	b_square = arg->squareDemanded();
 }
 MatrixArgument::~MatrixArgument() {}
 bool MatrixArgument::subtest(MathStructure &value, const EvaluationOptions &eo) const {
 	//if(!value.isMatrix()) {
 		value.eval(eo);
 	//}
-	return value.isMatrix() && (!b_sym || value.matrixIsSymmetric());
+	return value.isMatrix() && (!b_square || value.matrixIsSquare());
 }
-bool MatrixArgument::symmetricDemanded() const {return b_sym;}
-void MatrixArgument::setSymmetricDemanded(bool sym) {b_sym = sym;}
+bool MatrixArgument::squareDemanded() const {return b_square;}
+void MatrixArgument::setSquareDemanded(bool square) {b_square = square;}
 int MatrixArgument::type() const {return ARGUMENT_TYPE_MATRIX;}
 Argument *MatrixArgument::copy() const {return new MatrixArgument(this);}
 string MatrixArgument::print() const {return _("matrix");}
 string MatrixArgument::subprintlong() const {
-	if(b_sym) {
-		return _("a symmetric matrix");
+	if(b_square) {
+		return _("a square matrix");
 	} else {
 		return _("a matrix");
 	}

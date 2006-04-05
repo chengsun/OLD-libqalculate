@@ -3,4 +3,4 @@
 #
 
 EXTRA_DIST = \
-	POTFILES.in qalculate.pot *.po
+	POTFILES.in *.po

@@ -18,10 +18,50 @@
 
 /** @file */
 
+/** \mainpage Index
+*
+* \section intro_sec Introduction
+*
+* libqalculate is math libary for expression evaluation with units, variables and functions support and CAS functionality.
+*
+* The main parts of the library is the almighty Calculator class, the MathStructure class for mathematical expressions and classes for objects in an epxression,
+* mostly of the class Numbers and sub classes of ExpressionItem.
+*
+* A simple application using libqalculate need only create a calculator object, perhaps load definitions (functions, variables, units, etc.) and use the calculate function as follows:
+* \code new Calculator();
+* CALCULATOR->loadGlobalDefinitions();
+* CALCULATOR->loadLocalDefinitions();
+* EvaluationOptions eo;
+* MathStructure result = CALCULATOR->calculate("1 + 1", eo);\endcode
+*
+* More complex usage mainly involves manipulating objects of the MathStructure class directly.
+*
+* To display the resulting expression you will normally use MathStructure::format() followed by MathStructure::print() as follows:
+* \code PrintOptions po;
+* result.format(po);
+* string result_str = result.print(po); \endcode
+*
+* Central to the flexiblity of libqalculate is the many options passed to evaluating and display functions with EvaluationOptions and PrintOptions.
+*
+* \section usage_sec Using the library
+*
+* libqalculate uses pkg-config.
+*
+* For a simple program use pkg-config on the command line:
+* \code c++ `pkg-config --cflags --libs libqalculate` hello.c -o hello \endcode
+*
+* If the program uses autoconf, put the following in configure.in:
+* \code PKG_CHECK_MODULES(QALCULATE, [
+*	libqalculate >= 0.9.4
+*	])
+* AC_SUBST(QALCULATE_CFLAGS)
+* AC_SUBST(QALCULATE_LIBS) \endcode
+*/
+
 typedef vector<Prefix*> p_type;
 
 /** Parameters passed to plotting functions. */
-struct plot_parameters {
+struct PlotParameters {
 	/// Title label.
 	string title;
 	/// Y-axis label.
@@ -68,11 +108,11 @@ struct plot_parameters {
 	bool show_all_borders;
 	/// Where the plot legend shall be placed. Default: PLOT_LEGEND_TOP_RIGHT
 	PlotLegendPlacement legend_placement;
-	plot_parameters();
+	PlotParameters();
 };
 
 /** Parameters for plot data series. */
-struct plot_data_parameters {
+struct PlotDataParameters {
 	/// Title label.
 	string title;
 	/// Plot smoothing.
@@ -83,9 +123,10 @@ struct plot_data_parameters {
 	bool yaxis2;
 	/// Use scale on second x-axis
 	bool xaxis2;
-	plot_data_parameters();
+	PlotDataParameters();
 };
 
+///Message types
 typedef enum {
 	MESSAGE_INFORMATION,
 	MESSAGE_WARNING,
@@ -135,10 +176,10 @@ struct Element {
 /** The calculator class is responsible for loading functions, variables and units, and keeping track of them, as well as parsing expressions and much more. A calculator object must be created before any other Qalculate! class is used. There should never be more than one calculator object, accessed with CALCULATOR. 
 *
 * A simple application using libqalculate need only create a calculator object, perhaps load definitions (functions, variables, units, etc.) and use the calculate function as follows:
-* new Calculator();
+* \code new Calculator();
 * CALCULATOR->loadGlobalDefinitions();
 * CALCULATOR->loadLocalDefinitions();
-* MathStructure result = CALCULATOR->calculate("1 + 1");
+* MathStructure result = CALCULATOR->calculate("1 + 1");\endcode
 */
 class Calculator {
 
@@ -199,12 +240,14 @@ class Calculator {
 	
 	string per_str, times_str, plus_str, minus_str, and_str, AND_str, or_str, OR_str, XOR_str;
 	size_t per_str_len, times_str_len, plus_str_len, minus_str_len, and_str_len, AND_str_len, or_str_len, OR_str_len, XOR_str_len;
+
+	vector<MathStructure*> rpn_stack;
 	
   public:
 
 	KnownVariable *v_pi, *v_e, *v_i, *v_inf, *v_pinf, *v_minf, *v_undef;
 	UnknownVariable *v_x, *v_y, *v_z;
-	MathFunction *f_vector, *f_sort, *f_rank, *f_limits, *f_component, *f_components, *f_merge_vectors;
+	MathFunction *f_vector, *f_sort, *f_rank, *f_limits, *f_component, *f_dimension, *f_merge_vectors;
 	MathFunction *f_matrix, *f_matrix_to_vector, *f_area, *f_rows, *f_columns, *f_row, *f_column, *f_elements, *f_element, *f_transpose, *f_identity, *f_determinant, *f_permanent, *f_adjoint, *f_cofactor, *f_inverse; 
 	MathFunction *f_factorial, *f_factorial2, *f_multifactorial, *f_binomial;
 	MathFunction *f_xor, *f_bitxor, *f_even, *f_odd, *f_shift;
@@ -305,18 +348,8 @@ class Calculator {
 	*/
 	Unit *getDegUnit();
 
-	/** Returns prefix for an index (starting at zero). All prefixes can be traversed by starting at index zero and increasing the index until NULL is returned.
-	*
-	* @param index Index of prefix.
-	* @returns Prefix for index or NULL if not found.
-	*/
-	Prefix *getPrefix(size_t index) const;	
-	/** Returns prefix with provided name.
-	*
-	* @param name_ Name of prefix to retrieve.
-	* @returns Prefix with provided name or NULL if not found.
-	*/
-	Prefix *getPrefix(string name_) const;
+	/** @name Functions for finding a suitable prefix. */
+	//@{
 	DecimalPrefix *getExactDecimalPrefix(int exp10, int exp = 1) const;
 	BinaryPrefix *getExactBinaryPrefix(int exp2, int exp = 1) const;
 	Prefix *getExactPrefix(const Number &o, int exp = 1) const;				
@@ -327,7 +360,8 @@ class Calculator {
 	BinaryPrefix *getBestBinaryPrefix(int exp2, int exp = 1) const;		
 	BinaryPrefix *getBestBinaryPrefix(const Number &exp2, const Number &exp) const;
 	Prefix *addPrefix(Prefix *p);
-	void prefixNameChanged(Prefix *p, bool new_item = false);	
+	void prefixNameChanged(Prefix *p, bool new_item = false);
+	//@}
 
 	/** Set default precision for approximate calculations.
 	*
@@ -366,27 +400,55 @@ class Calculator {
 	void abort_this();
 	bool busy();
 	void terminateThreads();
-	
-	string localizeExpression(string str) const;
-	string unlocalizeExpression(string str) const;
-	bool separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const;
+
+	bool RPNStackTopEval(int usecs, const EvaluationOptions &eo = default_evaluation_options);
+	bool calculateRPN(MathOperation op, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	bool calculateRPN(MathFunction *f, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	bool calculateRPNBitwiseNot(int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	bool calculateRPNLogicalNot(int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	MathStructure *calculateRPN(MathOperation op, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	MathStructure *calculateRPN(MathFunction *f, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	MathStructure *calculateRPNBitwiseNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	MathStructure *calculateRPNLogicalNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	bool RPNStackEnter(MathStructure *mstruct, int usecs, const EvaluationOptions &eo = default_evaluation_options);
+	bool RPNStackEnter(string str, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	void RPNStackEnter(MathStructure *mstruct, bool eval = false);
+	void RPNStackEnter(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	MathStructure *getRPNStackTop() const;
+	MathStructure *getRPNStackIndex(size_t index) const;
+	size_t RPNStackSize() const;
+	void clearRPNStack();
+
+	/** @name Functions for calculating expressions. */
+	//@{
 	bool calculate(MathStructure *mstruct, string str, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
 	MathStructure calculate(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
 	string printMathStructureTimeOut(const MathStructure &mstruct, int usecs = 100000, const PrintOptions &op = default_print_options);
-	
+	//@}
+
+	/** @name Functions expression parsing. */
+	//@{
 	/** Parse an expression and place in a MathStructure object.
 	*
 	* @param str Expression
 	* @param po Parse options.
 	* @returns MathStructure with result of parse.
 	*/
+	string localizeExpression(string str) const;
+	string unlocalizeExpression(string str) const;
+	bool separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const;
+
+	void parseSigns(string &str) const;
 	MathStructure parse(string str, const ParseOptions &po = default_parse_options);
 	void parse(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
 	bool parseNumber(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
 	bool parseOperators(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
 	bool parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po, MathOperation s);
 	bool parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po);
-	
+	//@}
+
+	/** @name Functions converting epxressions between units. */
+	//@{
 	MathStructure convert(double value, Unit *from_unit, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options);
 	MathStructure convert(string str, Unit *from_unit, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options);
 	MathStructure convert(const MathStructure &mstruct, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options, bool always_convert = true);
@@ -395,7 +457,10 @@ class Calculator {
 	Unit *getBestUnit(Unit *u, bool allow_only_div = false);
 	MathStructure convertToBestUnit(const MathStructure &mstruct, const EvaluationOptions &eo = default_evaluation_options);
 	MathStructure convertToCompositeUnit(const MathStructure &mstruct, CompositeUnit *cu, const EvaluationOptions &eo = default_evaluation_options, bool always_convert = true);
-	
+	//@}
+
+	/** @name Functions for managing functions, variables, units and prefixes. */
+	//@{
 	void expressionItemActivated(ExpressionItem *item);
 	void expressionItemDeactivated(ExpressionItem *item);
 	void expressionItemDeleted(ExpressionItem *item);
@@ -419,7 +484,19 @@ class Calculator {
 	ExpressionItem *getExpressionItem(string name, ExpressionItem *item = NULL);
 	Unit* getUnit(string name_);
 	Unit* getActiveUnit(string name_);
-	Unit* getCompositeUnit(string internal_name_);	
+	Unit* getCompositeUnit(string internal_name_);
+	/** Returns prefix for an index (starting at zero). All prefixes can be traversed by starting at index zero and increasing the index until NULL is returned.
+	*
+	* @param index Index of prefix.
+	* @returns Prefix for index or NULL if not found.
+	*/
+	Prefix *getPrefix(size_t index) const;	
+	/** Returns prefix with provided name.
+	*
+	* @param name_ Name of prefix to retrieve.
+	* @returns Prefix with provided name or NULL if not found.
+	*/
+	Prefix *getPrefix(string name_) const;
 	Variable* addVariable(Variable *v, bool force = true, bool check_names = true);
 	void variableNameChanged(Variable *v, bool new_item = false);
 	void functionNameChanged(MathFunction *f, bool new_item = false);
@@ -432,17 +509,11 @@ class Calculator {
 	DataSet* getDataSet(size_t index);
 	DataSet* getDataSet(string name);
 	MathFunction* getFunction(string name_);	
-	MathFunction* getActiveFunction(string name_);	
-	void error(bool critical, const char *TEMPLATE,...);
-	/** Put a message in the message queue. 
-	*/
-	void message(MessageType mtype, const char *TEMPLATE,...);
-	/** Returns the first message in queue.
-	*/
-	CalculatorMessage *message();
-	/** Removes the first message in queue and returns the next.
-	*/
-	CalculatorMessage *nextMessage();
+	MathFunction* getActiveFunction(string name_);
+	//@}
+
+	/** @name Functions for testing validity of functions, variable and unit names. */
+	//@{
 	/** Tests if a name is valid for a variable.
 	*
 	* @param name_ Variable name.
@@ -478,20 +549,83 @@ class Calculator {
 	bool variableNameTaken(string name, Variable *object = NULL);
 	bool unitNameTaken(string name, Unit *object = NULL);
 	bool functionNameTaken(string name, MathFunction *object = NULL);
-	bool unitIsUsedByOtherUnits(const Unit *u) const;	
 	string getName(string name = "", ExpressionItem *object = NULL, bool force = false, bool always_append = false);
+	//@}
 
-	/** @name Functions for loading and saving definitions. */
+	bool unitIsUsedByOtherUnits(const Unit *u) const;
+	
+
+
+	/** @name Functions for message handling. */
 	//@{
+	void error(bool critical, const char *TEMPLATE,...);
+	/** Put a message in the message queue. 
+	*/
+	void message(MessageType mtype, const char *TEMPLATE,...);
+	/** Returns the first message in queue.
+	*/
+	CalculatorMessage *message();
+	/** Removes the first message in queue and returns the next.
+	*/
+	CalculatorMessage *nextMessage();
+	//@}
+
+
+	/** @name Functions for loading and saving definitions (variables, functions, units, etc.). */
+	//@{
+	/** Load all standard global (system wide) definitions from the global data directory ($PREFIX/share/qalculate).
+	*
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadGlobalDefinitions();
+	/** Load global (system wide) definitions from a file in the global data directory ($PREFIX/share/qalculate).
+	*
+	* @param filename Name of the file in the global data directory.
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadGlobalDefinitions(string filename);
+	/** Load prefixes.
+	*
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadGlobalPrefixes();
+	/** Load currencies.
+	*
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadGlobalCurrencies();
+	/** Load units.
+	*
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadGlobalUnits();
+	/** Load variables.
+	*
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadGlobalVariables();
+	/** Load functions.
+	*
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadGlobalFunctions();
+	/** Load data sets.
+	*
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadGlobalDataSets();
+	/** Load local, user specific, definitions from the local definitions directory (~/.qalculate/definitions).
+	* All files in the directory and in the datasets subdirectory are loaded.
+	*
+	* @returns true if the definitions were successfully loaded.
+	*/
 	bool loadLocalDefinitions();
+	/** Load definitions from a file.
+	*
+	* @param file_name The path to the file to load.
+	* @param is_user_defs true if the definitions are local, false if they are global.
+	* @returns true if the definitions were successfully loaded.
+	*/
 	int loadDefinitions(const char *file_name, bool is_user_defs = true);
 	bool saveDefinitions();	
 	int saveDataObjects();
@@ -502,9 +636,13 @@ class Calculator {
 	int saveDataSets(const char *file_name, bool save_global = false);
 	//@}
 
+	/** @name Functions for CSV file import/export. */
+	//@{
 	bool importCSV(MathStructure &mstruct, const char *file_name, int first_row = 1, string delimiter = ",", vector<string> *headers = NULL);
 	bool importCSV(const char *file_name, int first_row = 1, bool headers = true, string delimiter = ",", bool to_matrix = false, string name = "", string title = "", string category = "");
 	bool exportCSV(const MathStructure &mstruct, const char *file_name, string delimiter = ",");
+	//@}
+
 	int testCondition(string expression);
 	
 	/** @name Functions for exchange rates. */
@@ -563,7 +701,7 @@ class Calculator {
 	MathStructure expressionToPlotVector(string expression, const MathStructure &min, const MathStructure &max, const MathStructure &step, MathStructure *x_vector = NULL, string x_var = "\\x", const ParseOptions &po = default_parse_options);
 	MathStructure expressionToPlotVector(string expression, float min, float max, float step, MathStructure *x_vector = NULL, string x_var = "\\x", const ParseOptions &po = default_parse_options);
 	MathStructure expressionToPlotVector(string expression, const MathStructure &x_vector, string x_var = "\\x", const ParseOptions &po = default_parse_options);
-	bool plotVectors(plot_parameters *param, const vector<MathStructure> &y_vectors, const vector<MathStructure> &x_vectors, vector<plot_data_parameters*> &pdps, bool persistent = false);
+	bool plotVectors(PlotParameters *param, const vector<MathStructure> &y_vectors, const vector<MathStructure> &x_vectors, vector<PlotDataParameters*> &pdps, bool persistent = false);
 	bool invokeGnuplot(string commands, string commandline_extra = "", bool persistent = false);
 	bool closeGnuplot();
 	bool gnuplotOpen();

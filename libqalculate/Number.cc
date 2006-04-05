@@ -386,8 +386,12 @@ void Number::set(string number, const ParseOptions &po) {
 	remove_blank_ends(number);
 	if(base == 16 && number.length() >= 2 && number[0] == '0' && (number[1] == 'x' || number[1] == 'X')) {
 		number = number.substr(2, number.length() - 2);
+	} else if(base == 8 && number.length() >= 2 && number[0] == '0' && (number[1] == 'o' || number[1] == 'O')) {
+		number = number.substr(2, number.length() - 2);
 	} else if(base == 8 && number.length() > 1 && number[0] == '0' && number[1] != '.') {
 		number.erase(number.begin());
+	} else if(base == 2 && number.length() >= 2 && number[0] == '0' && (number[1] == 'b' || number[1] == 'B')) {
+		number = number.substr(2, number.length() - 2);
 	}
 	if(base > 36) base = 36;
 	if(base < 0) base = 10;
@@ -487,7 +491,7 @@ void Number::set(string number, const ParseOptions &po) {
 			minus = !minus;
 		} else if(number[index] == 'i') {
 			b_cplx = true;
-		} else {
+		} else if(number[index] != ' ') {
 			CALCULATOR->error(true, _("Character \'%c\' was ignored in the number \"%s\" with base %s."), number[index], number.c_str(), i2s(base).c_str(), NULL);
 		}
 	}
@@ -1710,14 +1714,18 @@ void Number::euler() {
 	setInternal(cln::eulerconst());
 }
 bool Number::zeta() {
-	if(isNegative() || !isInteger() || isZero() || isOne()) {
-		CALCULATOR->error(true, _("Integral point for Riemann's zeta must be an integer > 1."), NULL);
+	if(isOne()) {
+		setInfinity();
+		return true;
+	}
+	if(isNegative() || !isInteger() || isZero()) {
+		CALCULATOR->error(true, _("Can only handle Riemann Zeta with an integer argument (s) >= 1"), NULL);
 		return false;
 	}
 	bool overflow = false;
 	int i = intValue(&overflow);
 	if(overflow) {
-		CALCULATOR->error(true, _("Integral point for Riemann's zeta is too large."), NULL);
+		CALCULATOR->error(true, _("Cannot handle an argument (s) that large for Riemann Zeta."), NULL);
 		return false;
 	}
 	value = cln::zeta(i); 

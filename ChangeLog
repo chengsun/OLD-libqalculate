@@ -1,3 +1,9 @@
+2006-04-06 Niklas Knutsson  <nq@altern.org>
+
+	* Update RPN functions
+	* Update API documentation
+	* Change usecs argument to msecs
+
 2006-04-04 Niklas Knutsson  <nq@altern.org>
 
 	* Plugins

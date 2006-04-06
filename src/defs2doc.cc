@@ -458,7 +458,7 @@ void print_variable(Variable *v) {
 				} else if(((KnownVariable*) v)->get().isVector()) {
 					value = _("vector");
 				} else {
-					value = fix(CALCULATOR->printMathStructureTimeOut(((KnownVariable*) v)->get(), 30000));
+					value = fix(CALCULATOR->printMathStructureTimeOut(((KnownVariable*) v)->get(), 30));
 				}
 			}
 		} else {

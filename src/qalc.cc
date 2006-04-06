@@ -1451,7 +1451,7 @@ int main (int argc, char *argv[]) {
 								} else if(((KnownVariable*) v)->get().isVector()) {
 									value = _("vector");
 								} else {
-									value = CALCULATOR->printMathStructureTimeOut(((KnownVariable*) v)->get(), 30000);
+									value = CALCULATOR->printMathStructureTimeOut(((KnownVariable*) v)->get(), 30);
 								}
 							}
 						} else {

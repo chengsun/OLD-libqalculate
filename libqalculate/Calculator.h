@@ -305,11 +305,34 @@ class Calculator {
 	void beginTemporaryStopMessages();
 	int endTemporaryStopMessages(int *message_count = NULL, int *warning_count = NULL);	
 	
-	size_t addId(MathStructure *m_struct, bool persistent = false);
+	/** Stores a value with an associated id. Mainly for internal use.
+	*
+	* @param mstruct The value to store.
+	* @param persistent If false the values will be removed from storage when retrieved with getId().
+	* @returns Storage id.
+	*/
+	size_t addId(MathStructure *mstruct, bool persistent = false);
+	/** Stores a function value with arguments parsed from a text string using Function::parse(), with an associated id. Mainly for internal use.
+	*
+	* @param f Mathematical function.
+	* @param str Arguments.
+	* @param po Parse options.
+	* @param persistent If false the values will be removed from storage when retrieved with getId().
+	* @returns Storage id.
+	*/
 	size_t parseAddId(MathFunction *f, const string &str, const ParseOptions &po, bool persistent = false);
 	size_t parseAddIdAppend(MathFunction *f, const MathStructure &append_mstruct, const string &str, const ParseOptions &po, bool persistent = false);
 	size_t parseAddVectorId(const string &str, const ParseOptions &po, bool persistent = false);
+	/** Returns a stored value. Mainly for internal use.
+	* 
+	* @param id Storage id.
+	* @returns A stored value.
+	*/
 	MathStructure *getId(size_t id);	
+	/** Removes and unreferences (value->unref() will be called) a value from storage. Mainly for internal use.
+	* 
+	* @param id Storage id.
+	*/
 	void delId(size_t id);
 
 	/** Returns variable for an index (starting at zero). All variables can be traversed by starting at index zero and increasing the index until NULL is returned.
@@ -350,17 +373,75 @@ class Calculator {
 
 	/** @name Functions for finding a suitable prefix. */
 	//@{
+		/** Returns a decimal prefix with exactly the provided value, that fulfils the condition prefix->exponent(exp) == exp10.
+	*
+	* @param exp10 Base-10 exponent of the requested prefix.
+	* @param exp The exponent of the unit.
+	* @returns A prefix or NULL if not found.
+	*/
 	DecimalPrefix *getExactDecimalPrefix(int exp10, int exp = 1) const;
+	/** Returns a binary prefix with exactly the provided value, that fulfils the condition prefix->exponent(exp) == exp2.
+	*
+	* @param exp2 Base-2 exponent of the requested prefix.
+	* @param exp The exponent of the unit.
+	* @returns A prefix or NULL if not found.
+	*/
 	BinaryPrefix *getExactBinaryPrefix(int exp2, int exp = 1) const;
-	Prefix *getExactPrefix(const Number &o, int exp = 1) const;				
-	DecimalPrefix *getNearestDecimalPrefix(int exp10, int exp = 1) const;		
-	DecimalPrefix *getBestDecimalPrefix(int exp10, int exp = 1, bool all_prefixes = true) const;		
+	/** Returns a prefix with exactly the provided value, that fulfils the condition prefix->value(exp) == o.
+	*
+	* @param o Value of the requested prefix.
+	* @param exp The exponent of the unit.
+	* @returns A prefix or NULL if not found.
+	*/
+	Prefix *getExactPrefix(const Number &o, int exp = 1) const;
+	/** Returns the nearest decimal prefix for a value.
+	*
+	* @param exp10 Base-10 exponent of the value.
+	* @param exp The exponent of the unit.
+	* @returns A prefix or NULL if no decimal prefix is available.
+	*/
+	DecimalPrefix *getNearestDecimalPrefix(int exp10, int exp = 1) const;
+	/** Returns the best suited decimal prefix for a value.
+	*
+	* @param exp10 Base-10 exponent of the value.
+	* @param exp The exponent of the unit.
+	* @param all_prefixes If false, prefixes which is not a multiple of thousand (centi, deci, deka, hekto) will be skipped.
+	* @returns A prefix or NULL if the unit should be left without prefix.
+	*/
+	DecimalPrefix *getBestDecimalPrefix(int exp10, int exp = 1, bool all_prefixes = true) const;
+	/** Returns the best suited decimal prefix for a value.
+	*
+	* @param exp10 Base-10 exponent of the value.
+	* @param exp The exponent of the unit.
+	* @param all_prefixes If false, prefixes which is not a multiple of thousand (centi, deci, deka, hekto) will be skipped.
+	* @returns A prefix or NULL if the unit should be left without prefix.
+	*/
 	DecimalPrefix *getBestDecimalPrefix(const Number &exp10, const Number &exp, bool all_prefixes = true) const;
-	BinaryPrefix *getNearestBinaryPrefix(int exp2, int exp = 1) const;		
+	/** Returns the nearest binary prefix for a value.
+	*
+	* @param exp10 Base-2 exponent of the value.
+	* @param exp The exponent of the unit.
+	* @returns A prefix or NULL if no binary prefix is available.
+	*/
+	BinaryPrefix *getNearestBinaryPrefix(int exp2, int exp = 1) const;
+	/** Returns the best suited binary prefix for a value.
+	*
+	* @param exp10 Base-2 exponent of the value.
+	* @param exp The exponent of the unit.
+	* @returns A prefix or NULL if the unit should be left without prefix.
+	*/
 	BinaryPrefix *getBestBinaryPrefix(int exp2, int exp = 1) const;		
+	/** Returns the best suited binary prefix for a value.
+	*
+	* @param exp10 Base-2 exponent of the value.
+	* @param exp The exponent of the unit.
+	* @returns A prefix or NULL if the unit should be left without prefix.
+	*/
 	BinaryPrefix *getBestBinaryPrefix(const Number &exp2, const Number &exp) const;
+	/** Add a new prefix to the calculator. */
 	Prefix *addPrefix(Prefix *p);
-	void prefixNameChanged(Prefix *p, bool new_item = false);
+	/** Used internally. */
+	void prefixNameChanged(Prefix *p, bool new_item = false);	
 	//@}
 
 	/** Set default precision for approximate calculations.
@@ -375,70 +456,125 @@ class Calculator {
 	/** Returns the preferred decimal point character.
 	*/
 	const string &getDecimalPoint() const;
-	/** Returns the preferred comma character for separating arguments.
-	*/
+	/** Returns the preferred comma character for separating arguments.*/
 	const string &getComma() const;	
+	/** Sets argument separator and decimal sign from the current locale. Mainly for internal use. */
 	void setLocale();
+	/** Resets argument separator and decimal sign. Mainly for internal use. */
 	void unsetLocale();
+	/** Returns the translated text string used in expressions for converting to a specific unit expression (ex "5 meters to feet.*/
 	string localToString() const;
 	
-	/** Unload all non-builtin variables. */
+	/** Unloads all non-builtin variables. */
 	void resetVariables();
-	/** Unload all non-builtin functions. */
+	/** Unloads all non-builtin functions. */
 	void resetFunctions();	
-	/** Unload all non-builtin units. */
+	/** Unloads all non-builtin units. */
 	void resetUnits();
-	/** Unload all non-builtin variables, functions and units. */	
+	/** Unloads all non-builtin variables, functions and units. */	
 	void reset();
-	void addBuiltinVariables();	
+	/** Adds builtin variables. Called automatically when the calculator is created. */
+	void addBuiltinVariables();
+	/** Adds builtin functions. Called automatically when the calculator is created. */
 	void addBuiltinFunctions();
-	void addBuiltinUnits();	
+	/** Adds builtin units. Called automatically when the calculator is created. */
+	void addBuiltinUnits();
+	/** Saves the state of the calculator. Used internally to be able to restore the state after aborted calculation. */
 	void saveState();
+	/** Restores the saved state of the calculator. Used internally to restore the state after aborted calculation. */
 	void restoreState();
+	/** Clears all stored values. Used internally after aborted calculation. */
 	void clearBuffers();
+	/** Aborts the current calculation. */
 	void abort();
+	/** Aborts the current calculation. Used from within the calculation thread. */
 	void abort_this();
 	bool busy();
+	/** Terminate calculation and print threads if started. Do not use to terminate calculation. */
 	void terminateThreads();
 
-	bool RPNStackTopEval(int usecs, const EvaluationOptions &eo = default_evaluation_options);
-	bool calculateRPN(MathOperation op, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	bool calculateRPN(MathFunction *f, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	bool calculateRPNBitwiseNot(int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	bool calculateRPNLogicalNot(int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	bool calculateRPNRegister(size_t index, int msecs, const EvaluationOptions &eo = default_evaluation_options);
+	bool calculateRPN(MathOperation op, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	bool calculateRPN(MathFunction *f, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	bool calculateRPNBitwiseNot(int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	bool calculateRPNLogicalNot(int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	MathStructure *calculateRPN(MathOperation op, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	MathStructure *calculateRPN(MathFunction *f, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	MathStructure *calculateRPNBitwiseNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	MathStructure *calculateRPNLogicalNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	bool RPNStackEnter(MathStructure *mstruct, int usecs, const EvaluationOptions &eo = default_evaluation_options);
-	bool RPNStackEnter(string str, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	bool RPNStackEnter(MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
+	bool RPNStackEnter(string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
 	void RPNStackEnter(MathStructure *mstruct, bool eval = false);
 	void RPNStackEnter(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	MathStructure *getRPNStackTop() const;
-	MathStructure *getRPNStackIndex(size_t index) const;
+	bool setRPNRegister(size_t index, MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
+	bool setRPNRegister(size_t index, string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	void setRPNRegister(size_t index, MathStructure *mstruct, bool eval = false);
+	void setRPNRegister(size_t index, string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	void deleteRPNRegister(size_t index);
+	MathStructure *getRPNRegister(size_t index = 1) const;
 	size_t RPNStackSize() const;
 	void clearRPNStack();
+	void moveRPNRegister(size_t old_index, size_t new_index);
 
 	/** @name Functions for calculating expressions. */
 	//@{
-	bool calculate(MathStructure *mstruct, string str, int usecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	/** Calculates an expression. The expression should be unlocalized first with unlocalizeExpression().
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param mstruct Math structure to fill with the result.
+	* @param str Expression.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
+	* @param to_struct NULL or a math structure to fill with unit expression parsed after "to".
+	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
+	bool calculate(MathStructure *mstruct, string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	/** Calculates an expression. The expression should be unlocalized first with unlocalizeExpression().
+	*
+	* @param str Expression.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
+	* @param to_struct NULL or a math structure to fill with unit expression parsed after "to".
+	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
+	* @returns The result of the calculation.
+	*/
 	MathStructure calculate(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	string printMathStructureTimeOut(const MathStructure &mstruct, int usecs = 100000, const PrintOptions &op = default_print_options);
+	string printMathStructureTimeOut(const MathStructure &mstruct, int msecs = 100000, const PrintOptions &op = default_print_options);
 	//@}
 
 	/** @name Functions expression parsing. */
 	//@{
+	/** Returns a localized expressions. Affects decimal signs and argument separators.
+	*
+	* @param str The expression to localize.
+	* @returns A localized expression.
+	*/
+	string localizeExpression(string str) const;
+	/** Returns an unlocalized expressions. Affects decimal signs and argument separators.
+	*
+	* @param str The expression to unlocalize.
+	* @returns An unlocalized expression.
+	*/
+	string unlocalizeExpression(string str) const;
+	/** Split an expression string after and before " to ".
+	*
+	* @param str The expression. Will be set to the string before " to ".
+	* @param to_str Will be set to the string after " to ".
+	* @param eo Options for the evaluation and parsing of the expression (nothing will be done if units are not enabled).
+	* @returns true if " to " was found and the expression split.
+	*/
+	bool separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const;
+
+	void parseSigns(string &str) const;
 	/** Parse an expression and place in a MathStructure object.
 	*
 	* @param str Expression
 	* @param po Parse options.
 	* @returns MathStructure with result of parse.
 	*/
-	string localizeExpression(string str) const;
-	string unlocalizeExpression(string str) const;
-	bool separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const;
-
-	void parseSigns(string &str) const;
 	MathStructure parse(string str, const ParseOptions &po = default_parse_options);
 	void parse(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
 	bool parseNumber(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
@@ -470,11 +606,23 @@ class Calculator {
 	Unit* addUnit(Unit *u, bool force = true, bool check_names = true);
 	void delPrefixUFV(Prefix *object);
 	void delUFV(ExpressionItem *object);		
+	/** Checks if a variable exists/is registered in the calculator. */
 	bool hasVariable(Variable *v);
+	/** Checks if a unit exists/is registered in the calculator. */
 	bool hasUnit(Unit *u);
+	/** Checks if a function exists/is registered in the calculator. */
 	bool hasFunction(MathFunction *f);
+	/** Checks if a pointer points to a variable that still exists in the calculator. 
+	* As opposed to hasFunction(), this function only checks if the mathematical function has been deleted.
+	*/
 	bool stillHasVariable(Variable *v);
+	/** Checks if a pointer points to a unit that still exists in the calculator. 
+	* As opposed to hasUnit(), this function only checks if the unit has been deleted.
+	*/
 	bool stillHasUnit(Unit *u);
+	/** Checks if a pointer points to a mathematical function that still exists in the calculator. 
+	* As opposed to hasFunction(), this function only checks if the mathematical function has been deleted.
+	*/
 	bool stillHasFunction(MathFunction *f);
 	void saveFunctionCalled();
 	bool checkSaveFunctionCalled();
@@ -627,6 +775,10 @@ class Calculator {
 	* @returns true if the definitions were successfully loaded.
 	*/
 	int loadDefinitions(const char *file_name, bool is_user_defs = true);
+	/** Save local definitions to ~/.qalculate/definitions/
+	*
+	* @returns true if definitions was successfully saved.
+	*/
 	bool saveDefinitions();	
 	int saveDataObjects();
 	int savePrefixes(const char *file_name, bool save_global = false);	

@@ -1656,10 +1656,11 @@ bool Calculator::calculateRPN(MathOperation op, int msecs, const EvaluationOptio
 	return calculateRPNRegister(1, msecs, eo);
 }
 bool Calculator::calculateRPN(MathFunction *f, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
-	if(f->minargs() > 1 || rpn_stack.size() < 1) return false;
 	MathStructure *mstruct = new MathStructure(f, NULL);
 	if(f->args() != 0) {
-		mstruct->addChild_nocopy(rpn_stack.back());
+		if(rpn_stack.size() == 0) mstruct->addChild(m_zero);
+		else mstruct->addChild_nocopy(rpn_stack.back());
+		f->appendDefaultValues(*mstruct);
 		if(f->getArgumentDefinition(1) && f->getArgumentDefinition(1)->type() == ARGUMENT_TYPE_ANGLE) {
 			switch(eo.parse_options.angle_unit) {
 				case ANGLE_UNIT_DEGREES: {
@@ -1678,7 +1679,8 @@ bool Calculator::calculateRPN(MathFunction *f, int msecs, const EvaluationOption
 			}
 		}
 	}
-	rpn_stack.back() = mstruct;
+	if(rpn_stack.size() == 0) rpn_stack.push_back(mstruct);
+	else rpn_stack.back() = mstruct;
 	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
 	return calculateRPNRegister(1, msecs, eo);
 }
@@ -1722,10 +1724,11 @@ MathStructure *Calculator::calculateRPN(MathOperation op, const EvaluationOption
 	return rpn_stack.back();
 }
 MathStructure *Calculator::calculateRPN(MathFunction *f, const EvaluationOptions &eo, MathStructure *parsed_struct) {
-	if(f->minargs() > 1 || rpn_stack.size() < 1) return NULL;
 	MathStructure *mstruct = new MathStructure(f, NULL);
 	if(f->args() != 0) {
-		mstruct->addChild_nocopy(rpn_stack.back());
+		if(rpn_stack.size() == 0) mstruct->addChild(m_zero);
+		else mstruct->addChild_nocopy(rpn_stack.back());
+		f->appendDefaultValues(*mstruct);
 		if(f->getArgumentDefinition(1) && f->getArgumentDefinition(1)->type() == ARGUMENT_TYPE_ANGLE) {
 			switch(eo.parse_options.angle_unit) {
 				case ANGLE_UNIT_DEGREES: {
@@ -1744,8 +1747,8 @@ MathStructure *Calculator::calculateRPN(MathFunction *f, const EvaluationOptions
 			}
 		}
 	}
-	rpn_stack.back() = mstruct;
-	rpn_stack.back() = mstruct;
+	if(rpn_stack.size() == 0) rpn_stack.push_back(mstruct);
+	else rpn_stack.back() = mstruct;
 	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
 	mstruct->eval(eo);
 	return rpn_stack.back();

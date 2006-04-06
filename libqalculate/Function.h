@@ -149,7 +149,8 @@ class MathFunction : public ExpressionItem {
 	void setArgumentDefinition(size_t index, Argument *argdef);
 	int stringArgs(const string &str, vector<string> &svargs);
 	void setDefaultValue(size_t arg_, string value_);
-	const string &getDefaultValue(size_t arg_) const;	
+	const string &getDefaultValue(size_t arg_) const;
+	void appendDefaultValues(MathStructure &vargs);
 	MathStructure produceVector(const MathStructure &vargs, int begin = -1, int end = -1);
 	MathStructure produceArgumentsVector(const MathStructure &vargs, int begin = -1, int end = -1);
 	

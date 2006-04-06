@@ -465,8 +465,16 @@ MathStructure MathFunction::calculate(MathStructure &vargs, const EvaluationOpti
 	int itmp = vargs.size();
 	if(testArgumentCount(itmp)) {
 		while(itmp < maxargs()) {
-			vargs.addChild(CALCULATOR->parse(default_values[itmp - minargs()]));
-			itmp++;
+			Argument *arg = getArgumentDefinition(itmp + 1);
+			if(arg) {
+				MathStructure *mstruct = new MathStructure();
+				arg->parse(mstruct, default_values[itmp - minargs()]);
+				vargs.addChild_nocopy(mstruct);
+			} else {
+				MathStructure *mstruct = new MathStructure();
+				CALCULATOR->parse(mstruct, default_values[itmp - minargs()]);
+				vargs.addChild_nocopy(mstruct);
+			}
 		}
 		MathStructure mstruct;
 		if(!testArguments(vargs) || calculate(mstruct, vargs, eo) < 1) {
@@ -493,6 +501,21 @@ const string &MathFunction::getDefaultValue(size_t arg_) const {
 		return default_values[arg_ - argc - 1];
 	}
 	return empty_string;
+}
+void MathFunction::appendDefaultValues(MathStructure &vargs) {
+	if((int) vargs.size() < minargs()) return;
+	while((int) vargs.size() < maxargs()) {
+		Argument *arg = getArgumentDefinition(vargs.size() + 1);
+		if(arg) {
+			MathStructure *mstruct = new MathStructure();
+			arg->parse(mstruct, default_values[vargs.size() - minargs()]);
+			vargs.addChild_nocopy(mstruct);
+		} else {
+			MathStructure *mstruct = new MathStructure();
+			CALCULATOR->parse(mstruct, default_values[vargs.size() - minargs()]);
+			vargs.addChild_nocopy(mstruct);
+		}
+	}
 }
 int MathFunction::stringArgs(const string &argstr, vector<string> &svargs) {
 	svargs.clear();

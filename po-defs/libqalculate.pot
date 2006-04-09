@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-02 22:10+0200\n"
+"POT-Creation-Date: 2006-04-09 09:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3559,7 +3559,7 @@ msgstr ""
 msgid "atanh"
 msgstr ""
 
-#: ../data/functions.xml.in.h:577 ../data/variables.xml.in.h:111
+#: ../data/functions.xml.in.h:577 ../data/variables.xml.in.h:119
 msgid "atomic_mass"
 msgstr ""
 
@@ -7701,765 +7701,801 @@ msgid "&#x3C6;"
 msgstr ""
 
 #: ../data/variables.xml.in.h:14
-msgid "Alpha Particle Mass"
+msgid ":plural:billion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:15
-msgid "Apery's Constant"
+msgid ":plural:hundred"
 msgstr ""
 
 #: ../data/variables.xml.in.h:16
-msgid "Archimede's Constant (pi)"
+msgid ":plural:million"
 msgstr ""
 
 #: ../data/variables.xml.in.h:17
-msgid "Atomic Mass Constant"
+msgid ":plural:quadrillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:18
-msgid "Atomic and Nuclear Constants"
+msgid ":plural:quintillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:19
-msgid "Avogadro Constant"
+msgid ":plural:sextillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:20
-msgid "Basic Constants"
+msgid ":plural:thousand"
 msgstr ""
 
 #: ../data/variables.xml.in.h:21
-msgid "Billion"
+msgid ":plural:trillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:22
-msgid "Bohr Radius"
+msgid "Alpha Particle Mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:23
-msgid "Boltzmann Constant"
+msgid "Apery's Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:24
-msgid "Borh Magneton"
+msgid "Archimede's Constant (pi)"
 msgstr ""
 
 #: ../data/variables.xml.in.h:25
-msgid "Catalan's Constant"
+msgid "Atomic Mass Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:26
-msgid "Centillion"
+msgid "Atomic and Nuclear Constants"
 msgstr ""
 
 #: ../data/variables.xml.in.h:27
-msgid "Characteristic Impedance of Vacuum"
+msgid "Avogadro Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:28
-msgid "Classical Electron Radius"
+msgid "Basic Constants"
 msgstr ""
 
 #: ../data/variables.xml.in.h:29
-msgid "Compton Wavelength"
+msgid "Billion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:30
-msgid "Conductance Quantum"
+msgid "Bohr Radius"
 msgstr ""
 
 #: ../data/variables.xml.in.h:31
-msgid "Decillion"
+msgid "Boltzmann Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:32
-msgid "Duodecillion"
+msgid "Borh Magneton"
 msgstr ""
 
 #: ../data/variables.xml.in.h:33
-msgid "Electric Constant (Permittivity of Free Space)"
+msgid "Catalan's Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:34
-msgid "Electromagnetic Constants"
+msgid "Centillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:35
-msgid "Electron Mass"
+msgid "Characteristic Impedance of Vacuum"
 msgstr ""
 
 #: ../data/variables.xml.in.h:36
-msgid "Elementary Charge"
+msgid "Classical Electron Radius"
 msgstr ""
 
 #: ../data/variables.xml.in.h:37
-msgid "Euler's Constant"
+msgid "Compton Wavelength"
 msgstr ""
 
 #: ../data/variables.xml.in.h:38
-msgid "False"
+msgid "Conductance Quantum"
 msgstr ""
 
 #: ../data/variables.xml.in.h:39
-msgid "Faraday Constant"
+msgid "Decillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:40
-msgid "First Radiation Constant"
+msgid "Duodecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:41
-msgid "G"
+msgid "Electric Constant (Permittivity of Free Space)"
 msgstr ""
 
 #: ../data/variables.xml.in.h:42
-msgid "G_0"
+msgid "Electromagnetic Constants"
 msgstr ""
 
 #: ../data/variables.xml.in.h:43
-msgid "Googol"
+msgid "Electron Mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:44
-msgid "Googolplex"
+msgid "Elementary Charge"
 msgstr ""
 
 #: ../data/variables.xml.in.h:45
-msgid "Helion Mass"
+msgid "Euler's Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:46
-msgid "Hundred"
+msgid "False"
 msgstr ""
 
 #: ../data/variables.xml.in.h:47
-msgid "Ideal Gas Constant"
+msgid "Faraday Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:48
-msgid "Imaginary i (sqrt -1)"
+msgid "First Radiation Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:49
-msgid "Infinity"
+msgid "G"
 msgstr ""
 
 #: ../data/variables.xml.in.h:50
-msgid "Josephson Constant"
+msgid "G_0"
 msgstr ""
 
 #: ../data/variables.xml.in.h:51
-msgid "K_J"
+msgid "Googol"
 msgstr ""
 
 #: ../data/variables.xml.in.h:52
-msgid "Large Numbers"
+msgid "Googolplex"
 msgstr ""
 
 #: ../data/variables.xml.in.h:53
-msgid "Magnetic Constant (Permeability of Free Space)"
+msgid "Helion Mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:54
-msgid "Magnetic Flux Quantum"
+msgid "Hundred"
 msgstr ""
 
 #: ../data/variables.xml.in.h:55
-msgid "Million"
+msgid "Ideal Gas Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:56
-msgid "N_A"
+msgid "Imaginary i (sqrt -1)"
 msgstr ""
 
 #: ../data/variables.xml.in.h:57
-msgid "Negative Infinity"
+msgid "Infinity"
 msgstr ""
 
 #: ../data/variables.xml.in.h:58
-msgid "Neutron Mass"
+msgid "Josephson Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:59
-msgid "Newtonian Constant of Gravitation"
+msgid "K_J"
 msgstr ""
 
 #: ../data/variables.xml.in.h:60
-msgid "Nonillion"
+msgid "Large Numbers"
 msgstr ""
 
 #: ../data/variables.xml.in.h:61
-msgid "Novemdecillion"
+msgid "Magnetic Constant (Permeability of Free Space)"
 msgstr ""
 
 #: ../data/variables.xml.in.h:62
-msgid "Nuclear Magneton"
+msgid "Magnetic Flux Quantum"
 msgstr ""
 
 #: ../data/variables.xml.in.h:63
-msgid "Octillion"
+msgid "Million"
 msgstr ""
 
 #: ../data/variables.xml.in.h:64
-msgid "Octodecillion"
+msgid "N_A"
 msgstr ""
 
 #: ../data/variables.xml.in.h:65
-msgid "Per Mille"
+msgid "Negative Infinity"
 msgstr ""
 
 #: ../data/variables.xml.in.h:66
-msgid "Per Myriad"
+msgid "Neutron Mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:67
-msgid "Physical Constants"
+msgid "Newtonian Constant of Gravitation"
 msgstr ""
 
 #: ../data/variables.xml.in.h:68
-msgid "Physico-Chemical Constants"
+msgid "Nonillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:69
-msgid "Planck Constant"
+msgid "Novemdecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:70
-msgid "Planck Constant over 2 pi"
+msgid "Nuclear Magneton"
 msgstr ""
 
 #: ../data/variables.xml.in.h:71
-msgid "Planck Length"
+msgid "Octillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:72
-msgid "Planck Mass"
+msgid "Octodecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:73
-msgid "Planck Temperature"
+msgid "Per Mille"
 msgstr ""
 
 #: ../data/variables.xml.in.h:74
-msgid "Planck Time"
+msgid "Per Myriad"
 msgstr ""
 
 #: ../data/variables.xml.in.h:75
-msgid "Positive Infinity"
+msgid "Physical Constants"
 msgstr ""
 
 #: ../data/variables.xml.in.h:76
-msgid "Procent"
+msgid "Physico-Chemical Constants"
 msgstr ""
 
 #: ../data/variables.xml.in.h:77
-msgid "Proton Mass"
+msgid "Planck Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:78
-msgid "Pythagora's Constant (sqrt 2)"
+msgid "Planck Constant over 2 pi"
 msgstr ""
 
 #: ../data/variables.xml.in.h:79
-msgid "Quadrillion"
+msgid "Planck Length"
 msgstr ""
 
 #: ../data/variables.xml.in.h:80
-msgid "Quattuordecillion"
+msgid "Planck Mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:81
-msgid "Quindecillion"
+msgid "Planck Temperature"
 msgstr ""
 
 #: ../data/variables.xml.in.h:82
-msgid "Quintillion"
+msgid "Planck Time"
 msgstr ""
 
 #: ../data/variables.xml.in.h:83
-msgid "R_&#x221E;"
+msgid "Positive Infinity"
 msgstr ""
 
 #: ../data/variables.xml.in.h:84
-msgid "R_K"
+msgid "Procent"
 msgstr ""
 
 #: ../data/variables.xml.in.h:85
-msgid "Rydberg Constant"
+msgid "Proton Mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:86
-msgid "Second Radiation Constant"
+msgid "Pythagora's Constant (sqrt 2)"
 msgstr ""
 
 #: ../data/variables.xml.in.h:87
-msgid "Septendecillion"
+msgid "Quadrillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:88
-msgid "Septillion"
+msgid "Quattuordecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:89
-msgid "Sexdecillion"
+msgid "Quindecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:90
-msgid "Sextillion"
+msgid "Quintillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:91
-msgid "Small Numbers"
+msgid "R_&#x221E;"
 msgstr ""
 
 #: ../data/variables.xml.in.h:92
-msgid "Special Numbers"
+msgid "R_K"
 msgstr ""
 
 #: ../data/variables.xml.in.h:93
-msgid "Speed of Light in Vacuum"
+msgid "Rydberg Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:94
-msgid "T_P"
+msgid "Second Radiation Constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:95
-msgid "Tau Mass"
+msgid "Septendecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:96
-msgid "The Base of Natural Logarithms (e)"
+msgid "Septillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:97
-msgid "The Golden Ratio"
+msgid "Sexdecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:98
-msgid "Thousand"
+msgid "Sextillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:99
-msgid "Tredecillion"
+msgid "Small Numbers"
 msgstr ""
 
 #: ../data/variables.xml.in.h:100
-msgid "Trillion"
+msgid "Special Numbers"
 msgstr ""
 
 #: ../data/variables.xml.in.h:101
-msgid "True"
+msgid "Speed of Light in Vacuum"
 msgstr ""
 
 #: ../data/variables.xml.in.h:102
-msgid "Undecillion"
+msgid "T_P"
 msgstr ""
 
 #: ../data/variables.xml.in.h:103
-msgid "Undefined"
+msgid "Tau Mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:104
-msgid "Universal Constants"
+msgid "The Base of Natural Logarithms (e)"
 msgstr ""
 
 #: ../data/variables.xml.in.h:105
-msgid "Unknowns"
+msgid "The Golden Ratio"
 msgstr ""
 
 #: ../data/variables.xml.in.h:106
-msgid "Vigintillion"
+msgid "Thousand"
 msgstr ""
 
 #: ../data/variables.xml.in.h:107
-msgid "Z_0"
+msgid "Tredecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:108
-msgid "a_o"
+msgid "Trillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:109
-msgid "alpha_particle_mass"
+msgid "True"
 msgstr ""
 
 #: ../data/variables.xml.in.h:110
-msgid "apery"
+msgid "Undecillion"
+msgstr ""
+
+#: ../data/variables.xml.in.h:111
+msgid "Undefined"
 msgstr ""
 
 #: ../data/variables.xml.in.h:112
-msgid "avogadro"
+msgid "Universal Constants"
 msgstr ""
 
 #: ../data/variables.xml.in.h:113
-msgid "billion"
+msgid "Unknowns"
 msgstr ""
 
 #: ../data/variables.xml.in.h:114
-msgid "bohr_magneton"
+msgid "Vigintillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:115
-msgid "bohr_radius"
+msgid "Z_0"
 msgstr ""
 
 #: ../data/variables.xml.in.h:116
-msgid "boltzmann"
+msgid "a_o"
 msgstr ""
 
 #: ../data/variables.xml.in.h:117
-msgid "c"
+msgid "alpha_particle_mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:118
-msgid "c_1"
-msgstr ""
-
-#: ../data/variables.xml.in.h:119
-msgid "c_2"
+msgid "apery"
 msgstr ""
 
 #: ../data/variables.xml.in.h:120
-msgid "catalan"
+msgid "avogadro"
 msgstr ""
 
 #: ../data/variables.xml.in.h:121
-msgid "centillion"
+msgid "billion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:122
-msgid "characteristic_impedance"
+msgid "bohr_magneton"
 msgstr ""
 
 #: ../data/variables.xml.in.h:123
-msgid "classical_electron_radius"
+msgid "bohr_radius"
 msgstr ""
 
 #: ../data/variables.xml.in.h:124
-msgid "compton_wavelength"
+msgid "boltzmann"
 msgstr ""
 
 #: ../data/variables.xml.in.h:125
-msgid "conductance_quantum"
+msgid "c"
 msgstr ""
 
 #: ../data/variables.xml.in.h:126
-msgid "decillion"
+msgid "c_1"
 msgstr ""
 
 #: ../data/variables.xml.in.h:127
-msgid "duodecillion"
+msgid "c_2"
 msgstr ""
 
 #: ../data/variables.xml.in.h:128
-msgid "e"
+msgid "catalan"
 msgstr ""
 
 #: ../data/variables.xml.in.h:129
-msgid "e_charge"
+msgid "centillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:130
-msgid "electric_constant"
+msgid "characteristic_impedance"
 msgstr ""
 
 #: ../data/variables.xml.in.h:131
-msgid "electron_mass"
+msgid "classical_electron_radius"
 msgstr ""
 
 #: ../data/variables.xml.in.h:132
-msgid "elementary_charge"
+msgid "compton_wavelength"
 msgstr ""
 
 #: ../data/variables.xml.in.h:133
-msgid "euler"
+msgid "conductance_quantum"
 msgstr ""
 
 #: ../data/variables.xml.in.h:134
-msgid "false"
+msgid "decillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:135
-msgid "faraday"
+msgid "duodecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:136
-msgid "first_radiation"
+msgid "e"
 msgstr ""
 
 #: ../data/variables.xml.in.h:137
-msgid "golden"
+msgid "e_charge"
 msgstr ""
 
 #: ../data/variables.xml.in.h:138
-msgid "googol"
+msgid "electric_constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:139
-msgid "googolplex"
+msgid "electron_mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:140
-msgid "helion_mass"
+msgid "elementary_charge"
 msgstr ""
 
 #: ../data/variables.xml.in.h:141
-msgid "i"
+msgid "euler"
 msgstr ""
 
 #: ../data/variables.xml.in.h:142
-msgid "ideal_gas"
+msgid "false"
 msgstr ""
 
 #: ../data/variables.xml.in.h:143
-msgid "infinity"
+msgid "faraday"
 msgstr ""
 
 #: ../data/variables.xml.in.h:144
-msgid "josephson"
+msgid "first_radiation"
 msgstr ""
 
 #: ../data/variables.xml.in.h:145
-msgid "klitzing"
+msgid "golden"
 msgstr ""
 
 #: ../data/variables.xml.in.h:146
-msgid "l_P"
+msgid "googol"
 msgstr ""
 
 #: ../data/variables.xml.in.h:147
-msgid "m_&#x3B1;"
+msgid "googolplex"
 msgstr ""
 
 #: ../data/variables.xml.in.h:148
-msgid "m_&#x3C4;"
+msgid "helion_mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:149
-msgid "m_P"
+msgid "hundred"
 msgstr ""
 
 #: ../data/variables.xml.in.h:150
-msgid "m_e"
+msgid "i"
 msgstr ""
 
 #: ../data/variables.xml.in.h:151
-msgid "m_h"
+msgid "ideal_gas"
 msgstr ""
 
 #: ../data/variables.xml.in.h:152
-msgid "m_n"
+msgid "infinity"
 msgstr ""
 
 #: ../data/variables.xml.in.h:153
-msgid "m_p"
+msgid "josephson"
 msgstr ""
 
 #: ../data/variables.xml.in.h:154
-msgid "m_u"
+msgid "klitzing"
 msgstr ""
 
 #: ../data/variables.xml.in.h:155
-msgid "magnetic_constant"
+msgid "l_P"
 msgstr ""
 
 #: ../data/variables.xml.in.h:156
-msgid "magnetic_flux_quantum"
+msgid "m_&#x3B1;"
 msgstr ""
 
 #: ../data/variables.xml.in.h:157
-msgid "million"
+msgid "m_&#x3C4;"
 msgstr ""
 
 #: ../data/variables.xml.in.h:158
-msgid "minus_infinity"
+msgid "m_P"
 msgstr ""
 
 #: ../data/variables.xml.in.h:159
-msgid "neutron_mass"
+msgid "m_e"
 msgstr ""
 
 #: ../data/variables.xml.in.h:160
-msgid "newtonian_constant"
+msgid "m_h"
 msgstr ""
 
 #: ../data/variables.xml.in.h:161
-msgid "no"
+msgid "m_n"
 msgstr ""
 
 #: ../data/variables.xml.in.h:162
-msgid "nonillion"
+msgid "m_p"
 msgstr ""
 
 #: ../data/variables.xml.in.h:163
-msgid "novemdecillion"
+msgid "m_u"
 msgstr ""
 
 #: ../data/variables.xml.in.h:164
-msgid "nuclear_magneton"
+msgid "magnetic_constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:165
-msgid "octillion"
+msgid "magnetic_flux_quantum"
 msgstr ""
 
 #: ../data/variables.xml.in.h:166
-msgid "octodecillion"
+msgid "million"
 msgstr ""
 
 #: ../data/variables.xml.in.h:167
-msgid "permille"
+msgid "minus_infinity"
 msgstr ""
 
 #: ../data/variables.xml.in.h:168
-msgid "permyriad"
+msgid "neutron_mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:169
-msgid "pi"
+msgid "newtonian_constant"
 msgstr ""
 
 #: ../data/variables.xml.in.h:170
-msgid "planck"
+msgid "no"
 msgstr ""
 
 #: ../data/variables.xml.in.h:171
-msgid "planck2pi"
+msgid "nonillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:172
-msgid "planck_length"
+msgid "novemdecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:173
-msgid "planck_mass"
+msgid "nuclear_magneton"
 msgstr ""
 
 #: ../data/variables.xml.in.h:174
-msgid "planck_temperature"
+msgid "octillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:175
-msgid "planck_time"
+msgid "octodecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:176
-msgid "plus_infinity"
+msgid "permille"
 msgstr ""
 
 #: ../data/variables.xml.in.h:177
-msgid "procent"
+msgid "permyriad"
 msgstr ""
 
 #: ../data/variables.xml.in.h:178
-msgid "proton_mass"
+msgid "pi"
 msgstr ""
 
 #: ../data/variables.xml.in.h:179
-msgid "pythagoras"
+msgid "planck"
 msgstr ""
 
 #: ../data/variables.xml.in.h:180
-msgid "quadrillion"
+msgid "planck2pi"
 msgstr ""
 
 #: ../data/variables.xml.in.h:181
-msgid "quattuordecillion"
+msgid "planck_length"
 msgstr ""
 
 #: ../data/variables.xml.in.h:182
-msgid "quindecillion"
+msgid "planck_mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:183
-msgid "quintillion"
+msgid "planck_temperature"
 msgstr ""
 
 #: ../data/variables.xml.in.h:184
-msgid "r_e"
+msgid "planck_time"
 msgstr ""
 
 #: ../data/variables.xml.in.h:185
-msgid "rydberg"
+msgid "plus_infinity"
 msgstr ""
 
 #: ../data/variables.xml.in.h:186
-msgid "second_radiation"
+msgid "procent"
 msgstr ""
 
 #: ../data/variables.xml.in.h:187
-msgid "septendecillion"
+msgid "proton_mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:188
-msgid "septillion"
+msgid "pythagoras"
 msgstr ""
 
 #: ../data/variables.xml.in.h:189
-msgid "sexdecillion"
+msgid "quadrillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:190
-msgid "sextillion"
+msgid "quattuordecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:191
-msgid "speed_of_light"
+msgid "quindecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:192
-msgid "t_P"
+msgid "quintillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:193
-msgid "tau_mass"
+msgid "r_e"
 msgstr ""
 
 #: ../data/variables.xml.in.h:194
-msgid "thousand"
+msgid "rydberg"
 msgstr ""
 
 #: ../data/variables.xml.in.h:195
-msgid "tredecillion"
+msgid "second_radiation"
 msgstr ""
 
 #: ../data/variables.xml.in.h:196
-msgid "trillion"
+msgid "septendecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:197
-msgid "true"
+msgid "septillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:198
-msgid "undecillion"
+msgid "sexdecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:199
-msgid "undefined"
+msgid "sextillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:200
-msgid "vigintillion"
+msgid "speed_of_light"
 msgstr ""
 
 #: ../data/variables.xml.in.h:201
-msgid "von Klitzing Constant"
+msgid "t_P"
 msgstr ""
 
 #: ../data/variables.xml.in.h:202
-msgid "x"
+msgid "tau_mass"
 msgstr ""
 
 #: ../data/variables.xml.in.h:203
-msgid "y"
+msgid "thousand"
 msgstr ""
 
 #: ../data/variables.xml.in.h:204
-msgid "yes"
+msgid "tredecillion"
 msgstr ""
 
 #: ../data/variables.xml.in.h:205
+msgid "trillion"
+msgstr ""
+
+#: ../data/variables.xml.in.h:206
+msgid "true"
+msgstr ""
+
+#: ../data/variables.xml.in.h:207
+msgid "undecillion"
+msgstr ""
+
+#: ../data/variables.xml.in.h:208
+msgid "undefined"
+msgstr ""
+
+#: ../data/variables.xml.in.h:209
+msgid "vigintillion"
+msgstr ""
+
+#: ../data/variables.xml.in.h:210
+msgid "von Klitzing Constant"
+msgstr ""
+
+#: ../data/variables.xml.in.h:211
+msgid "x"
+msgstr ""
+
+#: ../data/variables.xml.in.h:212
+msgid "y"
+msgstr ""
+
+#: ../data/variables.xml.in.h:213
+msgid "yes"
+msgstr ""
+
+#: ../data/variables.xml.in.h:214
 msgid "z"
 msgstr ""

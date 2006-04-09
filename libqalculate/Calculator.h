@@ -515,6 +515,8 @@ class Calculator {
 	size_t RPNStackSize() const;
 	void clearRPNStack();
 	void moveRPNRegister(size_t old_index, size_t new_index);
+	void moveRPNRegisterUp(size_t index);
+	void moveRPNRegisterDown(size_t index);
 
 	/** @name Functions for calculating expressions. */
 	//@{
@@ -558,7 +560,7 @@ class Calculator {
 	* @param str The expression to unlocalize.
 	* @returns An unlocalized expression.
 	*/
-	string unlocalizeExpression(string str) const;
+	string unlocalizeExpression(string str, const ParseOptions &po = default_parse_options) const;
 	/** Split an expression string after and before " to ".
 	*
 	* @param str The expression. Will be set to the string before " to ".

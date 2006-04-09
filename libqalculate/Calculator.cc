@@ -55,7 +55,8 @@ using namespace cln;
 #define XML_DO_FROM_TEXT(node, action)			value = xmlNodeListGetString(doc, node->xmlChildrenNode, 1); if(value) {action((char*) value); xmlFree(value);} else action("");
 #define XML_GET_INT_FROM_PROP(node, name, i)		value = xmlGetProp(node, (xmlChar*) name); if(value) {i = s2i((char*) value); xmlFree(value);}
 #define XML_GET_INT_FROM_TEXT(node, i)			value = xmlNodeListGetString(doc, node->xmlChildrenNode, 1); if(value) {i = s2i((char*) value); xmlFree(value);}
-#define XML_GET_LOCALE_STRING_FROM_TEXT(node, str, best, next_best)		value = xmlNodeListGetString(doc, node->xmlChildrenNode, 1); lang = xmlNodeGetLang(node); if(!best) {if(!lang) {if(!next_best) {if(value) {str = (char*) value; remove_blank_ends(str);} else str = ""; if(locale.empty()) {best = true;}}} else {if(locale == (char*) lang) {best = true; if(value) {str = (char*) value; remove_blank_ends(str);} else str = "";} else if(!next_best && strlen((char*) lang) >= 2 && lang[0] == localebase[0] && lang[1] == localebase[1]) {next_best = true; if(value) {str = (char*) value; remove_blank_ends(str);} else str = "";} else if(!next_best && str.empty() && value) {str = (char*) value; remove_blank_ends(str);}}} if(value) xmlFree(value); if(lang) xmlFree(lang);
+#define XML_GET_LOCALE_STRING_FROM_TEXT(node, str, best, next_best)		value = xmlNodeListGetString(doc, node->xmlChildrenNode, 1); lang = xmlNodeGetLang(node); if(!best) {if(!lang) {if(!next_best) {if(value) {str = (char*) value; remove_blank_ends(str);} else str = ""; if(locale.empty()) {best = true;}}} else {if(locale == (char*) lang) {best = true; if(value) {str = (char*) value; remove_blank_ends(str);} else str = "";} else if(!next_best && strlen((char*) lang) >= 2 && fulfilled_translation == 0 && lang[0] == localebase[0] && lang[1] == localebase[1]) {next_best = true; if(value) {str = (char*) value; remove_blank_ends(str);} else str = "";} else if(!next_best && str.empty() && value) {str = (char*) value; remove_blank_ends(str);}}} if(value) xmlFree(value); if(lang) xmlFree(lang);
+#define XML_GET_LOCALE_STRING_FROM_TEXT_REQ(node, str, best, next_best)		value = xmlNodeListGetString(doc, node->xmlChildrenNode, 1); lang = xmlNodeGetLang(node); if(!best) {if(!lang) {if(!next_best) {if(value) {str = (char*) value; remove_blank_ends(str);} else str = ""; if(locale.empty()) {best = true;}}} else {if(locale == (char*) lang) {best = true; if(value) {str = (char*) value; remove_blank_ends(str);} else str = "";} else if(!next_best && strlen((char*) lang) >= 2 && fulfilled_translation == 0 && lang[0] == localebase[0] && lang[1] == localebase[1]) {next_best = true; if(value) {str = (char*) value; remove_blank_ends(str);} else str = "";} else if(!next_best && str.empty() && value && !require_translation) {str = (char*) value; remove_blank_ends(str);}}} if(value) xmlFree(value); if(lang) xmlFree(lang);
 
 const string &PrintOptions::comma() const {if(comma_sign.empty()) return CALCULATOR->getComma(); return comma_sign;}
 const string &PrintOptions::decimalpoint() const {if(decimalpoint_sign.empty()) return CALCULATOR->getDecimalPoint(); return decimalpoint_sign;}
@@ -1552,7 +1553,7 @@ string Calculator::localizeExpression(string str) const {
 	}
 	return str;
 }
-string Calculator::unlocalizeExpression(string str) const {
+string Calculator::unlocalizeExpression(string str, const ParseOptions &po) const {
 	if(DOT_STR == DOT && COMMA_STR == COMMA) return str;
 	vector<size_t> q_begin;
 	vector<size_t> q_end;
@@ -1572,6 +1573,23 @@ string Calculator::unlocalizeExpression(string str) const {
 		i3++;
 	}
 	if(DOT_STR != DOT) {
+		if(po.dot_as_separator) {
+			size_t ui = str.find(DOT);
+			while(ui != string::npos) {
+				bool b = false;
+				for(size_t ui2 = 0; ui2 < q_end.size(); ui2++) {
+					if(ui <= q_end[ui2] && ui >= q_begin[ui2]) {
+						ui = str.find(DOT, q_end[ui2] + 1);
+						b = true;
+						break;
+					}
+				}
+				if(!b) {
+					str.replace(ui, strlen(DOT), SPACE);
+					ui = str.find(DOT, ui + strlen(SPACE));
+				}
+			}
+		}
 		size_t ui = str.find(DOT_STR);
 		while(ui != string::npos) {
 			bool b = false;
@@ -1872,6 +1890,25 @@ void Calculator::moveRPNRegister(size_t old_index, size_t new_index) {
 			rpn_stack.insert(rpn_stack.begin() + new_index, mstruct);
 			rpn_stack.erase(rpn_stack.begin() + (old_index + 1));
 		}
+	}
+}
+void Calculator::moveRPNRegisterUp(size_t index) {
+	if(index > 1 && index <= rpn_stack.size()) {
+		index = rpn_stack.size() - index;
+		MathStructure *mstruct = rpn_stack[index];
+		rpn_stack.erase(rpn_stack.begin() + index);
+		index++;
+		if(index == rpn_stack.size()) rpn_stack.push_back(mstruct);
+		else rpn_stack.insert(rpn_stack.begin() + index, mstruct);
+	}
+}
+void Calculator::moveRPNRegisterDown(size_t index) {
+	if(index > 0 && index < rpn_stack.size()) {
+		index = rpn_stack.size() - index;
+		MathStructure *mstruct = rpn_stack[index];
+		rpn_stack.erase(rpn_stack.begin() + index);
+		index--;
+		rpn_stack.insert(rpn_stack.begin() + index, mstruct);
 	}
 }
 
@@ -4933,7 +4970,7 @@ bool Calculator::loadLocalDefinitions() {
 												best_name[name_index] = true;\
 												if(value2) names[name_index].name = (char*) value2;\
 												else names[name_index].name = "";\
-											} else {\
+											} else if(!require_translation) {\
 												if(!best_name[name_index] && !nextbest_name[name_index]) {\
 													if(value2) names[name_index].name = (char*) value2;\
 													else names[name_index].name = "";\
@@ -4950,7 +4987,7 @@ bool Calculator::loadLocalDefinitions() {
 												if(value2) names[name_index].name = (char*) value2;\
 												else names[name_index].name = "";\
 											}\
-										} else if(!nextbest_name[name_index] && strlen((char*) lang) >= 2 && lang[0] == localebase[0] && lang[1] == localebase[1]) {\
+										} else if(!nextbest_name[name_index] && strlen((char*) lang) >= 2 && fulfilled_translation == 0 && lang[0] == localebase[0] && lang[1] == localebase[1]) {\
 											value2 = xmlNodeListGetString(doc, child2->xmlChildrenNode, 1);\
 											if(!value2 || validation((char*) value2, version_numbers, is_user_defs)) {\
 												nextbest_name[name_index] = true; \
@@ -5008,14 +5045,16 @@ bool Calculator::loadLocalDefinitions() {
 #define ITEM_READ_DTH			if(!xmlStrcmp(child->name, (const xmlChar*) "description")) {\
 						XML_GET_LOCALE_STRING_FROM_TEXT(child, description, best_description, next_best_description)\
 					} else if(!xmlStrcmp(child->name, (const xmlChar*) "title")) {\
-						XML_GET_LOCALE_STRING_FROM_TEXT(child, title, best_title, next_best_title)\
+						XML_GET_LOCALE_STRING_FROM_TEXT_REQ(child, title, best_title, next_best_title)\
 					} else if(!xmlStrcmp(child->name, (const xmlChar*) "hidden")) {\
 						XML_GET_TRUE_FROM_TEXT(child, hidden);\
 					}
 				
 #define ITEM_INIT_DTH			hidden = false;\
 					title = ""; best_title = false; next_best_title = false;\
-					description = ""; best_description = false; next_best_description = false;
+					description = ""; best_description = false; next_best_description = false;\
+					if(fulfilled_translation > 0) require_translation = false; \
+					else {XML_GET_TRUE_FROM_PROP(cur, "require_translation", require_translation)}
 
 #define ITEM_INIT_NAME			for(size_t i = 0; i < 10; i++) {\
 						best_name[i] = false;\
@@ -5035,7 +5074,7 @@ bool Calculator::loadLocalDefinitions() {
 					}
 					
 #define ITEM_SET_NAME_2			for(size_t i = 0; i < 10; i++) {\
-						if(!names[i].name.empty()) {\
+						if(!names[i].name.empty() && names[i].name[0] != ':') {\
 							item->addName(names[i], i + 1);\
 							names[i].name = "";\
 						} else if(!ref_names[i].name.empty()) {\
@@ -5173,19 +5212,34 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 		locale = clocale;
 		if(locale == "POSIX" || locale == "C") {
 			locale = "";
+		} else {
+			size_t i = locale.find('.');
+			if(i != string::npos) locale = locale.substr(0, i);
 		}
 	}
 
+	int fulfilled_translation = 0;
 	string localebase;
 	if(locale.length() > 2) {
 		localebase = locale.substr(0, 2);
+		if(locale == "en_US") {
+			fulfilled_translation = 2;
+		} else if(localebase == "en") {
+			fulfilled_translation = 1;
+		}
 	} else {
 		localebase = locale;
+		if(locale == "en") {
+			fulfilled_translation = 2;
+		}
 	}
-	while(localebase.length() < 2) localebase += " ";
+	while(localebase.length() < 2) {
+		localebase += " ";
+		fulfilled_translation = 2;
+	}
 
 	int exponent = 1, litmp = 0;
-	bool active = false, hidden = false, b = false;
+	bool active = false, hidden = false, b = false, require_translation = false;
 	Number nr;
 	ExpressionItem *item;
 	MathFunction *f;
@@ -5281,7 +5335,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 				} else {
 					name = "";
 				}
-				XML_GET_FALSE_FROM_PROP(cur, "active", active)				
+				XML_GET_FALSE_FROM_PROP(cur, "active", active)
 				f = new UserFunction(category, "", "", is_user_defs, 0, "", "", 0, active);
 				item = f;
 				done_something = true;
@@ -5387,8 +5441,8 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 								arg->setAlerts(b);
 							}
 							child2 = child2->next;
-						}	
-						arg->setName(argname);					
+						}
+						arg->setName(argname);
 						itmp = 1;
 						XML_GET_INT_FROM_PROP(child, "index", itmp);
 						f->setArgumentDefinition(itmp, arg); 
@@ -5470,7 +5524,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 													best_name[name_index] = true;
 													if(value2) prop_names[name_index] = (char*) value2;
 													else prop_names[name_index] = "";
-												} else if(!nextbest_name[name_index] && strlen((char*) lang) >= 2 && lang[0] == localebase[0] && lang[1] == localebase[1]) {
+												} else if(!nextbest_name[name_index] && strlen((char*) lang) >= 2 && fulfilled_translation == 0 && lang[0] == localebase[0] && lang[1] == localebase[1]) {
 													value2 = xmlNodeListGetString(doc, child3->xmlChildrenNode, 1);
 													nextbest_name[name_index] = true;
 													if(value2) prop_names[name_index] = (char*) value2;
@@ -5615,7 +5669,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 			} else if(!xmlStrcmp(cur->name, (const xmlChar*) "builtin_function")) {
 				XML_GET_STRING_FROM_PROP(cur, "name", name)
 				f = getFunction(name);
-				if(f) {	
+				if(f) {
 					XML_GET_FALSE_FROM_PROP(cur, "active", active)
 					f->setLocal(is_user_defs, active);
 					f->setCategory(category);

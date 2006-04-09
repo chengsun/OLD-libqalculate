@@ -56,187 +56,196 @@
       </name>
       <value>10^100</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Centillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>centillion</_name>
       </name>
       <value>1E303</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Vigintillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>vigintillion</_name>
       </name>
       <value>1E63</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Novemdecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>novemdecillion</_name>
       </name>
       <value>1E60</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Octodecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>octodecillion</_name>
       </name>
       <value>1E57</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Septendecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>septendecillion</_name>
       </name>
       <value>1E54</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Sexdecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>sexdecillion</_name>
       </name>
       <value>1E51</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Quindecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>quindecillion</_name>
       </name>
       <value>1E48</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Quattuordecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>quattuordecillion</_name>
       </name>
       <value>1E45</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Tredecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>tredecillion</_name>
       </name>
       <value>1E42</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Duodecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>duodecillion</_name>
       </name>
       <value>1E39</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Undecillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>undecillion</_name>
       </name>
       <value>1E36</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Decillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>decillion</_name>
       </name>
       <value>1E33</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Nonillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>nonillion</_name>
       </name>
       <value>1E30</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Octillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>octillion</_name>
       </name>
       <value>1E27</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Septillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>septillion</_name>
       </name>
       <value>1E24</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Sextillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>sextillion</_name>
+      </name>
+      <name index="2">
+	<plural>true</plural>
+        <_name>:plural:sextillion</_name>
       </name>
       <value>1E21</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Quintillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>quintillion</_name>
+      </name>
+      <name index="2">
+	<plural>true</plural>
+        <_name>:plural:quintillion</_name>
       </name>
       <value>1E18</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Quadrillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>quadrillion</_name>
+      </name>
+      <name index="2">
+	<plural>true</plural>
+        <_name>:plural:quadrillion</_name>
       </name>
       <value>1E15</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Trillion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>trillion</_name>
+      </name>
+      <name index="2">
+	<plural>true</plural>
+        <_name>:plural:trillion</_name>
       </name>
       <value>1E12</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Billion</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>billion</_name>
+      </name>
+      <name index="2">
+	<plural>true</plural>
+        <_name>:plural:billion</_name>
       </name>
       <value>1E9</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Million</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>million</_name>
+      </name>
+      <name index="2">
+	<plural>true</plural>
+        <_name>:plural:million</_name>
       </name>
       <value>1E6</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Thousand</_title>
       <name index="1">
-        <reference>true</reference>
         <_name>thousand</_name>
+      </name>
+      <name index="2">
+	<plural>true</plural>
+        <_name>:plural:thousand</_name>
       </name>
       <value>1E3</value>
     </variable>
-    <variable>
+    <variable require_translation="true">
       <_title>Hundred</_title>
       <name index="1">
-        <reference>true</reference>
-        <_name>Hundred</_name>
+        <_name>hundred</_name>
+      </name>
+      <name index="2">
+	<plural>true</plural>
+        <_name>:plural:hundred</_name>
       </name>
       <value>1E2</value>
     </variable>

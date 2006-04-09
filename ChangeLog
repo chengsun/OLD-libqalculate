@@ -1,3 +1,12 @@
+2006-04-09 Niklas Knutsson  <nq@altern.org>
+
+	* Ignore definition names beginning with colon, for plural names where the original name does not differ
+
+2006-04-08 Niklas Knutsson  <nq@altern.org>
+
+	* Options to use dot as thousands separator when it is not the default decimal sign
+	* require_translation property for definitions, used in the large numbers category
+
 2006-04-06 Niklas Knutsson  <nq@altern.org>
 
 	* Update RPN functions

@@ -1,6 +1,8 @@
 2006-04-09 Niklas Knutsson  <nq@altern.org>
 
 	* Ignore definition names beginning with colon, for plural names where the original name does not differ
+	* Set vectors and matrices as the first argument by default
+	* Add more function descriptions
 
 2006-04-08 Niklas Knutsson  <nq@altern.org>
 

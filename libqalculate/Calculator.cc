@@ -1132,7 +1132,7 @@ void Calculator::addBuiltinFunctions() {
 	f_sort = addFunction(new SortFunction());
 	f_rank = addFunction(new RankFunction());
 	f_limits = addFunction(new LimitsFunction());
-	f_component = addFunction(new ComponentFunction());
+	//f_component = addFunction(new ComponentFunction());
 	f_dimension = addFunction(new DimensionFunction());
 	f_merge_vectors = addFunction(new MergeVectorsFunction());
 	f_matrix = addFunction(new MatrixFunction());

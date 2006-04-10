@@ -107,29 +107,29 @@ int MatrixToVectorFunction::calculate(MathStructure &mstruct, const MathStructur
 	return 1;
 }
 RowFunction::RowFunction() : MathFunction("row", 2) {
-	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
-	setArgumentDefinition(2, new MatrixArgument());	
+	setArgumentDefinition(1, new MatrixArgument());
+	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 }
 int RowFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	size_t row = (size_t) vargs[0].number().intValue();
-	if(row > vargs[1].rows()) {
-		CALCULATOR->error(true, _("Row %s does not exist in matrix."), vargs[0].print().c_str(), NULL);
+	size_t row = (size_t) vargs[1].number().intValue();
+	if(row > vargs[0].rows()) {
+		CALCULATOR->error(true, _("Row %s does not exist in matrix."), vargs[1].print().c_str(), NULL);
 		return 0;
 	}
-	vargs[1].rowToVector(row, mstruct);
+	vargs[0].rowToVector(row, mstruct);
 	return 1;
 }
 ColumnFunction::ColumnFunction() : MathFunction("column", 2) {
-	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
-	setArgumentDefinition(2, new MatrixArgument());	
+	setArgumentDefinition(1, new MatrixArgument());
+	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 }
 int ColumnFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	size_t col = (size_t) vargs[0].number().intValue();
-	if(col > vargs[1].columns()) {
-		CALCULATOR->error(true, _("Column %s does not exist in matrix."), vargs[0].print().c_str(), NULL);
+	size_t col = (size_t) vargs[1].number().intValue();
+	if(col > vargs[0].columns()) {
+		CALCULATOR->error(true, _("Column %s does not exist in matrix."), vargs[1].print().c_str(), NULL);
 		return 0;
 	}
-	vargs[1].columnToVector(col, mstruct);
+	vargs[0].columnToVector(col, mstruct);
 	return 1;
 }
 RowsFunction::RowsFunction() : MathFunction("rows", 1) {
@@ -164,7 +164,7 @@ ElementFunction::ElementFunction() : MathFunction("element", 2, 3) {
 	setDefaultValue(3, "0");
 }
 int ElementFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	if(vargs[0].isMatrix() && vargs[2].number().isPositive()) {
+	if(vargs[2].number().isPositive() && vargs[0].isMatrix()) {
 		size_t row = (size_t) vargs[1].number().intValue();
 		size_t col = (size_t) vargs[2].number().intValue();
 		bool b = true;
@@ -185,11 +185,10 @@ int ElementFunction::calculate(MathStructure &mstruct, const MathStructure &varg
 	} else {
 		if(vargs[2].number().isGreaterThan(1)) {
 			CALCULATOR->error(false, _("Argument 3, %s, is ignored for vectors."), getArgumentDefinition(3)->name().c_str(), NULL);
-			return 0;
 		}
 		size_t row = (size_t) vargs[1].number().intValue();
 		if(row > vargs[0].countChildren()) {
-			CALCULATOR->error(true, _("Element %s does not exist in matrix."), vargs[1].print().c_str(), NULL);
+			CALCULATOR->error(true, _("Element %s does not exist in vector."), vargs[1].print().c_str(), NULL);
 			return 0;
 		}
 		mstruct = *vargs[0].getChild(row);
@@ -217,23 +216,23 @@ int ComponentFunction::calculate(MathStructure &mstruct, const MathStructure &va
 	return 1;
 }
 LimitsFunction::LimitsFunction() : MathFunction("limits", 3) {
-	setArgumentDefinition(1, new IntegerArgument(""));
-	setArgumentDefinition(2, new IntegerArgument(""));	
-	setArgumentDefinition(3, new VectorArgument(""));	
+	setArgumentDefinition(1, new VectorArgument(""));
+	setArgumentDefinition(2, new IntegerArgument(""));
+	setArgumentDefinition(3, new IntegerArgument(""));
 }
 int LimitsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	vargs[2].getRange(vargs[0].number().intValue(), vargs[1].number().intValue(), mstruct);
+	vargs[0].getRange(vargs[1].number().intValue(), vargs[2].number().intValue(), mstruct);
 	return 1;
 }
 AreaFunction::AreaFunction() : MathFunction("area", 5) {
-	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
-	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));	
+	setArgumentDefinition(1, new MatrixArgument(""));
+	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 	setArgumentDefinition(3, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
-	setArgumentDefinition(4, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));	
-	setArgumentDefinition(5, new MatrixArgument(""));	
+	setArgumentDefinition(4, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
+	setArgumentDefinition(5, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 }
 int AreaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	vargs[4].getArea(vargs[0].number().intValue(), vargs[1].number().intValue(), vargs[2].number().intValue(), vargs[3].number().intValue(), mstruct);
+	vargs[0].getArea(vargs[1].number().intValue(), vargs[2].number().intValue(), vargs[3].number().intValue(), vargs[4].number().intValue(), mstruct);
 	return 1;
 }
 TransposeFunction::TransposeFunction() : MathFunction("transpose", 1) {
@@ -281,12 +280,12 @@ int PermanentFunction::calculate(MathStructure &mstruct, const MathStructure &va
 	return !mstruct.isUndefined();
 }
 CofactorFunction::CofactorFunction() : MathFunction("cofactor", 3) {
-	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
-	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));	
-	setArgumentDefinition(3, new MatrixArgument());
+	setArgumentDefinition(1, new MatrixArgument());
+	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
+	setArgumentDefinition(3, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
 }
 int CofactorFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
-	vargs[2].cofactor((size_t) vargs[0].number().intValue(), (size_t) vargs[1].number().intValue(), mstruct, eo);
+	vargs[0].cofactor((size_t) vargs[1].number().intValue(), (size_t) vargs[2].number().intValue(), mstruct, eo);
 	return !mstruct.isUndefined();
 }
 AdjointFunction::AdjointFunction() : MathFunction("adj", 1) {
@@ -1949,6 +1948,7 @@ int TotalFunction::calculate(MathStructure &mstruct, const MathStructure &vargs,
 	return 1;
 }
 PercentileFunction::PercentileFunction() : MathFunction("percentile", 2) {
+	setArgumentDefinition(1, new VectorArgument(""));
 	NumberArgument *arg = new NumberArgument();
 	Number fr;
 	arg->setMin(&fr);
@@ -1956,17 +1956,16 @@ PercentileFunction::PercentileFunction() : MathFunction("percentile", 2) {
 	arg->setMax(&fr);
 	arg->setIncludeEqualsMin(false);
 	arg->setIncludeEqualsMax(false);
-	setArgumentDefinition(1, arg);
-	setArgumentDefinition(2, new VectorArgument(""));
+	setArgumentDefinition(2, arg);
 }
 int PercentileFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	MathStructure v(vargs[1]);
+	MathStructure v(vargs[0]);
 	MathStructure *mp;
 	Number fr100(100);
 	if(!v.sortVector()) {
 		return 0;
 	} else {
-		Number pfr(vargs[0].number());		
+		Number pfr(vargs[1].number());
 		pfr /= 100;
 		pfr *= (int) v.countChildren() + 1;
 /*		Number cfr(v->countChildren());

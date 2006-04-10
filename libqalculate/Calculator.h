@@ -493,18 +493,82 @@ class Calculator {
 	/** Terminate calculation and print threads if started. Do not use to terminate calculation. */
 	void terminateThreads();
 
+	/** @name Functions for manipulation of the RPN stack. */
+	//@{
+	/** Evaluates a value on the RPN stack.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param index Index, starting at 1, on the RPN stack.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
 	bool calculateRPNRegister(size_t index, int msecs, const EvaluationOptions &eo = default_evaluation_options);
+	/** Applies a mathematical operation to the first and second value on the RPN stack. The the second value is changed with input from the first value.
+	* For example, with OPERATION_SUBTRACT the first value is subtracted from the second. The first value on the stack is removed.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param op Operation.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
 	bool calculateRPN(MathOperation op, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	bool calculateRPN(MathFunction *f, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	bool calculateRPNBitwiseNot(int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	bool calculateRPNLogicalNot(int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Applies a mathematical operation to the first and second value on the RPN stack. The the second value is changed with input from the first value.
+	* For example, with OPERATION_SUBTRACT the first value is subtracted from the second. The first value on the stack is removed.
+	*
+	* @param op Operation.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns The first value on the stack.
+	*/
 	MathStructure *calculateRPN(MathOperation op, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	MathStructure *calculateRPN(MathFunction *f, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	MathStructure *calculateRPNBitwiseNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
 	MathStructure *calculateRPNLogicalNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Evaluates a value and adds the result first on the RPN stack.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param mstruct Value.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation of the expression.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
 	bool RPNStackEnter(MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
+	/** Calculates an expression and adds the result first on the RPN stack. The expression should be unlocalized first with unlocalizeExpression().
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param str Expression.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
+	* @param to_struct NULL or a math structure to fill with unit expression parsed after "to".
+	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
 	bool RPNStackEnter(string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	/** Adds a value first on the RPN stack.
+	*
+	* @param mstruct Value.
+	* @param eval If true, the the mathematical structure will be evaluated first.
+	*/
 	void RPNStackEnter(MathStructure *mstruct, bool eval = false);
+	/** Calculates an expression adds the result first on the RPN stack. The expression should be unlocalized first with unlocalizeExpression().
+	*
+	* @param str Expression.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
+	* @param to_struct NULL or a math structure to fill with unit expression parsed after "to".
+	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
+	*/
 	void RPNStackEnter(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
 	bool setRPNRegister(size_t index, MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
 	bool setRPNRegister(size_t index, string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
@@ -517,6 +581,7 @@ class Calculator {
 	void moveRPNRegister(size_t old_index, size_t new_index);
 	void moveRPNRegisterUp(size_t index);
 	void moveRPNRegisterDown(size_t index);
+	//@}
 
 	/** @name Functions for calculating expressions. */
 	//@{

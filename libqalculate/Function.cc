@@ -1437,7 +1437,7 @@ bool NumberArgument::subtest(MathStructure &value, const EvaluationOptions &eo) 
 	if(!value.isNumber()) {
 		value.eval(eo);
 	}
-	if(!value.isNumber() || (!b_rational_number && !value.number().isRational()) || (!b_complex && value.number().isComplex())) {
+	if(!value.isNumber() || (b_rational_number && !value.number().isRational()) || (!b_complex && value.number().isComplex())) {
 		return false;
 	}
 	if(fmin) {
@@ -1451,7 +1451,7 @@ bool NumberArgument::subtest(MathStructure &value, const EvaluationOptions &eo) 
 		if(!(cmpr == COMPARISON_RESULT_LESS || (b_incl_max && COMPARISON_IS_EQUAL_OR_LESS(cmpr)))) {
 			return false;
 		}
-	}	
+	}
 	return true;
 }
 int NumberArgument::type() const {

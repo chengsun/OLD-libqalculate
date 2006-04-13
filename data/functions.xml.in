@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<QALCULATE version="0.9.3">
+<QALCULATE version="0.9.4">
   <category>
     <_title>Matrices &amp; Vectors</_title>
     <builtin_function name="vector">
@@ -1321,7 +1321,7 @@
       <expression>radtodef(i/2*(ln((\x-i)/\x)-ln((\x+i)/\x)))</expression>
     </function>
     <function>
-      <_title>Inverse Hyperbolic secant</_title>
+      <_title>Inverse Hyperbolic Secant</_title>
       <name index="1">
         <reference>true</reference>
         <_name>asech</_name>

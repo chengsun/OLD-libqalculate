@@ -1,3 +1,7 @@
+2006-04-13 Niklas Knutsson  <nq@altern.org>
+
+	* Fix horrible, horrible bug that caused all number arguments to require numbers to be rational
+
 2006-04-09 Niklas Knutsson  <nq@altern.org>
 
 	* Ignore definition names beginning with colon, for plural names where the original name does not differ

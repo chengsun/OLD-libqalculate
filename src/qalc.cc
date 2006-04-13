@@ -2126,7 +2126,7 @@ void load_preferences() {
 	historyfile += "qalc.history";
 	read_history(historyfile.c_str());
 #endif	
-	int version_numbers[] = {0, 9, 3};
+	int version_numbers[] = {0, 9, 4};
 	FILE *file = NULL;
 	filename += "qalc.cfg";
 	file = fopen(filename.c_str(), "r");

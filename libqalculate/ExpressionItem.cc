@@ -322,18 +322,18 @@ void ExpressionItem::removeName(size_t index) {
 		b_changed = true;
 	}
 }
-bool ExpressionItem::hasName(const string &sname) const {
+size_t ExpressionItem::hasName(const string &sname, bool case_sensitive) const {
 	for(size_t i = 0; i < names.size(); i++) {
-		if(names[i].case_sensitive && sname == names[i].name) return true;
-		if(!names[i].case_sensitive && equalsIgnoreCase(names[i].name, sname)) return true;
+		if(case_sensitive && names[i].case_sensitive && sname == names[i].name) return i + 1;
+		if((!case_sensitive || !names[i].case_sensitive) && equalsIgnoreCase(names[i].name, sname)) return i + 1;
 	}
-	return false;
+	return 0;
 }
-bool ExpressionItem::hasNameCaseSensitive(const string &sname) const {
+size_t ExpressionItem::hasNameCaseSensitive(const string &sname) const {
 	for(size_t i = 0; i < names.size(); i++) {
-		if(sname == names[i].name) return true;
+		if(sname == names[i].name) return i + 1;
 	}
-	return false;
+	return 0;
 }
 const ExpressionName &ExpressionItem::findName(int abbreviation, int use_unicode, int plural, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
 	for(size_t i = 0; i < names.size(); i++) {

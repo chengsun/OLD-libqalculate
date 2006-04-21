@@ -4,10 +4,7 @@
     <_title>Matrices &amp; Vectors</_title>
     <builtin_function name="vector">
       <_title>Construct Vector</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>vector</_name>
-      </name>
+      <_names>r:vector</_names>
       <_description>Returns a vector with listed elements.</_description>
       <argument index="1">
         <_title>Elements</_title>
@@ -15,10 +12,7 @@
     </builtin_function>
     <builtin_function name="genvector">
       <_title>Generate Vector</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>genvector</_name>
-      </name>
+      <_names>r:genvector</_names>
       <_description>Returns a vector generated from a function with a variable (default x) running from min to max. The fourth argument is either the requested number of elements if the sixth argument is false (default) or the step between each value of the variable.</_description>
       <argument index="1">
         <_title>Function</_title>
@@ -41,10 +35,7 @@
     </builtin_function>
     <builtin_function name="sort">
       <_title>Sort</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>sort</_name>
-      </name>
+      <_names>r:sort</_names>
       <_description>Returns a sorted vector.&#10;&#10;ex. sort([6, 1, 4])=[1, 4, 6]</_description>
       <argument index="1">
         <_title>Vector</_title>
@@ -55,10 +46,7 @@
     </builtin_function>
     <builtin_function name="rank">
       <_title>Rank</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>rank</_name>
-      </name>
+      <_names>r:rank</_names>
       <_description>Returns a vector with values of elements replaced with their mutual ranks.&#10;&#10;ex. rank([6, 1, 4]) = [3, 1, 2]</_description>
       <argument index="1">
         <_title>Vector</_title>
@@ -69,10 +57,7 @@
     </builtin_function>
     <builtin_function name="limits">
       <_title>Vector Limits</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>limits</_name>
-      </name>
+      <_names>r:limits</_names>
       <_description>Returns a part of a vector between two positions.</_description>
       <argument index="1">
         <_title>Vector</_title>
@@ -86,10 +71,7 @@
     </builtin_function>
     <builtin_function name="dimension">
       <_title>Dimension</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>dimension</_name>
-      </name>
+      <_names>r:dimension</_names>
       <_description>Returns the number of elements in a vector.</_description>
       <argument index="1">
         <_title>Vector</_title>
@@ -97,10 +79,7 @@
     </builtin_function>
     <builtin_function name="mergevectors">
       <_title>Merge Vectors</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>mergevectors</_name>
-      </name>
+      <_names>r:mergevectors</_names>
       <_description>Returns a vector with the elements from two vectors.</_description>
       <argument index="1">
         <_title>Vector 1</_title>
@@ -111,10 +90,7 @@
     </builtin_function>
     <builtin_function name="matrix">
       <_title>Construct Matrix</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>matrix</_name>
-      </name>
+      <_names>r:matrix</_names>
       <_description>Returns a matrix with specified dimensions and listed elements. Omitted elements are set to zero.</_description>
       <argument index="1">
         <_title>Rows</_title>
@@ -128,10 +104,7 @@
     </builtin_function>
     <builtin_function name="matrix2vector">
       <_title>Convert Matrix to Vector</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>matrix2vector</_name>
-      </name>
+      <_names>r:matrix2vector</_names>
       <_description>Puts each element of a matrix in vertical order in a vector.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -139,10 +112,7 @@
     </builtin_function>
     <builtin_function name="area">
       <_title>Matrix Area</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>area</_name>
-      </name>
+      <_names>r:area</_names>
       <_description>Returns a part of a matrix.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -162,10 +132,7 @@
     </builtin_function>
     <builtin_function name="rows">
       <_title>Rows</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>rows</_name>
-      </name>
+      <_names>r:rows</_names>
       <_description>Returns the number of rows in a matrix.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -173,10 +140,7 @@
     </builtin_function>
     <builtin_function name="columns">
       <_title>Columns</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>columns</_name>
-      </name>
+      <_names>r:columns</_names>
       <_description>Returns the number of columns in a matrix.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -184,10 +148,7 @@
     </builtin_function>
     <builtin_function name="row">
       <_title>Extract row as vector</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>row</_name>
-      </name>
+      <_names>r:row</_names>
       <_description>Returns a row in a matrix as a vector.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -198,10 +159,7 @@
     </builtin_function>
     <builtin_function name="column">
       <_title>Extract Column as Vector</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>column</_name>
-      </name>
+      <_names>r:column</_names>
       <_description>Returns a column in a matrix as a vector.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -212,10 +170,7 @@
     </builtin_function>
     <builtin_function name="elements">
       <_title>Elements</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>elements</_name>
-      </name>
+      <_names>r:elements</_names>
       <_description>Returns the number of elements in a matrix or vector.</_description>
       <argument index="1">
         <_title>Matrix or Vector</_title>
@@ -223,10 +178,7 @@
     </builtin_function>
     <builtin_function name="element">
       <_title>Element</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>element</_name>
-      </name>
+      <_names>r:element</_names>
       <_description>Returns the element at specified position in a matrix (row and column) or vector (index).</_description>
       <argument index="1">
         <_title>Matrix/Vector</_title>
@@ -240,10 +192,7 @@
     </builtin_function>
     <builtin_function name="transpose">
       <_title>Transpose</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>transpose</_name>
-      </name>
+      <_names>r:transpose</_names>
       <_description>Returns the transpose of a matrix.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -251,10 +200,7 @@
     </builtin_function>
     <builtin_function name="identity">
       <_title>Identity</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>identity</_name>
-      </name>
+      <_names>r:identity</_names>
       <_description>Returns the identity matrix of a matrix or with specified number of rows/columns.</_description>
       <argument index="1">
         <_title>Matrix or Rows/Columns</_title>
@@ -262,21 +208,15 @@
     </builtin_function>
     <builtin_function name="det">
       <_title>Determinant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>det</_name>
-      </name>
-      <_description>Calculates determinant of a matrix.</_description>
+      <_names>r:det</_names>
+      <_description>Calculates the determinant of a matrix.</_description>
       <argument index="1">
         <_title>Matrix</_title>
       </argument>
     </builtin_function>
     <builtin_function name="permanent">
       <_title>Permanent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>permanent</_name>
-      </name>
+      <_names>r:permanent</_names>
       <_description>Calculates the permanent of a matrix. The permanent differs from a determinant in that all signs in the expansion by minors are taken as positive.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -284,10 +224,7 @@
     </builtin_function>
     <builtin_function name="adj">
       <_title>Adjugate (Adjoint)</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>adj</_name>
-      </name>
+      <_names>r:adj</_names>
       <_description>Calculates the adjugate or adjoint of a matrix.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -295,10 +232,7 @@
     </builtin_function>
     <builtin_function name="cofactor">
       <_title>Cofactor</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>cofactor</_name>
-      </name>
+      <_names>r:cofactor</_names>
       <_description>Calculates the cofactor of the element at specified position.</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -312,10 +246,7 @@
     </builtin_function>
     <builtin_function name="inverse">
       <_title>Matrix Inverse</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>inverse</_name>
-      </name>
+      <_names>r:inverse</_names>
       <_description>Calculates the inverse of a matrix. The inverse is the matrix that multiplied by the original matrix equals the identity matrix (AB = BA = I).</_description>
       <argument index="1">
         <_title>Matrix</_title>
@@ -323,10 +254,7 @@
     </builtin_function>
     <builtin_function name="load">
       <_title>Load CSV File</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>load</_name>
-      </name>
+      <_names>r:load</_names>
       <_description>Returns a matrix imported from a CSV data file.</_description>
       <argument index="1">
         <_title>File Name</_title>
@@ -340,11 +268,8 @@
     </builtin_function>
     <builtin_function name="export">
       <_title>Export To CSV File</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>export</_name>
-      </name>
-      <_description>Exports a matrix to CSV data file.</_description>
+      <_names>r:export</_names>
+      <_description>Exports a matrix to a CSV data file.</_description>
       <argument index="1">
         <_title>Matrix/Vector</_title>
       </argument>
@@ -357,10 +282,7 @@
     </builtin_function>
     <function>
       <_title>Norm (length)</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>norm</_name>
-      </name>
+      <_names>r:norm</_names>
       <_description>Calculates the norm/length of a vector.</_description>
       <expression>abs((\x*\x)^(1/2))</expression>
       <argument type="vector" index="1">
@@ -374,20 +296,14 @@
     <builtin_function name="factorial">
       <_title>Factorial</_title>
       <_description>Calculates the factorial of an integer. Mulitplies the argument with every lesser positive integer (n(n-1)(n-2)...2*1). Can also be entered as a number followed by one exclamation mark.&#10;&#10;ex. factorial(5) = 5! = 5 * 4 * 3 * 2 * 1 = 120</_description>
-      <name index="1">
-        <reference>true</reference>
-        <_name>factorial</_name>
-      </name>
+      <_names>r:factorial</_names>
       <argument index="1">
         <_title>Value</_title>
       </argument>
     </builtin_function>
     <builtin_function name="factorial2">
       <_title>Double Factorial</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>factorial2</_name>
-      </name>
+      <_names>r:factorial2</_names>
       <_description>Calculates the doublefactorial of an integer. Mulitplies the argument with every second lesser positive integer (n(n-2)(n-4)...). Can also be entered as a number followed by two exclamation mark.&#10;&#10;ex. factorial2(5) = 5!! = 5 * 3 * 1 = 15</_description>
       <argument index="1">
         <_title>Value</_title>
@@ -395,10 +311,7 @@
     </builtin_function>
     <builtin_function name="multifactorial">
       <_title>Multifactorial</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>multifactorial</_name>
-      </name>
+      <_names>r:multifactorial</_names>
       <_description>Calculates the multifactorial of an integer. Mulitplies the argument with every x lesser positive integer (n(n-x)(n-2x)...). Can also be entered as a number followed by three or more exclamation mark.&#10;&#10;ex. multifactorial(18, 4) = 18!!!! = 18 * 14 * 10 * 6 * 2 = 30 240</_description>
       <argument index="1">
         <_title>Value</_title>
@@ -409,10 +322,7 @@
     </builtin_function>
     <builtin_function name="binomial">
       <_title>Binomial Coefficient</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>binomial</_name>
-      </name>
+      <_names>r:binomial</_names>
       <argument index="1">
         <_title>Exponent</_title>
       </argument>
@@ -422,10 +332,7 @@
     </builtin_function>
     <function>
       <_title>Hyperfactorial</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>hyperfactorial</_name>
-      </name>
+      <_names>r:hyperfactorial</_names>
       <expression>product(x^x,1,\x,x)</expression>
       <_description>Calculates the hyperfactorial of an integer. Mulitplies the argument raised by itself with every lesser positive integer raised by themselves (1^1 * 2^2 ... n^n). &#10;&#10;ex. hyperfactorial(3) = (3^3) * (2^2) * (1^1) = 108</_description>
       <argument type="integer" index="1">
@@ -435,10 +342,7 @@
     </function>
     <function>
       <_title>Superfactorial</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>superfactorial</_name>
-      </name>
+      <_names>r:superfactorial</_names>
       <expression>product(factorial(x),0,\x,x)</expression>
       <_description>Calculates the superfactorial of an integer. Mulitplies the factorial of the argument with the factorial of every lesser positive integer (1! * 2! ... n^n). &#10;&#10;ex. superfactorial(5) = 5! * 4! * 3! * 2! * 1! = 34 560</_description>
       <argument type="integer" index="1">
@@ -448,10 +352,7 @@
     </function>
     <function>
       <_title>Permutations</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>perm</_name>
-      </name>
+      <_names>r:perm</_names>
       <expression>\x!/(\x-\y)!</expression>
       <_description>Returns the number of possible arrangements of an ordered list with a number of objects to choose from and a list size. If there are three objects (1, 2 and 3) that is put in a list with two positions, the alternatives are [1, 2], [2, 1], [1, 3], [3, 1], [2, 3] and [3, 2], and thus the number of permutations is 6.</_description>
       <argument type="free" index="1">
@@ -463,10 +364,7 @@
     </function>
     <function>
       <_title>Combinations</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>comb</_name>
-      </name>
+      <_names>r:comb</_names>
       <expression>\x!/(\y!*(\x-\y)!)</expression>
       <_description>Returns the number of possible arrangements of an unordered list with a number of objects to choose from and a list size. If there are three objects (1, 2 and 3) that is put in a list with place for two, the alternatives are [1, 2], [1, 3], and [2, 3], and thus the number of combinations is 3.</_description>
       <argument type="free" index="1">
@@ -478,10 +376,7 @@
     </function>
     <function>
       <_title>Derangements</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>derangements</_name>
-      </name>
+      <_names>r:derangements</_names>
       <_description>Returns the number of possible rearrangements of an ordered list, of a certain size, where none of the objects are on their original position. If the original list is [1, 2, 3], the possible derangements is [2, 3, 1] and [3, 1, 2], and thus the number of derangements is 2.</_description>
       <expression>factorial(\x)*sum(((-1)^"i")/factorial("i"),0,\x,"i")</expression>
       <argument type="integer" index="1">
@@ -494,10 +389,7 @@
     <_title>Number Theory</_title>
     <builtin_function name="abs">
       <_title>Absolute Value</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>abs</_name>
-      </name>
+      <_names>r:abs</_names>
       <argument index="1">
         <_title>Value</_title>
       </argument>
@@ -506,40 +398,28 @@
       <_title>Arithmetics</_title>
       <builtin_function name="sgn">
         <_title>Signum</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>sgn</_name>
-        </name>
+        <_names>r:sgn</_names>
         <argument index="1">
           <_title>Number</_title>
         </argument>
       </builtin_function>
       <builtin_function name="numerator">
         <_title>Numerator</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>numerator</_name>
-        </name>
+        <_names>r:numerator</_names>
         <argument index="1">
           <_title>Number</_title>
         </argument>
       </builtin_function>
       <builtin_function name="denominator">
         <_title>Denominator</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>denominator</_name>
-        </name>
+        <_names>r:denominator</_names>
         <argument index="1">
           <_title>Number</_title>
         </argument>
       </builtin_function>
       <builtin_function name="rem">
         <_title>Remainder</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rem</_name>
-        </name>
+        <_names>r:rem</_names>
         <argument index="1">
           <_title>Numerator</_title>
         </argument>
@@ -549,10 +429,7 @@
       </builtin_function>
       <builtin_function name="mod">
         <_title>Modulus</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>mod</_name>
-        </name>
+        <_names>r:mod</_names>
         <argument index="1">
           <_title>Numerator</_title>
         </argument>
@@ -562,10 +439,7 @@
       </builtin_function>
       <function>
         <_title>Negate</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>neg</_name>
-        </name>
+        <_names>r:neg</_names>
         <expression>-\x</expression>
         <argument type="free" index="1">
           <_title>Value</_title>
@@ -573,10 +447,7 @@
       </function>
       <function>
         <_title>Reciprocal</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>inv</_name>
-        </name>
+        <_names>r:inv</_names>
         <expression>\x^(-1)</expression>
         <argument type="free" index="1">
           <_title>Value</_title>
@@ -584,10 +455,7 @@
       </function>
       <function>
         <_title>Multiply</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>multiply</_name>
-        </name>
+        <_names>r:multiply</_names>
         <expression>product(element(\x,"x"),1,dimension(\x),"x")</expression>
         <argument type="vector" index="1">
           <_title>Factors</_title>
@@ -595,10 +463,7 @@
       </function>
       <function>
         <_title>Add</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>add</_name>
-        </name>
+        <_names>r:add</_names>
         <expression>total(\x)</expression>
         <argument type="vector" index="1">
           <_title>Terms</_title>
@@ -606,10 +471,7 @@
       </function>
       <function>
         <_title>Subtract</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>subtract</_name>
-        </name>
+        <_names>r:subtract</_names>
         <expression>csum(2,-1,element(\x,1),"y"-"x","x","y",\x)</expression>
         <argument type="vector" index="1">
           <_title>Terms</_title>
@@ -617,10 +479,7 @@
       </function>
       <function>
         <_title>Divide</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>divide</_name>
-        </name>
+        <_names>r:divide</_names>
         <expression>\x/\y</expression>
         <argument type="free" index="1">
           <_title>Numerator</_title>
@@ -631,10 +490,7 @@
       </function>
       <function>
         <_title>Raise</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>raise</_name>
-        </name>
+        <_names>r:raise</_names>
         <expression>\x^\y</expression>
         <argument type="free" index="1">
           <_title>Base</_title>
@@ -648,10 +504,7 @@
       <_title>Polynomials</_title>
       <builtin_function name="coeff">
         <_title>Coefficient</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>coeff</_name>
-        </name>
+        <_names>r:coeff</_names>
         <argument index="1">
           <_title>Polynomial</_title>
         </argument>
@@ -664,10 +517,7 @@
       </builtin_function>
       <builtin_function name="lcoeff">
         <_title>Leading Coefficient</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>lcoeff</_name>
-        </name>
+        <_names>r:lcoeff</_names>
         <argument index="1">
           <_title>Polynomial</_title>
         </argument>
@@ -677,10 +527,7 @@
       </builtin_function>
       <builtin_function name="tcoeff">
         <_title>Trailing Coefficient</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>tcoeff</_name>
-        </name>
+        <_names>r:tcoeff</_names>
         <argument index="1">
           <_title>Polynomial</_title>
         </argument>
@@ -690,10 +537,7 @@
       </builtin_function>
       <builtin_function name="degree">
         <_title>Degree</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>degree</_name>
-        </name>
+        <_names>r:degree</_names>
         <argument index="1">
           <_title>Polynomial</_title>
         </argument>
@@ -703,10 +547,7 @@
       </builtin_function>
       <builtin_function name="ldegree">
         <_title>Lowest Degree (Valuation)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>ldegree</_name>
-        </name>
+        <_names>r:ldegree</_names>
         <argument index="1">
           <_title>Polynomial</_title>
         </argument>
@@ -716,10 +557,7 @@
       </builtin_function>
       <builtin_function name="pcontent">
         <_title>Content Part</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pcontent</_name>
-        </name>
+        <_names>r:pcontent</_names>
         <argument index="1">
           <_title>Polynomial</_title>
         </argument>
@@ -729,10 +567,7 @@
       </builtin_function>
       <builtin_function name="primpart">
         <_title>Primitive Part</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>primpart</_name>
-        </name>
+        <_names>r:primpart</_names>
         <argument index="1">
           <_title>Polynomial</_title>
         </argument>
@@ -742,10 +577,7 @@
       </builtin_function>
       <builtin_function name="punit">
         <_title>Unit Part</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>punit</_name>
-        </name>
+        <_names>r:punit</_names>
         <argument index="1">
           <_title>Polynomial</_title>
         </argument>
@@ -756,10 +588,7 @@
     </category>
     <builtin_function name="gcd">
       <_title>Greatest Common Divisor</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>gcd</_name>
-      </name>
+      <_names>r:gcd</_names>
       <argument index="1">
         <_title>1st Value</_title>
       </argument>
@@ -769,10 +598,7 @@
     </builtin_function>
     <builtin_function name="lcm">
       <_title>Least Common Multiplier</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>lcm</_name>
-      </name>
+      <_names>r:lcm</_names>
       <argument index="1">
         <_title>1st Value</_title>
       </argument>
@@ -784,60 +610,42 @@
       <_title>Rounding</_title>
       <builtin_function name="round">
         <_title>Round</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>round</_name>
-        </name>
+        <_names>r:round</_names>
         <argument index="1">
           <_title>Value</_title>
         </argument>
       </builtin_function>
       <builtin_function name="floor">
         <_title>Round Downwards</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>floor</_name>
-        </name>
+        <_names>r:floor</_names>
         <argument index="1">
           <_title>Value</_title>
         </argument>
       </builtin_function>
       <builtin_function name="ceil">
         <_title>Round Upwards</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>ceil</_name>
-        </name>
+        <_names>r:ceil</_names>
         <argument index="1">
           <_title>Value</_title>
         </argument>
       </builtin_function>
       <builtin_function name="trunc">
         <_title>Round Towards Zero</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>trunc</_name>
-        </name>
+        <_names>r:trunc</_names>
         <argument index="1">
           <_title>Value</_title>
         </argument>
       </builtin_function>
       <builtin_function name="int">
         <_title>Extract Integer Part</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>int</_name>
-        </name>
+        <_names>r:int</_names>
         <argument index="1">
           <_title>Value</_title>
         </argument>
       </builtin_function>
       <builtin_function name="frac">
         <_title>Extract Fractional Part</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>frac</_name>
-        </name>
+        <_names>r:frac</_names>
         <argument index="1">
           <_title>Value</_title>
         </argument>
@@ -847,10 +655,7 @@
       <_title>Number Bases</_title>
       <builtin_function name="base">
         <_title>Number Base</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>base</_name>
-        </name>
+        <_names>r:base</_names>
         <_description>Returns a decimal integer from a number of specified base between 2 and 36</_description>
         <argument index="1">
           <_title>Number</_title>
@@ -861,10 +666,7 @@
       </builtin_function>
       <builtin_function name="bin">
         <_title>Binary</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>bin</_name>
-        </name>
+        <_names>r:bin</_names>
         <_description>Returns a decimal integer from a binary number</_description>
         <argument index="1">
           <_title>Binary Number</_title>
@@ -872,10 +674,7 @@
       </builtin_function>
       <builtin_function name="oct">
         <_title>Octal</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>oct</_name>
-        </name>
+        <_names>r:oct</_names>
         <_description>Returns a decimal integer from an octal number</_description>
         <argument index="1">
           <_title>Octal Number</_title>
@@ -883,10 +682,7 @@
       </builtin_function>
       <builtin_function name="hex">
         <_title>Hexadecimal</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>hex</_name>
-        </name>
+        <_names>r:hex</_names>
         <_description>Returns a decimal value from a hexadecimal number</_description>
         <argument index="1">
           <_title>Hexadecimal Number</_title>
@@ -897,20 +693,14 @@
       <_title>Integers</_title>
       <builtin_function name="even">
         <_title>Even</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>even</_name>
-        </name>
+        <_names>r:even</_names>
         <argument index="1">
           <_title>Number</_title>
         </argument>
       </builtin_function>
       <builtin_function name="odd">
         <_title>Odd</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>odd</_name>
-        </name>
+        <_names>r:odd</_names>
         <argument index="1">
           <_title>Number</_title>
         </argument>
@@ -921,91 +711,60 @@
     <_title>Analysis</_title>
     <builtin_function name="re">
       <_title>Real Part</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>re</_name>
-      </name>
+      <_names>r:re</_names>
       <argument index="1">
         <_title>Complex Number</_title>
       </argument>
     </builtin_function>
     <builtin_function name="im">
       <_title>Imaginary Part</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>im</_name>
-      </name>
+      <_names>r:im</_names>
       <argument index="1">
         <_title>Complex Number</_title>
       </argument>
     </builtin_function>
     <builtin_function name="gamma">
       <_title>Gamma Function</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>gamma</_name>
-      </name>
+      <_names>r:gamma</_names>
     </builtin_function>
     <builtin_function name="beta">
       <_title>Beta Function</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>beta</_name>
-      </name>
+      <_names>r:beta</_names>
     </builtin_function>
   </category>
   <category>
     <_title>Exponents &amp; Logarithms</_title>
     <builtin_function name="sqrt">
       <_title>Square Root</_title>
-      <abbreviation index="1">
-        <unicode>true</unicode>
-        <_name>&#x221A;</_name>
-      </abbreviation>
-      <name index="2">
-        <reference>true</reference>
-        <_name>sqrt</_name>
-      </name>
+      <_names>au:&#x221A;,r:sqrt</_names>
       <argument index="1">
         <_title>Value</_title>
       </argument>
     </builtin_function>
     <builtin_function name="sq">
       <_title>Square</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>sq</_name>
-      </name>
+      <_names>r:sq</_names>
       <argument index="1">
         <_title>Value</_title>
       </argument>
     </builtin_function>
     <builtin_function name="exp">
       <_title>Exponential (e^x)</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>exp</_name>
-      </name>
+      <_names>r:exp</_names>
       <argument index="1">
         <_title>Exponent</_title>
       </argument>
     </builtin_function>
     <builtin_function name="ln">
       <_title>Natural Logarithm</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>ln</_name>
-      </name>
+      <_names>r:ln</_names>
       <argument index="1">
         <_title>Value</_title>
       </argument>
     </builtin_function>
     <builtin_function name="log">
       <_title>Base-N Logarithm</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>log</_name>
-      </name>
+      <_names>r:log</_names>
       <argument index="1">
         <_title>Value</_title>
       </argument>
@@ -1015,11 +774,7 @@
     </builtin_function>
     <function>
       <_title>Base-2 Logrithm</_title>
-      <name index="1">
-        <reference>true</reference>
-	<suffix>true</suffix>
-        <_name>log2</_name>
-      </name>
+      <_names>rs:log2</_names>
       <_description>Returns the base n logarithm.</_description>
       <expression>log(\x,2)</expression>
       <argument type="number" index="1">
@@ -1030,11 +785,7 @@
     </function>
     <function>
       <_title>Base-10 Logrithm</_title>
-      <name index="1">
-        <reference>true</reference>
-	<suffix>true</suffix>
-        <_name>log10</_name>
-      </name>
+      <_names>rs:log10</_names>
       <_description>Returns the base n logarithm.</_description>
       <expression>log(\x,10)</expression>
       <argument type="number" index="1">
@@ -1045,10 +796,7 @@
     </function>
     <function>
       <_title>Complex Exponential (Cis)</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>cis</_name>
-      </name>
+      <_names>r:cis</_names>
       <expression>e^(\x*i)</expression>
       <argument type="free" index="1">
         <_title>Exponent</_title>
@@ -1056,11 +804,7 @@
     </function>
     <function>
       <_title>2 raised the to power X</_title>
-      <name index="1">
-        <reference>true</reference>
-	<suffix>true</suffix>
-        <_name>exp2</_name>
-      </name>
+      <_names>rs:exp2</_names>
       <expression>2^\x</expression>
       <argument type="free" index="1">
         <_title>Exponent</_title>
@@ -1068,11 +812,7 @@
     </function>
     <function>
       <_title>10 raised the to power X</_title>
-      <name index="1">
-        <reference>true</reference>
-	<suffix>true</suffix>
-        <_name>exp10</_name>
-      </name>
+      <_names>rs:exp10</_names>
       <expression>10^\x</expression>
       <argument type="free" index="1">
         <_title>Exponent</_title>
@@ -1080,10 +820,7 @@
     </function>
     <function>
       <_title>Cube Root</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>cbrt</_name>
-      </name>
+      <_names>r:cbrt</_names>
       <expression>\x^(1/3)</expression>
       <argument type="free" index="1">
         <_title>Value</_title>
@@ -1091,10 +828,7 @@
     </function>
     <function>
       <_title>Nth root</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>root</_name>
-      </name>
+      <_names>r:root</_names>
       <expression>\x^(1/\y)</expression>
       <argument type="free" index="1">
         <_title>Base</_title>
@@ -1105,10 +839,7 @@
     </function>
     <function>
       <_title>X raised to the power Y</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>pow</_name>
-      </name>
+      <_names>r:pow</_names>
       <expression>\x^\y</expression>
       <argument type="free" index="1">
         <_title>Base</_title>
@@ -1119,10 +850,7 @@
     </function>
     <function>
       <_title>Square root (x * pi)</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>sqrtpi</_name>
-      </name>
+      <_names>r:sqrtpi</_names>
       <_description>Returns the non-negative square root of x * pi</_description>
       <expression>abs((\x*pi)^(1/2))</expression>
       <argument type="number" index="1">
@@ -1135,113 +863,71 @@
     <_title>Trigonometry</_title>
     <builtin_function name="sin">
       <_title>Sine</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>sin</_name>
-      </name>
+      <_names>r:sin</_names>
       <argument index="1">
         <_title>Angle</_title>
       </argument>
     </builtin_function>
     <builtin_function name="cos">
       <_title>Cosine</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>cos</_name>
-      </name>
+      <_names>r:cos</_names>
       <argument index="1">
         <_title>Angle</_title>
       </argument>
     </builtin_function>
     <builtin_function name="tan">
       <_title>Tangent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>tan</_name>
-      </name>
+      <_names>r:tan</_names>
       <argument index="1">
         <_title>Angle</_title>
       </argument>
     </builtin_function>
     <builtin_function name="asin">
       <_title>Inverse Sine</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>asin</_name>
-      </name>
+      <_names>r:asin</_names>
     </builtin_function>
     <builtin_function name="acos">
       <_title>Inverse Cosine</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>acos</_name>
-      </name>
+      <_names>r:acos</_names>
     </builtin_function>
     <builtin_function name="atan">
       <_title>Inverse Tangent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>atan</_name>
-      </name>
+      <_names>r:atan</_names>
     </builtin_function>
     <builtin_function name="sinh">
       <_title>Hyperbolic Sine</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>sinh</_name>
-      </name>
+      <_names>r:sinh</_names>
     </builtin_function>
     <builtin_function name="cosh">
       <_title>Hyperbolic Cosine</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>cosh</_name>
-      </name>
+      <_names>r:cosh</_names>
     </builtin_function>
     <builtin_function name="tanh">
       <_title>Hyperbolic Tangent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>tanh</_name>
-      </name>
+      <_names>r:tanh</_names>
     </builtin_function>
     <builtin_function name="asinh">
       <_title>Inverse Hyperbolic Sine</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>asinh</_name>
-      </name>
+      <_names>r:asinh</_names>
     </builtin_function>
     <builtin_function name="acosh">
       <_title>Inverse Hyperbolic Cosine</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>acosh</_name>
-      </name>
+      <_names>r:acosh</_names>
     </builtin_function>
     <builtin_function name="atanh">
       <_title>Inverse Hyperbolic Tangent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>atanh</_name>
-      </name>
+      <_names>r:atanh</_names>
     </builtin_function>
     <builtin_function name="radtodef">
       <_title>Radians to Default Angle Unit</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>radtodef</_name>
-      </name>
+      <_names>r:radtodef</_names>
       <argument index="1">
         <_title>Radians</_title>
       </argument>
     </builtin_function>
     <function>
       <_title>Secant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>sec</_name>
-      </name>
+      <_names>r:sec</_names>
       <expression>1/cos(\x)</expression>
       <argument type="angle" index="1">
         <_title>Angle</_title>
@@ -1250,10 +936,7 @@
     </function>
     <function>
       <_title>Cosecant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>csc</_name>
-      </name>
+      <_names>r:csc</_names>
       <expression>1/sin(\x)</expression>
       <argument type="angle" index="1">
         <_title>Angle</_title>
@@ -1262,10 +945,7 @@
     </function>
     <function>
       <_title>Cotangent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>cot</_name>
-      </name>
+      <_names>r:cot</_names>
       <expression>cos(\x)/sin(\x)</expression>
       <argument type="angle" index="1">
         <_title>Angle</_title>
@@ -1274,74 +954,47 @@
     </function>
     <function>
       <_title>Hyperbolic Secant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>sech</_name>
-      </name>
+      <_names>r:sech</_names>
       <expression>1/cosh(\x)</expression>
     </function>
     <function>
       <_title>Hyperbolic Cosecant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>csch</_name>
-      </name>
+      <_names>r:csch</_names>
       <expression>1/sinh(\x)</expression>
     </function>
     <function>
       <_title>Hyperbolic Cotangent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>coth</_name>
-      </name>
+      <_names>r:coth</_names>
       <expression>cosh(\x)/sinh(\x)</expression>
     </function>
     <function>
       <_title>Inverse Secant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>asec</_name>
-      </name>
+      <_names>r:asec</_names>
       <expression>radtodef(0.5pi+i*ln(sqrt(1-1\x^2)+i/\x))</expression>
     </function>
     <function>
       <_title>Inverse Cosecant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>acsc</_name>
-      </name>
+      <_names>r:acsc</_names>
       <expression>radtodef(-i*ln(sqrt(1-1\x^2)+i/\x))</expression>
     </function>
     <function>
       <_title>Inverse Cotangent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>acot</_name>
-      </name>
+      <_names>r:acot</_names>
       <expression>radtodef(i/2*(ln((\x-i)/\x)-ln((\x+i)/\x)))</expression>
     </function>
     <function>
       <_title>Inverse Hyperbolic Secant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>asech</_name>
-      </name>
+      <_names>r:asech</_names>
       <expression>ln(sqrt(1/\x-1)*sqrt(1/\x+1)+1/\x)</expression>
     </function>
     <function>
       <_title>Inverse Hyperbolic Cosecant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>acsch</_name>
-      </name>
+      <_names>r:acsch</_names>
       <expression>ln(sqrt(1+1/\x^2)+1/\x)</expression>
     </function>
     <function>
       <_title>Inverse Hyperbolic Cotangent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>acoth</_name>
-      </name>
+      <_names>r:acoth</_names>
       <expression>(ln(1+1/\x)-ln(1-1/\x))/2</expression>
     </function>
   </category>
@@ -1349,9 +1002,7 @@
     <_title>Miscellaneous</_title>
     <function>
       <_title>Body Mass Index (BMI)</_title>
-      <name index="1">
-        <_name>bmi</_name>
-      </name>
+      <_names>-r:bmi</_names>
       <_description>Calculates the Body Mass Index. The resulting BMI-value is sometimes interpreted as follows (although varies with age, sex, etc.):&#10;&#10;Underweight&#9;&#9;&lt; 18.5&#10;Normal weight&#9;&#9;18.5-25&#10;Overweight&#9;&#9;25-30&#10;Obesity&#9;&#9;&#9;&gt; 30&#10;&#10;Note that you must use units for weight (ex. 59kg) and length (ex. 174cm).</_description>
       <expression>(\x/(1000g))/(\y/m)^2</expression>
       <argument type="free" index="1">
@@ -1363,20 +1014,14 @@
     </function>
     <builtin_function name="zeta">
       <_title>Riemann Zeta</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>zeta</_name>
-      </name>
+      <_names>r:zeta</_names>
       <argument index="1">
         <_title>Integral Point</_title>
       </argument>
     </builtin_function>
     <builtin_function name="roman">
       <_title>Roman Number</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>roman</_name>
-      </name>
+      <_names>r:roman</_names>
       <argument index="1">
         <_title>Roman Number</_title>
       </argument>
@@ -1388,20 +1033,14 @@
       <_title>Descriptive Statistics</_title>
       <builtin_function name="total">
         <_title>Sum (total)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>total</_name>
-        </name>
+        <_names>r:total</_names>
         <argument index="1">
           <_title>Data</_title>
         </argument>
       </builtin_function>
       <builtin_function name="percentile">
         <_title>Percentile</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>percentile</_name>
-        </name>
+        <_names>r:percentile</_names>
         <argument index="1">
           <_title>Vector</_title>
         </argument>
@@ -1411,10 +1050,7 @@
       </builtin_function>
       <builtin_function name="min">
         <_title>Min</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>min</_name>
-        </name>
+        <_names>r:min</_names>
         <_description>Returns the lowest value.</_description>
         <argument index="1">
           <_title>Vector</_title>
@@ -1422,10 +1058,7 @@
       </builtin_function>
       <builtin_function name="max">
         <_title>Max</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>max</_name>
-        </name>
+        <_names>r:max</_names>
         <_description>Returns the highest value.</_description>
         <argument index="1">
           <_title>Vector</_title>
@@ -1433,10 +1066,7 @@
       </builtin_function>
       <builtin_function name="mode">
         <_title>Mode</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>mode</_name>
-        </name>
+        <_names>r:mode</_names>
         <_description>Returns the most frequently occuring value.</_description>
         <argument index="1">
           <_title>Vector</_title>
@@ -1444,10 +1074,7 @@
       </builtin_function>
       <function>
         <_title>Range</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>range</_name>
-        </name>
+        <_names>r:range</_names>
         <_description>Calculates the difference between the min and max value.</_description>
         <expression>max(\x)-min(\x)</expression>
         <argument type="vector" index="1">
@@ -1456,10 +1083,7 @@
       </function>
       <function>
         <_title>Median</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>median</_name>
-        </name>
+        <_names>r:median</_names>
         <expression>percentile(\x,50)</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1467,10 +1091,7 @@
       </function>
       <function>
         <_title>Quartile</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>quartile</_name>
-        </name>
+        <_names>r:quartile</_names>
         <expression>percentile(\x,25*\y)</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1483,10 +1104,7 @@
       </function>
       <function>
         <_title>Decile</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>decile</_name>
-        </name>
+        <_names>r:decile</_names>
         <expression>percentile(\x,10*\y)</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1499,10 +1117,7 @@
       </function>
       <function>
         <_title>Interquartile Range</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>iqr</_name>
-        </name>
+        <_names>r:iqr</_names>
         <_description>Calculates the difference between the first and third quartile.</_description>
         <expression>quartile(\x,3)-quartile(\x,1)</expression>
         <argument type="vector" index="1">
@@ -1511,10 +1126,7 @@
       </function>
       <function>
         <_title>Number</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>number</_name>
-        </name>
+        <_names>r:number</_names>
         <_description>Returns the number of samples.</_description>
         <expression>dimension(\x)</expression>
         <argument type="vector" index="1">
@@ -1524,10 +1136,7 @@
     </category>
     <builtin_function name="rand">
       <_title>Random Number</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>rand</_name>
-      </name>
+      <_names>r:rand</_names>
       <_description>Generates a pseudo-random number. Returns a real number between 0 and 1, if ceil is zero (default), or an integer between 1 and (including) ceil.</_description>
       <argument index="1">
         <_title>Ceil</_title>
@@ -1535,10 +1144,7 @@
     </builtin_function>
     <function>
       <_title>Random Number Between Limits</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>randbetween</_name>
-      </name>
+      <_names>r:randbetween</_names>
       <_description>Returns an integer between (including) bottom and top.</_description>
       <expression>rand(\y-\x+1)+\x-1</expression>
       <condition>\x&lt;=\y</condition>
@@ -1553,10 +1159,7 @@
       <_title>Means</_title>
       <function>
         <_title>Mean</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>mean</_name>
-        </name>
+        <_names>r:mean,average</_names>
         <expression>total(\x)/dimension(\x)</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1564,10 +1167,7 @@
       </function>
       <function>
         <_title>Harmonic Mean</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>harmmean</_name>
-        </name>
+        <_names>r:harmmean</_names>
         <expression>dimension(\x)/csum(1,-1,0,"y"+1/"x","x","y",\x)</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1575,10 +1175,7 @@
       </function>
       <function>
         <_title>Geometric Mean</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>geomean</_name>
-        </name>
+        <_names>r:geomean</_names>
         <expression>abs(csum(1,-1,1,"y"*"x","x","y",\x)^(1/dimension(\x)))</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1586,10 +1183,7 @@
       </function>
       <function>
         <_title>Trimmed Mean</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>trimmean</_name>
-        </name>
+        <_names>r:trimmean</_names>
         <expression>mean(limits(sort(\x),round(dimension(\x)/100*\y)+1,round(dimension(\x)/100*(100-\y))))</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1600,10 +1194,7 @@
       </function>
       <function>
         <_title>Winsorized Mean</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>winsormean</_name>
-        </name>
+        <_names>r:winsormean</_names>
 	<subfunction precalculate="true">sort(\x)</subfunction>
 	<subfunction precalculate="true">dimension(\x)</subfunction>
 	<subfunction precalculate="true">round(dimension(\x)/100*\y)</subfunction>
@@ -1617,10 +1208,7 @@
       </function>
       <function>
         <_title>Weighted Mean</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>weighmean</_name>
-        </name>
+        <_names>r:weighmean</_names>
 	<subfunction precalculate="true">dimension(\x)</subfunction>
 	<subfunction precalculate="true">min(dimension(\x),dimension(\y))</subfunction>
         <expression>csum(1,\2,0,"y"+"x"*element("v","i"+\1),"x","y",mergevectors(\x,\y),"i","v")/total(limits(\y,1,\2))</expression>
@@ -1633,10 +1221,7 @@
       </function>
       <function>
         <_title>Quadratic Mean (RMS)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rms</_name>
-        </name>
+        <_names>r:rms</_names>
         <expression>abs((csum(1,-1,0,"y"+"x"^2,"x","y",\x)/dimension(\x))^(1/2))</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1647,10 +1232,7 @@
       <_title>Moments</_title>
       <function>
         <_title>Standard Deviation (entire population)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>stdevp</_name>
-        </name>
+        <_names>r:stdevp</_names>
         <expression>abs(varp(\x)^(1/2))</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1658,10 +1240,7 @@
       </function>
       <function>
         <_title>Standard Deviation (random sampling)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>stdev</_name>
-        </name>
+        <_names>r:stdev</_names>
         <expression>abs(var(\x)^(1/2))</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1669,10 +1248,7 @@
       </function>
       <function>
         <_title>Variance (entire population)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>varp</_name>
-        </name>
+        <_names>r:varp</_names>
         <subfunction precalculate="true">mean(\x)</subfunction>
         <expression>csum(1,-1,0,"y"+("x"-\1)^2,"x","y",\x)/dimension(\x)</expression>
         <argument type="vector" index="1">
@@ -1681,10 +1257,7 @@
       </function>
       <function>
         <_title>Variance (random sampling)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>var</_name>
-        </name>
+        <_names>r:var</_names>
         <subfunction precalculate="true">mean(\x)</subfunction>
         <expression>csum(1,-1,0,"y"+("x"-\1)^2,"x","y",\x)/(dimension(\x)-1)</expression>
         <argument type="vector" index="1">
@@ -1693,10 +1266,7 @@
       </function>
       <function>
         <_title>Standard Error</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>stderr</_name>
-        </name>
+        <_names>r:stderr</_names>
         <expression>abs((var(\x)/dimension(\x))^(1/2))</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1704,10 +1274,7 @@
       </function>
       <function>
         <_title>Mean Deviation</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>meandev</_name>
-        </name>
+        <_names>r:meandev</_names>
         <subfunction precalculate="true">mean(\x)</subfunction>
         <expression>csum(1,-1,0,"y"+abs("x"-\1),"x","y",\x)/dimension(\x)</expression>
         <argument type="vector" index="1">
@@ -1716,10 +1283,7 @@
       </function>
       <function>
         <_title>Covariance</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>covar</_name>
-        </name>
+	<_names>r:cov,r:covar</_names>
         <subfunction precalculate="true">mean(\x)</subfunction>
 	<subfunction precalculate="true">mean(\y)</subfunction>
 	<subfunction precalculate="true">dimension(\x)</subfunction>
@@ -1734,10 +1298,7 @@
       </function>
       <function>
         <_title>Pooled Variance</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>poolvar</_name>
-        </name>
+        <_names>r:poolvar</_names>
         <subfunction precalculate="true">mean(\x)</subfunction>
         <subfunction precalculate="true">mean(\y)^2</subfunction>
         <expression>(csum(1,-1,0,"y"+("x"-\1)^2,"x","y",\x)+csum(1,-1,0,"y"+("x"-\2)^2,"x","y",\y))/(dimension(\x)+dimension(\y)-2)</expression>
@@ -1753,10 +1314,7 @@
       <_title>Regression</_title>
       <function>
         <_title>Statistical Correlation</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>cor</_name>
-        </name>
+        <_names>r:cor</_names>
         <expression>covar(\x,\y)/(stdev(\x)*stdev(\y))</expression>
         <argument type="vector" index="1">
           <_title>Data 1</_title>
@@ -1767,14 +1325,7 @@
       </function>
       <function>
         <_title>Pearson's Correlation Coefficient</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pearson</_name>
-        </name>
-	<name index="2">
-          <reference>true</reference>
-          <_name>correl</_name>
-        </name>
+        <_names>r:pearson,r:correl</_names>
 	<condition>dimension(\x)=dimension(\y)</condition>
 	<subfunction precalculate="true">total(\x)</subfunction>
 	<subfunction precalculate="true">total(\y)</subfunction>
@@ -1790,10 +1341,7 @@
       </function>
       <function>
         <_title>Spearman's Rho</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>spearman</_name>
-        </name>
+        <_names>r:spearman</_names>
 	<condition>dimension(\x)=dimension(\y)</condition>
         <expression>pearson(rank(\x),rank(\y))</expression>
         <argument type="vector" index="1">
@@ -1805,10 +1353,7 @@
       </function>
       <function active="false">
         <_title>Durbin-Watson</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>durbinwatson</_name>
-        </name>
+        <_names>r:durbinwatson</_names>
         <expression approximate="true">csum(2,-1,0,"y"+("x"-element("v","i"-1))^2,"x","y",mergevectors([0],\x),"i","v")/csum(1,-1,0,"y"+"x"^2,"x","y",\x)</expression>
         <argument type="vector" index="1">
           <_title>Data</_title>
@@ -1819,10 +1364,7 @@
       <_title>Statistical Tests</_title>
       <function>
         <_title>Unpaired T-Test</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>ttest</_name>
-        </name>
+        <_names>r:ttest</_names>
         <subfunction precalculate="true">poolvar(\x,\y)^2</subfunction>
         <expression>(mean(\x)-mean(\y))/abs(((\1)/dimension(\x)+(\1)/dimension(\y))^(1/2))</expression>
         <argument type="vector" index="1">
@@ -1834,10 +1376,7 @@
       </function>
       <function>
         <_title>Paired T-Test</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pttest</_name>
-        </name>
+        <_names>r:pttest</_names>
         <expression>mean(\x-\y)/stderr(\x-\y)</expression>
         <argument type="vector" index="1">
           <_title>Data 1</_title>
@@ -1851,10 +1390,7 @@
       <_title>Distribution</_title>
       <function>
         <_title>Rayleigh Distribution</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rayleigh</_name>
-        </name>
+        <_names>r:rayleigh</_names>
         <_description>Returns the probability density p(x) at x for a Rayleigh distribution with scale parameter sigma. (from Gnumeric)</_description>
         <expression>if(\x &lt; 0,0,(\x/\y)/\y*exp(-(\x/\y)*(\x/\y)/2))</expression>
         <argument type="free" index="1">
@@ -1867,10 +1403,7 @@
       </function>
       <function>
         <_title>Rayleigh Tail Distribution</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rayleightail</_name>
-        </name>
+        <_names>r:rayleightail</_names>
         <_description>Returns the probability density p(x) at x for a Rayleigh tail distribution with scale parameter sigma and a lower limit. (from Gnumeric)</_description>
         <expression>if(\x &lt; \y,0,(\x/\z)/\z*exp(((\y/\z)+(\x/\z))*((\y/\z)-(\x/\z))/2))</expression>
         <argument type="free" index="1">
@@ -1886,10 +1419,7 @@
       </function>
       <function>
         <_title>Pareto Distribution</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pareto</_name>
-        </name>
+        <_names>r:pareto</_names>
         <_description>Returns the probability density p(x) at x for a Pareto distribution with exponent and scale. (from Gnumeric)</_description>
         <expression>if(\x &lt; \z,0,(\y/\z)/(\x/\z)^(\y+1))</expression>
         <argument type="free" index="1">
@@ -1906,10 +1436,7 @@
       </function>
       <function>
         <_title>Logistic Distribution</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>logistic</_name>
-        </name>
+        <_names>r:logistic</_names>
         <_description>Returns the probability density p(x) at x for a logistic distribution with scale parameter. (from Gnumeric)</_description>
         <expression>exp(-abs(\x)/\y)/(abs(\y)*(1+exp(-abs(\x)/\y))^2)</expression>
         <argument type="free" index="1">
@@ -1926,10 +1453,7 @@
     <_title>Date &amp; Time</_title>
     <builtin_function name="days">
       <_title>Days between two dates</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>days</_name>
-      </name>
+      <_names>r:days</_names>
       <_description>Returns the number of days between two dates.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360, 1: real days (default), 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
       <argument index="1">
         <_title>First Date</_title>
@@ -1946,10 +1470,7 @@
     </builtin_function>
     <builtin_function name="yearfrac">
       <_title>Years between two dates</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>yearfrac</_name>
-      </name>
+      <_names>r:yearfrac</_names>
       <_description>Returns the number of years (fractional) between two dates.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360, 1: real days (default), 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
       <argument index="1">
         <_title>First Date</_title>
@@ -1966,10 +1487,7 @@
     </builtin_function>
     <builtin_function name="week">
       <_title>Week of Year</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>week</_name>
-      </name>
+      <_names>r:week</_names>
       <argument index="1">
         <_title>Date</_title>
       </argument>
@@ -1979,10 +1497,7 @@
     </builtin_function>
     <builtin_function name="weekday">
       <_title>Day of Week</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>weekday</_name>
-      </name>
+      <_names>r:weekday</_names>
       <argument index="1">
         <_title>Date</_title>
       </argument>
@@ -1992,87 +1507,60 @@
     </builtin_function>
     <builtin_function name="month">
       <_title>Month</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>month</_name>
-      </name>
+      <_names>r:month</_names>
       <argument index="1">
         <_title>Date</_title>
       </argument>
     </builtin_function>
     <builtin_function name="day">
       <_title>Day of Month</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>day</_name>
-      </name>
+      <_names>r:day</_names>
       <argument index="1">
         <_title>Date</_title>
       </argument>
     </builtin_function>
     <builtin_function name="year">
       <_title>Year</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>year</_name>
-      </name>
+      <_names>r:year</_names>
       <argument index="1">
         <_title>Date</_title>
       </argument>
     </builtin_function>
     <builtin_function name="yearday">
       <_title>Day of Year</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>yearday</_name>
-      </name>
+      <_names>r:yearday</_names>
       <argument index="1">
         <_title>Date</_title>
       </argument>
     </builtin_function>
     <builtin_function name="time">
       <_title>Current Time</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>time</_name>
-      </name>
+      <_names>r:time</_names>
     </builtin_function>
     <builtin_function name="isodate">
       <_title>Standard Date Format</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>isodate</_name>
-      </name>
-       <argument index="1">
+      <_names>r:isodate</_names>
+      <argument index="1">
         <_title>Date</_title>
       </argument>
     </builtin_function>
     <builtin_function name="localdate">
       <_title>Local Date Format</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>localdate</_name>
-      </name>
+      <_names>r:localdate</_names>
       <argument index="1">
         <_title>Date</_title>
       </argument>
     </builtin_function>
     <builtin_function name="timestamp">
       <_title>Date to Unix Timestamp</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>timestamp</_name>
-      </name>
+      <_names>r:timestamp</_names>
       <argument index="1">
         <_title>Date</_title>
       </argument>
     </builtin_function>
     <builtin_function name="stamptodate">
       <_title>Unix Timestamp to Date</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>stamptodate</_name>
-      </name>
+      <_names>r:stamptodate</_names>
       <argument index="1">
         <_title>Timestamp</_title>
       </argument>
@@ -2082,40 +1570,28 @@
     <_title>Utilities</_title>
     <builtin_function name="code">
       <_title>ASCII Value</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>code</_name>
-      </name>
+      <_names>r:code</_names>
       <argument index="1">
         <_title>Character</_title>
       </argument>
     </builtin_function>
     <builtin_function name="char">
       <_title>ASCII Char</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>char</_name>
-      </name>
+      <_names>r:char</_names>
       <argument index="1">
         <_title>Value</_title>
       </argument>
     </builtin_function>
     <builtin_function name="len">
       <_title>Length of string</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>len</_name>
-      </name>
+      <_names>r:len</_names>
       <argument index="1">
         <_title>Text</_title>
       </argument>
     </builtin_function>
     <builtin_function name="concatenate">
       <_title>Concatenate Strings</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>concatenate</_name>
-      </name>
+      <_names>r:concatenate</_names>
       <argument index="1">
         <_title>Text String 1</_title>
       </argument>
@@ -2125,10 +1601,7 @@
     </builtin_function>
     <builtin_function name="replace">
       <_title>Replace</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>replace</_name>
-      </name>
+      <_names>r:replace</_names>
       <argument index="1">
         <_title>Expression</_title>
       </argument>
@@ -2144,23 +1617,14 @@
     </builtin_function>
     <builtin_function name="nounit">
       <_title>Strip Units</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>nounit</_name>
-      </name>
-      <name index="2">
-        <_name>strip_units</_name>
-      </name>
+      <_names>r:nounit,strip_units</_names>
       <argument index="1">
         <_title>Expression</_title>
       </argument>
     </builtin_function>
     <builtin_function name="process">
       <_title>Process Vector Elements</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>process</_name>
-      </name>
+      <_names>r:process</_names>
       <argument index="1">
         <_title>Function</_title>
       </argument>
@@ -2179,10 +1643,7 @@
     </builtin_function>
     <builtin_function name="processm">
       <_title>Process Matrix Elements</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>processm</_name>
-      </name>
+      <_names>r:processm</_names>
       <argument index="1">
         <_title>Function</_title>
       </argument>
@@ -2204,10 +1665,7 @@
     </builtin_function>
     <builtin_function name="csum">
       <_title>Custom Sum of Elements</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>csum</_name>
-      </name>
+      <_names>r:csum</_names>
       <argument index="1">
         <_title>First Element</_title>
       </argument>
@@ -2238,10 +1696,7 @@
     </builtin_function>
     <builtin_function name="select">
       <_title>Select Vector Elements</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>select</_name>
-      </name>
+      <_names>r:select</_names>
       <argument index="1">
         <_title>Vector</_title>
       </argument>
@@ -2257,10 +1712,7 @@
     </builtin_function>
     <builtin_function name="function">
       <_title>Function</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>function</_name>
-      </name>
+      <_names>r:function</_names>
       <argument index="1">
         <_title>Expression</_title>
       </argument>
@@ -2270,50 +1722,35 @@
     </builtin_function>
     <builtin_function name="title">
       <_title>Title</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>title</_name>
-      </name>
+      <_names>r:title</_names>
       <argument index="1">
         <_title>Name</_title>
       </argument>
     </builtin_function>
     <builtin_function name="error">
       <_title>Display Error</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>error</_name>
-      </name>
+      <_names>r:error</_names>
       <argument index="1">
         <_title>Message</_title>
       </argument>
     </builtin_function>
     <builtin_function name="warning">
       <_title>Display Warning</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>warning</_name>
-      </name>
+      <_names>r:warning</_names>
       <argument index="1">
         <_title>Message</_title>
       </argument>
     </builtin_function>
     <builtin_function name="message">
       <_title>Display Message</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>message</_name>
-      </name>
+      <_names>r:message</_names>
       <argument index="1">
         <_title>Message</_title>
       </argument>
     </builtin_function>
     <builtin_function name="save">
       <_title>Save as Variable</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>save</_name>
-      </name>
+      <_names>r:save</_names>
       <argument index="1">
         <_title>Value</_title>
       </argument>
@@ -2332,10 +1769,7 @@
     <_title>Logical</_title>
     <builtin_function name="for">
       <_title>For...Do</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>for</_name>
-      </name>
+      <_names>r:for</_names>
       <argument index="1">
         <_title>Initial Value of Counter</_title>
       </argument>
@@ -2360,10 +1794,7 @@
     </builtin_function>
     <builtin_function name="if">
       <_title>If...Then...Else</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>if</_name>
-      </name>
+      <_names>r:if</_names>
       <_description>Tests a condition and returns a value depending on the result.</_description>
       <argument index="1">
         <_title>Condition</_title>
@@ -2377,10 +1808,7 @@
     </builtin_function>
     <builtin_function name="xor">
       <_title>Logical Exclusive OR</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>xor</_name>
-      </name>
+      <_names>r:xor</_names>
       <argument index="1">
         <_title>Value 1</_title>
       </argument>
@@ -2390,10 +1818,7 @@
     </builtin_function>
     <builtin_function name="bitxor">
       <_title>Bitwise Exclusive OR</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>bitxor</_name>
-      </name>
+      <_names>r:bitxor</_names>
       <argument index="1">
         <_title>Value 1</_title>
       </argument>
@@ -2403,10 +1828,7 @@
     </builtin_function>
     <builtin_function name="shift">
       <_title>Bitwise Shift</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>shift</_name>
-      </name>
+      <_names>r:shift</_names>
       <argument index="1">
         <_title>Number</_title>
       </argument>
@@ -2419,14 +1841,7 @@
     <_title>Algebra</_title>
     <builtin_function name="sum">
       <_title>Sum</_title>
-      <abbreviation index="1">
-        <unicode>true</unicode>
-        <_name>&#x3A3;</_name>
-      </abbreviation>
-      <name index="2">
-        <reference>true</reference>
-        <_name>sum</_name>
-      </name>
+      <_names>au:&#x3A3;,r:sum</_names>
       <_description>Corresponds to the sum symbol. Adds terms for each x ranging from the lower to the upper limit.</_description>
       <argument index="1">
         <_title>Term Expression</_title>
@@ -2443,14 +1858,7 @@
     </builtin_function>
     <builtin_function name="product">
       <_title>Product</_title>
-      <abbreviation index="1">
-        <unicode>true</unicode>
-        <_name>&#x3A0;</_name>
-      </abbreviation>
-      <name index="2">
-        <reference>true</reference>
-        <_name>product</_name>
-      </name>
+      <_names>au:&#x3A0;,r:product</_names>
       <_description>Corresponds to the product symbol. Multiplies factors for each x ranging from the lower to the upper limit.</_description>
       <argument index="1">
         <_title>Factor Expression</_title>
@@ -2467,10 +1875,7 @@
     </builtin_function>
     <builtin_function name="multisolve">
       <_title>Solve for multiple variables</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>multisolve</_name>
-      </name>
+      <_names>r:multisolve</_names>
       <argument index="1">
         <_title>Equation Vector</_title>
       </argument>
@@ -2480,10 +1885,7 @@
     </builtin_function>
     <builtin_function name="solve">
       <_title>Solve equation</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>solve</_name>
-      </name>
+      <_names>r:solve</_names>
       <argument index="1">
         <_title>Equation</_title>
       </argument>
@@ -2493,10 +1895,7 @@
     </builtin_function>
     <function>
       <_title>Solve for two variables</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>solve2</_name>
-      </name>
+      <_names>r:solve2</_names>
       <_description>Solves two equations with two unknown variables. Returns the value of the first variable.</_description>
       <expression>solve(replace(\x,\A{y},solve(\y,\A)),\Z{x})</expression>
       <argument index="1" type="free">
@@ -2514,10 +1913,7 @@
     </function>
     <function>
       <_title>Find Linear Function</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>linearfunction</_name>
-      </name>
+      <_names>r:linearfunction</_names>
       <_description>Finds the linear function for the straight line between two distinct points.</_description>
       <expression>(\a-\y)/(\z-\x)*("x"-\x)+\y</expression>
       <argument type="free" index="1">
@@ -2538,10 +1934,7 @@
     <_title>Calculus</_title>
     <builtin_function name="diff">
       <_title>Derive</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>diff</_name>
-      </name>
+      <_names>r:diff</_names>
       <argument index="1">
         <_title>Function</_title>
       </argument>
@@ -2554,10 +1947,7 @@
     </builtin_function>
     <builtin_function name="integrate">
       <_title>Integrate</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>integrate</_name>
-      </name>
+      <_names>r:integrate</_names>
       <argument index="1">
         <_title>Function</_title>
       </argument>
@@ -2567,10 +1957,7 @@
     </builtin_function>
     <function>
       <_title>Extreme Values</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>extremum</_name>
-      </name>
+      <_names>r:extremum</_names>
       <expression>solve(diff(\x, \Y{x})=0, \Y)</expression>
       <argument type="free" index="1">
         <_title>Function</_title>
@@ -2586,10 +1973,7 @@
       <_title>Triangle</_title>
       <function>
         <_title>Hypotenuse</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>hypot</_name>
-        </name>
+        <_names>r:hypot</_names>
         <expression>sqrt(\x^2+\y^2)</expression>
         <argument type="free" index="1">
           <_title>Side A</_title>
@@ -2600,10 +1984,7 @@
       </function>
       <function>
         <_title>Triangle Area</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>triangle</_name>
-        </name>
+        <_names>r:triangle</_names>
         <expression>(\x*\y)/2</expression>
         <argument type="free" index="1">
           <_title>Base</_title>
@@ -2614,10 +1995,7 @@
       </function>
       <function>
         <_title>Triangle Perimeter</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>triangle_perimeter</_name>
-        </name>
+        <_names>r:triangle_perimeter</_names>
         <expression>\x+\y+hypot(\x,\y)</expression>
         <argument type="free" index="1">
           <_title>Side A</_title>
@@ -2631,10 +2009,7 @@
       <_title>Circle</_title>
       <function>
         <_title>Circle Area</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>circle</_name>
-        </name>
+        <_names>r:circle</_names>
         <_description>Calculates the area of a circle using the radius</_description>
         <expression>\x^2*pi</expression>
         <argument type="free" index="1">
@@ -2643,10 +2018,7 @@
       </function>
       <function>
         <_title>Circle Circumference</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>circumference</_name>
-        </name>
+        <_names>r:circumference</_names>
         <_description>Calculates the area of a circle using the diameter</_description>
         <expression>\x*pi</expression>
         <argument type="free" index="1">
@@ -2658,10 +2030,7 @@
       <_title>Cylinder</_title>
       <function>
         <_title>Cylinder Volume</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>cylinder</_name>
-        </name>
+        <_names>r:cylinder</_names>
         <expression>\x^2*pi*\y</expression>
         <argument type="free" index="1">
           <_title>Radius</_title>
@@ -2672,10 +2041,7 @@
       </function>
       <function>
         <_title>Surface Area of Cylinder</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>cylinder_sa</_name>
-        </name>
+        <_names>r:cylinder_sa</_names>
         <expression>2*(\x^2*pi)+2*pi*\x*\y</expression>
         <argument type="free" index="1">
           <_title>Radius</_title>
@@ -2689,10 +2055,7 @@
       <_title>Cone</_title>
       <function>
         <_title>Cone Volume</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>cone</_name>
-        </name>
+        <_names>r:cone</_names>
         <expression>\x^2*pi*\y/3</expression>
         <argument type="free" index="1">
           <_title>Radius</_title>
@@ -2703,10 +2066,7 @@
       </function>
       <function>
         <_title>Surface Area of Cone</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>cone_sa</_name>
-        </name>
+        <_names>r:cone_sa</_names>
         <expression>\x^2*pi+pi*\x*abs((\y^2+\x^2)^(1/2))</expression>
         <argument type="free" index="1">
           <_title>Radius</_title>
@@ -2720,10 +2080,7 @@
       <_title>Sphere</_title>
       <function>
         <_title>Sphere Volume</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>sphere</_name>
-        </name>
+        <_names>r:sphere</_names>
         <expression>\x^3*pi*4/3</expression>
         <argument type="free" index="1">
           <_title>Radius</_title>
@@ -2731,10 +2088,7 @@
       </function>
       <function>
         <_title>Surface Area of Sphere</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>sphere_sa</_name>
-        </name>
+        <_names>r:sphere_sa</_names>
         <expression>\x^2*pi*4</expression>
         <argument type="free" index="1">
           <_title>Radius</_title>
@@ -2745,10 +2099,7 @@
       <_title>Square</_title>
       <function>
         <_title>Square Area</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>square</_name>
-        </name>
+        <_names>r:square</_names>
         <expression>\x^2</expression>
         <argument type="free" index="1">
           <_title>Length of Side</_title>
@@ -2756,10 +2107,7 @@
       </function>
       <function>
         <_title>Square Perimeter</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>square_perimeter</_name>
-        </name>
+        <_names>r:square_perimeter</_names>
         <expression>\x*4</expression>
         <argument type="free" index="1">
           <_title>Length of Side</_title>
@@ -2770,10 +2118,7 @@
       <_title>Cube</_title>
       <function>
         <_title>Cube Volume</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>cube</_name>
-        </name>
+        <_names>r:cube</_names>
         <expression>\x^3</expression>
         <argument type="free" index="1">
           <_title>Length of Side</_title>
@@ -2781,10 +2126,7 @@
       </function>
       <function>
         <_title>Surface Area of Cube</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>cube_sa</_name>
-        </name>
+        <_names>r:cube_sa</_names>
         <expression>(\x^2)*6</expression>
         <argument type="free" index="1">
           <_title>Length of Side</_title>
@@ -2795,10 +2137,7 @@
       <_title>Rectangle</_title>
       <function>
         <_title>Rectangle Area</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rect</_name>
-        </name>
+        <_names>r:rect</_names>
         <expression>\x*\y</expression>
         <argument type="free" index="1">
           <_title>Length</_title>
@@ -2809,10 +2148,7 @@
       </function>
       <function>
         <_title>Rectangle Perimeter</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rect_perimeter</_name>
-        </name>
+        <_names>r:rect_perimeter</_names>
         <expression>(\x+\y)*2</expression>
         <argument type="free" index="1">
           <_title>Length</_title>
@@ -2826,10 +2162,7 @@
       <_title>Prism</_title>
       <function>
         <_title>Volume of Rectangular Prism</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rectprism</_name>
-        </name>
+        <_names>r:rectprism</_names>
         <expression>\x*\y*\z</expression>
         <argument type="free" index="1">
           <_title>Length</_title>
@@ -2843,10 +2176,7 @@
       </function>
       <function>
         <_title>Surface Area of Rectangular Prism</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rectprism_sa</_name>
-        </name>
+        <_names>r:rectprism_sa</_names>
         <expression>(\x*\y)*2+(\x*\z)*2+(\y*\z)*2</expression>
         <argument type="free" index="1">
           <_title>Length</_title>
@@ -2860,10 +2190,7 @@
       </function>
       <function>
         <_title>Volume of Triangular Prism</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>triangleprism</_name>
-        </name>
+        <_names>r:triangleprism</_names>
         <expression>\x*\y*\z/2</expression>
         <argument type="free" index="1">
           <_title>Length</_title>
@@ -2880,10 +2207,7 @@
       <_title>Pyramid</_title>
       <function>
         <_title>Pyramid Volume</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pyramid</_name>
-        </name>
+        <_names>r:pyramid</_names>
         <expression>\x*\y*\z/3</expression>
         <argument type="free" index="1">
           <_title>Length of Base</_title>
@@ -2900,10 +2224,7 @@
       <_title>Parallelogram</_title>
       <function>
         <_title>Parallelogram Area</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>parallelogram</_name>
-        </name>
+        <_names>r:parallelogram</_names>
         <expression>\x*\y</expression>
         <argument type="free" index="1">
           <_title>Base</_title>
@@ -2914,10 +2235,7 @@
       </function>
       <function>
         <_title>Parallelogram Perimeter</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>parallelogram_perimeter</_name>
-        </name>
+        <_names>r:parallelogram_perimeter</_names>
         <expression>(\x+\y)*2</expression>
         <argument type="free" index="1">
           <_title>Side A</_title>
@@ -2931,10 +2249,7 @@
       <_title>Trapezoid</_title>
       <function>
         <_title>Trapezoid Area</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>trapezoid</_name>
-        </name>
+        <_names>r:trapezoid</_names>
         <expression>(\x+\y)/2*\z</expression>
         <argument type="free" index="1">
           <_title>Side A</_title>
@@ -2954,10 +2269,7 @@
       <_title>Microeconomics</_title>
       <function>
         <_title>Elasticity</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>elasticity</_name>
-        </name>
+        <_names>r:elasticity</_names>
         <_description>Calculates the demand elesticity. Also works for supply elasticity, income elasticity, cross-price elasticity, etc. Just replace demand, with supply, or price with income...&#10;&#10;Ex. elasticity(100-x^2, 3) calculates the demand elasticity when the price is 3 for the function "Q = 100 - x^2" where x is the default price variable.</_description>
         <expression>replace(diff(\x,\Z{x}),\Z,\y,1)*\y/replace(\x,\Z,\y)</expression>
         <argument type="free" index="1">
@@ -2972,10 +2284,7 @@
       </function>
       <function active="false">
         <_title>Consumer Surplus</_title>
-        <name index="1">
-	  <reference>true</reference>
-          <_name>csurplus</_name>
-        </name>
+        <_names>r:csurplus</_names>
         <subfunction precalculate="true">select(solve(\x=\y,\z),x&gt;=0,x,1)</subfunction>
         <expression>replace(integrate(\x-replace(\y,\Z{x},\1),\Z),\Z,\1,1)</expression>
         <argument type="free" index="1">
@@ -2990,10 +2299,7 @@
       </function>
       <function active="false">
         <_title>Producer Surplus</_title>
-        <name index="1">
-	  <reference>true</reference>
-          <_name>psurplus</_name>
-        </name>
+        <_names>r:psurplus</_names>
         <subfunction precalculate="true">select(solve(\x=\y,\z),x&gt;=0,x,1)</subfunction>
         <expression>replace(integrate(replace(\y,\Z{x},\1)-\x,\Z),\Z,\1,1)</expression>
 	<argument type="free" index="1">
@@ -3011,10 +2317,7 @@
       <_title>Finance</_title>
       <function>
         <_title>Sum-of-Years Digits Depreciation</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>syd</_name>
-        </name>
+        <_names>r:syd</_names>
         <_description>Calculates the sum-of-years digits depreciation for an asset based on its cost, salvage value, anticipated life, and a particular period. This method accelerates the rate of the depreciation, so that more depreciation expense occurs in earlier periods than in later ones. The depreciable cost is the actual cost minus the salvage value. The useful life is the number of periods (typically years) over which the asset is depreciated.</_description>
         <expression>((\x-\y)*(\z-\a+1)*2)/(\z*(\z+1))</expression>
         <argument type="free" index="1">
@@ -3032,10 +2335,7 @@
       </function>
       <function>
         <_title>Straight Line Depreciation</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>sln</_name>
-        </name>
+        <_names>r:sln</_names>
         <_description>Determines the straight line depreciation of an asset for a single period.&#10;&#10;Cost is the amount you paid for the asset. Salvage is the value of the asset at the end of the period. Life is the number of periods over which the asset is depreciated. SLN divides the cost evenly over the life of an asset.</_description>
         <expression>(\x-\y)/\z</expression>
         <argument type="free" index="1">
@@ -3050,10 +2350,7 @@
       </function>
       <function>
         <_title>Present Value</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pv</_name>
-        </name>
+        <_names>r:pv</_names>
         <_description>Returns the present value of an investment.&#10;&#10;If type = 1 then the payment is made at the beginning of the period, If type = 0 (or omitted) it is made at the end of each period.</_description>
         <expression>(-\A{0}-\z*(1+\x*\B{0})*(((1+\x)^\y-1)/\x))/((1+\x)^\y)</expression>
         <argument type="free" index="1">
@@ -3074,10 +2371,7 @@
       </function>
       <function>
         <_title>Nominal Interest Rate</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>nominal</_name>
-        </name>
+        <_names>r:nominal</_names>
         <_description>Calculates the nominal interest rate from a given effective interest rate compounded at given intervals.</_description>
         <expression>\y*(abs((\x+1)^(1/\y))-1)</expression>
         <argument type="free" index="1">
@@ -3089,10 +2383,7 @@
       </function>
       <function>
         <_title>Zero Coupon</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>zero_coupon</_name>
-        </name>
+        <_names>r:zero_coupon</_names>
         <_description>Calculates the value of a zero-coupon (pure discount) bond.</_description>
         <expression>\x/((1+\y)^\z)</expression>
         <argument type="free" index="1">
@@ -3107,10 +2398,7 @@
       </function>
       <function>
         <_title>Treasury Bill Yield</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>tbillyield</_name>
-        </name>
+        <_names>r:tbillyield</_names>
         <_description>Returns the yield for a treasury bill.</_description>
         <expression>(100-\z)/\z*(360/days(\x,\y,1,1))</expression>
         <argument type="date" index="1">
@@ -3125,10 +2413,7 @@
       </function>
       <function>
         <_title>Treasury Bill Price</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>tbillprice</_name>
-        </name>
+        <_names>r:tbillprice</_names>
         <_description>Returns the price per $100 value for a treasury bill.</_description>
         <expression>100*(1-(\z*days(\x,\y,1,1))/360)</expression>
         <argument type="date" index="1">
@@ -3143,10 +2428,7 @@
       </function>
       <function>
         <_title>Treasury Bill Equivalent</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>tbilleq</_name>
-        </name>
+        <_names>r:tbilleq</_names>
         <_description>Returns the bond equivalent for a treasury bill.</_description>
         <expression>365*\z/(360-\z*days(\x,\y,1,1))</expression>
         <argument type="date" index="1">
@@ -3161,10 +2443,7 @@
       </function>
       <function>
         <_title>Interest paid on a given period of an investment (ISPMT)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>ispmt</_name>
-        </name>
+        <_names>r:ispmt</_names>
         <_description>Calculates the interest paid on a given period of an investment.</_description>
         <expression>(-\a*\x)-((-\a*\x)/\z*\y)</expression>
         <argument type="free" index="1">
@@ -3184,10 +2463,7 @@
       </function>
       <function>
         <_title>Payment for a loan</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pmt</_name>
-        </name>
+        <_names>r:pmt</_names>
         <_description>Returns the amount of payment for a loan based on a constant interest rate and constant payments (each payment is equal amount).&#10;&#10;If type = 1 then the payment is made at the beginning of the period, If type = 0 (or omitted) it is made at the end of each period.</_description>
         <expression>(-\z*((1+\x)^\y)-\A{0})/((1+\x*\B{0})*(((1+\x)^\y-1)/\x))</expression>
         <argument type="free" index="1">
@@ -3208,10 +2484,7 @@
       </function>
       <function>
         <_title>Periods of an investment</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>nper</_name>
-        </name>
+        <_names>r:nper</_names>
         <_description>Calculates number of periods of an investment based on periodic constant payments and a constant interest rate.&#10;&#10;Type defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</_description>
         <expression>ln((\y*(1+\x*\B{0})-\A{0}*\x)/(\z*\x+\y*(1+\x*\B)))/ln(1+\x)</expression>
         <argument type="free" index="1">
@@ -3232,10 +2505,7 @@
       </function>
       <function active="false">
         <_title>Duration</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>duration</_name>
-        </name>
+        <_names>r:duration</_names>
         <_description>Calculates the duration of a security.</_description>
         <expression></expression>
         <argument type="date" index="1">
@@ -3261,10 +2531,7 @@
       </function>
       <function>
         <_title>Periods for investment to attain desired value</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>g_duration</_name>
-        </name>
+        <_names>r:g_duration</_names>
         <_description>Returns the number of periods needed for an investment to attain a desired value.</_description>
         <expression>ln(\z/\y)/ln(1+\x)</expression>
         <argument type="free" index="1">
@@ -3279,10 +2546,7 @@
       </function>
       <function>
         <_title>Payment of an annuity going towards principal (PPMT)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>ppmt</_name>
-        </name>
+        <_names>r:ppmt</_names>
         <_description>Calculates the amount of a payment of an annuity going towards principal.&#10;&#10;Type defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</_description>
         <expression>((-\a*(pow(1+\x,\z))-\B{0})/((1+\x*\C{0})*((pow(1+\x,\z)-1)/\x)))+(\a*pow(1+\x,(\y-1))+((-\a*(pow(1+\x,\z))-\B)/((1+\x*\C)*((pow(1+\x,\z)-1)/\x)))*((pow(1+\x,(\y-1))-1)/\x))*\x</expression>
         <argument type="free" index="1">
@@ -3308,10 +2572,7 @@
       </function>
       <function>
         <_title>Effective Interest Rate</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>effect</_name>
-        </name>
+        <_names>r:effect</_names>
         <_description>Calculates the effective interest for a given nominal rate.</_description>
         <expression>(1+\x/\y)^\y-1</expression>
         <argument type="free" index="1">
@@ -3323,10 +2584,7 @@
       </function>
       <function>
         <_title>Future Value</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>fv</_name>
-        </name>
+        <_names>r:fv</_names>
         <_description>Computes the future value of an investment. This is based on periodic, constant payments and a constant interest rate.&#10;&#10;If type = 1 then the payment is made at the beginning of the period, If type = 0 (or omitted) it is made at the end of each period.</_description>
         <expression>-(\A{0}*((1+\x)^\y)+\z*(1+\x*\B{0})*(((1+\x)^\y-1)/\x))</expression>
         <argument type="free" index="1">
@@ -3347,10 +2605,7 @@
       </function>
       <function>
         <_title>Return on continuously compounded interest</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>countinuous</_name>
-        </name>
+        <_names>r:continuous</_names>
         <_description>Calculates the return on continuously compounded interest, given the principal, nominal rate and time in years.</_description>
         <expression>\x*exp(\y*\z)</expression>
         <argument type="free" index="1">
@@ -3365,10 +2620,7 @@
       </function>
       <function>
         <_title>Compound</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>compound</_name>
-        </name>
+        <_names>r:compound</_names>
         <_description>Returns the value of an investment, given the principal, nominal interest rate, compounding frequency and time.</_description>
         <expression>\x*(1+\y/\z)^(\z*\a)</expression>
         <argument type="free" index="1">
@@ -3386,10 +2638,7 @@
       </function>
       <function>
         <_title>Payment of an annuity going towards interest (IPMT)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>ipmt</_name>
-        </name>
+        <_names>r:ipmt</_names>
         <_description>Calculates the amount of a payment of an annuity going towards interest.&#10;&#10;Type defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</_description>
         <expression>-(\a*pow(1+\x,(\y-1))+((-\a*(pow(1+\x,\z))-\B)/((1+\x*\C)*((pow(1+\x,\z)-1)/\x)))*((pow(1+\x,(\y-1))-1)/\x))*\x</expression>
         <argument type="free" index="1">
@@ -3415,10 +2664,7 @@
       </function>
       <function>
         <_title>Interest rate for a fully invested security</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>intrate</_name>
-        </name>
+        <_names>r:intrate</_names>
         <_description>Returns the interest rate for a fully invested security.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>(\a-\z)/\z/yearfrac(\x,\y,\B{0},1)</expression>
         <argument type="date" index="1">
@@ -3441,10 +2687,7 @@
       </function>
       <function>
         <_title>Dollar Fraction</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>dollarfr</_name>
-        </name>
+        <_names>r:dollarfr</_names>
         <_description>Converts a decimal dollar price into a dollar price expressed as a fraction.</_description>
         <expression>int(\x)+frac(\x)*\y/10^ceil(log(\y))</expression>
         <argument type="free" index="1">
@@ -3457,10 +2700,7 @@
       </function>
       <function>
         <_title>Dollar Decimal</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>dollarde</_name>
-        </name>
+        <_names>r:dollarde</_names>
         <_description>Converts a dollar price expressed as a fraction into a dollar price expressed as a decimal number.</_description>
         <expression>int(\x)+frac(\x)*10^ceil(log(\y))/\y</expression>
         <argument type="free" index="1">
@@ -3473,10 +2713,7 @@
       </function>
       <function>
         <_title>Amount received at maturity for a security bond</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>received</_name>
-        </name>
+        <_names>r:received</_names>
         <_description>Returns the amount received at the maturity date for an invested security.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360. The settlement date must be before maturity date.</_description>
         <expression>\z/(1-\a*yearfrac(\x,\y,\B{0},1))</expression>
         <argument type="date" index="1">
@@ -3499,10 +2736,7 @@
       </function>
       <function>
         <_title>Discount rate for a security</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>disc</_name>
-        </name>
+        <_names>r:disc</_names>
         <_description>Returns the discount rate for a security.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>(\a-\z)/\a/yearfrac(\x,\y,\B{0},1))</expression>
         <argument type="date" index="1">
@@ -3525,10 +2759,7 @@
       </function>
       <function>
         <_title>Accrued interest of security paying at maturity</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>accrintm</_name>
-        </name>
+        <_names>r:accrintm</_names>
         <_description>Returns the accrued interest for a security which pays interest at maturity date.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>\A{1000}*\z*yearfrac(\x,\y,\B{0},1)</expression>
         <argument type="date" index="1">
@@ -3551,10 +2782,7 @@
       </function>
       <function>
         <_title>Accrued interest of security with periodic interest payments</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>accrint</_name>
-        </name>
+        <_names>r:accrint</_names>
         <_description>Returns accrued interest for a security which pays periodic interest.&#10;&#10;Allowed frequencies are 1 - annual, 2 - semi-annual or 4 - quarterly. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>\b*\a/\c*\c*yearfrac(\x,\z,\D{0},1)+\y*0</expression>
         <argument type="date" index="1">
@@ -3585,10 +2813,7 @@
       </function>
       <function>
         <_title>Number of coupons to be paid</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>coupnum</_name>
-        </name>
+        <_names>r:coupnum</_names>
         <_description>Returns the number of coupons to be paid between the settlement and the maturity.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>trunc(yearfrac(\x,\y,\A{0},1)*\z)</expression>
         <argument type="date" index="1">
@@ -3610,10 +2835,7 @@
       </function>
       <function>
         <_title>Price per $100 face value of a security bond</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pricedisc</_name>
-        </name>
+        <_names>r:pricedisc</_names>
         <_description>Calculates and returns the price per $100 face value of a security bond. The security does not pay interest at maturity.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>\a-\z*\a*yearfrac(\x,\y,\B{0},1)</expression>
         <argument type="date" index="1">
@@ -3636,10 +2858,7 @@
       </function>
       <function>
         <_title>Price per $100 face value of a security</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>pricemat</_name>
-        </name>
+        <_names>r:pricemat</_names>
         <_description>Calculates and returns the price per $100 face value of a security. The security pays interest at maturity.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>(100+yearfrac(\z,\y,\C{0},1)*\a*100)/(1+yearfrac(\x,\y,\C,1)*\b)-yearfrac(\z,\x,\C,1)*\a*100</expression>
         <argument type="date" index="1">
@@ -3665,10 +2884,7 @@
       </function>
       <function>
         <_title>Level-Coupon Bond</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>level_coupon</_name>
-        </name>
+        <_names>r:level_coupon</_names>
         <_description>Calculates the value of a level-coupon bond.</_description>
         <expression>(\y*\x/\z)*((1-1/(((1+(\b/\z))^(\a*\z))))/(\b/\z))+(\x/((1+(\b/\z))^(\a*\z)))</expression>
         <argument type="free" index="1">
@@ -3688,61 +2904,5 @@
         </argument>
       </function>
     </category>
-  </category>
-  <category>
-    <_title>Elements</_title>
-    <builtin_function name="atomic_symbol">
-      <_title>Symbol of Element</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>atomic_symbol</_name>
-      </name>
-      <argument index="1">
-        <_title>Element</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="atomic_number">
-      <_title>Element Number</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>atomic_number</_name>
-      </name>
-      <argument index="1">
-        <_title>Element</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="atomic_name">
-      <_title>Name of Element</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>atomic_name</_name>
-      </name>
-      <argument index="1">
-        <_title>Element</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="atomic_weight">
-      <_title>Atomic Weight</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>atomic_weight</_name>
-      </name>
-      <name index="2">
-        <_name>atomic_mass</_name>
-      </name>
-      <argument index="1">
-        <_title>Element</_title>
-      </argument>
-    </builtin_function>
-    <builtin_function name="atom">
-      <_title>Element Info</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>atom</_name>
-      </name>
-      <argument index="1">
-        <_title>Element</_title>
-      </argument>
-    </builtin_function>
   </category>
 </QALCULATE>

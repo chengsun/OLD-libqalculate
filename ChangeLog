@@ -1,3 +1,9 @@
+2006-04-21 Niklas Knutsson  <nq@altern.org>
+
+	* Add the completed Dutch translation
+	* New name format in data files
+	* Update Dutch translation to new name format
+
 2006-04-13 Niklas Knutsson  <nq@altern.org>
 
 	* Fix horrible, horrible bug that caused all number arguments to require numbers to be rational

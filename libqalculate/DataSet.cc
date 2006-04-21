@@ -215,11 +215,11 @@ const string &DataProperty::getReferenceName() const {
 	}
 	return getName();
 }
-bool DataProperty::hasName(const string &s_name) {
+size_t DataProperty::hasName(const string &s_name) {
 	for(size_t i = 0; i < names.size(); i++) {
-		if(equalsIgnoreCase(s_name, names[i])) return true;
+		if(equalsIgnoreCase(s_name, names[i])) i + 1;
 	}
-	return false;
+	return 0;
 }
 size_t DataProperty::countNames() const {
 	return names.size();

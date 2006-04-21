@@ -135,7 +135,7 @@ class DataProperty {
 	bool nameIsReference(size_t index = 1) const;
 	void clearNames();
 	void addName(string s_name, bool is_ref = false, size_t index = 0);
-	bool hasName(const string &s_name);
+	size_t hasName(const string &s_name);
 	size_t countNames() const;
 	const string &getName(size_t index = 1) const;
 	const string &getReferenceName() const;

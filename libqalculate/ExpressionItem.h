@@ -146,15 +146,16 @@ class ExpressionItem {
 	/** Checks if the expression item has a name with a specific text string.
 	*
 	* @param sname A text string to look for (not case sensitive)
-	* @returns true if the item has a name with the given text string.
+	* @param case_sensitive If the name is case sensitive.
+	* @returns Index of the name with the given text string or zero if such a name was not found.
 	*/
-	virtual bool hasName(const string &sname) const;
+	virtual size_t hasName(const string &sname, bool case_sensitive = true) const;
 	/** Checks if the expression item has a name with a specific case sensitive text string.
 	*
 	* @param sname A text string to look for (case sensitive)
-	* @returns true if the item has a name with the given text string.
+	* @returns Index of the name with the given text string or zero if such a name was not found.
 	*/
-	virtual bool hasNameCaseSensitive(const string &sname) const;
+	virtual size_t hasNameCaseSensitive(const string &sname) const;
 	/** Searches for a name with specific properties.
 	*
 	* @param abbreviation If the name must be abbreviated. 1=true, 0=false, -1=ignore.

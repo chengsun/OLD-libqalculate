@@ -4,37 +4,17 @@
     <_title>Small Numbers</_title>
     <variable>
       <_title>Per Mille</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>permille</_name>
-      </name>
-      <abbreviation index="2">
-        <unicode>true</unicode>
-        <_name>&#x2030;</_name>
-      </abbreviation>
+      <_names>r:permille,au:&#x2030;</_names>
       <value>1/1000</value>
     </variable>
     <variable>
       <_title>Per Myriad</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>permyriad</_name>
-      </name>
-      <abbreviation index="2">
-        <unicode>true</unicode>
-        <_name>&#x2031;</_name>
-      </abbreviation>
+      <_names>r:permyriad,au:&#x2031;</_names>
       <value>1/10000</value>
     </variable>
     <variable>
       <_title>Procent</_title>
-      <abbreviation index="1">
-        <_name>%</_name>
-      </abbreviation>
-      <name index="2">
-        <reference>true</reference>
-        <_name>procent</_name>
-      </name>
+      <_names>a:%,r:procent</_names>
       <value>1/100</value>
     </variable>
   </category>
@@ -42,211 +22,127 @@
     <_title>Large Numbers</_title>
     <variable>
       <_title>Googolplex</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>googolplex</_name>
-      </name>
+      <_names>r:googolplex</_names>
       <value>10^(10^100)</value>
     </variable>
     <variable>
       <_title>Googol</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>googol</_name>
-      </name>
+      <_names>r:googol</_names>
       <value>10^100</value>
     </variable>
     <variable require_translation="true">
       <_title>Centillion</_title>
-      <name index="1">
-        <_name>centillion</_name>
-      </name>
+      <_names>-r:centillion</_names>
       <value>1E303</value>
     </variable>
     <variable require_translation="true">
       <_title>Vigintillion</_title>
-      <name index="1">
-        <_name>vigintillion</_name>
-      </name>
+      <_names>-r:vigintillion</_names>
       <value>1E63</value>
     </variable>
     <variable require_translation="true">
       <_title>Novemdecillion</_title>
-      <name index="1">
-        <_name>novemdecillion</_name>
-      </name>
+      <_names>-r:novemdecillion</_names>
       <value>1E60</value>
     </variable>
     <variable require_translation="true">
       <_title>Octodecillion</_title>
-      <name index="1">
-        <_name>octodecillion</_name>
-      </name>
+      <_names>-r:octodecillion</_names>
       <value>1E57</value>
     </variable>
     <variable require_translation="true">
       <_title>Septendecillion</_title>
-      <name index="1">
-        <_name>septendecillion</_name>
-      </name>
+      <_names>-r:septendecillion</_names>
       <value>1E54</value>
     </variable>
     <variable require_translation="true">
       <_title>Sexdecillion</_title>
-      <name index="1">
-        <_name>sexdecillion</_name>
-      </name>
+      <_names>-r:sexdecillion</_names>
       <value>1E51</value>
     </variable>
     <variable require_translation="true">
       <_title>Quindecillion</_title>
-      <name index="1">
-        <_name>quindecillion</_name>
-      </name>
+      <_names>-r:quindecillion</_names>
       <value>1E48</value>
     </variable>
     <variable require_translation="true">
       <_title>Quattuordecillion</_title>
-      <name index="1">
-        <_name>quattuordecillion</_name>
-      </name>
+      <_names>-r:quattuordecillion</_names>
       <value>1E45</value>
     </variable>
     <variable require_translation="true">
       <_title>Tredecillion</_title>
-      <name index="1">
-        <_name>tredecillion</_name>
-      </name>
+      <_names>-r:tredecillion</_names>
       <value>1E42</value>
     </variable>
     <variable require_translation="true">
       <_title>Duodecillion</_title>
-      <name index="1">
-        <_name>duodecillion</_name>
-      </name>
+      <_names>-r:duodecillion</_names>
       <value>1E39</value>
     </variable>
     <variable require_translation="true">
       <_title>Undecillion</_title>
-      <name index="1">
-        <_name>undecillion</_name>
-      </name>
+      <_names>-r:undecillion</_names>
       <value>1E36</value>
     </variable>
     <variable require_translation="true">
       <_title>Decillion</_title>
-      <name index="1">
-        <_name>decillion</_name>
-      </name>
+      <_names>-r:decillion</_names>
       <value>1E33</value>
     </variable>
     <variable require_translation="true">
       <_title>Nonillion</_title>
-      <name index="1">
-        <_name>nonillion</_name>
-      </name>
+      <_names>-r:nonillion</_names>
       <value>1E30</value>
     </variable>
     <variable require_translation="true">
       <_title>Octillion</_title>
-      <name index="1">
-        <_name>octillion</_name>
-      </name>
+      <_names>-r:octillion</_names>
       <value>1E27</value>
     </variable>
     <variable require_translation="true">
       <_title>Septillion</_title>
-      <name index="1">
-        <_name>septillion</_name>
-      </name>
+      <_names>-r:septillion</_names>
       <value>1E24</value>
     </variable>
     <variable require_translation="true">
       <_title>Sextillion</_title>
-      <name index="1">
-        <_name>sextillion</_name>
-      </name>
-      <name index="2">
-	<plural>true</plural>
-        <_name>:plural:sextillion</_name>
-      </name>
+      <_names>-r:sextillion</_names>
       <value>1E21</value>
     </variable>
     <variable require_translation="true">
       <_title>Quintillion</_title>
-      <name index="1">
-        <_name>quintillion</_name>
-      </name>
-      <name index="2">
-	<plural>true</plural>
-        <_name>:plural:quintillion</_name>
-      </name>
+      <_names>-r:quintillion</_names>
       <value>1E18</value>
     </variable>
     <variable require_translation="true">
       <_title>Quadrillion</_title>
-      <name index="1">
-        <_name>quadrillion</_name>
-      </name>
-      <name index="2">
-	<plural>true</plural>
-        <_name>:plural:quadrillion</_name>
-      </name>
+      <_names>-r:quadrillion</_names>
       <value>1E15</value>
     </variable>
     <variable require_translation="true">
       <_title>Trillion</_title>
-      <name index="1">
-        <_name>trillion</_name>
-      </name>
-      <name index="2">
-	<plural>true</plural>
-        <_name>:plural:trillion</_name>
-      </name>
+      <_names>-r:trillion</_names>
       <value>1E12</value>
     </variable>
     <variable require_translation="true">
       <_title>Billion</_title>
-      <name index="1">
-        <_name>billion</_name>
-      </name>
-      <name index="2">
-	<plural>true</plural>
-        <_name>:plural:billion</_name>
-      </name>
+      <_names>-r:billion</_names>
       <value>1E9</value>
     </variable>
     <variable require_translation="true">
       <_title>Million</_title>
-      <name index="1">
-        <_name>million</_name>
-      </name>
-      <name index="2">
-	<plural>true</plural>
-        <_name>:plural:million</_name>
-      </name>
+      <_names>-r:million</_names>
       <value>1E6</value>
     </variable>
     <variable require_translation="true">
       <_title>Thousand</_title>
-      <name index="1">
-        <_name>thousand</_name>
-      </name>
-      <name index="2">
-	<plural>true</plural>
-        <_name>:plural:thousand</_name>
-      </name>
+      <_names>-r:thousand</_names>
       <value>1E3</value>
     </variable>
     <variable require_translation="true">
       <_title>Hundred</_title>
-      <name index="1">
-        <_name>hundred</_name>
-      </name>
-      <name index="2">
-	<plural>true</plural>
-        <_name>:plural:hundred</_name>
-      </name>
+      <_names>-r:hundred</_names>
       <value>1E2</value>
     </variable>
   </category>
@@ -256,133 +152,57 @@
       <_title>Universal Constants</_title>
       <variable>
         <_title>Speed of Light in Vacuum</_title>
-        <abbreviation index="1">
-          <reference>true</reference>
-          <_name>c</_name>
-        </abbreviation>
-        <name index="2">
-          <_name>speed_of_light</_name>
-        </name>
+        <_names>ar:c,speed_of_light</_names>
         <value>299792458*m*s^(-1)</value>
       </variable>
       <variable>
         <_title>Planck Time</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>planck_time</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>t_P</_name>
-        </abbreviation>
+        <_names>r:planck_time,ais:t_P</_names>
         <value approximate="true" precision="3">5.39121E-44*s</value>
       </variable>
       <variable>
         <_title>Planck Temperature</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>planck_temperature</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>T_P</_name>
-        </abbreviation>
+        <_names>r:planck_temperature,ais:T_P</_names>
         <value approximate="true" precision="3">1.41679E32*K</value>
       </variable>
       <variable>
         <_title>Planck Mass</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>planck_mass</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>m_P</_name>
-        </abbreviation>
+        <_names>r:planck_mass,ais:m_P</_names>
         <value approximate="true" precision="3">2.17645E-5*g</value>
       </variable>
       <variable>
         <_title>Planck Length</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>planck_length</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>l_P</_name>
-        </abbreviation>
+        <_names>r:planck_length,ais:l_P</_names>
         <value approximate="true" precision="3">1.61624E-35*m</value>
       </variable>
       <variable>
         <_title>Planck Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>planck</_name>
-        </name>
+        <_names>r:planck</_names>
         <value approximate="true" precision="5">6.6260693E-34*J*s</value>
       </variable>
       <variable>
         <_title>Planck Constant over 2 pi</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>planck2pi</_name>
-        </name>
+        <_names>r:planck2pi</_names>
         <value>planck/(2*pi)</value>
       </variable>
       <variable>
         <_title>Newtonian Constant of Gravitation</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>newtonian_constant</_name>
-        </name>
-        <abbreviation index="2">
-          <_name>G</_name>
-        </abbreviation>
+        <_names>r:newtonian_constant,a:G</_names>
         <value approximate="true" precision="2">6.6742E-11*m^3*kg^(-1)*s^(-2)</value>
       </variable>
       <variable>
         <_title>Electric Constant (Permittivity of Free Space)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>electric_constant</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>&#x3B5;_0</_name>
-        </abbreviation>
+        <_names>r:electric_constant,aisu:&#x3B5;_0</_names>
         <value>1/(4E-7*pi*299792458^2)*F*m^(-1)</value>
       </variable>
       <variable>
         <_title>Magnetic Constant (Permeability of Free Space)</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>magnetic_constant</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>&#x3BC;_0</_name>
-        </abbreviation>
+        <_names>r:magnetic_constant,aisu:&#x3BC;_0</_names>
         <value>4E-7*pi*N*A^(-2)</value>
       </variable>
       <variable>
         <_title>Characteristic Impedance of Vacuum</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>characteristic_impedance</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>Z_0</_name>
-        </abbreviation>
+        <_names>r:characteristic_impedance,ais:Z_0</_names>
         <value>4E-7*pi*299792458*ohm</value>
       </variable>
     </category>
@@ -390,96 +210,37 @@
       <_title>Electromagnetic Constants</_title>
       <variable>
         <_title>Borh Magneton</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>bohr_magneton</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>&#x3BC;_B</_name>
-        </abbreviation>
+        <_names>r:bohr_magneton,aisu:&#x3BC;_B</_names>
         <value approximate="true" precision="6">927.400949E-26*J*T^(-1)</value>
       </variable>
       <variable>
         <_title>Conductance Quantum</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>conductance_quantum</_name>
-        </name>
-        <abbreviation index="2">
-          <suffix>true</suffix>
-          <avoid_input>true</avoid_input>
-          <_name>G_0</_name>
-        </abbreviation>
+        <_names>r:conductance_quantum,ais:G_0</_names>
         <value approximate="true" precision="7">7.748091733E-5*S</value>
       </variable>
       <variable>
         <_title>Elementary Charge</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>elementary_charge</_name>
-        </name>
-        <abbreviation index="2">
-          <suffix>true</suffix>
-          <avoid_input>true</avoid_input>
-          <_name>e_charge</_name>
-        </abbreviation>
+        <_names>r:elementary_charge,ais:e_charge</_names>
         <value approximate="true" precision="6">1.60217653E-19*C</value>
       </variable>
       <variable>
         <_title>Josephson Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>josephson</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>K_J</_name>
-        </abbreviation>
+        <_names>r:josephson,ais:K_J</_names>
         <value approximate="true" precision="6">483597.879E9*Hz*V^(-1)</value>
       </variable>
       <variable>
         <_title>Magnetic Flux Quantum</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>magnetic_flux_quantum</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>&#x3A6;_0</_name>
-        </abbreviation>
+        <_names>r:magnetic_flux_quantum,aisu:&#x3A6;_0</_names>
         <value approximate="true" precision="6">2.06783372E-15*Wb</value>
       </variable>
       <variable>
         <_title>Nuclear Magneton</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>nuclear_magneton</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>&#x3BC;_N</_name>
-        </abbreviation>
+        <_names>r:nuclear_magneton,aisu:&#x3BC;_N</_names>
         <value approximate="true" precision="6">5.05078343E-27*J*T^(-1)</value>
       </variable>
       <variable>
         <_title>von Klitzing Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>klitzing</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>R_K</_name>
-        </abbreviation>
+        <_names>r:klitzing,ais:R_K</_names>
         <value approximate="true" precision="8">25812.807449*ohm</value>
       </variable>
     </category>
@@ -487,136 +248,52 @@
       <_title>Atomic and Nuclear Constants</_title>
       <variable>
         <_title>Alpha Particle Mass</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>alpha_particle_mass</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>m_&#x3B1;</_name>
-        </abbreviation>
+        <_names>r:alpha_particle_mass,aisu:m_&#x3B1;</_names>
         <value approximate="true" precision="5">6.6446565E-24*g</value>
       </variable>
       <variable>
         <_title>Bohr Radius</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>bohr_radius</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>a_o</_name>
-        </abbreviation>
+        <_names>r:bohr_radius,ais:a_o</_names>
         <value approximate="true" precision="7">0.5291772108E-10*m</value>
       </variable>
       <variable>
         <_title>Classical Electron Radius</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>classical_electron_radius</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>r_e</_name>
-        </abbreviation>
+        <_names>r:classical_electron_radius,ais:r_e</_names>
         <value approximate="true" precision="7">2.817940325E-15*m</value>
       </variable>
       <variable>
         <_title>Compton Wavelength</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>compton_wavelength</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>&#x3BB;_C</_name>
-        </abbreviation>
+        <_names>r:compton_wavelength,aisu:&#x3BB;_C</_names>
         <value approximate="true" precision="7">2.426310238E-12*m</value>
       </variable>
       <variable>
         <_title>Electron Mass</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>electron_mass</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>m_e</_name>
-        </abbreviation>
+        <_names>r:electron_mass,ais:m_e</_names>
         <value approximate="true" precision="5">9.1093826E-28*g</value>
       </variable>
       <variable>
         <_title>Helion Mass</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>helion_mass</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>m_h</_name>
-        </abbreviation>
+        <_names>r:helion_mass,ais:m_h</_names>
         <value approximate="true" precision="6">5.00641214E-24*g</value>
       </variable>
       <variable>
         <_title>Neutron Mass</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>neutron_mass</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>m_n</_name>
-        </abbreviation>
+        <_names>r:neutron_mass,ais:m_n</_names>
         <value approximate="true" precision="6">1.67492728E-24*g</value>
       </variable>
       <variable>
         <_title>Proton Mass</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>proton_mass</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>m_p</_name>
-        </abbreviation>
+        <_names>r:proton_mass,ais:m_p</_names>
         <value approximate="true" precision="6">1.67262171E-24*g</value>
       </variable>
       <variable>
         <_title>Rydberg Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>rydberg</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>R_&#x221E;</_name>
-        </abbreviation>
+        <_names>r:rydberg,aisu:R_&#x221E;</_names>
         <value approximate="true" precision="11">10973731.568525*m^(-1)</value>
       </variable>
       <variable>
         <_title>Tau Mass</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>tau_mass</_name>
-        </name>
-        <abbreviation index="2">
-          <unicode>true</unicode>
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>m_&#x3C4;</_name>
-        </abbreviation>
+        <_names>r:tau_mass,aisu:m_&#x3C4;</_names>
         <value approximate="true" precision="3">3.16777E-24*g</value>
       </variable>
     </category>
@@ -624,78 +301,37 @@
       <_title>Physico-Chemical Constants</_title>
       <variable>
         <_title>Atomic Mass Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>atomic_mass</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>m_u</_name>
-        </abbreviation>
+        <_names>r:atomic_mass,ais:m_u</_names>
         <value approximate="true" precision="6">1.66053886E-24*g</value>
       </variable>
       <variable>
         <_title>Avogadro Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>avogadro</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>N_A</_name>
-        </abbreviation>
+        <_names>r:avogadro,ais:N_A</_names>
         <value approximate="true" precision="5">6.0221415E23*mol^(-1)</value>
       </variable>
       <variable>
         <_title>Boltzmann Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>boltzmann</_name>
-        </name>
+        <_names>r:boltzmann</_names>
         <value approximate="true" precision="5">1.3806505E-23*J*K^(-1)</value>
       </variable>
       <variable>
         <_title>Faraday Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>faraday</_name>
-        </name>
+        <_names>r:faraday</_names>
         <value approximate="true" precision="6">96485.3383*C*mol^(-1)</value>
       </variable>
       <variable>
         <_title>First Radiation Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>first_radiation</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>c_1</_name>
-        </abbreviation>
+        <_names>r:first_radiation,ais:c_1</_names>
         <value approximate="true" precision="6">3.74177138E-16*W*m^2</value>
       </variable>
       <variable>
         <_title>Ideal Gas Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>ideal_gas</_name>
-        </name>
+        <_names>r:ideal_gas</_names>
         <value approximate="true" precision="4">8.314472*J*K^(-1)*mol^(-1)</value>
       </variable>
       <variable>
         <_title>Second Radiation Constant</_title>
-        <name index="1">
-          <reference>true</reference>
-          <_name>second_radiation</_name>
-        </name>
-        <abbreviation index="2">
-          <avoid_input>true</avoid_input>
-          <suffix>true</suffix>
-          <_name>c_2</_name>
-        </abbreviation>
+        <_names>r:second_radiation,ais:c_2</_names>
         <value approximate="true" precision="5">1.4387752E-2*m*K</value>
       </variable>
     </category>
@@ -704,150 +340,79 @@
     <_title>Basic Constants</_title>
     <variable>
       <_title>The Golden Ratio</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>golden</_name>
-      </name>
-      <abbreviation index="2">
-        <unicode>true</unicode>
-        <_name>&#x3C6;</_name>
-      </abbreviation>
+      <_names>r:golden,au:&#x3C6;</_names>
       <value>(1+sqrt(5))/2</value>
     </variable>
     <variable>
       <_title>Pythagora's Constant (sqrt 2)</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>pythagoras</_name>
-      </name>
+      <_names>r:pythagoras</_names>
       <value>sqrt(2)</value>
     </variable>
     <variable>
       <_title>Apery's Constant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>apery</_name>
-      </name>
+      <_names>r:apery</_names>
       <value>zeta(3)</value>
     </variable>
     <builtin_variable name="e">
       <_title>The Base of Natural Logarithms (e)</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>e</_name>
-      </name>
+      <_names>r:e</_names>
     </builtin_variable>
     <builtin_variable name="pi">
       <_title>Archimede's Constant (pi)</_title>
-      <abbreviation index="1">
-        <unicode>true</unicode>
-        <_name>&#x3C0;</_name>
-      </abbreviation>
-      <name index="2">
-        <reference>true</reference>
-        <_name>pi</_name>
-      </name>
+      <_names>au:&#x3C0;,r:pi</_names>
     </builtin_variable>
     <builtin_variable name="euler">
       <_title>Euler's Constant</_title>
-      <abbreviation index="1">
-        <unicode>true</unicode>
-        <_name>&#x3B3;</_name>
-      </abbreviation>
-      <name index="2">
-        <reference>true</reference>
-        <_name>euler</_name>
-      </name>
+      <_names>au:&#x3B3;,r:euler</_names>
     </builtin_variable>
     <builtin_variable name="catalan">
       <_title>Catalan's Constant</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>catalan</_name>
-      </name>
+      <_names>r:catalan</_names>
     </builtin_variable>
   </category>
   <category>
     <_title>Special Numbers</_title>
     <builtin_variable name="i">
       <_title>Imaginary i (sqrt -1)</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>i</_name>
-      </name>
+      <_names>r:i</_names>
     </builtin_variable>
     <builtin_variable name="infinity">
       <_title>Infinity</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>infinity</_name>
-      </name>
+      <_names>r:infinity</_names>
     </builtin_variable>
     <builtin_variable name="plus_infinity">
       <_title>Positive Infinity</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>plus_infinity</_name>
-      </name>
+      <_names>r:plus_infinity</_names>
     </builtin_variable>
     <builtin_variable name="minus_infinity">
       <_title>Negative Infinity</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>minus_infinity</_name>
-      </name>
+      <_names>r:minus_infinity</_names>
     </builtin_variable>
     <builtin_variable name="undefined">
       <_title>Undefined</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>undefined</_name>
-      </name>
+      <_names>r:undefined</_names>
     </builtin_variable>
     <variable>
       <_title>False</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>false</_name>
-      </name>
-      <name index="2">
-        <reference>true</reference>
-        <_name>no</_name>
-      </name>
+      <_names>r:false,r:no</_names>
       <value>0</value>
     </variable>
     <variable>
       <_title>True</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>true</_name>
-      </name>
-      <name index="2">
-        <reference>true</reference>
-        <_name>yes</_name>
-      </name>
+      <_names>r:true,r:yes</_names>
       <value>1</value>
     </variable>
   </category>
   <category>
     <_title>Unknowns</_title>
     <unknown>
-      <name index="1">
-        <reference>true</reference>
-        <_name>x</_name>
-      </name>
+      <_names>r:x</_names>
     </unknown>
     <unknown>
-      <name index="1">
-        <reference>true</reference>
-        <_name>y</_name>
-      </name>
+      <_names>r:y</_names>
     </unknown>
     <unknown>
-      <name index="1">
-        <reference>true</reference>
-        <_name>z</_name>
-      </name>
+      <_names>r:z</_names>
     </unknown>
   </category>
 </QALCULATE>

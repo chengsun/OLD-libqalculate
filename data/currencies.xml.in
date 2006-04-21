@@ -4,319 +4,151 @@
     <_title>Currency</_title>
     <builtin_unit name="EUR">
       <_title>European Euros</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>EUR</_name>
-      </abbreviation>
-      <abbreviation index="2">
-        <unicode>true</unicode>
-        <_name>&#x20AC;</_name>
-      </abbreviation>
-      <name index="3">
-        <_name>euro</_name>
-      </name>
-      <plural index="4">
-        <_name>euros</_name>
-      </plural>
+      <_names>ar:EUR,au:&#x20AC;,euro,p:euros</_names>
     </builtin_unit>
     <builtin_unit name="USD">
       <_title>U.S. Dollars</_title>
-      <abbreviation index="1">
-        <_name>$</_name>
-      </abbreviation>
-      <abbreviation index="2">
-        <reference>true</reference>
-        <_name>USD</_name>
-      </abbreviation>
-      <name index="3">
-        <_name>dollar</_name>
-      </name>
-      <plural index="4">
-        <_name>dollars</_name>
-      </plural>
+      <_names>a:$,ar:USD,dollar,p:dollars</_names>
     </builtin_unit>
     <builtin_unit name="JPY">
       <_title>Japanese Yen</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>JPY</_name>
-      </abbreviation>
-      <abbreviation index="2">
-        <unicode>true</unicode>
-        <_name>&#xA5;</_name>
-      </abbreviation>
-      <name index="3">
-        <_name>yen</_name>
-      </name>
+      <_names>ar:JPY,au:&#xA5;,yen</_names>
     </builtin_unit>
     <builtin_unit name="DKK">
       <_title>Danish Kroner</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>DKK</_name>
-      </abbreviation>
+      <_names>ar:DKK</_names>
     </builtin_unit>
     <builtin_unit name="GBP">
       <_title>British Pounds</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>GBP</_name>
-      </abbreviation>
-      <abbreviation index="2">
-        <unicode>true</unicode>
-        <_name>&#xA3;</_name>
-      </abbreviation>
+      <_names>ar:GBP,au:&#xA3;</_names>
     </builtin_unit>
     <builtin_unit name="THB">
       <_title>Thai Bat</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>THB</_name>
-      </abbreviation>
+      <_names>ar:THB</_names>
     </builtin_unit>
     <builtin_unit name="SEK">
       <_title>Swedish Krona</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>SEK</_name>
-      </abbreviation>
+      <_names>ar:SEK</_names>
     </builtin_unit>
     <builtin_unit name="CHF">
       <_title>Swiss Francs</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>CHF</_name>
-      </abbreviation>
+      <_names>ar:CHF</_names>
     </builtin_unit>
     <builtin_unit name="ISK">
       <_title>Icelandic Krona</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>ISK</_name>
-      </abbreviation>
+      <_names>ar:ISK</_names>
     </builtin_unit>
     <builtin_unit name="NOK">
       <_title>Norwegian Kroner</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>NOK</_name>
-      </abbreviation>
+      <_names>ar:NOK</_names>
     </builtin_unit>
     <builtin_unit name="BGN">
       <_title>Bulgarian Lev</_title>
-      <name index="1">
-        <_name>lev</_name>
-      </name>
-      <abbreviation index="2">
-        <reference>true</reference>
-        <_name>BGN</_name>
-      </abbreviation>
+      <_names>lev,ar:BGN</_names>
     </builtin_unit>
     <builtin_unit name="RUB">
       <_title>Russian Ruble</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>RUB</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>ruble</_name>
-      </name>
+      <_names>ar:RUB,ruble</_names>
     </builtin_unit>
     <builtin_unit name="PHP">
       <_title>Phillipine Peso</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>PHP</_name>
-      </abbreviation>
+      <_names>ar:PHP</_names>
     </builtin_unit>
     <builtin_unit name="MYR">
       <_title>Malaysian Ringgit</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>MYR</_name>
-      </abbreviation>
+      <_names>ar:MYR</_names>
     </builtin_unit>
     <builtin_unit name="HRK">
       <_title>Croatian Kuna</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>HRK</_name>
-      </abbreviation>
+      <_names>ar:HRK</_names>
     </builtin_unit>
     <builtin_unit name="CNY">
       <_title>Yuan Renmimbi (PR China)</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>CNY</_name>
-      </abbreviation>
+      <_names>ar:CNY</_names>
     </builtin_unit>
     <builtin_unit name="IDR">
       <_title>Indonesian Rupiah</_title>
-      <abbreviation index="1">
-        <reference>IDR</reference>
-        <_name>CYP</_name>
-      </abbreviation>
+      <_names>ar:IDR</_names>
     </builtin_unit>
     <builtin_unit name="CYP">
       <_title>Cypriot Pound</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>CYP</_name>
-      </abbreviation>
+      <_names>ar:CYP</_names>
     </builtin_unit>
     <builtin_unit name="CZK">
       <_title>Czech Koruna</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>CZK</_name>
-      </abbreviation>
+      <_names>ar:CZK</_names>
     </builtin_unit>
     <builtin_unit name="EEK">
       <_title>Estonian Kroon</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>EEK</_name>
-      </abbreviation>
+      <_names>ar:EEK</_names>
     </builtin_unit>
     <builtin_unit name="HUF">
       <_title>Hungarian Forint</_title>
-      <name index="1">
-        <_name>forint</_name>
-      </name>
-      <abbreviation index="2">
-        <reference>true</reference>
-        <_name>HUF</_name>
-      </abbreviation>
+      <_names>forint,ar:HUF</_names>
     </builtin_unit>
     <builtin_unit name="LTL">
       <_title>Lithuanian Lit</_title>
-      <name index="1">
-        <_name>lit</_name>
-      </name>
-      <abbreviation index="2">
-        <reference>true</reference>
-        <_name>LTL</_name>
-      </abbreviation>
+      <_names>lit,ar:LTL</_names>
     </builtin_unit>
     <builtin_unit name="LVL">
       <_title>Latvian Lat</_title>
-      <name index="1">
-        <_name>lat</_name>
-      </name>
-      <abbreviation index="2">
-        <reference>true</reference>
-        <_name>LVL</_name>
-      </abbreviation>
+      <_names>lat,ar:LVL</_names>
     </builtin_unit>
     <builtin_unit name="MTL">
       <_title>Maltese Lira</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>MTL</_name>
-      </abbreviation>
+      <_names>ar:MTL</_names>
     </builtin_unit>
     <builtin_unit name="PLN">
       <_title>Polish Zloty</_title>
-      <name index="1">
-        <_name>zloty</_name>
-      </name>
-      <abbreviation index="2">
-        <reference>true</reference>
-        <_name>PLN</_name>
-      </abbreviation>
+      <_names>zloty,ar:PLN</_names>
     </builtin_unit>
     <builtin_unit name="RON">
       <_title>Romanian New Leu</_title>
-      <name index="1">
-        <_name>leu</_name>
-      </name>
-      <abbreviation index="2">
-        <reference>true</reference>
-        <_name>ROL</_name>
-      </abbreviation>
+      <_names>leu,ar:RON</_names>
     </builtin_unit>
     <builtin_unit name="SIT">
       <_title>Slovenian Tolar</_title>
-      <name index="1">
-        <_name>tolar</_name>
-      </name>
-      <abbreviation index="2">
-        <reference>true</reference>
-        <_name>SIT</_name>
-      </abbreviation>
+      <_names>tolar,ar:SIT</_names>
     </builtin_unit>
     <builtin_unit name="SKK">
       <_title>Slovakian Koruna</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>SKK</_name>
-      </abbreviation>
+      <_names>ar:SKK</_names>
     </builtin_unit>
     <builtin_unit name="TRY">
       <_title>Turkish New Lira</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>TRY</_name>
-      </abbreviation>
+      <_names>ar:TRY</_names>
     </builtin_unit>
     <builtin_unit name="AUD">
       <_title>Australian Dollars</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>AUD</_name>
-      </abbreviation>
+      <_names>ar:AUD</_names>
     </builtin_unit>
     <builtin_unit name="CAD">
       <_title>Canadian Dollars</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>CAD</_name>
-      </abbreviation>
+      <_names>ar:CAD</_names>
     </builtin_unit>
     <builtin_unit name="HKD">
       <_title>Hong Kong Dollars</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>HKD</_name>
-      </abbreviation>
+      <_names>ar:HKD</_names>
     </builtin_unit>
     <builtin_unit name="NZD">
       <_title>New Zealand Dollars</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>NZD</_name>
-      </abbreviation>
+      <_names>ar:NZD</_names>
     </builtin_unit>
     <builtin_unit name="SGD">
       <_title>Singapore Dollars</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>SGD</_name>
-      </abbreviation>
+      <_names>ar:SGD</_names>
     </builtin_unit>
     <builtin_unit name="KRW">
       <_title>South Korean Won</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>KRW</_name>
-      </abbreviation>
+      <_names>ar:KRW</_names>
     </builtin_unit>
     <builtin_unit name="ZAR">
       <_title>South African Rand</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>ZAR</_name>
-      </abbreviation>
+      <_names>ar:ZAR</_names>
     </builtin_unit>
     <unit type="alias">
       <_title>Euro Cent</_title>
-      <name index="1">
-        <reference>true</reference>
-        <_name>eurocent</_name>
-      </name>
-      <plural index="2">
-        <_name>eurocents</_name>
-      </plural>
+      <_names>r:eurocent,p:eurocents</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/100</relation>
@@ -325,17 +157,7 @@
     </unit>
     <unit type="alias">
       <_title>Cent (USD)</_title>
-      <abbreviation index="1">
-        <unicode>true</unicode>
-        <_name>&#xA2;</_name>
-      </abbreviation>
-      <name index="2">
-        <reference>true</reference>
-        <_name>cent</_name>
-      </name>
-      <plural index="3">
-        <_name>cents</_name>
-      </plural>
+      <_names>au:&#xA2;,r:cent,p:cents</_names>
       <base>
         <unit>USD</unit>
         <relation>1/100</relation>
@@ -344,10 +166,7 @@
     </unit>
     <unit type="alias">
       <_title>Belgian franc</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>BEF</_name>
-      </abbreviation>
+      <_names>ar:BEF</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/40.3399</relation>
@@ -356,10 +175,7 @@
     </unit>
     <unit type="alias">
       <_title>Greek drachma</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>GRD</_name>
-      </abbreviation>
+      <_names>ar:GRD</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/340.750</relation>
@@ -368,13 +184,7 @@
     </unit>
     <unit type="alias">
       <_title>French franc</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>FRF</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>franc</_name>
-      </name>
+      <_names>ar:FRF,franc</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/6.55957</relation>
@@ -383,13 +193,7 @@
     </unit>
     <unit type="alias">
       <_title>Italian lira</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>ITL</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>lira</_name>
-      </name>
+      <_names>ar:ITL,lira</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/1936.27</relation>
@@ -398,13 +202,7 @@
     </unit>
     <unit type="alias">
       <_title>Dutch guilder</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>NLG</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>guilder</_name>
-      </name>
+      <_names>ar:NLG,guilder</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/2.20371</relation>
@@ -413,13 +211,7 @@
     </unit>
     <unit type="alias">
       <_title>Portuguese escudo</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>PTE</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>escudo</_name>
-      </name>
+      <_names>ar:PTE,escudo</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/200.482</relation>
@@ -428,13 +220,7 @@
     </unit>
     <unit type="alias">
       <_title>Deutche Mark</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>DEM</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>mark</_name>
-      </name>
+      <_names>ar:DEM,mark</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/1.95583</relation>
@@ -443,16 +229,7 @@
     </unit>
     <unit type="alias">
       <_title>Spanish peseta</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>ESP</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>peseta</_name>
-      </name>
-      <plural index="3">
-        <_name>pesetas</_name>
-      </plural>
+      <_names>ar:ESP,peseta,p:pesetas</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/166.386</relation>
@@ -461,10 +238,7 @@
     </unit>
     <unit type="alias">
       <_title>Irish pound</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>IEP</_name>
-      </abbreviation>
+      <_names>ar:IEP</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/0.787564</relation>
@@ -473,10 +247,7 @@
     </unit>
     <unit type="alias">
       <_title>Luxembourg franc</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>LUF</_name>
-      </abbreviation>
+      <_names>ar:LUF</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/40.3399</relation>
@@ -484,14 +255,8 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Austrian shilling</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>ATS</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>shilling</_name>
-      </name>
+      <_title>Austrian schilling</_title>
+      <_names>ar:ATS,schilling</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/13.7603</relation>
@@ -500,13 +265,7 @@
     </unit>
     <unit type="alias">
       <_title>Finnish markka</_title>
-      <abbreviation index="1">
-        <reference>true</reference>
-        <_name>FIM</_name>
-      </abbreviation>
-      <name index="2">
-        <_name>markka</_name>
-      </name>
+      <_names>ar:FIM,markka</_names>
       <base>
         <unit>EUR</unit>
         <relation>1/5.94573</relation>

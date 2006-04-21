@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: libqalculate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-13 23:21+0100\n"
-"PO-Revision-Date: 2006-03-31 16:58\n"
+"PO-Revision-Date: 2006-04-04 10:39\n"
 "Last-Translator: Jaap Woldringh <jjh.woldringh@planet.nl>\n"
 "Language-Team: Nederlands <kde-i18n-nl@kde.org.>\n"
 "MIME-Version: 1.0\n"
@@ -588,7 +588,7 @@ msgstr "Ongeldig teken '%c', in expressie."
 
 #: ../src/qalc.cc:896 ../src/qalc.cc:1194 ../src/qalc.cc:1512
 msgid "set"
-msgstr "instellen"
+msgstr "set"
 
 #: ../src/qalc.cc:899 ../src/qalc.cc:1195 ../src/qalc.cc:1574
 msgid "save"
@@ -761,7 +761,7 @@ msgstr "Eigenschappen"
 
 #: ../src/qalc.cc:1336
 msgid "key"
-msgstr "toets"
+msgstr "sleutelwaarde"
 
 #: ../src/qalc.cc:1354 ../src/qalc.cc:1357
 msgid "Unit"
@@ -1033,7 +1033,7 @@ msgid ""
 "No comparison (equality or inequality) to solve. The entered expression to "
 "solve is not correct (ex. \"x + 5 = 3\" is correct)"
 msgstr ""
-"Geen op te lossen gelijkheid of ongelijkheid. De ingevoerde op te lossen expressie "
+"Geen op te lossen vergelijking (gelijkheid of ongelijkheid). De ingevoerde op te lossen expressie "
 "is onjuist (bv. \"x + 5 = 3\" is juist)"
 
 #: ../libqalculate/BuiltinFunctions.cc:3091
@@ -1251,11 +1251,11 @@ msgstr "Ongebruikte waarden op de stack (stapelregister)."
 
 #: ../libqalculate/Calculator.cc:4082
 msgid "RPN syntax error. Stack is empty."
-msgstr "RPN-fout. Stack (stapelregister) is leeg."
+msgstr "RPN-syntaxisfout. Stack (stapelregister) is leeg."
 
 #: ../libqalculate/Calculator.cc:4084
 msgid "RPN syntax error. Operator ignored as there where only one stack value."
-msgstr "RPN-fout. Bewerking genegeerd omdat er slechts één waarde is op de stack (stapelregister)."
+msgstr "RPN-syntaxisfout. Bewerking genegeerd omdat er slechts één waarde is op de stack (stapelregister)."
 
 #: ../libqalculate/Calculator.cc:4443
 #, c-format
@@ -1654,7 +1654,7 @@ msgstr "Fout in Romeinse cijfers: \"%s\". Geïnterpreteerd als %s, wat als %s zo
 
 #: ../libqalculate/Number.cc:457
 msgid "':' in decimal number ignored (decimal point detected)."
-msgstr "'.' in decimaal getal genegeerd (decimale komma gevonden)."
+msgstr "':' in decimaal getal genegeerd (decimale komma gevonden)."
 
 #: ../libqalculate/Number.cc:473
 msgid "Decimal point in sexagesimal number treated as ':'."

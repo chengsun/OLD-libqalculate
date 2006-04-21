@@ -497,7 +497,7 @@ msgstr ""
 
 #: ../data/currencies.xml.in.h:119
 msgid "lira"
-msgstr "lira"
+msgstr "lire"
 
 #: ../data/currencies.xml.in.h:120
 msgid "lit"
@@ -7210,15 +7210,15 @@ msgstr ""
 
 #: ../data/units.xml.in.h:624
 msgid "meters"
-msgstr "meter"
+msgstr ":"
 
 #: ../data/units.xml.in.h:625
 msgid "metre"
-msgstr "meter"
+msgstr ":"
 
 #: ../data/units.xml.in.h:626
 msgid "metres"
-msgstr "meter"
+msgstr ":"
 
 #: ../data/units.xml.in.h:627
 msgid "mi"

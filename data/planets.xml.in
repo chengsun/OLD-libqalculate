@@ -27,7 +27,8 @@
     <temperature>210</temperature>
   </object>
   <object>
-    <_name>Mercury</_name>
+    <!-- Planet -->
+    <_name>!planets!Mercury</_name>
     <year>87.96935</year>
     <speed>47.8725</speed>
     <eccentricity>0.20563069</eccentricity>

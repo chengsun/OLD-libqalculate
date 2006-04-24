@@ -5,6 +5,7 @@ SUBDIRS = libqalculate src data po po-defs docs
 EXTRA_DIST = \
 	autogen.sh \
 	TODO \
+	README.translate \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \

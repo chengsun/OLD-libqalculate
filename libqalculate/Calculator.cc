@@ -1812,7 +1812,7 @@ void Calculator::RPNStackEnter(string str, const EvaluationOptions &eo, MathStru
 	rpn_stack.push_back(new MathStructure(calculate(str, eo, parsed_struct, to_struct, make_to_division)));
 }
 bool Calculator::setRPNRegister(size_t index, MathStructure *mstruct, int msecs, const EvaluationOptions &eo) {
-	if(mstruct = NULL) {
+	if(mstruct == NULL) {
 		deleteRPNRegister(index);
 		return true;
 	}
@@ -1831,7 +1831,7 @@ bool Calculator::setRPNRegister(size_t index, string str, int msecs, const Evalu
 	return calculate(mstruct, str, msecs, eo, parsed_struct, to_struct, make_to_division);
 }
 void Calculator::setRPNRegister(size_t index, MathStructure *mstruct, bool eval) {
-	if(mstruct = NULL) {
+	if(mstruct == NULL) {
 		deleteRPNRegister(index);
 		return;
 	}
@@ -2110,6 +2110,7 @@ MathStructure Calculator::convert(const MathStructure &mstruct, Unit *to_unit, c
 					}
 					break;
 				}
+				default: {}
 			}
 		}
 		if(b) {		
@@ -2444,6 +2445,7 @@ MathStructure Calculator::convertToBestUnit(const MathStructure &mstruct, const 
 			mstruct_new.eval(eo2);
 			return mstruct_new;
 		}
+		default: {}
 	}
 	return mstruct;
 }
@@ -2489,6 +2491,7 @@ MathStructure Calculator::convertToCompositeUnit(const MathStructure &mstruct, C
 					}
 					break;				
 				}
+				default: {}
 			}
 		}
 		if(b) {	
@@ -4945,7 +4948,6 @@ bool Calculator::loadLocalDefinitions() {
 
 #define ITEM_SAVE_BUILTIN_NAMES\
 	if(!is_user_defs) {item->setRegistered(false);} \
-	bool has_ref_name; \
 	for(size_t i = 1; i <= item->countNames(); i++) { \
 		if(item->getName(i).reference) { \
 			for(size_t i2 = 0; i2 < 10; i2++) { \
@@ -4961,9 +4963,13 @@ bool Calculator::loadLocalDefinitions() {
 #define ITEM_SET_BEST_NAMES(validation) \
 	size_t names_i = 0, i2 = 0; \
 	string *str_names; \
+	if(best_names == "-") {best_names = ""; nextbest_names = "";} \
 	if(!best_names.empty()) {str_names = &best_names;} \
 	else if(!nextbest_names.empty()) {str_names = &nextbest_names;} \
 	else {str_names = &default_names;} \
+	if(!str_names->empty() && (*str_names)[0] == '!') { \
+		names_i = str_names->find('!', 1) + 1; \
+	} \
 	while(true) { \
 		size_t i3 = names_i; \
 		names_i = str_names->find(",", i3); \
@@ -5010,7 +5016,9 @@ bool Calculator::loadLocalDefinitions() {
 
 #define ITEM_SET_BUILTIN_NAMES \
 	for(size_t i = 0; i < 10; i++) { \
-		if(!ref_names[i].name.empty()) { \
+		if(ref_names[i].name.empty()) { \
+			break; \
+		} else { \
 			size_t i4 = item->hasName(ref_names[i].name, ref_names[i].case_sensitive); \
 			if(i4 > 0) { \
 				const ExpressionName *enameptr = &item->getName(i4); \
@@ -5031,8 +5039,12 @@ bool Calculator::loadLocalDefinitions() {
 	}
 
 #define ITEM_SET_REFERENCE_NAMES(validation) \
-	if(str_names != &default_names) { \
-		names_i = 0; \
+	if(str_names != &default_names && !default_names.empty()) { \
+		if(default_names[0] == '!') { \
+			names_i = default_names.find('!', 1) + 1; \
+		} else { \
+			names_i = 0; \
+		} \
 		i2 = 0; \
 		while(true) { \
 			size_t i3 = names_i; \
@@ -5072,7 +5084,7 @@ bool Calculator::loadLocalDefinitions() {
 				size_t i4 = item->hasName(ename.name, ename.case_sensitive); \
 				if(i4 > 0) { \
 					const ExpressionName *enameptr = &item->getName(i4); \
-					ename.case_sensitive = enameptr->case_sensitive; \
+					ename.suffix = enameptr->suffix; \
 					ename.abbreviation = enameptr->abbreviation; \
 					ename.avoid_input = enameptr->avoid_input; \
 					ename.plural = enameptr->plural; \
@@ -5290,7 +5302,18 @@ bool Calculator::loadLocalDefinitions() {
 					
 #define ITEM_SET_DTH\
 					item->setDescription(description);\
-					item->setTitle(title);\
+					if(!title.empty() && title[0] == '!') {\
+						size_t i = title.find('!', 1);\
+						if(i == string::npos) {\
+							item->setTitle(title);\
+						} else if(i + 1 == title.length()) {\
+							item->setTitle("");\
+						} else {\
+							item->setTitle(title.substr(i + 1, title.length() - (i + 1)));\
+						}\
+					} else {\
+						item->setTitle(title);\
+					}\
 					item->setHidden(hidden);
 
 #define ITEM_SET_SHORT_NAME\
@@ -5520,7 +5543,16 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 			if(!category.empty()) {
 				category += "/";
 			}
-			category += category_title;
+			if(!category_title.empty() && category_title[0] == '!') {\
+				size_t i = category_title.find('!', 1);
+				if(i == string::npos) {
+					category += category_title;
+				} else if(i + 1 < category_title.length()) {
+					category += category_title.substr(i + 1, category_title.length() - (i + 1));
+				}
+			} else {
+				category += category_title;
+			}
 		}
 		while(!sub_items.empty() || (in_unfinished && cur)) {
 			if(!in_unfinished) {
@@ -5654,7 +5686,16 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							}
 							child2 = child2->next;
 						}
-						arg->setName(argname);
+						if(!argname.empty() && argname[0] == '!') {
+							size_t i = argname.find('!', 1);
+							if(i == string::npos) {
+								arg->setName(argname);
+							} else if(i + 1 < argname.length()) {
+								arg->setName(argname.substr(i + 1, argname.length() - (i + 1)));
+							}
+						} else {
+							arg->setName(argname);
+						}
 						itmp = 1;
 						XML_GET_INT_FROM_PROP(child, "index", itmp);
 						f->setArgumentDefinition(itmp, arg); 
@@ -5830,15 +5871,28 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							}
 							child2 = child2->next;
 						}
-						dp->setTitle(proptitle);
+						if(!proptitle.empty() && proptitle[0] == '!') {\
+							size_t i = proptitle.find('!', 1);
+							if(i == string::npos) {
+								dp->setTitle(proptitle);
+							} else if(i + 1 < proptitle.length()) {
+								dp->setTitle(proptitle.substr(i + 1, proptitle.length() - (i + 1)));
+							}
+						} else {
+							dp->setTitle(proptitle);
+						}
 						dp->setDescription(propdescr);
 						if(new_names) {
 							size_t names_i = 0, i2 = 0;
 							string *str_names;
 							bool had_ref = false;
+							if(best_prop_names == "-") {best_prop_names = ""; nextbest_prop_names = "";}
 							if(!best_prop_names.empty()) {str_names = &best_prop_names;}
 							else if(!nextbest_prop_names.empty()) {str_names = &nextbest_prop_names;}
 							else {str_names = &default_prop_names;}
+							if(!str_names->empty() && (*str_names)[0] == '!') {
+								names_i = str_names->find('!', 1) + 1;
+							}
 							while(true) {
 								size_t i3 = names_i;
 								names_i = str_names->find(",", i3);
@@ -5867,8 +5921,12 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 								if(names_i == string::npos) {break;}
 								names_i++;
 							}
-							if(str_names != &default_prop_names) {
-								names_i = 0;
+							if(str_names != &default_prop_names && !default_prop_names.empty()) {
+								if(default_prop_names[0] == '!') {
+									names_i = default_prop_names.find('!', 1) + 1;
+								} else {
+									names_i = 0;
+								}
 								i2 = 0;
 								while(true) {
 									size_t i3 = names_i;
@@ -5957,7 +6015,16 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 						}
 						itmp = 1;
 						if(dc->getArgumentDefinition(itmp)) {
-							dc->getArgumentDefinition(itmp)->setName(argname);
+							if(!argname.empty() && argname[0] == '!') {
+								size_t i = argname.find('!', 1);
+								if(i == string::npos) {
+									dc->getArgumentDefinition(itmp)->setName(argname);
+								} else if(i + 1 < argname.length()) {
+									dc->getArgumentDefinition(itmp)->setName(argname.substr(i + 1, argname.length() - (i + 1)));
+								}
+							} else {
+								dc->getArgumentDefinition(itmp)->setName(argname);
+							}
 						}
 					} else if(!xmlStrcmp(child->name, (const xmlChar*) "property_argument")) {
 						child2 = child->xmlChildrenNode;
@@ -5970,7 +6037,16 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 						}
 						itmp = 2;
 						if(dc->getArgumentDefinition(itmp)) {
-							dc->getArgumentDefinition(itmp)->setName(argname);
+							if(!argname.empty() && argname[0] == '!') {
+								size_t i = argname.find('!', 1);
+								if(i == string::npos) {
+									dc->getArgumentDefinition(itmp)->setName(argname);
+								} else if(i + 1 < argname.length()) {
+									dc->getArgumentDefinition(itmp)->setName(argname.substr(i + 1, argname.length() - (i + 1)));
+								}
+							} else {
+								dc->getArgumentDefinition(itmp)->setName(argname);
+							}
 						}
 					} else if(!xmlStrcmp(child->name, (const xmlChar*) "default_property")) {
 						XML_DO_FROM_TEXT(child, dc->setDefaultProperty)
@@ -6037,9 +6113,27 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							itmp = 1;
 							XML_GET_INT_FROM_PROP(child, "index", itmp);
 							if(f->getArgumentDefinition(itmp)) {
-								f->getArgumentDefinition(itmp)->setName(argname);
+								if(!argname.empty() && argname[0] == '!') {
+									size_t i = argname.find('!', 1);
+									if(i == string::npos) {
+										f->getArgumentDefinition(itmp)->setName(argname);
+									} else if(i + 1 < argname.length()) {
+										f->getArgumentDefinition(itmp)->setName(argname.substr(i + 1, argname.length() - (i + 1)));
+									}
+								} else {
+									f->getArgumentDefinition(itmp)->setName(argname);
+								}
 							} else if(itmp <= f->maxargs() || itmp <= f->minargs()) {
-								f->setArgumentDefinition(itmp, new Argument(argname, false));
+								if(!argname.empty() && argname[0] == '!') {
+									size_t i = argname.find('!', 1);
+									if(i == string::npos) {
+										f->setArgumentDefinition(itmp, new Argument(argname, false));
+									} else if(i + 1 < argname.length()) {
+										f->setArgumentDefinition(itmp, new Argument(argname.substr(i + 1, argname.length() - (i + 1)), false));
+									}
+								} else {
+									f->setArgumentDefinition(itmp, new Argument(argname, false));
+								}
 							}
 						} else ITEM_READ_NAME(functionNameIsValid)
 						 else ITEM_READ_DTH
@@ -7267,7 +7361,7 @@ int Calculator::saveFunctions(const char* file_name, bool save_global) {
 }
 int Calculator::saveDataSets(const char* file_name, bool save_global) {
 	xmlDocPtr doc = xmlNewDoc((xmlChar*) "1.0");	
-	xmlNodePtr cur, newnode, newnode2, newnode3;	
+	xmlNodePtr cur, newnode, newnode2;
 	doc->children = xmlNewDocNode(doc, NULL, (xmlChar*) "QALCULATE", NULL);	
 	xmlNewProp(doc->children, (xmlChar*) "version", (xmlChar*) VERSION);
 	const ExpressionName *ename;

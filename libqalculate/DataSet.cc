@@ -217,7 +217,7 @@ const string &DataProperty::getReferenceName() const {
 }
 size_t DataProperty::hasName(const string &s_name) {
 	for(size_t i = 0; i < names.size(); i++) {
-		if(equalsIgnoreCase(s_name, names[i])) i + 1;
+		if(equalsIgnoreCase(s_name, names[i])) return i + 1;
 	}
 	return 0;
 }
@@ -619,6 +619,16 @@ bool DataSet::loadObjects(const char *file_name, bool is_user_defs) {
 									if(value) {
 										str = (char*) value;
 										remove_blank_ends(str);
+										if(!str.empty() && str[0] == '!') {
+											size_t i4 = str.find('!', 1);
+											if(i4 != string::npos) {
+												if(i4 + 1 < str.length()) {
+													str = str.substr(i4 + 1, str.length() - (i4 + 1));
+												} else {
+													str = "";
+												}
+											}
+										}
 									} else {
 										str = ""; 
 									}

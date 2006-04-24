@@ -7,6 +7,7 @@
       <_names>r:vector</_names>
       <_description>Returns a vector with listed elements.</_description>
       <argument index="1">
+        <!-- Vector/matrix elements -->
         <_title>Elements</_title>
       </argument>
     </builtin_function>
@@ -112,6 +113,7 @@
     </builtin_function>
     <builtin_function name="area">
       <_title>Matrix Area</_title>
+      <!-- Matrix area -->
       <_names>r:area</_names>
       <_description>Returns a part of a matrix.</_description>
       <argument index="1">
@@ -177,6 +179,7 @@
       </argument>
     </builtin_function>
     <builtin_function name="element">
+      <!-- Vector/matrix element -->
       <_title>Element</_title>
       <_names>r:element</_names>
       <_description>Returns the element at specified position in a matrix (row and column) or vector (index).</_description>
@@ -304,7 +307,7 @@
     <builtin_function name="factorial2">
       <_title>Double Factorial</_title>
       <_names>r:factorial2</_names>
-      <_description>Calculates the doublefactorial of an integer. Mulitplies the argument with every second lesser positive integer (n(n-2)(n-4)...). Can also be entered as a number followed by two exclamation mark.&#10;&#10;ex. factorial2(5) = 5!! = 5 * 3 * 1 = 15</_description>
+      <_description>Calculates the doublefactorial of an integer. Mulitplies the argument with every second lesser positive integer (n(n-2)(n-4)...). Can also be entered as a number followed by two exclamation marks.&#10;&#10;ex. factorial2(5) = 5!! = 5 * 3 * 1 = 15</_description>
       <argument index="1">
         <_title>Value</_title>
       </argument>
@@ -312,7 +315,7 @@
     <builtin_function name="multifactorial">
       <_title>Multifactorial</_title>
       <_names>r:multifactorial</_names>
-      <_description>Calculates the multifactorial of an integer. Mulitplies the argument with every x lesser positive integer (n(n-x)(n-2x)...). Can also be entered as a number followed by three or more exclamation mark.&#10;&#10;ex. multifactorial(18, 4) = 18!!!! = 18 * 14 * 10 * 6 * 2 = 30 240</_description>
+      <_description>Calculates the multifactorial of an integer. Mulitplies the argument with every x lesser positive integer (n(n-x)(n-2x)...). Can also be entered as a number followed by three or more exclamation marks.&#10;&#10;ex. multifactorial(18, 4) = 18!!!! = 18 * 14 * 10 * 6 * 2 = 30 240</_description>
       <argument index="1">
         <_title>Value</_title>
       </argument>
@@ -400,6 +403,7 @@
         <_title>Signum</_title>
         <_names>r:sgn</_names>
         <argument index="1">
+          <!-- A numerical value -->
           <_title>Number</_title>
         </argument>
       </builtin_function>
@@ -536,7 +540,7 @@
         </argument>
       </builtin_function>
       <builtin_function name="degree">
-        <_title>Degree</_title>
+        <_title>Polynomial Degree</_title>
         <_names>r:degree</_names>
         <argument index="1">
           <_title>Polynomial</_title>
@@ -864,6 +868,7 @@
     <builtin_function name="sin">
       <_title>Sine</_title>
       <_names>r:sin</_names>
+      <!-- Angle argument for trigonometric functions -->
       <argument index="1">
         <_title>Angle</_title>
       </argument>
@@ -1125,7 +1130,8 @@
         </argument>
       </function>
       <function>
-        <_title>Number</_title>
+        <_title>Number of Samples</_title>
+        <!-- Number of samples -->
         <_names>r:number</_names>
         <_description>Returns the number of samples.</_description>
         <expression>dimension(\x)</expression>
@@ -2521,6 +2527,7 @@
           <_title>Annualized Yield (%)</_title>
         </argument>
         <argument type="free" index="5">
+          <!-- Reccurance -->
           <_title>Frequency</_title>
         </argument>
         <argument type="integer" index="6">

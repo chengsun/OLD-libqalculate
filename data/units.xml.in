@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <QALCULATE version="0.9.4">
   <category>
-    <_title>Length</_title>
+    <!-- Unit category -->
+    <_title>!units!Length</_title>
     <unit type="base">
       <system>SI</system>
       <_title>Meter</_title>
@@ -216,7 +217,8 @@
     </unit>
   </category>
   <category>
-    <_title>Angle</_title>
+    <!-- Unit category -->
+    <_title>!units!Angle</_title>
     <category>
       <_title>Plane Angle</_title>
       <unit type="composite">
@@ -356,7 +358,8 @@
     </category>
   </category>
   <category>
-    <_title>Mass</_title>
+    <!-- Unit category -->
+    <_title>!units!Mass</_title>
     <unit type="base">
       <system>SI</system>
       <_title>Gram</_title>
@@ -686,7 +689,8 @@
       </base>
     </unit>
     <category>
-      <_title>Frequency</_title>
+      <!-- Unit category -->
+      <_title>!units!Frequency</_title>
       <unit type="alias">
         <system>SI</system>
         <_title>Hertz</_title>
@@ -2394,7 +2398,7 @@
     </unit>
     <unit type="alias">
       <_title>Calorie (international table)</_title>
-      <_names>ar:cal,c:calorie,cp:calories</_names>
+      <_names>ais:cal_IT,ar:cal,c:calorie,cp:calories</_names>
       <base>
         <unit>J</unit>
         <relation>4.1868</relation>
@@ -2412,7 +2416,7 @@
     </unit>
     <unit type="alias">
       <_title>Calorie (thermochemical)</_title>
-      <_names>ar:cal_th,thermo_calorie,p:thermo_calories</_names>
+      <_names>ars:cal_th</_names>
       <base>
         <unit>J</unit>
         <relation>4.184</relation>
@@ -2421,7 +2425,7 @@
     </unit>
     <unit type="alias">
       <_title>Calorie (15 degrees Celcius)</_title>
-      <_names>r:calorie_fifteen,p:calories_fifteen</_names>
+      <_names>ars:cal_fifteen</_names>
       <base>
         <unit>J</unit>
         <relation approximate="true">4.185880</relation>
@@ -2430,7 +2434,7 @@
     </unit>
     <unit type="alias">
       <_title>Calorie (mean)</_title>
-      <_names>ar:cal_mean,mean_calorie,p:mean_calories</_names>
+      <_names>ars:cal_mean</_names>
       <base>
         <unit>J</unit>
         <relation approximate="true">4.19002</relation>

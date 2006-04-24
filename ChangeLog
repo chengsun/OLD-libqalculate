@@ -1,3 +1,16 @@
+2006-04-24 Niklas Knutsson  <nq@altern.org>
+
+	* Fix bug #1475373 ("1 kg m/s" was simplified to "1000 m/s")
+
+2006-04-23 Niklas Knutsson  <nq@altern.org>
+
+	* README.translate with information for translators
+	* Update Swedish translation
+
+2006-04-22 Niklas Knutsson  <nq@altern.org>
+
+	* Prepend !category! to strings, which might have different translations in different contexts, in data files
+
 2006-04-21 Niklas Knutsson  <nq@altern.org>
 
 	* Add the completed Dutch translation

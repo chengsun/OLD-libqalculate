@@ -556,7 +556,8 @@
     <y_pos>6</y_pos>
   </object>
   <object symbol="Hg" number="80">
-    <_name>Mercury</_name>
+    <!-- Chemical element -->
+    <_name>!elements!Mercury</_name>
     <class>5</class>
     <weight>200.59</weight>
     <x_pos>12</x_pos>

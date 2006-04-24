@@ -893,6 +893,7 @@ int main (int argc, char *argv[]) {
 		} else {
 			scom = str.substr(0, ispace);
 		}
+		//The command "set" as in "set precision 10". The original text string for commands is kept in addition to the translation.
 		if(EQUALS_IGNORECASE_AND_LOCAL(scom, "set", _("set"))) {
 			str = str.substr(ispace + 1, slen - (ispace + 1));
 			set_option(str);

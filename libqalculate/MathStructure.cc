@@ -286,6 +286,7 @@ void MathStructure::set(const MathStructure &o, bool merge_precision) {
 			ct_comp = o.comparisonType();
 			break;
 		}
+		default: {}
 	}
 	b_protected = o.isProtected();
 	for(size_t i = 0; i < o.size(); i++) {
@@ -330,6 +331,7 @@ void MathStructure::set_nocopy(MathStructure &o, bool merge_precision) {
 			ct_comp = o.comparisonType();
 			break;
 		}
+		default: {}
 	}
 	b_protected = o.isProtected();
 	for(size_t i = 0; i < o.size(); i++) {
@@ -1082,6 +1084,7 @@ bool MathStructure::representsNonMatrix() const {
 			}
 			return true;
 		}
+		default: {}
 	}
 	return true;
 }
@@ -1617,6 +1620,7 @@ bool MathStructure::equals(const MathStructure &o) const {
 			}
 			return true;
 		}
+		default: {}
 	}
 	if(SIZE < 1) return false;
 	for(size_t i = 0; i < SIZE; i++) {
@@ -3056,6 +3060,7 @@ int MathStructure::merge_power(MathStructure &mstruct, const EvaluationOptions &
 									break;
 								}
 							}
+							default: {}
 						}
 					}
 					if(bnum) {
@@ -4178,6 +4183,7 @@ int MathStructure::merge_bitwise_and(MathStructure &mstruct, const EvaluationOpt
 				case STRUCT_BITWISE_AND: {
 					return 0;
 				}
+				default: {}
 			}	
 		}
 	}
@@ -4244,6 +4250,7 @@ int MathStructure::merge_bitwise_or(MathStructure &mstruct, const EvaluationOpti
 				case STRUCT_BITWISE_OR: {
 					return 0;
 				}
+				default: {}
 			}	
 		}
 	}
@@ -4283,6 +4290,7 @@ int MathStructure::merge_bitwise_xor(MathStructure &mstruct, const EvaluationOpt
 			}
 			return -1;
 		}
+		default: {}
 	}
 	return -1;
 }
@@ -4506,6 +4514,7 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 					setToChild(1);
 					break;
 				}
+				default: {}
 			}
 			break;
 		}
@@ -4952,6 +4961,7 @@ bool MathStructure::calculateMergeIndex(size_t index, const EvaluationOptions &e
 		case STRUCT_BITWISE_XOR: {
 			return calculateBitwiseXorIndex(index, eo, true, mparent, index_this);
 		}
+		default: {}
 	}
 	return calculatesub(eo, feo, false, mparent, index_this);
 }
@@ -6411,10 +6421,10 @@ void clean_multiplications(MathStructure &mstruct) {
 			if(mstruct[i].isMultiplication()) {
 				size_t i2 = 0;
 				for(; i2 < mstruct[i + i2].size(); i2++) {
-					mstruct[i][i2].ref();
-					mstruct.insertChild_nocopy(&mstruct[i][i2], i + i2);
+					mstruct[i + i2][i2].ref();
+					mstruct.insertChild_nocopy(&mstruct[i + i2][i2], i + i2 + 1);
 				}
-				mstruct.delChild(i + i2);
+				mstruct.delChild(i + i2 + 1);
 			}
 		}
 	}
@@ -6761,6 +6771,7 @@ bool factorize_find_multiplier(const MathStructure &mstruct, MathStructure &mnew
 				return true;
 			}
 		}
+		default: {}
 	}
 	return false;
 }
@@ -9271,6 +9282,7 @@ void MathStructure::unformat(const EvaluationOptions &eo) {
 			}
 			b_plural = false;
 		}
+		default: {}
 	}
 }
 
@@ -9376,6 +9388,7 @@ void idm2(const MathStructure &mnum, bool &bfrac, bool &bint, Number &nr) {
 			}
 			break;
 		}
+		default: {}
 	}
 }
 void idm3(MathStructure &mnum, Number &nr, bool expand) {
@@ -9882,6 +9895,7 @@ void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure*, size
 							}
 							break;
 						}
+						default: {}
 					}
 					switch(CHILD(1).type()) {
 						case STRUCT_UNIT: {
@@ -9912,10 +9926,11 @@ void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure*, size
 									else CHILD(1)[0][CHILD(1)[0].size() - 1].setPlural(do_plural);
 									break;
 								}
+								default: {}
 							}
 							break;
 						}
-						
+						default: {}						
 					}
 				}
 			} else {
@@ -10399,6 +10414,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 			}
 			break;
 		}
+		default: {}
 	}
 }
 
@@ -14147,6 +14163,7 @@ bool MathStructure::isolate_x_sub(const EvaluationOptions &eo, EvaluationOptions
 			}
 			break;
 		}
+		default: {}
 	}
 	return false;
 }
@@ -14237,6 +14254,7 @@ bool MathStructure::isRationalPolynomial() const {
 		case STRUCT_SYMBOLIC: {			
 			return representsNonMatrix() && !representsUndefined(true, true);
 		}
+		default: {}
 	}
 	return false;
 }
@@ -14264,6 +14282,7 @@ const Number &MathStructure::overallCoefficient() const {
 		case STRUCT_POWER: {
 			return nr_zero;
 		}
+		default: {}
 	}
 	return nr_zero;
 }

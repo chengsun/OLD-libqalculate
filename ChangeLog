@@ -1,3 +1,14 @@
+2006-04-28 Niklas Knutsson  <nq@altern.org>
+
+	* Update API documentation
+	* equation => formula in MathFunction
+	* Do less in setFormula() if formula is empty
+
+2006-04-27 Niklas Knutsson  <nq@altern.org>
+
+	* Fix parsed expression for RPN operation
+	* Remove capitalization from argument titles
+
 2006-04-24 Niklas Knutsson  <nq@altern.org>
 
 	* Fix bug #1475373 ("1 kg m/s" was simplified to "1000 m/s")

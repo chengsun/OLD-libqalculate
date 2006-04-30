@@ -50,7 +50,90 @@ enum {
 	MULTIPLICATION_SIGN_OPERATOR_SHORT
 };
 
-/// A structure representing a mathematical expression/result
+/// A structure representing a mathematical value/expression/result
+/**
+* A MathStructure can both be container representing an operation with an ordered list of children or simple value representing
+* a number, , variable etc. The children of a container might be of any type, allowing a tree-like nested structure.
+*
+* These are the most common conatiner/operation types:
+*	- \b Addition: contains two or more children, representing terms (x+y+...)
+*	- \b Multiplication: contains two or more children, representing factors (x*y*...)
+*	- \b Power: contains exactly two children, representing base and exponent (x^y)
+*	- \b Function: contains a two or more children, representing arguments, and a reference to a MathFunction object ( f(x,y,...) )
+*	- \b Comparison: an equality or inequality containing exactly two children, represening the expressions right and left of the sign, specified with a ComparisonType (x=y, x!=y, x&gt;y, ...)
+*	- \b Vector: contains zero or more children, representing elements in a vector ( [x, y, z, ...] )
+*
+* Also available are containers representing logical and bitwise operations.
+* Subtraction is represented by an addition structure with negated children and division by a multiplication structure with inverted children.
+* Matrices is represented by a vector with vectors as children.
+*
+* For formatted structures, the following types is also available:
+*	- \b Negation: contains exactly one child (-x)
+*	- \b Invertion: contains exactly one child (1/x)
+*	- \b Division: contains exactly two children representing numerator and denominator (x/y)
+*
+* The following value types are available:
+*	- \b Number: has a Number object, representing a rational, floating point, complex or infinite numeric value
+*	- \b Variable: has a reference to a Variable object, with a known or unknown value
+*	- \b Symbolic: has an associated text string, with assumptions about the represented value controlled by the default assumptions
+*	- \b Unit: has a reference to a Unit object, and might in a formatted structure also have a reference to a Prefix object
+*	- \b Undefined: represents an undefined value
+*
+* To create a MathStructure, you can either create a simple structure using the constructors and then expanding it with structural operations,
+* or use the parse or calculation functions of the global Calculator object to convert an expression string.
+*
+* The expression "(5x + 2) * 3" can be turned into a MathStructure either using
+* \code
+* MathStructure mstruct = CALCULATOR->parse("(5x + 2) * 3");
+* \endcode
+* or
+* \code
+* MathStructure mstruct(5);
+* mstruct *= CALCULATOR->v_x;
+* mstruct += 2;
+* mstruct *= 3:
+* \endcode
+* The first variant is obviously simpler, but slower and allows less control.
+*
+* Then, to evaluate/calculate/simplify (whatever) a structure, eval() should normally be used. The EvaluationOptions passed to eval() allows much control over the process
+* and the outcome.
+* \code
+* EvaluationOptions eo;
+* mstruct.eval(eo);
+* \endcode
+*
+* After that, to display the result, you should first format the structure using format() and then display it using print(), passing the PrintOptions to both.
+* \code
+* PrintOptions po;
+* mstruct.format(po);
+* std::cout << mstruct.print(po) << std::endl;
+* \endcode
+*
+* Most low-level functions expect the structure to be unformatted och require that unformat() is called after an expression string has been parsed or format() has been called.
+*
+* To access a child structure either the [] operator or the safer getChild() can be used.
+* Note however that the index passed to the operator start at zero and the index argument for getChild() starts at one.
+* \code
+* MathStructure mstruct(5);
+* mstruct += 2;
+* std::cout << mstruct.print() << std::endl; // output: "5 + 2"
+* std::cout << mstruct.getChild(1)->print() << std::endl; // output: "5"
+* std::cout << mstruct[1].print() << std::endl; // output: "2"
+* \endcode
+*
+* MathStructure uses reference count for management of objects allocated with new.
+* Call ref() when starting to use the object and unref() when done.
+* Note that the reference count is initialized to 1 in the constructors, so ref() should not be called after the object creation.
+* This system is used for all child objects, so the following is perfectly legal:
+* \code
+* MathStructure *mchild_p = mstruct->getChild(1);
+* mchild_p->ref(); // mchild_p reference count = 2
+* mstruct->unref(); //mstruct reference count = 0, mstruct deleted, mchild_p reference count = 1
+* (...)
+* mchild_p->unref(); // mchild_p reference count = 0, mchild_p deleted
+* \endcode
+*/
+
 class MathStructure {
 
 	protected:
@@ -81,13 +164,6 @@ class MathStructure {
 		void init();
 	
 	public:
-
-		/** @name Functions to keep track of referrers */
-		//@{
-		void ref();
-		void unref();
-		size_t refcount() const;
-		//@}
 
 		/** @name Constructors */
 		//@{
@@ -247,11 +323,12 @@ class MathStructure {
 		void operator = (Variable *v);
 		void operator = (string sym);
 		//@}
-		
-		/** @name Functions for protection from changes when evaluating */
+
+		/** @name Functions to keep track of referrers */
 		//@{
-		void setProtected(bool do_protect = true);
-		bool isProtected() const;
+		void ref();
+		void unref();
+		size_t refcount() const;
 		//@}
 
 		/** @name Functions for numbers */
@@ -259,6 +336,34 @@ class MathStructure {
 		const Number &number() const;
 		Number &number();
 		void numberUpdated();
+		//@}
+
+		/** @name Functions for symbols */
+		//@{
+		const string &symbol() const;
+		//@}
+
+		/** @name Functions for units */
+		//@{
+		Unit *unit() const;
+		Prefix *prefix() const;
+		void setPrefix(Prefix *p);
+		bool isPlural() const;
+		void setPlural(bool is_plural);
+		void setUnit(Unit *u);
+		//@}
+		
+		/** @name Functions for mathematical functions */
+		//@{
+		void setFunction(MathFunction *f);
+		MathFunction *function() const;
+		const MathStructure *functionValue() const;
+		//@}
+
+		/** @name Functions for variables */
+		//@{
+		void setVariable(Variable *v);
+		Variable *variable() const;
 		//@}
 
 		/** @name Functions for nested structures (power, muliplication, addition, vector, etc) */
@@ -309,39 +414,11 @@ class MathStructure {
 		MathStructure *exponent();
 		//@}
 
-		/** @name Functions for symbols */
-		//@{
-		const string &symbol() const;
-		//@}
-
-		/** @name Functions for nested structures */
+		/** @name Functions for comparisons */
 		//@{
 		ComparisonType comparisonType() const;
 		void setComparisonType(ComparisonType comparison_type);
 		//@}		
-
-		/** @name Functions for units */
-		//@{
-		Unit *unit() const;
-		Prefix *prefix() const;
-		void setPrefix(Prefix *p);
-		bool isPlural() const;
-		void setPlural(bool is_plural);
-		void setUnit(Unit *u);
-		//@}
-		
-		/** @name Functions for mathematical functions */
-		//@{
-		void setFunction(MathFunction *f);				
-		MathFunction *function() const;
-		const MathStructure *functionValue() const;
-		//@}
-
-		/** @name Functions for variables */
-		//@{
-		void setVariable(Variable *v);
-		Variable *variable() const;
-		//@}
 		
 		/** @name Functions checking type and value */
 		//@{
@@ -543,16 +620,7 @@ class MathStructure {
 		
 		/** @name Functions for calculation/evaluation */
 		//@{
-		int merge_addition(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
-		int merge_multiplication(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false, bool do_append = true);
-		int merge_power(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
-		int merge_logical_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
-		int merge_logical_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
-		int merge_logical_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
-		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
-		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
-		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
-		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo, bool recursive = true, MathStructure *mparent = NULL, size_t index_this = 1);
+		MathStructure &eval(const EvaluationOptions &eo = default_evaluation_options);
 		bool calculateMergeIndex(size_t index, const EvaluationOptions &eo, const EvaluationOptions &feo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateLogicalOrLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateLogicalOrIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
@@ -586,8 +654,23 @@ class MathStructure {
 		bool calculateAdd(const MathStructure &madd, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateSubtract(const MathStructure &msub, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateFunctions(const EvaluationOptions &eo, bool recursive = true);
-		MathStructure &eval(const EvaluationOptions &eo = default_evaluation_options);		
+		int merge_addition(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_multiplication(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false, bool do_append = true);
+		int merge_power(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_logical_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_logical_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_logical_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_bitwise_and(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_bitwise_or(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		int merge_bitwise_xor(MathStructure &mstruct, const EvaluationOptions &eo, MathStructure *mparent = NULL, size_t index_this = 1, size_t index_that = 2, bool reversed = false);
+		bool calculatesub(const EvaluationOptions &eo, const EvaluationOptions &feo, bool recursive = true, MathStructure *mparent = NULL, size_t index_this = 1);
 		void evalSort(bool recursive = false);
+		//@}
+
+		/** @name Functions for protection from changes when evaluating */
+		//@{
+		void setProtected(bool do_protect = true);
+		bool isProtected() const;
 		//@}
 		
 		/** @name Functions for format and display */
@@ -651,8 +734,7 @@ class MathStructure {
 		bool invertMatrix(const EvaluationOptions &eo);
 		bool adjointMatrix(const EvaluationOptions &eo);
 		bool transposeMatrix();
-		MathStructure &cofactor(size_t r, size_t c, MathStructure &mstruct, const EvaluationOptions &eo) const;
-	
+		MathStructure &cofactor(size_t r, size_t c, MathStructure &mstruct, const EvaluationOptions &eo) const;	
 		//@}
 
 		/** @name Functions for unit conversion */

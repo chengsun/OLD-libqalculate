@@ -48,14 +48,21 @@ typedef enum {
 	ARGUMENT_MIN_MAX_NEGATIVE	
 } ArgumentMinMaxPreDefinition;
 
-enum {
+/// Type of mathematical function
+typedef enum {
+	/// class MathFunction
 	SUBTYPE_FUNCTION,
+	/// class UseFunction
 	SUBTYPE_USER_FUNCTION,
+	/// class DataSet
 	SUBTYPE_DATA_SET
-};
+} FunctionSubtype;
 
 /// Abstract base class for mathematical functions.
 /**
+* A mathemical function, subclassed from MathFunction, should at least reimplement
+* calculate(MathStructure&, const MathStructure&, const EvaluationOptions&) and copy(), and preferably also the represents* functions.
+* Argument definitions should be added in the constructor.
 */
 class MathFunction : public ExpressionItem {
 
@@ -81,13 +88,31 @@ class MathFunction : public ExpressionItem {
 	virtual ExpressionItem *copy() const = 0;
 	virtual void set(const ExpressionItem *item);
 	virtual int type() const;
+	/** Returns the subtype of the mathematical function,  corresponding to which subsubclass the object belongs to.
+	*
+	* @returns ::FunctionSubtype.
+	*/
 	virtual int subtype() const;
 
 	bool testArgumentCount(int itmp);
 	virtual MathStructure calculate(const string &eq, const EvaluationOptions &eo = default_evaluation_options);
 	virtual MathStructure parse(const string &eq, const ParseOptions &po = default_parse_options);
 	virtual int parse(MathStructure &mstruct, const string &eq, const ParseOptions &po = default_parse_options);
-	virtual MathStructure calculate(MathStructure &vargs, const EvaluationOptions &eo = default_evaluation_options);	
+	virtual MathStructure calculate(MathStructure &vargs, const EvaluationOptions &eo = default_evaluation_options);
+	/**
+	* The main function for subclasses to reimplement.
+	* Calculates a value from arguments in vargs and puts it in mstruct.
+	*
+	* This function expects the number of arguments to be equal to the maximum number of arguments, and checked by the argument definitions.
+	*
+	* If the return value is negative, then argument -(return value) has been evaluated in mstruct.
+	* If -(return value) is greater than max arguments, then mstruct is a vector of evaluated argument values.
+	*
+	* @param[out] mstruct Structure that is set with the result of the calculation.
+	* @param vargs Arguments passed to the mathematical function.
+	* @param eo Evaluation options.
+	* @returns 1 if the calculation was successful.
+	*/
 	virtual int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);
 	/** Returns the functions condition expression.
 	*
@@ -173,26 +198,58 @@ class MathFunction : public ExpressionItem {
 };
 
 /// A user defined mathematical function.
-/** User functions are functions defined using an expression.
+/**
+* User functions are functions defined using expression strings, representing mathematical formulas.
+*
+* The expression/formula of a function is basically a normal expression with placeholders for arguments.
+* These placeholders consists of a backslash and a letter — x, y, z for the 1st, 2nd and 3rd arguments and a to u for argument 4 to 24.
+* They are replaced by entered arguments when a function is calculated.
+* The placeholders naturally also decide the number of arguments that a function requires.
+* For example the function for triangle area ("base * height / 2") has the name triangle and the formula "(\x*\y)/2",
+* which gives that "triangle(2, 3)" equals "(2*3) / 2" and returns "3" as result.
+* An argument can be used more than one time and all arguments must not necessarily be in order in the formula.
+*
+* Additionally, optional arguments can be put in the formula with upper-case (X, Y, Z, ...) instead of lower-case letters (x, y, z, ...).
+* The default value can be put in brackets after the letter (ex. "\X{2}").
+* The default value may be omitted and is then zero. All additional arguments after an optional argument must also be optional.
+*
+* To simplify the formula and make it more efficient, subfunctions can be used.
+* These works just like the main formula, using the arguments of it.
+* Subfunctions are referenced in the formula using \index ('\2', '\2', '\3', ...).
+* Even though it would be quite meaningless, the formula for triangle function could for example have a subfunction "\x*\y" and the formula "\1/2".
+* Subfunctions must be added before the main formula is set.
 */
 class UserFunction : public MathFunction {
   protected:
   
-	string eq, eq_calc;
+	string sformula, sformula_calc;
 	vector<string> v_subs;
 	vector<bool> v_precalculate;
 	
   public:
   
-	UserFunction(string cat_, string name_, string eq_, bool is_local = true, int argc_ = -1, string title_ = "", string descr_ = "", int max_argc_ = 0, bool is_active = true);
+	UserFunction(string cat_, string name_, string formula_, bool is_local = true, int argc_ = -1, string title_ = "", string descr_ = "", int max_argc_ = 0, bool is_active = true);
 	UserFunction(const UserFunction *function);
 	void set(const ExpressionItem *item);
 	ExpressionItem *copy() const;
-	string equation() const;
-	string internalEquation() const;
-	int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);	
-	void setEquation(string new_eq, int argc_ = -1, int max_argc_ = 0);
+	/** Returns the external representation of the formula. */
+	string formula() const;
+	/** Returns the internal representation of the formula. */
+	string internalFormula() const;
+	int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);
+	/** Sets the formula of the mathematical function.
+	*
+	* @param new_formula Formula/expression.
+	* @param arc_ Minimum number of arguments or -1 to read from formula.
+	* @param max_argc_ Maximum number of arguments (ignored if argc_ < 0)
+	*/
+	void setFormula(string new_formula, int argc_ = -1, int max_argc_ = 0);
 	void addSubfunction(string subfunction, bool precalculate = true);
+	/** Sets the formula for a subfunction.
+	*
+	* @param index Index (starting at 1).
+	* @param subfunction Formula/expression.
+	*/
 	void setSubfunction(size_t index, string subfunction);
 	void delSubfunction(size_t index);
 	void clearSubfunctions();
@@ -355,7 +412,11 @@ class Argument {
 	void setRationalPolynomial(bool rational_polynomial);
 	
 	virtual bool suggestsQuotes() const;
-	
+
+	/** Returns the type of the argument, corresponding to which subclass the object belongs to.
+	*
+	* @returns ::ArgumentType.
+	*/
 	virtual int type() const;
 
 };

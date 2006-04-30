@@ -14,6 +14,7 @@
 
 #include <libqalculate/includes.h>
 
+/** @file */
 
 /// A name for an expression item (function, variable or unit)
 /** An expression name has a text string representing a name and boolean values describing the names properties.
@@ -53,7 +54,28 @@ struct ExpressionName {
 };
 
 /// Abstract base class for functions, variables and units.
-/** 
+/**
+* Expression items have one or more names used to reference it in mathematical expressions and display them in a result.
+* Each name must be fully unique, with the exception that functions can have names used by other types of items
+* (for example "min" is used as a name for the minute unit but also for a function returning smallest value in a vector).
+*
+* Items have an optional title and description for information to the end user.
+* The categoy property is used to organize items, so that the end user can easily find them.
+* Subcategories are separated by a slash, '/' (ex. "Physical Constants/Electromagnetic Constants").
+*
+* A local item is created/edited by the end user.
+*
+* A builtin item has defining properties that can/should not be edited by the user and is usually an item not loaded from the definition files.
+*
+* An inactive item can not be used in expressions and can share the name of an active item.
+*
+* The hidden propery defines if the item should be hidden from the end user.
+*
+* Before an item can be used in expressions, it must be added to the Calculator object using CALCULATOR->addExpressionItem().
+* It is then said to be registered.
+*
+* To delete an ExpressionItem object you should use destroy() to make sure that the item is removed from the Calculator and does not have any referrer.
+*
 */
 class ExpressionItem {
 
@@ -77,6 +99,7 @@ class ExpressionItem {
 	virtual bool destroy();
 
 	bool isRegistered() const;
+	/// For internal use.
 	void setRegistered(bool is_registered);
 
 	virtual const string &name(bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
@@ -85,9 +108,9 @@ class ExpressionItem {
 	/** Returns the name that best fulfils provided criterias. If two names are equally preferred, the one with lowest index is returned.
 	*
 	* @param abbreviation If an abbreviated name is preferred.
-	* @param abbreviation If a name with unicode characters can be displayed/is preferred (prioritized if false).
-	* @param abbreviation If a name in plural form is preferred.
-	* @param abbreviation If a reference name is preferred (ignored if false).
+	* @param use_unicode If a name with unicode characters can be displayed/is preferred (prioritized if false).
+	* @param plural If a name in plural form is preferred.
+	* @param reference If a reference name is preferred (ignored if false).
 	* @param can_display_unicode_string_function Function that tests if the unicode characters in a name can be displayed. If the function returns false, the name will be rejected.
 	* @param can_display_unicode_string_arg Argument to pass to the above test function.
 	* @returns The preferred name.
@@ -96,9 +119,9 @@ class ExpressionItem {
 	/** Returns the name that best fulfils provided criterias and is suitable for user input. If two names are equally preferred, the one with lowest index is returned.
 	*
 	* @param abbreviation If an abbreviated name is preferred.
-	* @param abbreviation If a name with unicode characters can be displayed/is preferred (prioritized if false).
-	* @param abbreviation If a name in plural form is preferred.
-	* @param abbreviation If a reference name is preferred (ignored if false).
+	* @param use_unicode If a name with unicode characters can be displayed/is preferred (prioritized if false).
+	* @param plural If a name in plural form is preferred.
+	* @param reference If a reference name is preferred (ignored if false).
 	* @param can_display_unicode_string_function Function that tests if the unicode characters in a name can be displayed. If the function returns false, the name will be rejected.
 	* @param can_display_unicode_string_arg Argument to pass to the above test function.
 	* @returns The preferred name.
@@ -107,9 +130,9 @@ class ExpressionItem {
 	/** Returns the name that best fulfils provided criterias and is suitable for display. If two names are equally preferred, the one with lowest index is returned.
 	*
 	* @param abbreviation If an abbreviated name is preferred.
-	* @param abbreviation If a name with unicode characters can be displayed/is preferred (prioritized if false).
-	* @param abbreviation If a name in plural form is preferred.
-	* @param abbreviation If a reference name is preferred (ignored if false).
+	* @param use_unicode If a name with unicode characters can be displayed/is preferred (prioritized if false).
+	* @param plural If a name in plural form is preferred.
+	* @param reference If a reference name is preferred (ignored if false).
 	* @param can_display_unicode_string_function Function that tests if the unicode characters in a name can be displayed. If the function returns false, the name will be rejected.
 	* @param can_display_unicode_string_arg Argument to pass to the above test function.
 	* @returns The preferred name.
@@ -166,9 +189,21 @@ class ExpressionItem {
 	* @returns The first found name with the specified properties or empty_expression_name if none found.
 	*/
 	virtual const ExpressionName &findName(int abbreviation = -1, int use_unicode = -1, int plural = -1, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
-	
+
+	/** Returns the title, descriptive name, of the item.
+	*
+	* @param return_name_if_no_title If true, a name is returned if the title string is empty (using preferredName(false, use_unicode, false, false, can_display_unicode_string_function, can_display_unicode_string_arg)).
+	* @param use_unicode If a name with unicode characters can be displayed/is preferred (passed to preferredName()).
+	* @param can_display_unicode_string_function Function that tests if the unicode characters in a name can be displayed. If the function returns false, the name will be rejected (passed to preferredName()).
+	* @param can_display_unicode_string_arg Argument to pass to the above test function (passed to preferredName()).
+	* @returns Item title.
+	*/
 	virtual const string &title(bool return_name_if_no_title = true, bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
-	
+
+	/** Sets the title, descriptive name, of the item. The title can not be used in expressions.
+	*
+	* @param title_ The new title.
+	*/
 	virtual void setTitle(string title_);
 
 	/** Returns the expression items description.
@@ -193,6 +228,7 @@ class ExpressionItem {
 	*/
 	virtual void setCategory(string cat_);
 
+	/** If the object has been changed since it was created/loaded. */
 	virtual bool hasChanged() const;
 	virtual void setChanged(bool has_changed);
 	
@@ -200,10 +236,20 @@ class ExpressionItem {
 	virtual bool setLocal(bool is_local = true, int will_be_active = -1);
 	
 	virtual bool isBuiltin() const;
-	
+
+	/** If the item is approximate or exact.
+	* Note that an actual value associated with the item might have a have a lower precision.
+	* For, for example, a mathematical function this defines the precision of the formula, not the result.
+	*
+	* @returns true if the item is approximate
+	*/
 	virtual bool isApproximate() const;
 	virtual void setApproximate(bool is_approx = true);
-	
+
+	/** Returns precision of the item, if it is approximate.
+	* Note that an actual value associated with the item might have a have a lower precision.
+	* For, for example, a mathematical function this defines the precision of the formula, not the result.
+	*/
 	virtual int precision() const;
 	virtual void setPrecision(int prec);
 
@@ -216,10 +262,10 @@ class ExpressionItem {
 	
 	virtual bool isHidden() const;
 	virtual void setHidden(bool is_hidden);
-	
-	virtual int refcount() const;
+
 	/** The reference count is not used to delete the expression item when it becomes zero, but to stop from being deleted while it is in use.
 	*/
+	virtual int refcount() const;
 	virtual void ref();
 	virtual void unref();
 	virtual void ref(ExpressionItem *o);
@@ -227,9 +273,9 @@ class ExpressionItem {
 	virtual ExpressionItem *getReferencer(size_t index = 1) const;
 	virtual bool changeReference(ExpressionItem *o_from, ExpressionItem *o_to);
 
-	/** Returns the type of the expression item, corresponding to which subclass the object belongs to (TYPE_FUNCTION, TYPE_VARIABLE or TYPE_UNIT).
+	/** Returns the type of the expression item, corresponding to which subclass the object belongs to.
 	*
-	* @returns Type/subclass.
+	* @returns ::ExpressionItemType.
 	*/
 	virtual int type() const = 0;
 	/** Returns the subtype of the expression item, corresponding to which subsubclass the object belongs to.

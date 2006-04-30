@@ -165,7 +165,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Belgian franc</_title>
+      <_title>Belgian Franc</_title>
       <_names>ar:BEF</_names>
       <base>
         <unit>EUR</unit>
@@ -174,7 +174,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Greek drachma</_title>
+      <_title>Greek Drachma</_title>
       <_names>ar:GRD</_names>
       <base>
         <unit>EUR</unit>
@@ -183,7 +183,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>French franc</_title>
+      <_title>French Franc</_title>
       <_names>ar:FRF,franc</_names>
       <base>
         <unit>EUR</unit>
@@ -192,7 +192,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Italian lira</_title>
+      <_title>Italian Lira</_title>
       <_names>ar:ITL,lira</_names>
       <base>
         <unit>EUR</unit>
@@ -201,7 +201,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Dutch guilder</_title>
+      <_title>Dutch Guilder</_title>
       <_names>ar:NLG,guilder</_names>
       <base>
         <unit>EUR</unit>
@@ -210,7 +210,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Portuguese escudo</_title>
+      <_title>Portuguese Escudo</_title>
       <_names>ar:PTE,escudo</_names>
       <base>
         <unit>EUR</unit>
@@ -228,7 +228,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Spanish peseta</_title>
+      <_title>Spanish Peseta</_title>
       <_names>ar:ESP,peseta,p:pesetas</_names>
       <base>
         <unit>EUR</unit>
@@ -237,7 +237,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Irish pound</_title>
+      <_title>Irish Pound</_title>
       <_names>ar:IEP</_names>
       <base>
         <unit>EUR</unit>
@@ -246,7 +246,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Luxembourg franc</_title>
+      <_title>Luxembourg Franc</_title>
       <_names>ar:LUF</_names>
       <base>
         <unit>EUR</unit>
@@ -255,7 +255,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Austrian schilling</_title>
+      <_title>Austrian Schilling</_title>
       <_names>ar:ATS,schilling</_names>
       <base>
         <unit>EUR</unit>
@@ -264,7 +264,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Finnish markka</_title>
+      <_title>Finnish Markka</_title>
       <_names>ar:FIM,markka</_names>
       <base>
         <unit>EUR</unit>

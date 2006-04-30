@@ -15,10 +15,12 @@
 #include <libqalculate/includes.h>
 #include <libqalculate/Function.h>
 
+/** @file */
+
 typedef Sgi::vector<DataProperty*>::iterator DataObjectPropertyIter;
 
 /// A a data set object.
-/** Data objects consists property-value pairs. */
+/** Data objects consist of property-value pairs. */
 class DataObject {
 
   protected:
@@ -67,7 +69,7 @@ class DataObject {
 	/** Returns unparsed value for a property.
 	*
 	* @param property Property to read.
-	* @param is_approximate If the value is approximate. Is set to 1 for approximate, 0 for exact, -1 for property default, if not NULL.
+	* @param[out] is_approximate If the value is approximate. Is set to 1 for approximate, 0 for exact, -1 for property default, if not NULL.
 	* @returns Unparsed value or empty string if property value is not set.
 	*/
 	const string &getProperty(DataProperty *property, int *is_approximate = NULL);
@@ -89,10 +91,22 @@ class DataObject {
 	* @returns Value in display format or empty string if property value is not set.
 	*/
 	string getPropertyDisplayString(DataProperty *property);
-	
+
+	/** If the object has been modified by the end user (if setUserModified() has been called).
+	*
+	* @returns true if the object has been modified by the user.
+	*/
 	bool isUserModified() const;
+	/** Specify if the object has been modified by the end user.
+	*
+	* @param user_modified true if the object has been modified by the user.
+	*/
 	void setUserModified(bool user_modified = true);
-	
+
+	/** Returns the data set that the object belongs to.
+	*
+	* @returns Parent data set.
+	*/
 	DataSet *parentSet() const;
 
 };

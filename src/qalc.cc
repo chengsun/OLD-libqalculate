@@ -1391,10 +1391,10 @@ int main (int argc, char *argv[]) {
 									fputs(")", stdout);
 									
 								}
-								if(!au->reverseExpression().empty()) {
+								if(!au->inverseExpression().empty()) {
 									puts("");
 									PRINT_AND_COLON_TABS_INFO(_("Inverse Relation"));
-									FPUTS_UNICODE(CALCULATOR->localizeExpression(au->reverseExpression()).c_str(), stdout);
+									FPUTS_UNICODE(CALCULATOR->localizeExpression(au->inverseExpression()).c_str(), stdout);
 									if(item->isApproximate()) {
 										fputs(" (", stdout);
 										FPUTS_UNICODE(_("approximate"), stdout);

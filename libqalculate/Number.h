@@ -16,14 +16,18 @@
 
 #include <cln/cln.h>
 
+/** @file */
+
 #define EQUALS_PRECISION_DEFAULT 	-1
-#define EQUALS_PRECISION_LOWEST		-2
+#define EQUALS_PRECISION_LOWEST	-2
 #define EQUALS_PRECISION_HIGHEST	-3
 
-/** 
-* A number.
-*
-* Can be rational, floating, point, complex or infinite. Implimented using CLN numbers.
+
+/// A number.
+/**
+* Can be rational, floating point, complex or infinite.
+* Has arbitrary precision (uses Calculator::precision()) and infinitely large rational numbers.
+* Implimented using CLN numbers.
  */
 class Number {
 	
@@ -88,7 +92,7 @@ class Number {
 		/**
 		* Converts a number to an integer. If the number does not represent an integer it will rounded using round().
 		*
-		* @param overflow If overflow is non-null it will be set to true if the number was to large to fit in an int.
+		* @param[out] overflow If overflow is non-null it will be set to true if the number was to large to fit in an int.
 		* @return Resulting integer.
  		*/
 		int intValue(bool *overflow = NULL) const;

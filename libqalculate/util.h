@@ -14,6 +14,7 @@
 
 #include <libqalculate/includes.h>
 
+/** @file */
 
 /// \cond
 struct eqstr {

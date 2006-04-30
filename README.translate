@@ -6,7 +6,7 @@ The GUI packages contains translations for the GUI text as usual in the po direc
 
 The best strategy is probably to start with qalculate-gtk or qalculate-kde. These contain approximately 700 messages which are essentially the same in both GUI's. The most difficult and demanding task is no doubt the translation of all definitions. It's by no means necessary to translate every package.
 
-The source packages for libqalculate, qalculate-gtk, qalculate-bases, qalculate-currency and qalculate-units do not include any .pot files. Instead the initial translation file is generated (and updated) with "../intltool-update language code" (ex. ../intltool-update sv, for the Swedish translation) from the po directories. intltool-update is generated when ./configure is run from the top package directory. You can also create a pot file with "../intltool-update --pot".
+The source packages for libqalculate, qalculate-gtk, qalculate-bases, qalculate-currency and qalculate-units do not include any .pot files. Instead the pot file is created with "../intltool-update --pot". You can then run "msginit --locale=??" or just copy the pot-file to ??.po. The translation file is updated with "../intltool-update language code" (ex. ../intltool-update sv, for the Swedish translation) from the po directories. intltool-update is generated when ./configure is run from the top package directory.
 
 qalculate-kde uses a slightly different system and include the package includes a pot-file which is copied and edited to create a new translation.
 

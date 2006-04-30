@@ -1662,15 +1662,37 @@ bool Calculator::calculateRPN(MathOperation op, int msecs, const EvaluationOptio
 		MathStructure *mstruct = new MathStructure();
 		mstruct->add(m_zero, op);
 		rpn_stack.push_back(mstruct);
+		if(parsed_struct) parsed_struct->clear();
 	} else if(rpn_stack.size() == 1) {
+		if(parsed_struct) {
+			parsed_struct->clear();
+			if(op == OPERATION_SUBTRACT) {
+				parsed_struct->transform(STRUCT_ADDITION, *rpn_stack.back());
+				(*parsed_struct)[1].transform(STRUCT_NEGATE);
+			} else if(op == OPERATION_DIVIDE) {
+				parsed_struct->transform(STRUCT_DIVISION, *rpn_stack.back());
+			} else {
+				parsed_struct->add(*rpn_stack.back(), op);
+			}
+		}
 		MathStructure *mstruct = new MathStructure();
 		mstruct->add_nocopy(rpn_stack.back(), op);
 		rpn_stack.back() = mstruct;
 	} else {
+		if(parsed_struct) {
+			parsed_struct->set(*rpn_stack[rpn_stack.size() - 2]);
+			if(op == OPERATION_SUBTRACT) {
+				parsed_struct->transform(STRUCT_ADDITION, *rpn_stack.back());
+				(*parsed_struct)[1].transform(STRUCT_NEGATE);
+			} else if(op == OPERATION_DIVIDE) {
+				parsed_struct->transform(STRUCT_DIVISION, *rpn_stack.back());
+			} else {
+				parsed_struct->add(*rpn_stack.back(), op);
+			}
+		}
 		rpn_stack[rpn_stack.size() - 2]->add_nocopy(rpn_stack.back(), op);
 		rpn_stack.pop_back();
 	}
-	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
 	return calculateRPNRegister(1, msecs, eo);
 }
 bool Calculator::calculateRPN(MathFunction *f, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
@@ -1729,15 +1751,37 @@ MathStructure *Calculator::calculateRPN(MathOperation op, const EvaluationOption
 		MathStructure *mstruct = new MathStructure();
 		mstruct->add(m_zero, op);
 		rpn_stack.push_back(mstruct);
-	} else if(rpn_stack.size() == 1) {
+	}
+	if(rpn_stack.size() == 1) {
+		if(parsed_struct) {
+			parsed_struct->clear();
+			if(op == OPERATION_SUBTRACT) {
+				parsed_struct->transform(STRUCT_ADDITION, *rpn_stack.back());
+				(*parsed_struct)[1].transform(STRUCT_NEGATE);
+			} else if(op == OPERATION_DIVIDE) {
+				parsed_struct->transform(STRUCT_DIVISION, *rpn_stack.back());
+			} else {
+				parsed_struct->add(*rpn_stack.back(), op);
+			}
+		}
 		MathStructure *mstruct = new MathStructure();
 		mstruct->add_nocopy(rpn_stack.back(), op);
 		rpn_stack.back() = mstruct;
 	} else {
+		if(parsed_struct) {
+			parsed_struct->set(*rpn_stack[rpn_stack.size() - 2]);
+			if(op == OPERATION_SUBTRACT) {
+				parsed_struct->transform(STRUCT_ADDITION, *rpn_stack.back());
+				(*parsed_struct)[1].transform(STRUCT_NEGATE);
+			} else if(op == OPERATION_DIVIDE) {
+				parsed_struct->transform(STRUCT_DIVISION, *rpn_stack.back());
+			} else {
+				parsed_struct->add(*rpn_stack.back(), op);
+			}
+		}
 		rpn_stack[rpn_stack.size() - 2]->add_nocopy(rpn_stack.back(), op);
 		rpn_stack.pop_back();
 	}
-	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
 	rpn_stack.back()->eval(eo);
 	return rpn_stack.back();
 }
@@ -2113,7 +2157,7 @@ MathStructure Calculator::convert(const MathStructure &mstruct, Unit *to_unit, c
 				default: {}
 			}
 		}
-		if(b) {		
+		if(b) {
 			mstruct_new.divide(to_unit);
 			EvaluationOptions eo2 = eo;
 			//eo2.calculate_functions = false;
@@ -2164,7 +2208,8 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 			int new_points;
 			int new_points_m;
 			int max_points = 0;
-			for(size_t i = 0; cu->get(i, &exp); i++) {
+			for(size_t i = 1; i <= cu->countUnits(); i++) {
+				cu->get(i, &exp);
 				if(exp < 0) {
 					max_points -= exp;
 				} else {
@@ -2172,16 +2217,13 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 				}
 			}
 			Unit *best_u = NULL;
-			Unit *cu_unit, *bu;
+			Unit *bu;
 			AliasUnit *au;
 			for(size_t i = 0; i < units.size(); i++) {
 				if(units[i]->subtype() == SUBTYPE_BASE_UNIT && (points == 0 || (points == 1 && minus))) {
 					new_points = 0;
-					for(size_t i2 = 0; true; i2++) {
-						cu_unit = cu->get(i2);
-						if(!cu_unit) {
-							break;
-						} else if(cu_unit->baseUnit() == units[i]) {
+					for(size_t i2 = 1; i2 <= cu->countUnits(); i2++) {
+						if(cu->get(i2)->baseUnit() == units[i]) {
 							points = 1;
 							best_u = units[i];
 							minus = false;
@@ -2197,11 +2239,8 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 					new_points_m = 0;
 					if(b_exp != 1 || bu->subtype() == SUBTYPE_COMPOSITE_UNIT) {
 						if(bu->subtype() == SUBTYPE_BASE_UNIT) {
-							for(size_t i2 = 0; true; i2++) {
-								cu_unit = cu->get(i2, &exp);
-								if(!cu_unit) {
-									break;
-								} else if(cu_unit == bu) {
+							for(size_t i2 = 1; i2 <= cu->countUnits(); i2++) {
+								if(cu->get(i2, &exp) == bu) {
 									bool m = false;
 									if(b_exp < 0 && exp < 0) {
 										b_exp = -b_exp;
@@ -2244,11 +2283,10 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 										b_exp = cu_mstruct.getChild(i2)->exponent()->number().intValue();
 									}
 									if(bu) {
-										for(size_t i3 = 0; true; i3++) {
-											cu_unit = cu->get(i3, &exp);
-											if(!cu_unit) {
-												break;
-											} else if(cu_unit == bu) {
+										bool b = false;
+										for(size_t i3 = 1; i3 <= cu->countUnits(); i3++) {
+											if(cu->get(i3, &exp) == bu) {
+												b = true;
 												bool m = false;
 												if(exp < 0 && b_exp > 0) {
 													new_points -= b_exp;
@@ -2276,7 +2314,7 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 												break;
 											}
 										}
-										if(!cu_unit) {
+										if(!b) {
 											if(b_exp < 0) b_exp = -b_exp;
 											new_points -= b_exp;	
 											new_points_m -= b_exp;
@@ -2327,39 +2365,31 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 				}
 				if(b) {
 					Unit *u2 = getBestUnit(cu2, true);
-					Unit *cu_unit2;
+					b = false;
 					if(u2->subtype() == SUBTYPE_COMPOSITE_UNIT) {
-						for(size_t i3 = 0; true; i3++) {
-							cu_unit = ((CompositeUnit*) u2)->get(i3, &exp);
-							if(!cu_unit) {
-								break;
-							} else {
-								for(size_t i4 = 0; true; i4++) {
-									cu_unit2 = cu_new->get(i4, &b_exp);
-									if(!cu_unit2) {
-										break;
-									} else if(cu_unit2 == cu_unit) {
-										cu_new->setExponent(i4, b_exp + exp);
-										break;
-									}
+						for(size_t i3 = 1; i3 <= ((CompositeUnit*) u2)->countUnits(); i3++) {
+							Unit *cu_unit = ((CompositeUnit*) u2)->get(i3, &exp);
+							for(size_t i4 = 1; i4 <= cu_new->countUnits(); i4++) {
+								if(cu_new->get(i4, &b_exp) == cu_unit) {
+									b = true;
+									cu_new->setExponent(i4, b_exp + exp);
+									break;
 								}
-								if(!cu_unit2) cu_new->add(cu_unit, exp);
 							}
+							if(!b) cu_new->add(cu_unit, exp);
 						}
 						return_cu = true;
 						delete u2;
 					} else if(u2->subtype() == SUBTYPE_ALIAS_UNIT) {
 						return_cu = true;
-						for(size_t i3 = 0; true; i3++) {
-							cu_unit = cu_new->get(i3, &exp);
-							if(!cu_unit) {
-								break;
-							} else if(cu_unit == u2) {
+						for(size_t i3 = 1; i3 <= cu_new->countUnits(); i3++) {
+							if(cu_new->get(i3, &exp) == u2) {
+								b = true;
 								cu_new->setExponent(i3, exp + 1);
 								break;
 							}
 						}
-						if(!cu_unit) cu_new->add(u2);
+						if(!b) cu_new->add(u2);
 					}
 				}
 				delete cu2;
@@ -2831,7 +2861,8 @@ ExpressionItem* Calculator::addExpressionItem(ExpressionItem *item, bool force) 
 			return addVariable((Variable*) item, force);
 		}
 		case TYPE_FUNCTION: {
-			return addFunction((MathFunction*) item, force);
+			if(item->subtype() == item->subtype() == SUBTYPE_DATA_SET) return addDataSet((DataSet*) item, force);
+			else return addFunction((MathFunction*) item, force);
 		}		
 		case TYPE_UNIT: {
 			return addUnit((Unit*) item, force);
@@ -5423,7 +5454,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 
 	xmlDocPtr doc;
 	xmlNodePtr cur, child, child2, child3;
-	string version, stmp, name, uname, type, svalue, sexp, plural, singular, category_title, category, description, title, reverse, base, argname, usystem;
+	string version, stmp, name, uname, type, svalue, sexp, plural, singular, category_title, category, description, title, inverse, base, argname, usystem;
 	bool best_title, next_best_title, best_category_title, next_best_category_title, best_description, next_best_description;
 	bool best_plural, next_best_plural, best_singular, next_best_singular, best_argname, next_best_argname;
 	bool best_proptitle, next_best_proptitle, best_propdescr, next_best_propdescr;
@@ -5588,7 +5619,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 				ITEM_INIT_NAME
 				while(child != NULL) {
 					if(!xmlStrcmp(child->name, (const xmlChar*) "expression")) {
-						XML_DO_FROM_TEXT(child, ((UserFunction*) f)->setEquation);
+						XML_DO_FROM_TEXT(child, ((UserFunction*) f)->setFormula);
 						XML_GET_PREC_FROM_PROP(child, prec)
 						f->setPrecision(prec);
 						XML_GET_APPROX_FROM_PROP(child, b)
@@ -6380,7 +6411,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							child2 = child->xmlChildrenNode;
 							exponent = 1;
 							svalue = "";
-							reverse = "";
+							inverse = "";
 							b = true;
 							while(child2 != NULL) {
 								if(!xmlStrcmp(child2->name, (const xmlChar*) "unit")) {
@@ -6394,7 +6425,9 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 									XML_GET_APPROX_FROM_PROP(child2, b)
 									XML_GET_PREC_FROM_PROP(child, prec)
 								} else if(!xmlStrcmp(child2->name, (const xmlChar*) "reverse_relation")) {
-									XML_GET_STRING_FROM_TEXT(child2, reverse);
+									XML_GET_STRING_FROM_TEXT(child2, inverse);
+								} else if(!xmlStrcmp(child2->name, (const xmlChar*) "inverse_relation")) {
+									XML_GET_STRING_FROM_TEXT(child2, inverse);
 								} else if(!xmlStrcmp(child2->name, (const xmlChar*) "exponent")) {
 									XML_GET_STRING_FROM_TEXT(child2, stmp);
 									if(stmp.empty()) {
@@ -6431,7 +6464,7 @@ int Calculator::loadDefinitions(const char* file_name, bool is_user_defs) {
 							unfinished_cats.push_back(category);
 						}
 					} else {
-						au = new AliasUnit(category, name, plural, singular, title, u, svalue, exponent, reverse, is_user_defs, false, active);
+						au = new AliasUnit(category, name, plural, singular, title, u, svalue, exponent, inverse, is_user_defs, false, active);
 						au->setDescription(description);
 						au->setPrecision(prec);
 						au->setApproximate(b);
@@ -7110,10 +7143,12 @@ int Calculator::saveUnits(const char* file_name, bool save_global) {
 				}
 				if(!units[i]->isBuiltin()) {
 					if(units[i]->subtype() == SUBTYPE_COMPOSITE_UNIT) {
-						for(size_t i2 = 0; i2 < cu->units.size(); i2++) {
+						for(size_t i2 = 1; i2 <= cu->countUnits(); i2++) {
 							newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "part", NULL);
-							xmlNewTextChild(newnode2, NULL, (xmlChar*) "unit", (xmlChar*) cu->units[i2]->firstBaseUnit()->referenceName().c_str());
-							Prefix *p = cu->units[i2]->prefix();
+							int exp = 1;
+							Prefix *p = NULL;
+							Unit *u = cu->get(i2, &exp, &p);
+							xmlNewTextChild(newnode2, NULL, (xmlChar*) "unit", (xmlChar*) u->referenceName().c_str());
 							if(p) {
 								switch(p->type()) {
 									case PREFIX_DECIMAL: {
@@ -7132,7 +7167,7 @@ int Calculator::saveUnits(const char* file_name, bool save_global) {
 									}
 								}
 							}
-							xmlNewTextChild(newnode2, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(cu->units[i2]->firstBaseExp()).c_str());
+							xmlNewTextChild(newnode2, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(exp).c_str());
 						}
 					}
 					if(units[i]->subtype() == SUBTYPE_ALIAS_UNIT) {
@@ -7141,8 +7176,8 @@ int Calculator::saveUnits(const char* file_name, bool save_global) {
 						newnode3 = xmlNewTextChild(newnode2, NULL, (xmlChar*) "relation", (xmlChar*) au->expression().c_str());
 						if(units[i]->isApproximate()) xmlNewProp(newnode3, (xmlChar*) "approximate", (xmlChar*) "true");
 						if(units[i]->precision() > 0) xmlNewProp(newnode2, (xmlChar*) "precision", (xmlChar*) i2s(units[i]->precision()).c_str());
-						if(!au->reverseExpression().empty()) {
-							xmlNewTextChild(newnode2, NULL, (xmlChar*) "reverse_relation", (xmlChar*) au->reverseExpression().c_str());	
+						if(!au->inverseExpression().empty()) {
+							xmlNewTextChild(newnode2, NULL, (xmlChar*) "inverse_relation", (xmlChar*) au->inverseExpression().c_str());
 						}
 						xmlNewTextChild(newnode2, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(au->firstBaseExp()).c_str());
 					}
@@ -7262,7 +7297,7 @@ int Calculator::saveFunctions(const char* file_name, bool save_global) {
 						else xmlNewProp(newnode2, (xmlChar*) "precalculate", (xmlChar*) "false");
 						
 					}
-					newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "expression", (xmlChar*) ((UserFunction*) functions[i])->equation().c_str());
+					newnode2 = xmlNewTextChild(newnode, NULL, (xmlChar*) "expression", (xmlChar*) ((UserFunction*) functions[i])->formula().c_str());
 					if(functions[i]->isApproximate()) xmlNewProp(newnode2, (xmlChar*) "approximate", (xmlChar*) "true");
 					if(functions[i]->precision() > 0) xmlNewProp(newnode2, (xmlChar*) "precision", (xmlChar*) i2s(functions[i]->precision()).c_str());
 					if(!functions[i]->condition().empty()) {

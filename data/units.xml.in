@@ -1069,7 +1069,7 @@
       <base>
         <unit>K</unit>
         <relation>\x + 273.15</relation>
-        <reverse_relation>\x - 273.15</reverse_relation>
+        <inverse_relation>\x - 273.15</inverse_relation>
         <exponent>1</exponent>
       </base>
     </unit>
@@ -1079,7 +1079,7 @@
       <base>
         <unit>K</unit>
         <relation>5\x/9</relation>
-        <reverse_relation>9\x/5</reverse_relation>
+        <inverse_relation>9\x/5</inverse_relation>
         <exponent>1</exponent>
       </base>
     </unit>
@@ -1089,7 +1089,7 @@
       <base>
         <unit>K</unit>
         <relation>(2298.35+5\x)/9</relation>
-        <reverse_relation>(9\x-2298.35)/5</reverse_relation>
+        <inverse_relation>(9\x-2298.35)/5</inverse_relation>
         <exponent>1</exponent>
       </base>
     </unit>

@@ -464,23 +464,25 @@ bool MathFunction::testArguments(MathStructure &vargs) {
 MathStructure MathFunction::calculate(MathStructure &vargs, const EvaluationOptions &eo) {
 	int itmp = vargs.size();
 	if(testArgumentCount(itmp)) {
-		while(itmp < maxargs()) {
-			Argument *arg = getArgumentDefinition(itmp + 1);
-			if(arg) {
-				MathStructure *mstruct = new MathStructure();
-				arg->parse(mstruct, default_values[itmp - minargs()]);
-				vargs.addChild_nocopy(mstruct);
-			} else {
-				MathStructure *mstruct = new MathStructure();
-				CALCULATOR->parse(mstruct, default_values[itmp - minargs()]);
-				vargs.addChild_nocopy(mstruct);
-			}
-		}
+		appendDefaultValues(vargs);
 		MathStructure mstruct;
-		if(!testArguments(vargs) || calculate(mstruct, vargs, eo) < 1) {
+		int ret = 0;
+		if(!testArguments(vargs) || (ret = calculate(mstruct, vargs, eo)) < 1) {
+			if(ret < 0) {
+				ret = -ret;
+				if(maxargs() > 0 && ret > maxargs()) {
+					if(mstruct.isVector()) {
+						for(size_t arg_i = 0; arg_i < vargs.size() && arg_i < mstruct.size(); arg_i++) {
+							vargs.setChild(mstruct[arg_i], arg_i + 1);
+						}
+					}
+				} else if(ret <= (int) vargs.size()) {
+					vargs.setChild(mstruct, ret);
+				}
+			}
 			return createFunctionMathStructureFromVArgs(vargs);
 		}
-		if(precision() < 0) mstruct.setPrecision(precision());
+		if(precision() > 0 && precision() < mstruct.precision()) mstruct.setPrecision(precision());
 		if(isApproximate()) mstruct.setApproximate();
 		return mstruct;
 	} else {
@@ -647,28 +649,28 @@ bool MathFunction::representsUndefined(const MathStructure&) const {return false
 bool MathFunction::representsBoolean(const MathStructure&) const {return false;}
 bool MathFunction::representsNonMatrix(const MathStructure &vargs) const {return representsNumber(vargs, true);}
 
-UserFunction::UserFunction(string cat_, string name_, string eq_, bool is_local, int argc_, string title_, string descr_, int max_argc_, bool is_active) : MathFunction(name_, argc_, max_argc_, cat_, title_, descr_, is_active) {
+UserFunction::UserFunction(string cat_, string name_, string formula_, bool is_local, int argc_, string title_, string descr_, int max_argc_, bool is_active) : MathFunction(name_, argc_, max_argc_, cat_, title_, descr_, is_active) {
 	b_local = is_local;
 	b_builtin = false;
-	setEquation(eq_, argc_, max_argc_);
+	setFormula(formula_, argc_, max_argc_);
 	setChanged(false);
 }
 UserFunction::UserFunction(const UserFunction *function) {
 	set(function);
 }
-string UserFunction::equation() const {
-	return eq;
+string UserFunction::formula() const {
+	return sformula;
 }
-string UserFunction::internalEquation() const {
-	return eq_calc;
+string UserFunction::internalFormula() const {
+	return sformula_calc;
 }
 ExpressionItem *UserFunction::copy() const {
 	return new UserFunction(this);
 }
 void UserFunction::set(const ExpressionItem *item) {
 	if(item->type() == TYPE_FUNCTION && item->subtype() == SUBTYPE_USER_FUNCTION) {
-		eq = ((UserFunction*) item)->equation();
-		eq_calc = ((UserFunction*) item)->internalEquation();
+		sformula = ((UserFunction*) item)->formula();
+		sformula_calc = ((UserFunction*) item)->internalFormula();
 		v_subs.clear();
 		v_precalculate.clear();
 		for(size_t i = 1; i <= ((UserFunction*) item)->countSubfunctions(); i++) {
@@ -686,7 +688,7 @@ int UserFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 
 	ParseOptions po;
 	if(args() != 0) {
-		string stmp = eq_calc;
+		string stmp = sformula_calc;
 		string svar;
 		string v_str, w_str;
 		vector<string> v_strs;
@@ -865,16 +867,22 @@ int UserFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 		if(precision() > 0) mstruct.setPrecision(precision());
 		if(isApproximate()) mstruct.setApproximate();
 	} else {
-		CALCULATOR->parse(&mstruct, eq_calc, po);
+		CALCULATOR->parse(&mstruct, sformula_calc, po);
 		if(precision() > 0) mstruct.setPrecision(precision());
 		if(isApproximate()) mstruct.setApproximate();
 	}
 	return 1;
 }
-void UserFunction::setEquation(string new_eq, int argc_, int max_argc_) {
+void UserFunction::setFormula(string new_formula, int argc_, int max_argc_) {
 	setChanged(true);
-	eq = new_eq;
+	sformula = new_formula;
 	default_values.clear();
+	if(sformula.empty() && v_subs.empty()) {
+		sformula_calc = new_formula;
+		argc = 0;
+		max_argc = 0;
+		return;
+	}
 	if(argc_ < 0) {
 		argc_ = 0, max_argc_ = 0;
 		string svar, svar_o, svar_v;
@@ -882,7 +890,7 @@ void UserFunction::setEquation(string new_eq, int argc_, int max_argc_) {
 		size_t i3 = 0, i4 = 0, i5 = 0;
 		size_t i2 = 0;
 		for(int i = 0; i < 26; i++) {
-			begin_loop_in_set_equation:
+			begin_loop_in_set_formula:
 			i4 = 0; i5 = 0;
 			svar = '\\';
 			svar_o = '\\';
@@ -895,16 +903,16 @@ void UserFunction::setEquation(string new_eq, int argc_, int max_argc_) {
 			else
 				svar_o += 'X' + i;
 				
-			before_find_in_set_equation:
-			if(i < 24 && (i2 = new_eq.find(svar_o, i4)) != string::npos) {
-				if(i2 > 0 && new_eq[i2 - 1] == '\\') {
+			before_find_in_set_formula:
+			if(i < 24 && (i2 = new_formula.find(svar_o, i4)) != string::npos) {
+				if(i2 > 0 && new_formula[i2 - 1] == '\\') {
 					i4 = i2 + 2;
-					goto before_find_in_set_equation;
+					goto before_find_in_set_formula;
 				}				
 				i3 = 0;
-				if(new_eq.length() > i2 + 2 && new_eq[i2 + 2] == ID_WRAP_LEFT_CH) {
-					if((i3 = new_eq.find(ID_WRAP_RIGHT_CH, i2 + 2)) != string::npos) {
-						svar_v = new_eq.substr(i2 + 3, i3 - (i2 + 3));	
+				if(new_formula.length() > i2 + 2 && new_formula[i2 + 2] == ID_WRAP_LEFT_CH) {
+					if((i3 = new_formula.find(ID_WRAP_RIGHT_CH, i2 + 2)) != string::npos) {
+						svar_v = new_formula.substr(i2 + 3, i3 - (i2 + 3));
 						i3 -= i2 + 1;
 					} else i3 = 0;
 				}
@@ -913,12 +921,12 @@ void UserFunction::setEquation(string new_eq, int argc_, int max_argc_) {
 				} else {
 					default_values.push_back("0");
 				}
-				new_eq.replace(i2, 2 + i3, svar);
-				while((i2 = new_eq.find(svar_o, i2 + 1)) != string::npos) {
-					if(i2 > 0 && new_eq[i2 - 1] == '\\') {
+				new_formula.replace(i2, 2 + i3, svar);
+				while((i2 = new_formula.find(svar_o, i2 + 1)) != string::npos) {
+					if(i2 > 0 && new_formula[i2 - 1] == '\\') {
 						i2++;
 					} else {
-						new_eq.replace(i2, 2, svar);
+						new_formula.replace(i2, 2, svar);
 					}
 				}
 				for(size_t sub_i = 0; sub_i < v_subs.size(); sub_i++) {
@@ -932,19 +940,19 @@ void UserFunction::setEquation(string new_eq, int argc_, int max_argc_) {
 					}
 				}
 				optionals = true;
-			} else if((i2 = new_eq.find(svar, i5)) != string::npos) {
-				if(i2 > 0 && new_eq[i2 - 1] == '\\') {
+			} else if((i2 = new_formula.find(svar, i5)) != string::npos) {
+				if(i2 > 0 && new_formula[i2 - 1] == '\\') {
 					i5 = i2 + 2;
-					goto before_find_in_set_equation;
+					goto before_find_in_set_formula;
 				}
 			} else {
 				b = false;
 				for(size_t sub_i = 0; sub_i < v_subs.size(); sub_i++) {
-					before_find_in_vsubs_set_equation:
+					before_find_in_vsubs_set_formula:
 					if(i < 24 && (i2 = v_subs[sub_i].find(svar_o, i4)) != string::npos) {
 						if(i2 > 0 && v_subs[sub_i][i2 - 1] == '\\') {
 							i4 = i2 + 2;
-							goto before_find_in_vsubs_set_equation;
+							goto before_find_in_vsubs_set_formula;
 						}				
 						i3 = 0;
 						if(v_subs[sub_i].length() > i2 + 2 && v_subs[sub_i][i2 + 2] == ID_WRAP_LEFT_CH) {
@@ -971,7 +979,7 @@ void UserFunction::setEquation(string new_eq, int argc_, int max_argc_) {
 					} else if((i2 = v_subs[sub_i].find(svar, i5)) != string::npos) {
 						if(i2 > 0 && v_subs[sub_i][i2 - 1] == '\\') {
 							i5 = i2 + 2;
-							goto before_find_in_vsubs_set_equation;
+							goto before_find_in_vsubs_set_formula;
 						}
 						b = true;
 					}
@@ -979,7 +987,7 @@ void UserFunction::setEquation(string new_eq, int argc_, int max_argc_) {
 				if(!b) {
 					if(i < 24 && !optionals) {
 						i = 24;
-						goto begin_loop_in_set_equation;
+						goto begin_loop_in_set_formula;
 					}
 					break;
 				}
@@ -1013,7 +1021,7 @@ void UserFunction::setEquation(string new_eq, int argc_, int max_argc_) {
 		default_values.push_back("0");
 	}
 	if(max_argc_ > 0) default_values.resize(max_argc_ - argc_);
-	eq_calc = new_eq;
+	sformula_calc = new_formula;
 	argc = argc_;
 	max_argc = max_argc_;	
 }

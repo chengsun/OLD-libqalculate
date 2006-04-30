@@ -5349,18 +5349,16 @@ bool MathStructure::calculateFunctions(const EvaluationOptions &eo, bool recursi
 		} else {
 			if(i < 0) {
 				i = -i;
-				if(o_function->maxargs() > 1) {
-					while(i > 0) {
-						size_t i2 = i % o_function->maxargs();
-						if(i2 != 0 && i2 <= SIZE) {
-							CHILD(i2 - 1).set_nocopy(*mstruct);
-							CHILD_UPDATED(i2 - 1);
+				if(o_function->maxargs() > 0 && i > o_function->maxargs()) {
+					if(mstruct->isVector()) {
+						for(size_t arg_i = 1; arg_i <= SIZE && arg_i <= mstruct->size(); arg_i++) {
+							mstruct->getChild(arg_i)->ref();
+							setChild_nocopy(mstruct->getChild(arg_i), arg_i);
 						}
-						i = i / o_function->maxargs();
 					}
 				} else if(i <= (int) SIZE) {
-					CHILD(i - 1).set_nocopy(*mstruct);
-					CHILD_UPDATED(i - 1);
+					mstruct->ref();
+					setChild_nocopy(mstruct, i);
 				}
 			}
 			/*if(eo.approximation == APPROXIMATION_EXACT) {
@@ -12076,31 +12074,32 @@ bool MathStructure::syncUnits(bool sync_complex_relations, bool *found_complex_r
 		}
 		if(do_erase) {
 			alias_units.erase(alias_units.begin() + i);
-			for(int i2 = 0; i2 < (int) cu->units.size(); i2++) {
+			for(int i2 = 1; i2 <= (int) cu->countUnits(); i2++) {
 				b = false;
-				switch(cu->units[i2]->firstBaseUnit()->subtype()) {
+				Unit *cub = cu->get(i2);
+				switch(cub->subtype()) {
 					case SUBTYPE_BASE_UNIT: {
 						for(size_t i3 = 0; i3 < base_units.size(); i3++) {
-							if(base_units[i3] == cu->units[i2]->firstBaseUnit()) {
+							if(base_units[i3] == cub) {
 								b = true;
 								break;
 							}
 						}
-						if(!b) base_units.push_back((Unit*) cu->units[i2]->firstBaseUnit());
+						if(!b) base_units.push_back(cub);
 						break;
 					}
 					case SUBTYPE_ALIAS_UNIT: {
 						for(size_t i3 = 0; i3 < alias_units.size(); i3++) {
-							if(alias_units[i3] == cu->units[i2]->firstBaseUnit()) {
+							if(alias_units[i3] == cub) {
 								b = true;
 								break;
 							}
 						}
-						if(!b) alias_units.push_back((AliasUnit*) cu->units[i2]->firstBaseUnit());				
+						if(!b) alias_units.push_back((AliasUnit*) cub);
 						break;
 					}
 					case SUBTYPE_COMPOSITE_UNIT: {
-						gatherInformation(((CompositeUnit*) cu->units[i2]->firstBaseUnit())->generateMathStructure(), base_units, alias_units);
+						gatherInformation(((CompositeUnit*) cub)->generateMathStructure(), base_units, alias_units);
 						break;
 					}
 				}
@@ -12238,8 +12237,8 @@ bool MathStructure::convert(Unit *u, bool convert_complex_relations, bool *found
 		}
 		MathStructure *exp = new MathStructure(1, 1);
 		MathStructure *mstruct = new MathStructure(1, 1);
-		u->convert(o_unit, *mstruct, *exp, &b);
-		if(b) {
+		;
+		if(u->convert(o_unit, *mstruct, *exp)) {
 			o_unit = u;
 			if(!exp->isOne()) {
 				if(calculate_new_functions) exp->calculateFunctions(feo, true);
@@ -12253,11 +12252,12 @@ bool MathStructure::convert(Unit *u, bool convert_complex_relations, bool *found
 			} else {
 				mstruct->unref();
 			}
+			return true;
 		} else {
 			exp->unref();
 			mstruct->unref();
+			return false;
 		}
-		return b;
 	} else {
 		if(convert_complex_relations) {
 			if(m_type == STRUCT_MULTIPLICATION) {
@@ -12304,8 +12304,7 @@ bool MathStructure::convert(Unit *u, bool convert_complex_relations, bool *found
 						efc = exp.countFunctions();
 						mfc = mstruct.countFunctions();
 					}
-					u->convert(u2, mstruct, exp, &b);
-					if(b) {
+					if(u->convert(u2, mstruct, exp)) {
 						set(u);
 						if(!exp.isOne()) {
 							if(calculate_new_functions && exp.countFunctions() > efc) exp.calculateFunctions(feo, true);
@@ -12315,8 +12314,9 @@ bool MathStructure::convert(Unit *u, bool convert_complex_relations, bool *found
 							if(calculate_new_functions && mstruct.countFunctions() > mfc) mstruct.calculateFunctions(feo, true);
 							multiply(mstruct);
 						}
+						return true;
 					}
-					return b;
+					return false;
 				}
 			} else if(m_type == STRUCT_POWER) {
 				if(CHILD(0).isUnit() && u->hasComplexRelationTo(CHILD(0).unit())) {
@@ -12331,8 +12331,7 @@ bool MathStructure::convert(Unit *u, bool convert_complex_relations, bool *found
 					if(calculate_new_functions) {
 						efc = exp.countFunctions();
 					}
-					u->convert(CHILD(0).unit(), mstruct, exp, &b);
-					if(b) {
+					if(u->convert(CHILD(0).unit(), mstruct, exp)) {
 						set(u);
 						if(!exp.isOne()) {
 							if(calculate_new_functions && exp.countFunctions() > efc) exp.calculateFunctions(feo, true);
@@ -12342,8 +12341,9 @@ bool MathStructure::convert(Unit *u, bool convert_complex_relations, bool *found
 							if(calculate_new_functions) mstruct.calculateFunctions(feo, true);
 							multiply(mstruct);
 						}
+						return true;
 					}
-					return b;
+					return false;
 				}
 			}
 			if(m_type == STRUCT_MULTIPLICATION || m_type == STRUCT_POWER) {

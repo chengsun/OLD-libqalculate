@@ -64,10 +64,10 @@
         <_title>Vector</_title>
       </argument>
       <argument index="2">
-        <_title>Lower Limit</_title>
+        <_title>Lower limit</_title>
       </argument>
       <argument index="3">
-        <_title>Upper Limit</_title>
+        <_title>Upper limit</_title>
       </argument>
     </builtin_function>
     <builtin_function name="dimension">
@@ -120,16 +120,16 @@
         <_title>Matrix</_title>
       </argument>
       <argument index="2">
-        <_title>Start Row</_title>
+        <_title>Start row</_title>
       </argument>
       <argument index="3">
-        <_title>Start Column</_title>
+        <_title>Start column</_title>
       </argument>
       <argument index="4">
-        <_title>End Row</_title>
+        <_title>End row</_title>
       </argument>
       <argument index="5">
-        <_title>End Column</_title>
+        <_title>End column</_title>
       </argument>
     </builtin_function>
     <builtin_function name="rows">
@@ -175,7 +175,7 @@
       <_names>r:elements</_names>
       <_description>Returns the number of elements in a matrix or vector.</_description>
       <argument index="1">
-        <_title>Matrix or Vector</_title>
+        <_title>Matrix or vector</_title>
       </argument>
     </builtin_function>
     <builtin_function name="element">
@@ -184,10 +184,10 @@
       <_names>r:element</_names>
       <_description>Returns the element at specified position in a matrix (row and column) or vector (index).</_description>
       <argument index="1">
-        <_title>Matrix/Vector</_title>
+        <_title>Matrix/vector</_title>
       </argument>
       <argument index="2">
-        <_title>Row/Index</_title>
+        <_title>Row/index</_title>
       </argument>
       <argument index="3">
         <_title>Column</_title>
@@ -206,7 +206,7 @@
       <_names>r:identity</_names>
       <_description>Returns the identity matrix of a matrix or with specified number of rows/columns.</_description>
       <argument index="1">
-        <_title>Matrix or Rows/Columns</_title>
+        <_title>Matrix or rows/columns</_title>
       </argument>
     </builtin_function>
     <builtin_function name="det">
@@ -260,10 +260,10 @@
       <_names>r:load</_names>
       <_description>Returns a matrix imported from a CSV data file.</_description>
       <argument index="1">
-        <_title>File Name</_title>
+        <_title>Filename</_title>
       </argument>
       <argument index="2">
-        <_title>First Data Row</_title>
+        <_title>First data row</_title>
       </argument>
       <argument index="3">
         <_title>Separator</_title>
@@ -274,10 +274,10 @@
       <_names>r:export</_names>
       <_description>Exports a matrix to a CSV data file.</_description>
       <argument index="1">
-        <_title>Matrix/Vector</_title>
+        <_title>Matrix/vector</_title>
       </argument>
       <argument index="2">
-        <_title>File Name</_title>
+        <_title>Filename</_title>
       </argument>
       <argument index="3">
         <_title>Separator</_title>
@@ -383,7 +383,7 @@
       <_description>Returns the number of possible rearrangements of an ordered list, of a certain size, where none of the objects are on their original position. If the original list is [1, 2, 3], the possible derangements is [2, 3, 1] and [3, 1, 2], and thus the number of derangements is 2.</_description>
       <expression>factorial(\x)*sum(((-1)^"i")/factorial("i"),0,\x,"i")</expression>
       <argument type="integer" index="1">
-        <_title>Number of Elements</_title>
+        <_title>Number of elements</_title>
         <min>1</min>
       </argument>
     </function>
@@ -594,20 +594,20 @@
       <_title>Greatest Common Divisor</_title>
       <_names>r:gcd</_names>
       <argument index="1">
-        <_title>1st Value</_title>
+        <_title>1st value</_title>
       </argument>
       <argument index="2">
-        <_title>2nd Value</_title>
+        <_title>2nd value</_title>
       </argument>
     </builtin_function>
     <builtin_function name="lcm">
       <_title>Least Common Multiplier</_title>
       <_names>r:lcm</_names>
       <argument index="1">
-        <_title>1st Value</_title>
+        <_title>1st value</_title>
       </argument>
       <argument index="2">
-        <_title>2nd Value</_title>
+        <_title>2nd value</_title>
       </argument>
     </builtin_function>
     <category>
@@ -673,7 +673,7 @@
         <_names>r:bin</_names>
         <_description>Returns a decimal integer from a binary number</_description>
         <argument index="1">
-          <_title>Binary Number</_title>
+          <_title>Binary number</_title>
         </argument>
       </builtin_function>
       <builtin_function name="oct">
@@ -681,7 +681,7 @@
         <_names>r:oct</_names>
         <_description>Returns a decimal integer from an octal number</_description>
         <argument index="1">
-          <_title>Octal Number</_title>
+          <_title>Octal number</_title>
         </argument>
       </builtin_function>
       <builtin_function name="hex">
@@ -689,7 +689,7 @@
         <_names>r:hex</_names>
         <_description>Returns a decimal value from a hexadecimal number</_description>
         <argument index="1">
-          <_title>Hexadecimal Number</_title>
+          <_title>Hexadecimal number</_title>
         </argument>
       </builtin_function>
     </category>
@@ -717,14 +717,14 @@
       <_title>Real Part</_title>
       <_names>r:re</_names>
       <argument index="1">
-        <_title>Complex Number</_title>
+        <_title>Complex number</_title>
       </argument>
     </builtin_function>
     <builtin_function name="im">
       <_title>Imaginary Part</_title>
       <_names>r:im</_names>
       <argument index="1">
-        <_title>Complex Number</_title>
+        <_title>Complex number</_title>
       </argument>
     </builtin_function>
     <builtin_function name="gamma">
@@ -858,7 +858,7 @@
       <_description>Returns the non-negative square root of x * pi</_description>
       <expression>abs((\x*pi)^(1/2))</expression>
       <argument type="number" index="1">
-        <_title>Non-Negative Value</_title>
+        <_title>Non-negative value</_title>
         <min include_equals="true">0</min>
       </argument>
     </function>
@@ -1021,14 +1021,14 @@
       <_title>Riemann Zeta</_title>
       <_names>r:zeta</_names>
       <argument index="1">
-        <_title>Integral Point</_title>
+        <_title>Integral point</_title>
       </argument>
     </builtin_function>
     <builtin_function name="roman">
       <_title>Roman Number</_title>
       <_names>r:roman</_names>
       <argument index="1">
-        <_title>Roman Number</_title>
+        <_title>Roman number</_title>
       </argument>
     </builtin_function>
   </category>
@@ -1195,7 +1195,7 @@
           <_title>Data</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Trimmed Percentage (at each end)</_title>
+          <_title>Trimmed percentage (at each end)</_title>
         </argument>
       </function>
       <function>
@@ -1209,7 +1209,7 @@
           <_title>Data</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Winsorized Percentage (at each end)</_title>
+          <_title>Winsorized percentage (at each end)</_title>
         </argument>
       </function>
       <function>
@@ -1416,7 +1416,7 @@
           <_title>X</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Lower Limit</_title>
+          <_title>Lower limit</_title>
         </argument>
         <argument type="number" index="3">
           <_title>Sigma</_title>
@@ -1462,13 +1462,13 @@
       <_names>r:days</_names>
       <_description>Returns the number of days between two dates.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360, 1: real days (default), 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
       <argument index="1">
-        <_title>First Date</_title>
+        <_title>First date</_title>
       </argument>
       <argument index="2">
-        <_title>Second Date</_title>
+        <_title>Second date</_title>
       </argument>
       <argument index="3">
-        <_title>Day Counting Basis</_title>
+        <_title>Day counting basis</_title>
       </argument>
       <argument index="4">
         <_title>Financial function mode</_title>
@@ -1479,13 +1479,13 @@
       <_names>r:yearfrac</_names>
       <_description>Returns the number of years (fractional) between two dates.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360, 1: real days (default), 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
       <argument index="1">
-        <_title>First Date</_title>
+        <_title>First date</_title>
       </argument>
       <argument index="2">
-        <_title>Second Date</_title>
+        <_title>Second date</_title>
       </argument>
       <argument index="3">
-        <_title>Day Counting Basis</_title>
+        <_title>Day counting basis</_title>
       </argument>
       <argument index="4">
         <_title>Financial function mode</_title>
@@ -1599,10 +1599,10 @@
       <_title>Concatenate Strings</_title>
       <_names>r:concatenate</_names>
       <argument index="1">
-        <_title>Text String 1</_title>
+        <_title>Text string 1</_title>
       </argument>
       <argument index="2">
-        <_title>Text String 2</_title>
+        <_title>Text string 2</_title>
       </argument>
     </builtin_function>
     <builtin_function name="replace">
@@ -1612,10 +1612,10 @@
         <_title>Expression</_title>
       </argument>
       <argument index="2">
-        <_title>Original Value</_title>
+        <_title>Original value</_title>
       </argument>
       <argument index="3">
-        <_title>New Value</_title>
+        <_title>New value</_title>
       </argument>
       <argument index="4">
         <_title>Precalculate expression</_title>
@@ -1635,16 +1635,16 @@
         <_title>Function</_title>
       </argument>
       <argument index="2">
-        <_title>Element Variable</_title>
+        <_title>Element variable</_title>
       </argument>
       <argument index="3">
         <_title>Vector</_title>
       </argument>
       <argument index="4">
-        <_title>Index Variable</_title>
+        <_title>Index variable</_title>
       </argument>
       <argument index="5">
-        <_title>Vector Variable</_title>
+        <_title>Vector variable</_title>
       </argument>
     </builtin_function>
     <builtin_function name="processm">
@@ -1654,50 +1654,50 @@
         <_title>Function</_title>
       </argument>
       <argument index="2">
-        <_title>Element Variable</_title>
+        <_title>Element variable</_title>
       </argument>
       <argument index="3">
         <_title>Matrix</_title>
       </argument>
       <argument index="4">
-        <_title>Row Variable</_title>
+        <_title>Row variable</_title>
       </argument>
       <argument index="5">
-        <_title>Column Variable</_title>
+        <_title>Column variable</_title>
       </argument>
       <argument index="6">
-        <_title>Matrix Variable</_title>
+        <_title>Matrix variable</_title>
       </argument>
     </builtin_function>
     <builtin_function name="csum">
       <_title>Custom Sum of Elements</_title>
       <_names>r:csum</_names>
       <argument index="1">
-        <_title>First Element</_title>
+        <_title>First element</_title>
       </argument>
       <argument index="2">
-        <_title>Last Element</_title>
+        <_title>Last element</_title>
       </argument>
       <argument index="3">
-        <_title>Initial Value</_title>
+        <_title>Initial value</_title>
       </argument>
       <argument index="4">
         <_title>Function</_title>
       </argument>
       <argument index="5">
-        <_title>Value Variable</_title>
+        <_title>Value variable</_title>
       </argument>
       <argument index="6">
-        <_title>Element Variable</_title>
+        <_title>Element variable</_title>
       </argument>
       <argument index="7">
         <_title>Vector</_title>
       </argument>
       <argument index="8">
-        <_title>Index Variable</_title>
+        <_title>Index variable</_title>
       </argument>
       <argument index="9">
-        <_title>Vector Variable</_title>
+        <_title>Vector variable</_title>
       </argument>
     </builtin_function>
     <builtin_function name="select">
@@ -1710,7 +1710,7 @@
         <_title>Condition</_title>
       </argument>
       <argument index="3">
-        <_title>Element Variable</_title>
+        <_title>Element variable</_title>
       </argument>
       <argument index="4">
         <_title>Select first match</_title>
@@ -1777,25 +1777,25 @@
       <_title>For...Do</_title>
       <_names>r:for</_names>
       <argument index="1">
-        <_title>Initial Value of Counter</_title>
+        <_title>Initial value of counter</_title>
       </argument>
       <argument index="2">
-        <_title>Counter Variable</_title>
+        <_title>Counter variable</_title>
       </argument>
       <argument index="3">
-        <_title>For Condition</_title>
+        <_title>For condition</_title>
       </argument>
       <argument index="4">
-        <_title>Counter Update Function</_title>
+        <_title>Counter update function</_title>
       </argument>
       <argument index="5">
-        <_title>Initial Value</_title>
+        <_title>Initial value</_title>
       </argument>
       <argument index="6">
-        <_title>Do Function</_title>
+        <_title>Do function</_title>
       </argument>
       <argument index="7">
-        <_title>Value Variable</_title>
+        <_title>Value variable</_title>
       </argument>
     </builtin_function>
     <builtin_function name="if">
@@ -1850,16 +1850,16 @@
       <_names>au:&#x3A3;,r:sum</_names>
       <_description>Corresponds to the sum symbol. Adds terms for each x ranging from the lower to the upper limit.</_description>
       <argument index="1">
-        <_title>Term Expression</_title>
+        <_title>Term expression</_title>
       </argument>
       <argument index="2">
-        <_title>Lower Limit (i)</_title>
+        <_title>Lower limit (i)</_title>
       </argument>
       <argument index="3">
-        <_title>Upper Limit (n)</_title>
+        <_title>Upper limit (n)</_title>
       </argument>
       <argument index="4">
-        <_title>Index Variable</_title>
+        <_title>Index variable</_title>
       </argument>
     </builtin_function>
     <builtin_function name="product">
@@ -1867,26 +1867,26 @@
       <_names>au:&#x3A0;,r:product</_names>
       <_description>Corresponds to the product symbol. Multiplies factors for each x ranging from the lower to the upper limit.</_description>
       <argument index="1">
-        <_title>Factor Expression</_title>
+        <_title>Factor expression</_title>
       </argument>
       <argument index="2">
-        <_title>Lower Limit (i)</_title>
+        <_title>Lower limit (i)</_title>
       </argument>
       <argument index="3">
-        <_title>Upper Limit (n)</_title>
+        <_title>Upper limit (n)</_title>
       </argument>
       <argument index="4">
-        <_title>Index Variable</_title>
+        <_title>Index variable</_title>
       </argument>
     </builtin_function>
     <builtin_function name="multisolve">
       <_title>Solve for multiple variables</_title>
       <_names>r:multisolve</_names>
       <argument index="1">
-        <_title>Equation Vector</_title>
+        <_title>Equation vector</_title>
       </argument>
       <argument index="2">
-        <_title>Variable Vector</_title>
+        <_title>Variable vector</_title>
       </argument>
     </builtin_function>
     <builtin_function name="solve">
@@ -1958,7 +1958,7 @@
         <_title>Function</_title>
       </argument>
       <argument index="2">
-        <_title>Variable of Integration</_title>
+        <_title>Variable of integration</_title>
       </argument>
     </builtin_function>
     <function>
@@ -2108,7 +2108,7 @@
         <_names>r:square</_names>
         <expression>\x^2</expression>
         <argument type="free" index="1">
-          <_title>Length of Side</_title>
+          <_title>Length of side</_title>
         </argument>
       </function>
       <function>
@@ -2116,7 +2116,7 @@
         <_names>r:square_perimeter</_names>
         <expression>\x*4</expression>
         <argument type="free" index="1">
-          <_title>Length of Side</_title>
+          <_title>Length of side</_title>
         </argument>
       </function>
     </category>
@@ -2127,7 +2127,7 @@
         <_names>r:cube</_names>
         <expression>\x^3</expression>
         <argument type="free" index="1">
-          <_title>Length of Side</_title>
+          <_title>Length of side</_title>
         </argument>
       </function>
       <function>
@@ -2135,7 +2135,7 @@
         <_names>r:cube_sa</_names>
         <expression>(\x^2)*6</expression>
         <argument type="free" index="1">
-          <_title>Length of Side</_title>
+          <_title>Length of side</_title>
         </argument>
       </function>
     </category>
@@ -2216,10 +2216,10 @@
         <_names>r:pyramid</_names>
         <expression>\x*\y*\z/3</expression>
         <argument type="free" index="1">
-          <_title>Length of Base</_title>
+          <_title>Length of base</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Width of Base</_title>
+          <_title>Width of base</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Height</_title>
@@ -2279,13 +2279,13 @@
         <_description>Calculates the demand elesticity. Also works for supply elasticity, income elasticity, cross-price elasticity, etc. Just replace demand, with supply, or price with income...&#10;&#10;Ex. elasticity(100-x^2, 3) calculates the demand elasticity when the price is 3 for the function "Q = 100 - x^2" where x is the default price variable.</_description>
         <expression>replace(diff(\x,\Z{x}),\Z,\y,1)*\y/replace(\x,\Z,\y)</expression>
         <argument type="free" index="1">
-          <_title>Demand Function</_title>
+          <_title>Demand function</_title>
         </argument>
         <argument type="free" index="2">
           <_title>Price</_title>
         </argument>
         <argument type="symbol" index="3">
-          <_title>Price Variable</_title>
+          <_title>Price variable</_title>
         </argument>
       </function>
       <function active="false">
@@ -2294,13 +2294,13 @@
         <subfunction precalculate="true">select(solve(\x=\y,\z),x&gt;=0,x,1)</subfunction>
         <expression>replace(integrate(\x-replace(\y,\Z{x},\1),\Z),\Z,\1,1)</expression>
         <argument type="free" index="1">
-          <_title>Demand Function</_title>
+          <_title>Demand function</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Supply Function or Price</_title>
+          <_title>Supply function or price</_title>
         </argument>
         <argument type="symbol" index="3">
-          <_title>Quantity Variabel</_title>
+          <_title>Quantity variabel</_title>
         </argument>
       </function>
       <function active="false">
@@ -2309,13 +2309,13 @@
         <subfunction precalculate="true">select(solve(\x=\y,\z),x&gt;=0,x,1)</subfunction>
         <expression>replace(integrate(replace(\y,\Z{x},\1)-\x,\Z),\Z,\1,1)</expression>
 	<argument type="free" index="1">
-          <_title>Supply Function</_title>
+          <_title>Supply function</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Demand Function or Price</_title>
+          <_title>Demand function or price</_title>
         </argument>
         <argument type="symbol" index="3">
-          <_title>Quantity Variabel</_title>
+          <_title>Quantity variabel</_title>
         </argument>
       </function>
     </category>
@@ -2330,7 +2330,7 @@
           <_title>Cost</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Salvage Value</_title>
+          <_title>Salvage value</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Life</_title>
@@ -2360,16 +2360,16 @@
         <_description>Returns the present value of an investment.&#10;&#10;If type = 1 then the payment is made at the beginning of the period, If type = 0 (or omitted) it is made at the end of each period.</_description>
         <expression>(-\A{0}-\z*(1+\x*\B{0})*(((1+\x)^\y-1)/\x))/((1+\x)^\y)</expression>
         <argument type="free" index="1">
-          <_title>Interest Rate</_title>
+          <_title>Interest rate</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Number of Periods</_title>
+          <_title>Number of periods</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Payment made each period</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Future Value</_title>
+          <_title>Future value</_title>
         </argument>
         <argument type="boolean" index="5">
           <_title>Type</_title>
@@ -2381,7 +2381,7 @@
         <_description>Calculates the nominal interest rate from a given effective interest rate compounded at given intervals.</_description>
         <expression>\y*(abs((\x+1)^(1/\y))-1)</expression>
         <argument type="free" index="1">
-          <_title>Effective Interest Rate</_title>
+          <_title>Effective interest rate</_title>
         </argument>
         <argument type="free" index="2">
           <_title>Periods</_title>
@@ -2393,10 +2393,10 @@
         <_description>Calculates the value of a zero-coupon (pure discount) bond.</_description>
         <expression>\x/((1+\y)^\z)</expression>
         <argument type="free" index="1">
-          <_title>Face Value</_title>
+          <_title>Face value</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Interest Rate</_title>
+          <_title>Interest rate</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Years</_title>
@@ -2408,10 +2408,10 @@
         <_description>Returns the yield for a treasury bill.</_description>
         <expression>(100-\z)/\z*(360/days(\x,\y,1,1))</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Price per $100 face value</_title>
@@ -2423,13 +2423,13 @@
         <_description>Returns the price per $100 value for a treasury bill.</_description>
         <expression>100*(1-(\z*days(\x,\y,1,1))/360)</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="free" index="3">
-          <_title>Discount Rate</_title>
+          <_title>Discount rate</_title>
         </argument>
       </function>
       <function>
@@ -2438,13 +2438,13 @@
         <_description>Returns the bond equivalent for a treasury bill.</_description>
         <expression>365*\z/(360-\z*days(\x,\y,1,1))</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="free" index="3">
-          <_title>Discount Rate</_title>
+          <_title>Discount rate</_title>
         </argument>
       </function>
       <function>
@@ -2453,18 +2453,18 @@
         <_description>Calculates the interest paid on a given period of an investment.</_description>
         <expression>(-\a*\x)-((-\a*\x)/\z*\y)</expression>
         <argument type="free" index="1">
-          <_title>Periodic Interest Rate</_title>
+          <_title>Periodic interest rate</_title>
         </argument>
         <argument type="integer" index="2">
-          <_title>Amortizement Period</_title>
+          <_title>Amortizement period</_title>
           <min>1</min>
         </argument>
         <argument type="integer" index="3">
-          <_title>Number of Periods</_title>
+          <_title>Number of periods</_title>
           <min>1</min>
         </argument>
         <argument type="free" index="4">
-          <_title>Present Value</_title>
+          <_title>Present value</_title>
         </argument>
       </function>
       <function>
@@ -2476,13 +2476,13 @@
           <_title>Rate</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Number of Periods</_title>
+          <_title>Number of periods</_title>
         </argument>
         <argument type="free" index="3">
-          <_title>Present Value</_title>
+          <_title>Present value</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Future Value</_title>
+          <_title>Future value</_title>
         </argument>
         <argument type="boolean" index="5">
           <_title>Type</_title>
@@ -2494,16 +2494,16 @@
         <_description>Calculates number of periods of an investment based on periodic constant payments and a constant interest rate.&#10;&#10;Type defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</_description>
         <expression>ln((\y*(1+\x*\B{0})-\A{0}*\x)/(\z*\x+\y*(1+\x*\B)))/ln(1+\x)</expression>
         <argument type="free" index="1">
-          <_title>Interest Rate</_title>
+          <_title>Interest rate</_title>
         </argument>
         <argument type="free" index="2">
           <_title>Payment made each period</_title>
         </argument>
         <argument type="free" index="3">
-          <_title>Present Value</_title>
+          <_title>Present value</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Future Value</_title>
+          <_title>Future value</_title>
         </argument>
         <argument type="free" index="5">
           <_title>Type</_title>
@@ -2515,23 +2515,23 @@
         <_description>Calculates the duration of a security.</_description>
         <expression></expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="free" index="3">
-          <_title>Annual Coupon Rate (%)</_title>
+          <_title>Annual coupon rate (%)</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Annualized Yield (%)</_title>
+          <_title>Annualized yield (%)</_title>
         </argument>
         <argument type="free" index="5">
           <!-- Reccurance -->
           <_title>Frequency</_title>
         </argument>
         <argument type="integer" index="6">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2545,10 +2545,10 @@
           <_title>Rate</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Present Value</_title>
+          <_title>Present value</_title>
         </argument>
         <argument type="free" index="3">
-          <_title>Future Value</_title>
+          <_title>Future value</_title>
         </argument>
       </function>
       <function>
@@ -2557,21 +2557,21 @@
         <_description>Calculates the amount of a payment of an annuity going towards principal.&#10;&#10;Type defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</_description>
         <expression>((-\a*(pow(1+\x,\z))-\B{0})/((1+\x*\C{0})*((pow(1+\x,\z)-1)/\x)))+(\a*pow(1+\x,(\y-1))+((-\a*(pow(1+\x,\z))-\B)/((1+\x*\C)*((pow(1+\x,\z)-1)/\x)))*((pow(1+\x,(\y-1))-1)/\x))*\x</expression>
         <argument type="free" index="1">
-          <_title>Periodic Interest Rate</_title>
+          <_title>Periodic interest rate</_title>
         </argument>
         <argument type="integer" index="2">
-          <_title>Amortizement Period</_title>
+          <_title>Amortizement period</_title>
           <min>1</min>
         </argument>
         <argument type="integer" index="3">
-          <_title>Number of Periods</_title>
+          <_title>Number of periods</_title>
           <min>1</min>
         </argument>
         <argument type="free" index="4">
-          <_title>Present Value</_title>
+          <_title>Present value</_title>
         </argument>
         <argument type="free" index="5">
-          <_title>Desired Future Value</_title>
+          <_title>Desired future value</_title>
         </argument>
         <argument type="boolean" index="6">
           <_title>Type</_title>
@@ -2583,7 +2583,7 @@
         <_description>Calculates the effective interest for a given nominal rate.</_description>
         <expression>(1+\x/\y)^\y-1</expression>
         <argument type="free" index="1">
-          <_title>Nominal Interest Rate</_title>
+          <_title>Nominal interest rate</_title>
         </argument>
         <argument type="free" index="2">
           <_title>Periods</_title>
@@ -2595,16 +2595,16 @@
         <_description>Computes the future value of an investment. This is based on periodic, constant payments and a constant interest rate.&#10;&#10;If type = 1 then the payment is made at the beginning of the period, If type = 0 (or omitted) it is made at the end of each period.</_description>
         <expression>-(\A{0}*((1+\x)^\y)+\z*(1+\x*\B{0})*(((1+\x)^\y-1)/\x))</expression>
         <argument type="free" index="1">
-          <_title>Interest Rate</_title>
+          <_title>Interest rate</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Number of Periods</_title>
+          <_title>Number of periods</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Payment made each period</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Present Value</_title>
+          <_title>Present value</_title>
         </argument>
         <argument type="boolean" index="5">
           <_title>Type</_title>
@@ -2619,7 +2619,7 @@
           <_title>Principal</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Interest Rate</_title>
+          <_title>Interest rate</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Years</_title>
@@ -2634,7 +2634,7 @@
           <_title>Principal</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Nominal Interest Rate</_title>
+          <_title>Nominal interest rate</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Periods per year</_title>
@@ -2649,21 +2649,21 @@
         <_description>Calculates the amount of a payment of an annuity going towards interest.&#10;&#10;Type defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</_description>
         <expression>-(\a*pow(1+\x,(\y-1))+((-\a*(pow(1+\x,\z))-\B)/((1+\x*\C)*((pow(1+\x,\z)-1)/\x)))*((pow(1+\x,(\y-1))-1)/\x))*\x</expression>
         <argument type="free" index="1">
-          <_title>Periodic Interest Rate</_title>
+          <_title>Periodic interest rate</_title>
         </argument>
         <argument type="integer" index="2">
           <_title>Period</_title>
           <min>1</min>
         </argument>
         <argument type="integer" index="3">
-          <_title>Number of Periods</_title>
+          <_title>Number of periods</_title>
           <min>1</min>
         </argument>
         <argument type="free" index="4">
-          <_title>Present Value</_title>
+          <_title>Present value</_title>
         </argument>
         <argument type="free" index="5">
-          <_title>Future Value</_title>
+          <_title>Future value</_title>
         </argument>
         <argument type="boolean" index="6">
           <_title>Type</_title>
@@ -2675,10 +2675,10 @@
         <_description>Returns the interest rate for a fully invested security.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>(\a-\z)/\z/yearfrac(\x,\y,\B{0},1)</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Investment</_title>
@@ -2687,7 +2687,7 @@
           <_title>Redemption</_title>
         </argument>
         <argument type="integer" index="5">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2698,10 +2698,10 @@
         <_description>Converts a decimal dollar price into a dollar price expressed as a fraction.</_description>
         <expression>int(\x)+frac(\x)*\y/10^ceil(log(\y))</expression>
         <argument type="free" index="1">
-          <_title>Decimal Dollar</_title>
+          <_title>Decimal dollar</_title>
         </argument>
         <argument type="integer" index="2">
-          <_title>Denominator of Fraction</_title>
+          <_title>Denominator of fraction</_title>
           <min>1</min>
         </argument>
       </function>
@@ -2711,10 +2711,10 @@
         <_description>Converts a dollar price expressed as a fraction into a dollar price expressed as a decimal number.</_description>
         <expression>int(\x)+frac(\x)*10^ceil(log(\y))/\y</expression>
         <argument type="free" index="1">
-          <_title>Fractional Dollar</_title>
+          <_title>Fractional dollar</_title>
         </argument>
         <argument type="integer" index="2">
-          <_title>Denominator of Fraction</_title>
+          <_title>Denominator of fraction</_title>
           <min>1</min>
         </argument>
       </function>
@@ -2724,19 +2724,19 @@
         <_description>Returns the amount received at the maturity date for an invested security.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360. The settlement date must be before maturity date.</_description>
         <expression>\z/(1-\a*yearfrac(\x,\y,\B{0},1))</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Investment</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Discount Rate</_title>
+          <_title>Discount rate</_title>
         </argument>
         <argument type="integer" index="5">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2747,10 +2747,10 @@
         <_description>Returns the discount rate for a security.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>(\a-\z)/\a/yearfrac(\x,\y,\B{0},1))</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Price per $100 face value</_title>
@@ -2759,7 +2759,7 @@
           <_title>Redemption</_title>
         </argument>
         <argument type="integer" index="5">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2770,19 +2770,19 @@
         <_description>Returns the accrued interest for a security which pays interest at maturity date.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>\A{1000}*\z*yearfrac(\x,\y,\B{0},1)</expression>
         <argument type="date" index="1">
-          <_title>Issue Date</_title>
+          <_title>Issue date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="free" index="3">
-          <_title>Annual Rate of Security</_title>
+          <_title>Annual rate of security</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Par Value</_title>
+          <_title>Par value</_title>
         </argument>
         <argument type="integer" index="5">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2793,19 +2793,19 @@
         <_description>Returns accrued interest for a security which pays periodic interest.&#10;&#10;Allowed frequencies are 1 - annual, 2 - semi-annual or 4 - quarterly. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>\b*\a/\c*\c*yearfrac(\x,\z,\D{0},1)+\y*0</expression>
         <argument type="date" index="1">
-          <_title>Issue Date</_title>
+          <_title>Issue date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>First Interest</_title>
+          <_title>First interest</_title>
         </argument>
         <argument type="date" index="3">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Annual Rate of Security</_title>
+          <_title>Annual rate of security</_title>
         </argument>
         <argument type="free" index="5">
-          <_title>Par Value</_title>
+          <_title>Par value</_title>
         </argument>
         <argument type="integer" index="6">
           <_title>Frequency</_title>
@@ -2813,7 +2813,7 @@
 	  <max>4</max>
         </argument>
         <argument type="integer" index="7">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2824,10 +2824,10 @@
         <_description>Returns the number of coupons to be paid between the settlement and the maturity.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>trunc(yearfrac(\x,\y,\A{0},1)*\z)</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="integer" index="3">
           <_title>Frequency</_title>
@@ -2835,7 +2835,7 @@
 	  <max>12</max>
         </argument>
         <argument type="integer" index="4">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2846,10 +2846,10 @@
         <_description>Calculates and returns the price per $100 face value of a security bond. The security does not pay interest at maturity.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>\a-\z*\a*yearfrac(\x,\y,\B{0},1)</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="free" index="3">
           <_title>Discount</_title>
@@ -2858,7 +2858,7 @@
           <_title>Redemption</_title>
         </argument>
         <argument type="integer" index="5">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2869,22 +2869,22 @@
         <_description>Calculates and returns the price per $100 face value of a security. The security pays interest at maturity.&#10;&#10;Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/360.</_description>
         <expression>(100+yearfrac(\z,\y,\C{0},1)*\a*100)/(1+yearfrac(\x,\y,\C,1)*\b)-yearfrac(\z,\x,\C,1)*\a*100</expression>
         <argument type="date" index="1">
-          <_title>Settlement Date</_title>
+          <_title>Settlement date</_title>
         </argument>
         <argument type="date" index="2">
-          <_title>Maturity Date</_title>
+          <_title>Maturity date</_title>
         </argument>
         <argument type="date" index="3">
-          <_title>Issue Date</_title>
+          <_title>Issue date</_title>
         </argument>
         <argument type="free" index="4">
-          <_title>Discount Rate</_title>
+          <_title>Discount rate</_title>
         </argument>
         <argument type="free" index="5">
-          <_title>Annual Yield</_title>
+          <_title>Annual yield</_title>
         </argument>
         <argument type="integer" index="6">
-          <_title>Day Counting Basis</_title>
+          <_title>Day counting basis</_title>
           <min>0</min>
 	  <max>4</max>
         </argument>
@@ -2895,19 +2895,19 @@
         <_description>Calculates the value of a level-coupon bond.</_description>
         <expression>(\y*\x/\z)*((1-1/(((1+(\b/\z))^(\a*\z))))/(\b/\z))+(\x/((1+(\b/\z))^(\a*\z)))</expression>
         <argument type="free" index="1">
-          <_title>Face Value</_title>
+          <_title>Face value</_title>
         </argument>
         <argument type="free" index="2">
-          <_title>Coupon Rate</_title>
+          <_title>Coupon rate</_title>
         </argument>
         <argument type="free" index="3">
-          <_title>Coupons per Year</_title>
+          <_title>Coupons per year</_title>
         </argument>
         <argument type="free" index="4">
           <_title>Years</_title>
         </argument>
         <argument type="free" index="5">
-          <_title>Market Interest Rate</_title>
+          <_title>Market interest rate</_title>
         </argument>
       </function>
     </category>

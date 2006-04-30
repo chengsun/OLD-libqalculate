@@ -60,7 +60,7 @@
 
 typedef vector<Prefix*> p_type;
 
-/** Parameters passed to plotting functions. */
+/// Parameters passed to plotting functions.
 struct PlotParameters {
 	/// Title label.
 	string title;
@@ -111,7 +111,7 @@ struct PlotParameters {
 	PlotParameters();
 };
 
-/** Parameters for plot data series. */
+/// Parameters for plot data series.
 struct PlotDataParameters {
 	/// Title label.
 	string title;
@@ -290,77 +290,285 @@ class Calculator {
 	vector<Prefix*> prefixes;
 	vector<DecimalPrefix*> decimal_prefixes;
 	vector<BinaryPrefix*> binary_prefixes;
-  
+
+	/** @name Constructor */
+	//@{
 	Calculator();
 	virtual ~Calculator();
+	//@}
 
-	bool utf8_pos_is_valid_in_name(char *pos);
-
-	void addStringAlternative(string replacement, string standard);
-	bool delStringAlternative(string replacement, string standard);
-	void addDefaultStringAlternative(string replacement, string standard);
-	bool delDefaultStringAlternative(string replacement, string standard);
-
-	bool showArgumentErrors() const;
-	void beginTemporaryStopMessages();
-	int endTemporaryStopMessages(int *message_count = NULL, int *warning_count = NULL);	
-	
-	/** Stores a value with an associated id. Mainly for internal use.
+	/** @name Functions for calculating expressions. */
+	//@{
+	/** Calculates an expression. The expression should be unlocalized first with unlocalizeExpression().
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
 	*
-	* @param mstruct The value to store.
-	* @param persistent If false the values will be removed from storage when retrieved with getId().
-	* @returns Storage id.
+	* @param[out] mstruct Math structure to fill with the result.
+	* @param str Expression.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
+	* @param[out] to_struct NULL or a math structure to fill with unit expression parsed after "to".
+	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
 	*/
-	size_t addId(MathStructure *mstruct, bool persistent = false);
-	/** Stores a function value with arguments parsed from a text string using Function::parse(), with an associated id. Mainly for internal use.
+	bool calculate(MathStructure *mstruct, string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	/** Calculates an expression. The expression should be unlocalized first with unlocalizeExpression().
+	*
+	* @param str Expression.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
+	* @param[out] to_struct NULL or a math structure to fill with unit expression parsed after "to".
+	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
+	* @returns The result of the calculation.
+	*/
+	MathStructure calculate(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	string printMathStructureTimeOut(const MathStructure &mstruct, int msecs = 100000, const PrintOptions &op = default_print_options);
+	int testCondition(string expression);
+	//@}
+
+	/** @name Functions for handling of threaded calculations */
+	//@{
+	/** Aborts the current calculation. */
+	void abort();
+	/** Aborts the current calculation. Used from within the calculation thread. */
+	void abort_this();
+	/** Returns true if the calculate or print thread is busy. */
+	bool busy();
+	/** Saves the state of the calculator. Used internally to be able to restore the state after aborted calculation. */
+	void saveState();
+	/** Restores the saved state of the calculator. Used internally to restore the state after aborted calculation. */
+	void restoreState();
+	/** Clears all stored values. Used internally after aborted calculation. */
+	void clearBuffers();
+	/** Terminate calculation and print threads if started. Do not use to terminate calculation. */
+	void terminateThreads();
+	//@}
+
+	/** @name Functions for manipulation of the RPN stack. */
+	//@{
+	/** Evaluates a value on the RPN stack.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param index Index, starting at 1, on the RPN stack.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
+	bool calculateRPNRegister(size_t index, int msecs, const EvaluationOptions &eo = default_evaluation_options);
+	/** Applies a mathematical operation to the first and second value on the RPN stack. The the second value is changed with input from the first value.
+	* For example, with OPERATION_SUBTRACT the first value is subtracted from the second. The first value on the stack is removed.
+	* If not enough registers is available, then zeros are added.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param op Operation.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
+	bool calculateRPN(MathOperation op, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Applies a mathematical operation to the first value on the RPN stack. The value is set as the first argument of the function.
+	* If no register is available, then zero is added.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
 	*
 	* @param f Mathematical function.
-	* @param str Arguments.
-	* @param po Parse options.
-	* @param persistent If false the values will be removed from storage when retrieved with getId().
-	* @returns Storage id.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
 	*/
-	size_t parseAddId(MathFunction *f, const string &str, const ParseOptions &po, bool persistent = false);
-	size_t parseAddIdAppend(MathFunction *f, const MathStructure &append_mstruct, const string &str, const ParseOptions &po, bool persistent = false);
-	size_t parseAddVectorId(const string &str, const ParseOptions &po, bool persistent = false);
-	/** Returns a stored value. Mainly for internal use.
-	* 
-	* @param id Storage id.
-	* @returns A stored value.
+	bool calculateRPN(MathFunction *f, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Applies bitwise not to the first value on the RPN stack.
+	* If no register is available, then zero is added.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
 	*/
-	MathStructure *getId(size_t id);	
-	/** Removes and unreferences (value->unref() will be called) a value from storage. Mainly for internal use.
-	* 
-	* @param id Storage id.
+	bool calculateRPNBitwiseNot(int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Applies logical not to the first value on the RPN stack.
+	* If no register is available, then zero is added.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
 	*/
-	void delId(size_t id);
+	bool calculateRPNLogicalNot(int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Applies a mathematical operation to the first and second value on the RPN stack. The the second value is changed with input from the first value.
+	* For example, with OPERATION_SUBTRACT the first value is subtracted from the second. The first value on the stack is removed.
+	* If not enough registers is available, then zeros are added.
+	*
+	* @param op Operation.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns The first value on the stack.
+	*/
+	MathStructure *calculateRPN(MathOperation op, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Applies a mathematical operation to the first value on the RPN stack. The value is set as the first argument of the function.
+	* If no register is available, then zero is added.
+	*
+	* @param f Mathematical function.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns The first value on the stack.
+	*/
+	MathStructure *calculateRPN(MathFunction *f, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Applies bitwise not to the first value on the RPN stack.
+	* If no register is available, then zero is added.
+	*
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns The first value on the stack.
+	*/
+	MathStructure *calculateRPNBitwiseNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Applies logical not to the first value on the RPN stack.
+	* If no register is available, then zero is added.
+	*
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the unevaluated result.
+	* @returns The first value on the stack.
+	*/
+	MathStructure *calculateRPNLogicalNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
+	/** Evaluates a value and adds the result first on the RPN stack.
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param mstruct Value.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation of the expression.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
+	bool RPNStackEnter(MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
+	/** Calculates an expression and adds the result first on the RPN stack. The expression should be unlocalized first with unlocalizeExpression().
+	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
+	* The calculation can then be stopped with abort().
+	*
+	* @param str Expression.
+	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
+	* @param[out] to_struct NULL or a math structure to fill with unit expression parsed after "to".
+	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
+	* @returns true if the calculation was successfully started (and finished if msecs > 0).
+	*/
+	bool RPNStackEnter(string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	/** Adds a value first on the RPN stack.
+	*
+	* @param mstruct Value.
+	* @param eval If true, the the mathematical structure will be evaluated first.
+	*/
+	void RPNStackEnter(MathStructure *mstruct, bool eval = false);
+	/** Calculates an expression adds the result first on the RPN stack. The expression should be unlocalized first with unlocalizeExpression().
+	*
+	* @param str Expression.
+	* @param eo Options for the evaluation and parsing of the expression.
+	* @param[out] parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
+	* @param[out] to_struct NULL or a math structure to fill with unit expression parsed after "to".
+	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
+	*/
+	void RPNStackEnter(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	bool setRPNRegister(size_t index, MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
+	bool setRPNRegister(size_t index, string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	void setRPNRegister(size_t index, MathStructure *mstruct, bool eval = false);
+	void setRPNRegister(size_t index, string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
+	void deleteRPNRegister(size_t index);
+	MathStructure *getRPNRegister(size_t index = 1) const;
+	size_t RPNStackSize() const;
+	void clearRPNStack();
+	void moveRPNRegister(size_t old_index, size_t new_index);
+	void moveRPNRegisterUp(size_t index);
+	void moveRPNRegisterDown(size_t index);
+	//@}
 
-	/** Returns variable for an index (starting at zero). All variables can be traversed by starting at index zero and increasing the index until NULL is returned.
+	/** @name Functions for expression parsing. */
+	//@{
+	/** Returns a localized expressions. Affects decimal signs and argument separators.
 	*
-	* @param index Index of variable.
-	* @returns Variable for index or NULL if not found.
+	* @param str The expression to localize.
+	* @returns A localized expression.
 	*/
-	Variable *getVariable(size_t index) const;
-	/** Returns unit for an index (starting at zero). All units can be traversed by starting at index zero and increasing the index until NULL is returned.
+	string localizeExpression(string str) const;
+	/** Returns an unlocalized expressions. Affects decimal signs and argument separators.
 	*
-	* @param index Index of unit.
-	* @returns Unit for index or NULL if not found.
+	* @param str The expression to unlocalize.
+	* @returns An unlocalized expression.
 	*/
-	Unit *getUnit(size_t index) const;	
-	/** Returns function for an index (starting at zero). All functions can be traversed by starting at index zero and increasing the index until NULL is returned.
+	string unlocalizeExpression(string str, const ParseOptions &po = default_parse_options) const;
+	/** Split an expression string after and before " to ".
 	*
-	* @param index Index of function.
-	* @returns Function for index or NULL if not found.
+	* @param[out] str The expression. Will be set to the string before " to ".
+	* @param[out] to_str Will be set to the string after " to ".
+	* @param eo Options for the evaluation and parsing of the expression (nothing will be done if units are not enabled).
+	* @returns true if " to " was found and the expression split.
 	*/
-	MathFunction *getFunction(size_t index) const;	
-	
+	bool separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const;
+
+	void parseSigns(string &str) const;
+	/** Parse an expression and place in a MathStructure object.
+	*
+	* @param str Expression
+	* @param po Parse options.
+	* @returns MathStructure with result of parse.
+	*/
+	MathStructure parse(string str, const ParseOptions &po = default_parse_options);
+	void parse(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
+	bool parseNumber(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
+	bool parseOperators(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
+	bool parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po, MathOperation s);
+	bool parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po);
+	//@}
+
+	/** @name Functions converting epxressions between units. */
+	//@{
+	/** Converts to a unit expression.
+	* The converted value is evaluated.
+	*
+	* @param mstruct The value to convert.
+	* @param composite_ Unit expression.
+	* @param eo Evaluation options.
+	* @returns Converted value.
+	*/
+	MathStructure convert(const MathStructure &mstruct, string composite_, const EvaluationOptions &eo = default_evaluation_options);
+	/** Converts to a unit.
+	* The converted value is evaluated.
+	*
+	* @param mstruct The value to convert.
+	* @param composite_ Unit to convert to.
+	* @param eo Evaluation options.
+	* @param always_convert ...
+	* @returns Converted value.
+	*/
+	MathStructure convert(const MathStructure &mstruct, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options, bool always_convert = true);
+	MathStructure convert(double value, Unit *from_unit, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options);
+	MathStructure convert(string str, Unit *from_unit, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options);
+	MathStructure convertToBaseUnits(const MathStructure &mstruct, const EvaluationOptions &eo = default_evaluation_options);
+	Unit *getBestUnit(Unit *u, bool allow_only_div = false);
+	MathStructure convertToBestUnit(const MathStructure &mstruct, const EvaluationOptions &eo = default_evaluation_options);
+	MathStructure convertToCompositeUnit(const MathStructure &mstruct, CompositeUnit *cu, const EvaluationOptions &eo = default_evaluation_options, bool always_convert = true);
+	//@}
+
+	/** @name Functions for default assumptions for unknown variables and symbols */
+	//@{
 	/** Set assumptions for objects without own assumptions (unknown variables and symbols).
 	*/
 	void setDefaultAssumptions(Assumptions *ass);
 	/** Returns the default assumptions for objects without own assumptions (unknown variables and symbols).
 	*/
 	Assumptions *defaultAssumptions();
-	
+	//@}
+
+	/** @name Functions for retrieval of angle units */
+	//@{	
 	/** Returns the gradians unit.
 	*/
 	Unit *getGraUnit();
@@ -370,6 +578,7 @@ class Calculator {
 	/** Returns the degrees unit.
 	*/
 	Unit *getDegUnit();
+	//@}
 
 	/** @name Functions for finding a suitable prefix. */
 	//@{
@@ -444,225 +653,7 @@ class Calculator {
 	void prefixNameChanged(Prefix *p, bool new_item = false);	
 	//@}
 
-	/** Set default precision for approximate calculations.
-	*
-	* @param precision Precision.
-	*/
-	void setPrecision(int precision = DEFAULT_PRECISION);
-	/** Returns default precision for approximate calculations.
-	*/
-	int getPrecision() const;
-
-	/** Returns the preferred decimal point character.
-	*/
-	const string &getDecimalPoint() const;
-	/** Returns the preferred comma character for separating arguments.*/
-	const string &getComma() const;	
-	/** Sets argument separator and decimal sign from the current locale. Mainly for internal use. */
-	void setLocale();
-	/** Resets argument separator and decimal sign. Mainly for internal use. */
-	void unsetLocale();
-	/** Returns the translated text string used in expressions for converting to a specific unit expression (ex "5 meters to feet.*/
-	string localToString() const;
-	
-	/** Unloads all non-builtin variables. */
-	void resetVariables();
-	/** Unloads all non-builtin functions. */
-	void resetFunctions();	
-	/** Unloads all non-builtin units. */
-	void resetUnits();
-	/** Unloads all non-builtin variables, functions and units. */	
-	void reset();
-	/** Adds builtin variables. Called automatically when the calculator is created. */
-	void addBuiltinVariables();
-	/** Adds builtin functions. Called automatically when the calculator is created. */
-	void addBuiltinFunctions();
-	/** Adds builtin units. Called automatically when the calculator is created. */
-	void addBuiltinUnits();
-	/** Saves the state of the calculator. Used internally to be able to restore the state after aborted calculation. */
-	void saveState();
-	/** Restores the saved state of the calculator. Used internally to restore the state after aborted calculation. */
-	void restoreState();
-	/** Clears all stored values. Used internally after aborted calculation. */
-	void clearBuffers();
-	/** Aborts the current calculation. */
-	void abort();
-	/** Aborts the current calculation. Used from within the calculation thread. */
-	void abort_this();
-	bool busy();
-	/** Terminate calculation and print threads if started. Do not use to terminate calculation. */
-	void terminateThreads();
-
-	/** @name Functions for manipulation of the RPN stack. */
-	//@{
-	/** Evaluates a value on the RPN stack.
-	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
-	* The calculation can then be stopped with abort().
-	*
-	* @param index Index, starting at 1, on the RPN stack.
-	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
-	* @param eo Options for the evaluation and parsing of the expression.
-	* @returns true if the calculation was successfully started (and finished if msecs > 0).
-	*/
-	bool calculateRPNRegister(size_t index, int msecs, const EvaluationOptions &eo = default_evaluation_options);
-	/** Applies a mathematical operation to the first and second value on the RPN stack. The the second value is changed with input from the first value.
-	* For example, with OPERATION_SUBTRACT the first value is subtracted from the second. The first value on the stack is removed.
-	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
-	* The calculation can then be stopped with abort().
-	*
-	* @param op Operation.
-	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
-	* @param eo Options for the evaluation and parsing of the expression.
-	* @param parsed_struct NULL or a math structure to fill with the unevaluated result.
-	* @returns true if the calculation was successfully started (and finished if msecs > 0).
-	*/
-	bool calculateRPN(MathOperation op, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	bool calculateRPN(MathFunction *f, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	bool calculateRPNBitwiseNot(int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	bool calculateRPNLogicalNot(int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	/** Applies a mathematical operation to the first and second value on the RPN stack. The the second value is changed with input from the first value.
-	* For example, with OPERATION_SUBTRACT the first value is subtracted from the second. The first value on the stack is removed.
-	*
-	* @param op Operation.
-	* @param eo Options for the evaluation and parsing of the expression.
-	* @param parsed_struct NULL or a math structure to fill with the unevaluated result.
-	* @returns The first value on the stack.
-	*/
-	MathStructure *calculateRPN(MathOperation op, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	MathStructure *calculateRPN(MathFunction *f, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	MathStructure *calculateRPNBitwiseNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	MathStructure *calculateRPNLogicalNot(const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL);
-	/** Evaluates a value and adds the result first on the RPN stack.
-	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
-	* The calculation can then be stopped with abort().
-	*
-	* @param mstruct Value.
-	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
-	* @param eo Options for the evaluation of the expression.
-	* @returns true if the calculation was successfully started (and finished if msecs > 0).
-	*/
-	bool RPNStackEnter(MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
-	/** Calculates an expression and adds the result first on the RPN stack. The expression should be unlocalized first with unlocalizeExpression().
-	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
-	* The calculation can then be stopped with abort().
-	*
-	* @param str Expression.
-	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
-	* @param eo Options for the evaluation and parsing of the expression.
-	* @param parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
-	* @param to_struct NULL or a math structure to fill with unit expression parsed after "to".
-	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
-	* @returns true if the calculation was successfully started (and finished if msecs > 0).
-	*/
-	bool RPNStackEnter(string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	/** Adds a value first on the RPN stack.
-	*
-	* @param mstruct Value.
-	* @param eval If true, the the mathematical structure will be evaluated first.
-	*/
-	void RPNStackEnter(MathStructure *mstruct, bool eval = false);
-	/** Calculates an expression adds the result first on the RPN stack. The expression should be unlocalized first with unlocalizeExpression().
-	*
-	* @param str Expression.
-	* @param eo Options for the evaluation and parsing of the expression.
-	* @param parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
-	* @param to_struct NULL or a math structure to fill with unit expression parsed after "to".
-	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
-	*/
-	void RPNStackEnter(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	bool setRPNRegister(size_t index, MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
-	bool setRPNRegister(size_t index, string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	void setRPNRegister(size_t index, MathStructure *mstruct, bool eval = false);
-	void setRPNRegister(size_t index, string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	void deleteRPNRegister(size_t index);
-	MathStructure *getRPNRegister(size_t index = 1) const;
-	size_t RPNStackSize() const;
-	void clearRPNStack();
-	void moveRPNRegister(size_t old_index, size_t new_index);
-	void moveRPNRegisterUp(size_t index);
-	void moveRPNRegisterDown(size_t index);
-	//@}
-
-	/** @name Functions for calculating expressions. */
-	//@{
-	/** Calculates an expression. The expression should be unlocalized first with unlocalizeExpression().
-	* This function starts the calculation in a separate thread and will return when the calculation has started unless a maximum time has been specified.
-	* The calculation can then be stopped with abort().
-	*
-	* @param mstruct Math structure to fill with the result.
-	* @param str Expression.
-	* @param msecs The maximum time for the calculation in milliseconds. If msecs <= 0 the time will be unlimited.
-	* @param eo Options for the evaluation and parsing of the expression.
-	* @param parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
-	* @param to_struct NULL or a math structure to fill with unit expression parsed after "to".
-	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
-	* @returns true if the calculation was successfully started (and finished if msecs > 0).
-	*/
-	bool calculate(MathStructure *mstruct, string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	/** Calculates an expression. The expression should be unlocalized first with unlocalizeExpression().
-	*
-	* @param str Expression.
-	* @param eo Options for the evaluation and parsing of the expression.
-	* @param parsed_struct NULL or a math structure to fill with the result of the parsing of the expression.
-	* @param to_struct NULL or a math structure to fill with unit expression parsed after "to".
-	* @param make_to_division If true, the expression after "to" will be interpreted as a unit epxression to convert the result to.
-	* @returns The result of the calculation.
-	*/
-	MathStructure calculate(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	string printMathStructureTimeOut(const MathStructure &mstruct, int msecs = 100000, const PrintOptions &op = default_print_options);
-	//@}
-
-	/** @name Functions expression parsing. */
-	//@{
-	/** Returns a localized expressions. Affects decimal signs and argument separators.
-	*
-	* @param str The expression to localize.
-	* @returns A localized expression.
-	*/
-	string localizeExpression(string str) const;
-	/** Returns an unlocalized expressions. Affects decimal signs and argument separators.
-	*
-	* @param str The expression to unlocalize.
-	* @returns An unlocalized expression.
-	*/
-	string unlocalizeExpression(string str, const ParseOptions &po = default_parse_options) const;
-	/** Split an expression string after and before " to ".
-	*
-	* @param str The expression. Will be set to the string before " to ".
-	* @param to_str Will be set to the string after " to ".
-	* @param eo Options for the evaluation and parsing of the expression (nothing will be done if units are not enabled).
-	* @returns true if " to " was found and the expression split.
-	*/
-	bool separateToExpression(string &str, string &to_str, const EvaluationOptions &eo) const;
-
-	void parseSigns(string &str) const;
-	/** Parse an expression and place in a MathStructure object.
-	*
-	* @param str Expression
-	* @param po Parse options.
-	* @returns MathStructure with result of parse.
-	*/
-	MathStructure parse(string str, const ParseOptions &po = default_parse_options);
-	void parse(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
-	bool parseNumber(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
-	bool parseOperators(MathStructure *mstruct, string str, const ParseOptions &po = default_parse_options);
-	bool parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po, MathOperation s);
-	bool parseAdd(string &str, MathStructure *mstruct, const ParseOptions &po);
-	//@}
-
-	/** @name Functions converting epxressions between units. */
-	//@{
-	MathStructure convert(double value, Unit *from_unit, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options);
-	MathStructure convert(string str, Unit *from_unit, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options);
-	MathStructure convert(const MathStructure &mstruct, Unit *to_unit, const EvaluationOptions &eo = default_evaluation_options, bool always_convert = true);
-	MathStructure convert(const MathStructure &mstruct, string composite_, const EvaluationOptions &eo = default_evaluation_options);
-	MathStructure convertToBaseUnits(const MathStructure &mstruct, const EvaluationOptions &eo = default_evaluation_options);
-	Unit *getBestUnit(Unit *u, bool allow_only_div = false);
-	MathStructure convertToBestUnit(const MathStructure &mstruct, const EvaluationOptions &eo = default_evaluation_options);
-	MathStructure convertToCompositeUnit(const MathStructure &mstruct, CompositeUnit *cu, const EvaluationOptions &eo = default_evaluation_options, bool always_convert = true);
-	//@}
-
-	/** @name Functions for managing functions, variables, units and prefixes. */
+	/** @name Functions for managing functions, variables, units, prefixes and data sets. */
 	//@{
 	void expressionItemActivated(ExpressionItem *item);
 	void expressionItemDeactivated(ExpressionItem *item);
@@ -725,6 +716,43 @@ class Calculator {
 	DataSet* getDataSet(string name);
 	MathFunction* getFunction(string name_);	
 	MathFunction* getActiveFunction(string name_);
+	/** Returns variable for an index (starting at zero). All variables can be traversed by starting at index zero and increasing the index until NULL is returned.
+	*
+	* @param index Index of variable.
+	* @returns Variable for index or NULL if not found.
+	*/
+	Variable *getVariable(size_t index) const;
+	/** Returns unit for an index (starting at zero). All units can be traversed by starting at index zero and increasing the index until NULL is returned.
+	*
+	* @param index Index of unit.
+	* @returns Unit for index or NULL if not found.
+	*/
+	Unit *getUnit(size_t index) const;	
+	/** Returns function for an index (starting at zero). All functions can be traversed by starting at index zero and increasing the index until NULL is returned.
+	*
+	* @param index Index of function.
+	* @returns Function for index or NULL if not found.
+	*/
+	MathFunction *getFunction(size_t index) const;
+	bool unitIsUsedByOtherUnits(const Unit *u) const;
+	//@}
+
+	/** @name Functions for handling of builtin expression items */
+	//@{
+	/** Unloads all non-builtin variables. */
+	void resetVariables();
+	/** Unloads all non-builtin functions. */
+	void resetFunctions();	
+	/** Unloads all non-builtin units. */
+	void resetUnits();
+	/** Unloads all non-builtin variables, functions and units. */	
+	void reset();
+	/** Adds builtin variables. Called automatically when the calculator is created. */
+	void addBuiltinVariables();
+	/** Adds builtin functions. Called automatically when the calculator is created. */
+	void addBuiltinFunctions();
+	/** Adds builtin units. Called automatically when the calculator is created. */
+	void addBuiltinUnits();
 	//@}
 
 	/** @name Functions for testing validity of functions, variable and unit names. */
@@ -753,6 +781,7 @@ class Calculator {
 	bool unitNameIsValid(const char *name_);
 	bool unitNameIsValid(const char *name_, int version_numbers[3], bool is_user_defs);
 	bool unitNameIsValid(const string &name_, int version_numbers[3], bool is_user_defs);
+	bool utf8_pos_is_valid_in_name(char *pos);
 	string convertToValidUnitName(string name_);
 	/** Checks if a name is used by another object which is not allowed to have the same name.
 	*
@@ -767,10 +796,6 @@ class Calculator {
 	string getName(string name = "", ExpressionItem *object = NULL, bool force = false, bool always_append = false);
 	//@}
 
-	bool unitIsUsedByOtherUnits(const Unit *u) const;
-	
-
-
 	/** @name Functions for message handling. */
 	//@{
 	void error(bool critical, const char *TEMPLATE,...);
@@ -783,8 +808,10 @@ class Calculator {
 	/** Removes the first message in queue and returns the next.
 	*/
 	CalculatorMessage *nextMessage();
+	bool showArgumentErrors() const;
+	void beginTemporaryStopMessages();
+	int endTemporaryStopMessages(int *message_count = NULL, int *warning_count = NULL);	
 	//@}
-
 
 	/** @name Functions for loading and saving definitions (variables, functions, units, etc.). */
 	//@{
@@ -861,8 +888,6 @@ class Calculator {
 	bool importCSV(const char *file_name, int first_row = 1, bool headers = true, string delimiter = ",", bool to_matrix = false, string name = "", string title = "", string category = "");
 	bool exportCSV(const MathStructure &mstruct, const char *file_name, string delimiter = ",");
 	//@}
-
-	int testCondition(string expression);
 	
 	/** @name Functions for exchange rates. */
 	//@{
@@ -924,6 +949,74 @@ class Calculator {
 	bool invokeGnuplot(string commands, string commandline_extra = "", bool persistent = false);
 	bool closeGnuplot();
 	bool gnuplotOpen();
+	//@}
+
+	/** @name Functions for global precision */
+	//@{
+	/** Set default precision for approximate calculations.
+	*
+	* @param precision Precision.
+	*/
+	void setPrecision(int precision = DEFAULT_PRECISION);
+	/** Returns default precision for approximate calculations.
+	*/
+	int getPrecision() const;
+	//@}
+
+	/** @name Functions for localization */
+	//@{
+	/** Returns the preferred decimal point character.
+	*/
+	const string &getDecimalPoint() const;
+	/** Returns the preferred comma character for separating arguments.*/
+	const string &getComma() const;	
+	/** Sets argument separator and decimal sign from the current locale. Mainly for internal use. */
+	void setLocale();
+	/** Resets argument separator and decimal sign. Mainly for internal use. */
+	void unsetLocale();
+	/** Returns the translated text string used in expressions for converting to a specific unit expression (ex "5 meters to feet.*/
+	string localToString() const;
+	//@}
+
+	/** @name Functions adding alternative symbols for operators and such */
+	//@{
+	void addStringAlternative(string replacement, string standard);
+	bool delStringAlternative(string replacement, string standard);
+	void addDefaultStringAlternative(string replacement, string standard);
+	bool delDefaultStringAlternative(string replacement, string standard);
+	//@}
+
+	/** @name Functions for storing values with associated identifiers */
+	//@{
+	/** Stores a value with an associated id. Mainly for internal use.
+	*
+	* @param mstruct The value to store.
+	* @param persistent If false the values will be removed from storage when retrieved with getId().
+	* @returns Storage id.
+	*/
+	size_t addId(MathStructure *mstruct, bool persistent = false);
+	/** Stores a function value with arguments parsed from a text string using Function::parse(), with an associated id. Mainly for internal use.
+	*
+	* @param f Mathematical function.
+	* @param str Arguments.
+	* @param po Parse options.
+	* @param persistent If false the values will be removed from storage when retrieved with getId().
+	* @returns Storage id.
+	*/
+	size_t parseAddId(MathFunction *f, const string &str, const ParseOptions &po, bool persistent = false);
+	size_t parseAddIdAppend(MathFunction *f, const MathStructure &append_mstruct, const string &str, const ParseOptions &po, bool persistent = false);
+	size_t parseAddVectorId(const string &str, const ParseOptions &po, bool persistent = false);
+	/** Returns a stored value. Mainly for internal use.
+	* 
+	* @param id Storage id.
+	* @returns A stored value.
+	*/
+	MathStructure *getId(size_t id);	
+	/** Removes and unreferences (value->unref() will be called) a value from storage. Mainly for internal use.
+	* 
+	* @param id Storage id.
+	*/
+	void delId(size_t id);
 	//@}
 		
 };

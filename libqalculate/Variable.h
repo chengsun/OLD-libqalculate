@@ -15,6 +15,8 @@
 #include <libqalculate/ExpressionItem.h>
 #include <libqalculate/includes.h>
 
+/** @file */
+
 #define DECLARE_BUILTIN_VARIABLE(x)	class x : public DynamicVariable { \
 					  private: \
 						void calculate() const;	\
@@ -24,37 +26,52 @@
 						ExpressionItem *copy() const {return new x(this);} \
 					};
 
-/** Type assumption.
+/// Type assumption.
+/**
+* Each type is a subset of the type above.
 */
 typedef enum {
 	ASSUMPTION_TYPE_NONE = 0,
+	/// Multiplication is NOT commutative
 	ASSUMPTION_TYPE_NONMATRIX = 1,
 	ASSUMPTION_TYPE_NUMBER = 2,
+	/// im(x) != 0
 	ASSUMPTION_TYPE_COMPLEX = 3,
 	ASSUMPTION_TYPE_REAL = 4,
 	ASSUMPTION_TYPE_RATIONAL = 5,
 	ASSUMPTION_TYPE_INTEGER = 6
 } AssumptionType;
 
-/** Signedness assumption.
-*/
+/// Signedness assumption.
 typedef enum {
+	/// x = ?
 	ASSUMPTION_SIGN_UNKNOWN,
+	/// x > 0
 	ASSUMPTION_SIGN_POSITIVE,
+	/// x >= 0
 	ASSUMPTION_SIGN_NONNEGATIVE,
+	/// x < 0
 	ASSUMPTION_SIGN_NEGATIVE,
+	/// x <= 0
 	ASSUMPTION_SIGN_NONPOSITIVE,
+	/// x != 0
 	ASSUMPTION_SIGN_NONZERO
 } AssumptionSign;
 
-enum {
+/// Type of variable
+typedef enum {
+	/// class Variable
 	SUBTYPE_VARIABLE,
+	/// class UnknownVariable
 	SUBTYPE_UNKNOWN_VARIABLE,
+	/// class KnownVariable
 	SUBTYPE_KNOWN_VARIABLE
-};
+} VariableSubtype;
 
 /// An assumption about an unknown mathematical value.
-/** Assumptions have a type and a sign. The type describes the type of the value -- if it represents a number or something else, and what type of number is represented. The sign restricts the signedness of a number. The sign generally only applies the assumptions representing a number. The assumption class also includes max and min values, which however are not used anywhere yet.
+/** Assumptions have a type and a sign. The type describes the type of the value -- if it represents a number or something else, and what type of number is represented.
+* The sign restricts the signedness of a number. The sign generally only applies the assumptions representing a number.
+* The assumption class also includes max and min values, which however are not used anywhere yet.
 */
 class Assumptions {
 
@@ -112,6 +129,10 @@ class Variable : public ExpressionItem {
 	virtual ExpressionItem *copy() const = 0;
 	virtual void set(const ExpressionItem *item);
 	virtual int type() const {return TYPE_VARIABLE;}
+	/** Returns the subtype of the variable, corresponding to which subsubclass the object belongs to.
+	*
+	* @returns ::VariableSubtype.
+	*/
 	virtual int subtype() const {return SUBTYPE_VARIABLE;}
 	/** Returns if the variable has a known value (as oppossed to assumptions).
 	*
@@ -202,7 +223,8 @@ class UnknownVariable : public Variable {
 /// A variable with a known value.
 /** Known variables have an associated value. The value can be a simple number or a full mathematical expression. The known variable class is used both for variable values and constants.
 *
-* The value can be provided as an expression in the form of a text string or as a mathematical value in the form of an object of the MathStructure class. The text string is transformed when needed, which saves time when loading many variable definitions which might not be used, at least not immediately.
+* The value can be provided as an expression in the form of a text string or as a mathematical value in the form of an object of the MathStructure class.
+* The text string is parsed when needed, which saves time when loading many variable definitions which might not be used, at least not immediately.
 */
 class KnownVariable : public Variable {
 

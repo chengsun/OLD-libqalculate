@@ -75,25 +75,23 @@ class Unit : public ExpressionItem {
 	* @returns true if the unit is a currency.
 	*/
 	bool isCurrency() const;
-	void setPlural(string name_, bool force = true);
-	void setSingular(string name_, bool force = true);
 	/** Returns a display string representing the unit in an expression.
 	*
 	* Equivalent to preferredName() for Unit and AliasUnit, but closer to MathStructure::print() for CompositeUnit (prints out base expression).
 	*/
 	virtual string print(bool plural_, bool short_, bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
 	virtual const string &plural(bool return_singular_if_no_plural = true, bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
-	virtual const string &singular(bool return_short_if_no_singular = true, bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
-	virtual const string &shortName(bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
+	virtual const string &singular(bool return_abbreviation_if_no_singular = true, bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
+	virtual const string &abbreviation(bool return_singular_if_no_abbreviation = true, bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
 	virtual bool isUsedByOtherUnits() const;
 	virtual Unit* baseUnit() const;
-	virtual MathStructure &baseValue(MathStructure &mvalue, MathStructure &mexp) const;
-	virtual MathStructure &convertToBase(MathStructure &mvalue, MathStructure &mexp) const;
-	virtual MathStructure &baseValue(MathStructure &mvalue) const;
-	virtual MathStructure &convertToBase(MathStructure &mvalue) const;
-	virtual MathStructure baseValue() const;
-	virtual MathStructure convertToBase() const;
-	virtual int baseExp(int exp_ = 1) const;
+	virtual MathStructure &convertToBaseUnit(MathStructure &mvalue, MathStructure &mexp) const;
+	virtual MathStructure &convertFromBaseUnit(MathStructure &mvalue, MathStructure &mexp) const;
+	virtual MathStructure &convertToBaseUnit(MathStructure &mvalue) const;
+	virtual MathStructure &convertFromBaseUnit(MathStructure &mvalue) const;
+	virtual MathStructure convertToBaseUnit() const;
+	virtual MathStructure convertFromBaseUnit() const;
+	virtual int baseExponent(int exp = 1) const;
 	virtual int type() const;
 	/** Returns the subtype of the unit, corresponding to which subsubclass the object belongs to.
 	*
@@ -160,13 +158,13 @@ class AliasUnit : public Unit {
 
   protected:
 
-	string value, rvalue;
-	int exp;
-	Unit *unit;
+	string svalue, sinverse;
+	int i_exp;
+	Unit *o_unit;
 
   public:
 
-	AliasUnit(string cat_, string name_, string plural_, string singular_, string title_, Unit *alias, string relation = "1", int exp_ = 1, string inverse = "", bool is_local = true, bool is_builtin = false, bool is_active = true);
+	AliasUnit(string cat_, string name_, string plural_, string singular_, string title_, Unit *alias, string relation = "1", int exp = 1, string inverse = "", bool is_local = true, bool is_builtin = false, bool is_active = true);
 	AliasUnit(const AliasUnit *unit);		
 	AliasUnit();			
 	virtual ~AliasUnit();
@@ -187,17 +185,17 @@ class AliasUnit : public Unit {
 	* Sets the inverse relation expression.
 	*/
 	virtual void setInverseExpression(string inverse);
-	virtual MathStructure &firstBaseValue(MathStructure &mvalue, MathStructure &mexp) const;
-	virtual MathStructure &convertToFirstBase(MathStructure &mvalue, MathStructure &mexp) const;
-	virtual MathStructure &baseValue(MathStructure &mvalue, MathStructure &mexp) const;
-	virtual MathStructure &convertToBase(MathStructure &mvalue, MathStructure &mexp) const;
-	virtual MathStructure &baseValue(MathStructure &mvalue) const;
-	virtual MathStructure &convertToBase(MathStructure &mvalue) const;
-	virtual MathStructure baseValue() const;
-	virtual MathStructure convertToBase() const;
-	virtual int baseExp(int exp_ = 1) const;
-	virtual void setExponent(int exp_);
-	virtual int firstBaseExp() const;
+	virtual MathStructure &convertToFirstBaseUnit(MathStructure &mvalue, MathStructure &mexp) const;
+	virtual MathStructure &convertFromFirstBaseUnit(MathStructure &mvalue, MathStructure &mexp) const;
+	virtual MathStructure &convertToBaseUnit(MathStructure &mvalue, MathStructure &mexp) const;
+	virtual MathStructure &convertFromBaseUnit(MathStructure &mvalue, MathStructure &mexp) const;
+	virtual MathStructure &convertToBaseUnit(MathStructure &mvalue) const;
+	virtual MathStructure &convertFromBaseUnit(MathStructure &mvalue) const;
+	virtual MathStructure convertToBaseUnit() const;
+	virtual MathStructure convertFromBaseUnit() const;
+	virtual int baseExponent(int exp = 1) const;
+	virtual void setExponent(int exp);
+	virtual int firstBaseExponent() const;
 	virtual int subtype() const;
 	virtual bool isChildOf(Unit *u) const;
 	virtual bool isParentOf(Unit *u) const;
@@ -218,7 +216,7 @@ class AliasUnit_Composite : public AliasUnit {
 
   public:
 
-	AliasUnit_Composite(Unit *alias, int exp_ = 1, Prefix *prefix_ = NULL);
+	AliasUnit_Composite(Unit *alias, int exp = 1, Prefix *prefix_ = NULL);
 	AliasUnit_Composite(const AliasUnit_Composite *unit);			
 	virtual ~AliasUnit_Composite();
 
@@ -228,9 +226,9 @@ class AliasUnit_Composite : public AliasUnit {
 	virtual string print(bool plural_, bool short_, bool use_unicode = false, bool (*can_display_unicode_string_function) (const char*, void*) = NULL, void *can_display_unicode_string_arg = NULL) const;
 	virtual Prefix *prefix() const;
 	virtual int prefixExponent() const;	
-	virtual void set(Unit *u, int exp_ = 1, Prefix *prefix_ = NULL);
-	virtual MathStructure &firstBaseValue(MathStructure &mvalue, MathStructure &mexp) const;
-	virtual MathStructure &convertToFirstBase(MathStructure &mvalue, MathStructure &mexp) const;
+	virtual void set(Unit *u, int exp = 1, Prefix *prefix_ = NULL);
+	virtual MathStructure &convertToFirstBaseUnit(MathStructure &mvalue, MathStructure &mexp) const;
+	virtual MathStructure &convertFromFirstBaseUnit(MathStructure &mvalue, MathStructure &mexp) const;
 
 };
 
@@ -264,19 +262,19 @@ class CompositeUnit : public Unit {
 		/** Adds a sub/base unit with specified exponent and an optional prefix.
 		*
 		* @param u Unit.
-		* @param exp_ Exponent.
+		* @param exp Exponent.
 		* @param prefix Prefix.
 		*/
-		virtual void add(Unit *u, int exp_ = 1, Prefix *prefix = NULL);
+		virtual void add(Unit *u, int exp = 1, Prefix *prefix = NULL);
 		/** Retrieves information about a sub/base unit 
 		*
 		* @param index Index starting at 1.
-		* @param[out] exp_ Exponent.
+		* @param[out] exp Exponent.
 		* @param[out] prefix Prefix.
 		* @returns Sub/base unit (AliasUnit_Composite::firstBaseUnit()).
 		*/
-		virtual Unit *get(size_t index, int *exp_ = NULL, Prefix **prefix = NULL) const;
-		virtual void setExponent(size_t index, int exp_);
+		virtual Unit *get(size_t index, int *exp = NULL, Prefix **prefix = NULL) const;
+		virtual void setExponent(size_t index, int exp);
 		virtual void setPrefix(size_t index, Prefix *prefix);
 		/** Returns the number of sub/base units */
 		virtual size_t countUnits() const;

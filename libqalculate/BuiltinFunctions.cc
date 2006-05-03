@@ -2931,6 +2931,28 @@ int SaveFunction::calculate(MathStructure&, const MathStructure &vargs, const Ev
 	return 1;
 }
 
+RegisterFunction::RegisterFunction() : MathFunction("register", 1) {
+	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));
+}
+int RegisterFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+	if(vargs[0].number().isGreaterThan(CALCULATOR->RPNStackSize())) {
+		CALCULATOR->error(false, _("Register %s does not exist. Returning zero."), vargs[0].print().c_str(), NULL);
+		mstruct.clear();
+		return 1;
+	}
+	mstruct.set(*CALCULATOR->getRPNRegister((size_t) vargs[0].number().intValue()));
+	return 1;
+}
+StackFunction::StackFunction() : MathFunction("stack", 0) {
+}
+int StackFunction::calculate(MathStructure &mstruct, const MathStructure&, const EvaluationOptions&) {
+	mstruct.clearVector();
+	for(size_t i = 1; i <= CALCULATOR->RPNStackSize(); i++) {
+		mstruct.addChild(*CALCULATOR->getRPNRegister(i));
+	}
+	return 1;
+}
+
 DeriveFunction::DeriveFunction() : MathFunction("diff", 1, 3) {
 	setArgumentDefinition(2, new SymbolicArgument());
 	setDefaultValue(2, "x");

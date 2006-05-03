@@ -36,7 +36,7 @@
 #include <wait.h>
 #include <queue>
 #include <glib.h>
-#include <dlfcn.h>
+//#include <dlfcn.h>
 
 #include <cln/cln.h>
 using namespace cln;
@@ -148,6 +148,14 @@ Number nr_zero, nr_one, nr_minus_one;
 EvaluationOptions no_evaluation;
 ExpressionName empty_expression_name;
 
+enum {
+	PROC_RPN_ADD,
+	PROC_RPN_SET,
+	PROC_RPN_OPERATION_1,
+	PROC_RPN_OPERATION_2,
+	PROC_NO_COMMAND
+};
+
 void *calculate_proc(void *pipe) {
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
@@ -168,6 +176,36 @@ void *calculate_proc(void *pipe) {
 			mstruct->set(_("aborted"));
 			meval.eval(CALCULATOR->tmp_evaluationoptions);
 			mstruct->set(meval);
+		}
+		switch(CALCULATOR->tmp_proc_command) {
+			case PROC_RPN_ADD: {
+				CALCULATOR->RPNStackEnter(mstruct, false);
+				break;
+			}
+			case PROC_RPN_SET: {
+				CALCULATOR->setRPNRegister(CALCULATOR->tmp_rpnindex, mstruct, false);
+				break;
+			}
+			case PROC_RPN_OPERATION_1: {
+				if(CALCULATOR->RPNStackSize() > 0) {
+					CALCULATOR->setRPNRegister(1, mstruct, false);
+				} else {
+					CALCULATOR->RPNStackEnter(mstruct, false);
+				}
+				break;
+			}
+			case PROC_RPN_OPERATION_2: {
+				if(CALCULATOR->RPNStackSize() > 1) {
+					CALCULATOR->deleteRPNRegister(1);
+				}
+				if(CALCULATOR->RPNStackSize() > 0) {
+					CALCULATOR->setRPNRegister(1, mstruct, false);
+				} else {
+					CALCULATOR->RPNStackEnter(mstruct, false);
+				}
+				break;
+			}
+			case PROC_NO_COMMAND: {}
 		}
 		CALCULATOR->b_busy = false;
 	}
@@ -1272,6 +1310,9 @@ void Calculator::addBuiltinFunctions() {
 	f_load = addFunction(new LoadFunction());
 	f_export = addFunction(new ExportFunction());
 
+	f_register = addFunction(new RegisterFunction());
+	f_stack = addFunction(new StackFunction());
+
 	f_diff = addFunction(new DeriveFunction());
 	f_integrate = addFunction(new IntegrateFunction());
 	f_solve = addFunction(new SolveFunction());
@@ -1475,13 +1516,21 @@ void Calculator::abort() {
 		stopped_errors_count.clear();
 		disable_errors_ref = 0;
 		clearBuffers();
+		if(tmp_rpn_mstruct) tmp_rpn_mstruct->unref();
+		tmp_rpn_mstruct = NULL;
 		b_busy = false;
 		pthread_create(&calculate_thread, &calculate_thread_attr, calculate_proc, calculate_pipe_r);
 	}
 }
 void Calculator::abort_this() {
 	restoreState();
+	stopped_messages_count.clear();
+	stopped_warnings_count.clear();
+	stopped_errors_count.clear();
+	disable_errors_ref = 0;
 	clearBuffers();
+	if(tmp_rpn_mstruct) tmp_rpn_mstruct->unref();
+	tmp_rpn_mstruct = NULL;
 	b_busy = false;
 	calculate_thread_stopped = true;
 	pthread_exit(PTHREAD_CANCELED);
@@ -1628,7 +1677,10 @@ string Calculator::unlocalizeExpression(string str, const ParseOptions &po) cons
 
 bool Calculator::calculateRPNRegister(size_t index, int msecs, const EvaluationOptions &eo) {
 	if(index <= 0 || index > rpn_stack.size()) return false;
-	index = rpn_stack.size() - index;
+	return calculateRPN(new MathStructure(*rpn_stack[rpn_stack.size() - index]), PROC_RPN_SET, index, msecs, eo);
+}
+
+bool Calculator::calculateRPN(MathStructure *mstruct, int command, size_t index, int msecs, const EvaluationOptions &eo) {
 	saveState();
 	b_busy = true;
 	if(calculate_thread_stopped) {
@@ -1637,9 +1689,12 @@ bool Calculator::calculateRPNRegister(size_t index, int msecs, const EvaluationO
 	}
 	bool had_msecs = msecs > 0;
 	tmp_evaluationoptions = eo;
+	tmp_proc_command = command;
+	tmp_rpnindex = index;
+	tmp_rpn_mstruct = mstruct;
 	bool b_parse = false;
 	fwrite(&b_parse, sizeof(bool), 1, calculate_pipe_w);
-	void *x = (void*) rpn_stack[index];
+	void *x = (void*) mstruct;
 	fwrite(&x, sizeof(void*), 1, calculate_pipe_w);
 	fflush(calculate_pipe_w);
 	struct timespec rtime;
@@ -1651,17 +1706,51 @@ bool Calculator::calculateRPNRegister(size_t index, int msecs, const EvaluationO
 	}	
 	if(had_msecs && b_busy) {
 		abort();
-		rpn_stack[index]->set(string(_("aborted")));
+		return false;
+	}
+	return true;
+}
+bool Calculator::calculateRPN(string str, int command, size_t index, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
+	MathStructure *mstruct = new MathStructure();
+	saveState();
+	b_busy = true;
+	if(calculate_thread_stopped) {
+		pthread_create(&calculate_thread, &calculate_thread_attr, calculate_proc, calculate_pipe_r);
+		calculate_thread_stopped = false;
+	}
+	bool had_msecs = msecs > 0;
+	expression_to_calculate = str;
+	tmp_evaluationoptions = eo;
+	tmp_proc_command = command;
+	tmp_rpnindex = index;
+	tmp_rpn_mstruct = mstruct;
+	tmp_parsedstruct = parsed_struct;
+	tmp_tostruct = to_struct;
+	tmp_maketodivision = make_to_division;
+	bool b_parse = true;
+	fwrite(&b_parse, sizeof(bool), 1, calculate_pipe_w);
+	void *x = (void*) mstruct;
+	fwrite(&x, sizeof(void*), 1, calculate_pipe_w);
+	fflush(calculate_pipe_w);
+	struct timespec rtime;
+	rtime.tv_sec = 0;
+	rtime.tv_nsec = 1000000;
+	while(msecs > 0 && b_busy) {
+		nanosleep(&rtime, NULL);
+		msecs -= 1;
+	}	
+	if(had_msecs && b_busy) {
+		abort();
 		return false;
 	}
 	return true;
 }
 
 bool Calculator::calculateRPN(MathOperation op, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	MathStructure *mstruct;
 	if(rpn_stack.size() == 0) {
-		MathStructure *mstruct = new MathStructure();
+		mstruct = new MathStructure();
 		mstruct->add(m_zero, op);
-		rpn_stack.push_back(mstruct);
 		if(parsed_struct) parsed_struct->clear();
 	} else if(rpn_stack.size() == 1) {
 		if(parsed_struct) {
@@ -1675,9 +1764,8 @@ bool Calculator::calculateRPN(MathOperation op, int msecs, const EvaluationOptio
 				parsed_struct->add(*rpn_stack.back(), op);
 			}
 		}
-		MathStructure *mstruct = new MathStructure();
-		mstruct->add_nocopy(rpn_stack.back(), op);
-		rpn_stack.back() = mstruct;
+		mstruct = new MathStructure();
+		mstruct->add(*rpn_stack.back(), op);
 	} else {
 		if(parsed_struct) {
 			parsed_struct->set(*rpn_stack[rpn_stack.size() - 2]);
@@ -1690,16 +1778,16 @@ bool Calculator::calculateRPN(MathOperation op, int msecs, const EvaluationOptio
 				parsed_struct->add(*rpn_stack.back(), op);
 			}
 		}
-		rpn_stack[rpn_stack.size() - 2]->add_nocopy(rpn_stack.back(), op);
-		rpn_stack.pop_back();
+		mstruct = new MathStructure(*rpn_stack[rpn_stack.size() - 2]);
+		mstruct->add(*rpn_stack.back(), op);
 	}
-	return calculateRPNRegister(1, msecs, eo);
+	return calculateRPN(mstruct, PROC_RPN_OPERATION_2, 0, msecs, eo);
 }
 bool Calculator::calculateRPN(MathFunction *f, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
 	MathStructure *mstruct = new MathStructure(f, NULL);
 	if(f->args() != 0) {
 		if(rpn_stack.size() == 0) mstruct->addChild(m_zero);
-		else mstruct->addChild_nocopy(rpn_stack.back());
+		else mstruct->addChild(*rpn_stack.back());
 		f->appendDefaultValues(*mstruct);
 		if(f->getArgumentDefinition(1) && f->getArgumentDefinition(1)->type() == ARGUMENT_TYPE_ANGLE) {
 			switch(eo.parse_options.angle_unit) {
@@ -1719,40 +1807,40 @@ bool Calculator::calculateRPN(MathFunction *f, int msecs, const EvaluationOption
 			}
 		}
 	}
-	if(rpn_stack.size() == 0) rpn_stack.push_back(mstruct);
-	else rpn_stack.back() = mstruct;
-	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
-	return calculateRPNRegister(1, msecs, eo);
+	if(parsed_struct) parsed_struct->set(*mstruct);
+	return calculateRPN(mstruct, PROC_RPN_OPERATION_1, 0, msecs, eo);
 }
 bool Calculator::calculateRPNBitwiseNot(int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	MathStructure *mstruct;
 	if(rpn_stack.size() == 0) {
-		MathStructure *mstruct = new MathStructure();
+		mstruct = new MathStructure();
 		mstruct->setBitwiseNot();
-		rpn_stack.push_back(mstruct);
 	} else {
-		rpn_stack.back()->setBitwiseNot();
+		mstruct = new MathStructure(*rpn_stack.back());
+		mstruct->setBitwiseNot();
 	}
-	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
-	return calculateRPNRegister(1, msecs, eo);
+	if(parsed_struct) parsed_struct->set(*mstruct);
+	return calculateRPN(mstruct, PROC_RPN_OPERATION_1, 0, msecs, eo);
 }
 bool Calculator::calculateRPNLogicalNot(int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	MathStructure *mstruct;
 	if(rpn_stack.size() == 0) {
-		MathStructure *mstruct = new MathStructure();
+		mstruct = new MathStructure();
 		mstruct->setLogicalNot();
-		rpn_stack.push_back(mstruct);
 	} else {
-		rpn_stack.back()->setLogicalNot();
+		mstruct = new MathStructure(*rpn_stack.back());
+		mstruct->setLogicalNot();
 	}
 	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
-	return calculateRPNRegister(1, msecs, eo);
+	return calculateRPN(mstruct, PROC_RPN_OPERATION_1, 0, msecs, eo);
 }
 MathStructure *Calculator::calculateRPN(MathOperation op, const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	MathStructure *mstruct;
 	if(rpn_stack.size() == 0) {
-		MathStructure *mstruct = new MathStructure();
+		mstruct = new MathStructure();
 		mstruct->add(m_zero, op);
-		rpn_stack.push_back(mstruct);
-	}
-	if(rpn_stack.size() == 1) {
+		if(parsed_struct) parsed_struct->clear();
+	} else if(rpn_stack.size() == 1) {
 		if(parsed_struct) {
 			parsed_struct->clear();
 			if(op == OPERATION_SUBTRACT) {
@@ -1764,9 +1852,8 @@ MathStructure *Calculator::calculateRPN(MathOperation op, const EvaluationOption
 				parsed_struct->add(*rpn_stack.back(), op);
 			}
 		}
-		MathStructure *mstruct = new MathStructure();
-		mstruct->add_nocopy(rpn_stack.back(), op);
-		rpn_stack.back() = mstruct;
+		mstruct = new MathStructure();
+		mstruct->add(*rpn_stack.back(), op);
 	} else {
 		if(parsed_struct) {
 			parsed_struct->set(*rpn_stack[rpn_stack.size() - 2]);
@@ -1779,17 +1866,27 @@ MathStructure *Calculator::calculateRPN(MathOperation op, const EvaluationOption
 				parsed_struct->add(*rpn_stack.back(), op);
 			}
 		}
-		rpn_stack[rpn_stack.size() - 2]->add_nocopy(rpn_stack.back(), op);
-		rpn_stack.pop_back();
+		mstruct = new MathStructure(*rpn_stack[rpn_stack.size() - 2]);
+		mstruct->add(*rpn_stack.back(), op);
 	}
-	rpn_stack.back()->eval(eo);
+	mstruct->eval(eo);
+	if(rpn_stack.size() > 1) {
+		rpn_stack.back()->unref();
+		rpn_stack.erase(rpn_stack.begin() + (rpn_stack.size() - 1));
+	}
+	if(rpn_stack.size() > 0) {
+		rpn_stack.back()->unref();
+		rpn_stack.back() = mstruct;
+	} else {
+		rpn_stack.push_back(mstruct);
+	}
 	return rpn_stack.back();
 }
 MathStructure *Calculator::calculateRPN(MathFunction *f, const EvaluationOptions &eo, MathStructure *parsed_struct) {
 	MathStructure *mstruct = new MathStructure(f, NULL);
 	if(f->args() != 0) {
 		if(rpn_stack.size() == 0) mstruct->addChild(m_zero);
-		else mstruct->addChild_nocopy(rpn_stack.back());
+		else mstruct->addChild(*rpn_stack.back());
 		f->appendDefaultValues(*mstruct);
 		if(f->getArgumentDefinition(1) && f->getArgumentDefinition(1)->type() == ARGUMENT_TYPE_ANGLE) {
 			switch(eo.parse_options.angle_unit) {
@@ -1809,44 +1906,59 @@ MathStructure *Calculator::calculateRPN(MathFunction *f, const EvaluationOptions
 			}
 		}
 	}
-	if(rpn_stack.size() == 0) rpn_stack.push_back(mstruct);
-	else rpn_stack.back() = mstruct;
-	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
+	if(parsed_struct) parsed_struct->set(*mstruct);
 	mstruct->eval(eo);
+	if(rpn_stack.size() == 0) {
+		rpn_stack.push_back(mstruct);
+	} else {
+		rpn_stack.back()->unref();
+		rpn_stack.back() = mstruct;
+	}
 	return rpn_stack.back();
 }
 MathStructure *Calculator::calculateRPNBitwiseNot(const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	MathStructure *mstruct;
 	if(rpn_stack.size() == 0) {
-		MathStructure *mstruct = new MathStructure();
-		mstruct->setLogicalNot();
+		mstruct = new MathStructure();
+		mstruct->setBitwiseNot();
+	} else {
+		mstruct = new MathStructure(*rpn_stack.back());
+		mstruct->setBitwiseNot();
+	}
+	if(parsed_struct) parsed_struct->set(*mstruct);
+	mstruct->eval(eo);
+	if(rpn_stack.size() == 0) {
 		rpn_stack.push_back(mstruct);
 	} else {
-		rpn_stack.back()->setLogicalNot();
+		rpn_stack.back()->unref();
+		rpn_stack.back() = mstruct;
 	}
-	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
-	rpn_stack.back()->eval(eo);
 	return rpn_stack.back();
 }
 MathStructure *Calculator::calculateRPNLogicalNot(const EvaluationOptions &eo, MathStructure *parsed_struct) {
+	MathStructure *mstruct;
 	if(rpn_stack.size() == 0) {
-		MathStructure *mstruct = new MathStructure();
+		mstruct = new MathStructure();
 		mstruct->setLogicalNot();
+	} else {
+		mstruct = new MathStructure(*rpn_stack.back());
+		mstruct->setLogicalNot();
+	}
+	if(parsed_struct) parsed_struct->set(*mstruct);
+	mstruct->eval(eo);
+	if(rpn_stack.size() == 0) {
 		rpn_stack.push_back(mstruct);
 	} else {
-		rpn_stack.back()->setLogicalNot();
+		rpn_stack.back()->unref();
+		rpn_stack.back() = mstruct;
 	}
-	if(parsed_struct) parsed_struct->set(*rpn_stack.back());
-	rpn_stack.back()->eval(eo);
 	return rpn_stack.back();
 }
 bool Calculator::RPNStackEnter(MathStructure *mstruct, int msecs, const EvaluationOptions &eo) {
-	rpn_stack.push_back(mstruct);
-	return calculateRPNRegister(1, msecs, eo);
+	return calculateRPN(mstruct, PROC_RPN_ADD, 0, msecs, eo);
 }
 bool Calculator::RPNStackEnter(string str, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
-	MathStructure *mstruct = new MathStructure();
-	rpn_stack.push_back(mstruct);
-	return calculate(mstruct, str, msecs, eo, parsed_struct, to_struct, make_to_division);
+	return calculateRPN(str, PROC_RPN_ADD, 0, msecs, eo, parsed_struct, to_struct, make_to_division);
 }
 void Calculator::RPNStackEnter(MathStructure *mstruct, bool eval) {
 	if(eval) mstruct->eval();
@@ -1861,35 +1973,29 @@ bool Calculator::setRPNRegister(size_t index, MathStructure *mstruct, int msecs,
 		return true;
 	}
 	if(index <= 0 || index > rpn_stack.size()) return false;
-	index = rpn_stack.size() - index;
-	rpn_stack[index]->unref();
-	rpn_stack[index] = mstruct;
-	return calculateRPNRegister(rpn_stack.size() - index, msecs, eo);
+	return calculateRPN(mstruct, PROC_RPN_SET, index, msecs, eo);
 }
 bool Calculator::setRPNRegister(size_t index, string str, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
 	if(index <= 0 || index > rpn_stack.size()) return false;
-	index = rpn_stack.size() - index;
-	rpn_stack[index]->unref();
-	MathStructure *mstruct = new MathStructure();
-	rpn_stack[index] = mstruct;
-	return calculate(mstruct, str, msecs, eo, parsed_struct, to_struct, make_to_division);
+	return calculateRPN(str, PROC_RPN_OPERATION_2, index, msecs, eo, parsed_struct, to_struct, make_to_division);
 }
 void Calculator::setRPNRegister(size_t index, MathStructure *mstruct, bool eval) {
 	if(mstruct == NULL) {
 		deleteRPNRegister(index);
 		return;
 	}
+	if(eval) mstruct->eval();
 	if(index <= 0 || index > rpn_stack.size()) return;
 	index = rpn_stack.size() - index;
 	rpn_stack[index]->unref();
-	if(eval) mstruct->eval();
 	rpn_stack[index] = mstruct;
 }
 void Calculator::setRPNRegister(size_t index, string str, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
 	if(index <= 0 || index > rpn_stack.size()) return;
 	index = rpn_stack.size() - index;
+	MathStructure *mstruct = new MathStructure(calculate(str, eo, parsed_struct, to_struct, make_to_division));
 	rpn_stack[index]->unref();
-	rpn_stack[index] = new MathStructure(calculate(str, eo, parsed_struct, to_struct, make_to_division));
+	rpn_stack[index] = mstruct;
 }
 void Calculator::deleteRPNRegister(size_t index) {
 	if(index <= 0 || index > rpn_stack.size()) return;
@@ -1967,6 +2073,8 @@ bool Calculator::calculate(MathStructure *mstruct, string str, int msecs, const 
 	bool had_msecs = msecs > 0;
 	expression_to_calculate = str;
 	tmp_evaluationoptions = eo;
+	tmp_proc_command = PROC_NO_COMMAND;
+	tmp_rpn_mstruct = NULL;
 	tmp_parsedstruct = parsed_struct;
 	tmp_tostruct = to_struct;
 	tmp_maketodivision = make_to_division;
@@ -2102,7 +2210,7 @@ MathStructure Calculator::convert(string str, Unit *from_unit, Unit *to_unit, co
 }
 MathStructure Calculator::convert(const MathStructure &mstruct, Unit *to_unit, const EvaluationOptions &eo, bool always_convert) {
 	if(to_unit->subtype() == SUBTYPE_COMPOSITE_UNIT) return convertToCompositeUnit(mstruct, (CompositeUnit*) to_unit, eo, always_convert);
-	if(to_unit->subtype() != SUBTYPE_ALIAS_UNIT || (((AliasUnit*) to_unit)->baseUnit()->subtype() != SUBTYPE_COMPOSITE_UNIT && ((AliasUnit*) to_unit)->baseExp() == 1)) {
+	if(to_unit->subtype() != SUBTYPE_ALIAS_UNIT || (((AliasUnit*) to_unit)->baseUnit()->subtype() != SUBTYPE_COMPOSITE_UNIT && ((AliasUnit*) to_unit)->baseExponent() == 1)) {
 		MathStructure mstruct_new(mstruct);
 		if(!mstruct_new.convert(to_unit, true)) {
 			mstruct_new = mstruct;
@@ -2192,9 +2300,9 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 		}
 		case SUBTYPE_ALIAS_UNIT: {
 			AliasUnit *au = (AliasUnit*) u;
-			if(au->baseExp() == 1 && au->baseUnit()->subtype() == SUBTYPE_BASE_UNIT) {
+			if(au->baseExponent() == 1 && au->baseUnit()->subtype() == SUBTYPE_BASE_UNIT) {
 				return (Unit*) au->baseUnit();
-			} else if(au->firstBaseUnit()->subtype() == SUBTYPE_COMPOSITE_UNIT || au->firstBaseExp() != 1) {
+			} else if(au->firstBaseUnit()->subtype() == SUBTYPE_COMPOSITE_UNIT || au->firstBaseExponent() != 1) {
 				return u;
 			} else {
 				return getBestUnit((Unit*) au->firstBaseUnit());
@@ -2234,7 +2342,7 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 				} else if(units[i]->subtype() == SUBTYPE_ALIAS_UNIT) {
 					au = (AliasUnit*) units[i];
 					bu = (Unit*) au->baseUnit();
-					b_exp = au->baseExp();
+					b_exp = au->baseExponent();
 					new_points = 0;
 					new_points_m = 0;
 					if(b_exp != 1 || bu->subtype() == SUBTYPE_COMPOSITE_UNIT) {
@@ -2268,7 +2376,7 @@ Unit *Calculator::getBestUnit(Unit *u, bool allow_only_div) {
 									break;
 								}
 							}
-						} else if(au->firstBaseExp() != 1 || au->firstBaseUnit()->subtype() == SUBTYPE_COMPOSITE_UNIT) {
+						} else if(au->firstBaseExponent() != 1 || au->firstBaseUnit()->subtype() == SUBTYPE_COMPOSITE_UNIT) {
 							MathStructure cu_mstruct = ((CompositeUnit*) bu)->generateMathStructure();
 							cu_mstruct.raise(b_exp);
 							cu_mstruct = convertToBaseUnits(cu_mstruct);
@@ -7179,7 +7287,7 @@ int Calculator::saveUnits(const char* file_name, bool save_global) {
 						if(!au->inverseExpression().empty()) {
 							xmlNewTextChild(newnode2, NULL, (xmlChar*) "inverse_relation", (xmlChar*) au->inverseExpression().c_str());
 						}
-						xmlNewTextChild(newnode2, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(au->firstBaseExp()).c_str());
+						xmlNewTextChild(newnode2, NULL, (xmlChar*) "exponent", (xmlChar*) i2s(au->firstBaseExponent()).c_str());
 					}
 				}
 			}

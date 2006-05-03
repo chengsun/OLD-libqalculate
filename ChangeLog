@@ -1,3 +1,16 @@
+2006-05-03 Niklas Knutsson  <nq@altern.org>
+
+	* Update API documentation
+	* Clean up Unit API
+	* More function descriptions
+	* tetrahedron(), tetrahedron_sa(), tetrahedron_height(), sqpyramid(), sqpyramid_sa() and sqpyramid_height() functions
+	* Do not update the stack until the calculation is finished
+	* stack() and register() functions
+	* Add true RPN mode to qalc
+	* Add "rpn", "stack" and "clear stack" commands, and "lowercase e", "lowercase numbers", "spell out logical", "dot as separator"
+	   and "rpn" set command options in qalc
+	* Update Swedish translation
+
 2006-04-28 Niklas Knutsson  <nq@altern.org>
 
 	* Update API documentation

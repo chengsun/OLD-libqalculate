@@ -1608,6 +1608,7 @@
     <builtin_function name="replace">
       <_title>Replace</_title>
       <_names>r:replace</_names>
+      <_description>Replaces a certain value in an expression with a new value. The expression is calculated before the replacement if the fourth argument is true.</_description>
       <argument index="1">
         <_title>Expression</_title>
       </argument>
@@ -1624,6 +1625,7 @@
     <builtin_function name="nounit">
       <_title>Strip Units</_title>
       <_names>r:nounit,strip_units</_names>
+      <_description>Removes all units from an expression. The expression is calculated before the removal.</_description>
       <argument index="1">
         <_title>Expression</_title>
       </argument>
@@ -1769,6 +1771,19 @@
       <argument index="4">
         <_title>Title</_title>
       </argument>
+    </builtin_function>
+    <builtin_function name="register">
+      <_title>RPN Stack Register</_title>
+      <_names>r:register</_names>
+      <_description>Returns the value of a RPN stack register.</_description>
+      <argument index="1">
+        <_title>Index</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="stack">
+      <_title>RPN Stack Vector</_title>
+      <_names>r:stack</_names>
+      <_description>Returns the RPN stack as a vector.</_description>
     </builtin_function>
   </category>
   <category>
@@ -2169,6 +2184,7 @@
       <function>
         <_title>Volume of Rectangular Prism</_title>
         <_names>r:rectprism</_names>
+        <_description>Calculates the volume of a prism with rectangular base.</_description>
         <expression>\x*\y*\z</expression>
         <argument type="free" index="1">
           <_title>Length</_title>
@@ -2183,6 +2199,7 @@
       <function>
         <_title>Surface Area of Rectangular Prism</_title>
         <_names>r:rectprism_sa</_names>
+        <_description>Calculates the surface area of a prism with rectangular base.</_description>
         <expression>(\x*\y)*2+(\x*\z)*2+(\y*\z)*2</expression>
         <argument type="free" index="1">
           <_title>Length</_title>
@@ -2197,6 +2214,7 @@
       <function>
         <_title>Volume of Triangular Prism</_title>
         <_names>r:triangleprism</_names>
+        <_description>Calculates the volume of a prism with triangular base.</_description>
         <expression>\x*\y*\z/2</expression>
         <argument type="free" index="1">
           <_title>Length</_title>
@@ -2214,6 +2232,7 @@
       <function>
         <_title>Pyramid Volume</_title>
         <_names>r:pyramid</_names>
+        <_description>Calculates the volume of a 3-dimensional shape standing on a rectangular base and terminating in a point at the top.</_description>
         <expression>\x*\y*\z/3</expression>
         <argument type="free" index="1">
           <_title>Length of base</_title>
@@ -2225,12 +2244,61 @@
           <_title>Height</_title>
         </argument>
       </function>
+      <function>
+        <_title>Volume of Regular Tetrahedron</_title>
+        <_names>r:tetrahedron</_names>
+        <expression>sqrt(2)/12*\x^3</expression>
+        <argument type="free" index="1">
+          <_title>Length of side</_title>
+        </argument>
+      </function>
+      <function>
+        <_title>Surface Area of Regular Tetrahedron</_title>
+        <_names>r:tetrahedron_sa</_names>
+        <expression>sqrt(3)*\x^2</expression>
+        <argument type="free" index="1">
+          <_title>Length of side</_title>
+        </argument>
+      </function>
+      <function>
+        <_title>Height of Regular Tetrahedron</_title>
+        <_names>r:tetrahedron_height</_names>
+        <expression>sqrt(6)/3*\x</expression>
+        <argument type="free" index="1">
+          <_title>Length of side</_title>
+        </argument>
+      </function>
+      <function>
+        <_title>Volume of Square Pyramid</_title>
+        <_names>r:sqpyramid</_names>
+        <expression>sqrt(2)/6*\x^3</expression>
+        <argument type="free" index="1">
+          <_title>Length of side</_title>
+        </argument>
+      </function>
+      <function>
+        <_title>Surface Area of Square Pyramid</_title>
+        <_names>r:sqpyramid_sa</_names>
+        <expression>(1+sqrt(3))*\x^2</expression>
+        <argument type="free" index="1">
+          <_title>Length of side</_title>
+        </argument>
+      </function>
+      <function>
+        <_title>Height of Square Pyramid</_title>
+        <_names>r:sqpyramid_height</_names>
+        <expression>sqrt(2)/2*\x</expression>
+        <argument type="free" index="1">
+          <_title>Length of side</_title>
+        </argument>
+      </function>
     </category>
     <category>
       <_title>Parallelogram</_title>
       <function>
         <_title>Parallelogram Area</_title>
         <_names>r:parallelogram</_names>
+        <_description>Calculates the area of a four-sided figure whose opposite sides are both parallel and equal in length.</_description>
         <expression>\x*\y</expression>
         <argument type="free" index="1">
           <_title>Base</_title>
@@ -2242,6 +2310,7 @@
       <function>
         <_title>Parallelogram Perimeter</_title>
         <_names>r:parallelogram_perimeter</_names>
+        <_description>Calculates the perimeter of a four-sided figure whose opposite sides are both parallel and equal in length.</_description>
         <expression>(\x+\y)*2</expression>
         <argument type="free" index="1">
           <_title>Side A</_title>
@@ -2256,6 +2325,7 @@
       <function>
         <_title>Trapezoid Area</_title>
         <_names>r:trapezoid</_names>
+	<_description>Calculates the area of a four-sided figure with two parallel sides.</_description>
         <expression>(\x+\y)/2*\z</expression>
         <argument type="free" index="1">
           <_title>Side A</_title>

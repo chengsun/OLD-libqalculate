@@ -105,38 +105,44 @@ bool Unit::isUsedByOtherUnits() const {
 string Unit::print(bool plural_, bool short_, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
 	return preferredName(short_, use_unicode, plural_, false, can_display_unicode_string_function, can_display_unicode_string_arg).name;
 }
-const string &Unit::plural(bool, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
-	return preferredName(false, use_unicode, true, false, can_display_unicode_string_function, can_display_unicode_string_arg).name;
+const string &Unit::plural(bool return_singular_if_no_plural, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
+	const ExpressionName *ename = &preferredName(false, use_unicode, true, false, can_display_unicode_string_function, can_display_unicode_string_arg);
+	if(!return_singular_if_no_plural && !ename->plural) return empty_string;
+	return ename->name;
 }
-const string &Unit::singular(bool, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
-	return preferredName(false, use_unicode, false, false, can_display_unicode_string_function, can_display_unicode_string_arg).name;
+const string &Unit::singular(bool return_abbreviation_if_no_singular, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
+	const ExpressionName *ename = &preferredName(false, use_unicode, false, false, can_display_unicode_string_function, can_display_unicode_string_arg);
+	if(!return_abbreviation_if_no_singular && ename->abbreviation) return empty_string;
+	return ename->name;
 }
-const string &Unit::shortName(bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
-	return preferredName(true, use_unicode, false, false, can_display_unicode_string_function, can_display_unicode_string_arg).name;
+const string &Unit::abbreviation(bool return_singular_if_no_abbreviation, bool use_unicode, bool (*can_display_unicode_string_function) (const char*, void*), void *can_display_unicode_string_arg) const {
+	const ExpressionName *ename = &preferredName(true, use_unicode, false, false, can_display_unicode_string_function, can_display_unicode_string_arg);
+	if(!return_singular_if_no_abbreviation && !ename->abbreviation) return empty_string;
+	return ename->name;
 }
 Unit* Unit::baseUnit() const {
 	return (Unit*) this;
 }
-MathStructure &Unit::baseValue(MathStructure &mvalue, MathStructure&) const {
+MathStructure &Unit::convertToBaseUnit(MathStructure &mvalue, MathStructure&) const {
 	return mvalue;
 }
-MathStructure &Unit::convertToBase(MathStructure &mvalue, MathStructure&) const {
+MathStructure &Unit::convertFromBaseUnit(MathStructure &mvalue, MathStructure&) const {
 	return mvalue;
 }
-MathStructure &Unit::baseValue(MathStructure &mvalue) const {
+MathStructure &Unit::convertToBaseUnit(MathStructure &mvalue) const {
 	return mvalue;
 }
-MathStructure &Unit::convertToBase(MathStructure &mvalue) const {
+MathStructure &Unit::convertFromBaseUnit(MathStructure &mvalue) const {
 	return mvalue;
 }
-MathStructure Unit::baseValue() const {
+MathStructure Unit::convertToBaseUnit() const {
 	return MathStructure(1, 1);
 }
-MathStructure Unit::convertToBase() const {
+MathStructure Unit::convertFromBaseUnit() const {
 	return MathStructure(1, 1);
 }
-int Unit::baseExp(int exp_) const {
-	return exp_;
+int Unit::baseExponent(int exp) const {
+	return exp;
 }
 int Unit::type() const {
 	return TYPE_UNIT;
@@ -176,8 +182,8 @@ bool Unit::convert(Unit *u, MathStructure &mvalue, MathStructure &mexp) const {
 	if(u == this) {
 		return true;
 	} else if(u->baseUnit() == baseUnit()) {
-		u->baseValue(mvalue, mexp);
-		convertToBase(mvalue, mexp);
+		u->convertToBaseUnit(mvalue, mexp);
+		convertFromBaseUnit(mvalue, mexp);
 		if(isCurrency()) {
 			CALCULATOR->checkExchangeRatesDate();
 		}
@@ -195,19 +201,19 @@ bool Unit::convert(Unit *u, MathStructure &mvalue, MathStructure &mexp) const {
 	return false;
 }
 
-AliasUnit::AliasUnit(string cat_, string name_, string plural_, string short_name_, string title_, Unit *alias, string relation, int exp_, string inverse, bool is_local, bool is_builtin, bool is_active) : Unit(cat_, name_, plural_, short_name_, title_, is_local, is_builtin, is_active) {
-	unit = (Unit*) alias;
+AliasUnit::AliasUnit(string cat_, string name_, string plural_, string short_name_, string title_, Unit *alias, string relation, int exp, string inverse, bool is_local, bool is_builtin, bool is_active) : Unit(cat_, name_, plural_, short_name_, title_, is_local, is_builtin, is_active) {
+	o_unit = (Unit*) alias;
 	remove_blank_ends(relation);
 	remove_blank_ends(inverse);
-	value = relation;
-	rvalue = inverse;
-	exp = exp_;
+	svalue = relation;
+	sinverse = inverse;
+	i_exp = exp;
 }
 AliasUnit::AliasUnit() {
-	unit = NULL;
-	value = "";
-	rvalue = "";
-	exp = 1;
+	o_unit = NULL;
+	svalue = "";
+	sinverse = "";
+	i_exp = 1;
 }
 AliasUnit::AliasUnit(const AliasUnit *unit) {
 	set(unit);
@@ -221,53 +227,50 @@ void AliasUnit::set(const ExpressionItem *item) {
 		Unit::set(item);
 		if(((Unit*) item)->subtype() == SUBTYPE_ALIAS_UNIT) {
 			AliasUnit *u = (AliasUnit*) item;
-			unit = (Unit*) u->firstBaseUnit();
-			exp = u->firstBaseExp();
-			value = u->expression();
-			rvalue = u->inverseExpression();
+			o_unit = (Unit*) u->firstBaseUnit();
+			i_exp = u->firstBaseExponent();
+			svalue = u->expression();
+			sinverse = u->inverseExpression();
 		}
 	} else {
 		ExpressionItem::set(item);
 	}
 }
 Unit* AliasUnit::baseUnit() const {
-	return unit->baseUnit();
+	return o_unit->baseUnit();
 }
 Unit* AliasUnit::firstBaseUnit() const {
-	return unit;
+	return o_unit;
 }
 void AliasUnit::setBaseUnit(Unit *alias) {
-	unit = (Unit*) alias;
+	o_unit = (Unit*) alias;
 	setChanged(true);
 }
 string AliasUnit::expression() const {
-	return value;
+	return svalue;
 }
 string AliasUnit::inverseExpression() const {
-	return rvalue;
+	return sinverse;
 }
 void AliasUnit::setExpression(string relation) {
 	remove_blank_ends(relation);
 	if(relation.empty()) {
-		value = "1";
+		svalue = "1";
 	} else {
-		value = relation;
+		svalue = relation;
 	}
 	setChanged(true);
 }
 void AliasUnit::setInverseExpression(string inverse) {
 	remove_blank_ends(inverse);
-	rvalue = inverse;
+	sinverse = inverse;
 	setChanged(true);
 }
-MathStructure &AliasUnit::baseValue(MathStructure &mvalue, MathStructure &mexp) const {
-	firstBaseValue(mvalue, mexp);
-	if(exp != 1) {
-		mexp.multiply(exp);	
-	}
-	return unit->baseValue(mvalue, mexp);
+MathStructure &AliasUnit::convertToBaseUnit(MathStructure &mvalue, MathStructure &mexp) const {
+	convertToFirstBaseUnit(mvalue, mexp);
+	return o_unit->convertToBaseUnit(mvalue, mexp);
 }
-MathStructure &AliasUnit::convertToBase(MathStructure &mvalue, MathStructure &mexp) const {
+MathStructure &AliasUnit::convertFromBaseUnit(MathStructure &mvalue, MathStructure &mexp) const {
 	Unit *u = (Unit*) baseUnit();
 	AliasUnit *u2;
 	while(true) {
@@ -280,42 +283,42 @@ MathStructure &AliasUnit::convertToBase(MathStructure &mvalue, MathStructure &me
 			}
 		}
 		u = u2;
-		u2->convertToFirstBase(mvalue, mexp);
+		u2->convertFromFirstBaseUnit(mvalue, mexp);
 		if(u == this) break;
 	}	
 	return mvalue;
 }
-MathStructure &AliasUnit::baseValue(MathStructure &mvalue) const {
+MathStructure &AliasUnit::convertToBaseUnit(MathStructure &mvalue) const {
 	MathStructure mexp(1, 1);
-	return baseValue(mvalue, mexp);
+	return convertToBaseUnit(mvalue, mexp);
 }
-MathStructure &AliasUnit::convertToBase(MathStructure &mvalue) const {
+MathStructure &AliasUnit::convertFromBaseUnit(MathStructure &mvalue) const {
 	MathStructure mexp(1, 1);
-	return convertToBase(mvalue, mexp);
+	return convertFromBaseUnit(mvalue, mexp);
 }
-MathStructure AliasUnit::baseValue() const {
+MathStructure AliasUnit::convertToBaseUnit() const {
 	MathStructure mexp(1, 1);
 	MathStructure mvalue(1, 1);
-	return baseValue(mvalue, mexp);
+	return convertToBaseUnit(mvalue, mexp);
 }
-MathStructure AliasUnit::convertToBase() const {
+MathStructure AliasUnit::convertFromBaseUnit() const {
 	MathStructure mexp(1, 1);
 	MathStructure mvalue(1, 1);
-	return convertToBase(mvalue, mexp);
+	return convertFromBaseUnit(mvalue, mexp);
 }
 
-int AliasUnit::baseExp(int exp_) const {
-	return unit->baseExp(exp_ * exp);
+int AliasUnit::baseExponent(int exp) const {
+	return o_unit->baseExponent(exp * i_exp);
 }
-MathStructure &AliasUnit::convertToFirstBase(MathStructure &mvalue, MathStructure &mexp) const {
-	if(exp != 1) mexp /= exp;
+MathStructure &AliasUnit::convertFromFirstBaseUnit(MathStructure &mvalue, MathStructure &mexp) const {
+	if(i_exp != 1) mexp /= i_exp;
 	ParseOptions po;
 	if(isApproximate() && precision() < 1) {
 		po.read_precision = ALWAYS_READ_PRECISION;
 	}
-	if(rvalue.empty()) {
-		if(value.find("\\x") != string::npos) {
-			string stmp = value;
+	if(sinverse.empty()) {
+		if(svalue.find("\\x") != string::npos) {
+			string stmp = svalue;
 			string stmp2 = LEFT_PARENTHESIS ID_WRAP_LEFT;
 			int x_id = CALCULATOR->addId(new MathStructure(mvalue), true);
 			stmp2 += i2s(x_id);
@@ -331,13 +334,13 @@ MathStructure &AliasUnit::convertToFirstBase(MathStructure &mvalue, MathStructur
 			CALCULATOR->delId(y_id);
 		} else {
 			MathStructure *mstruct = new MathStructure();
-			CALCULATOR->parse(mstruct, value, po);
+			CALCULATOR->parse(mstruct, svalue, po);
 			if(!mexp.isOne()) mstruct->raise(mexp);
 			mvalue.divide_nocopy(mstruct, true);
 		}
 	} else {
-		if(rvalue.find("\\x") != string::npos) {
-			string stmp = rvalue;
+		if(sinverse.find("\\x") != string::npos) {
+			string stmp = sinverse;
 			string stmp2 = LEFT_PARENTHESIS ID_WRAP_LEFT;
 			int x_id = CALCULATOR->addId(new MathStructure(mvalue), true);
 			stmp2 += i2s(x_id);
@@ -353,7 +356,7 @@ MathStructure &AliasUnit::convertToFirstBase(MathStructure &mvalue, MathStructur
 			CALCULATOR->delId(y_id);			
 		} else {
 			MathStructure *mstruct = new MathStructure();
-			CALCULATOR->parse(mstruct, rvalue, po);
+			CALCULATOR->parse(mstruct, sinverse, po);
 			if(!mexp.isOne()) mstruct->raise(mexp);
 			mvalue.multiply_nocopy(mstruct, true);
 		}
@@ -362,13 +365,13 @@ MathStructure &AliasUnit::convertToFirstBase(MathStructure &mvalue, MathStructur
 	if(isApproximate()) mvalue.setApproximate();
 	return mvalue;
 }
-MathStructure &AliasUnit::firstBaseValue(MathStructure &mvalue, MathStructure &mexp) const {
+MathStructure &AliasUnit::convertToFirstBaseUnit(MathStructure &mvalue, MathStructure &mexp) const {
 	ParseOptions po;
 	if(isApproximate() && precision() < 1) {
 		po.read_precision = ALWAYS_READ_PRECISION;
 	}
-	if(value.find("\\x") != string::npos) {
-		string stmp = value;
+	if(svalue.find("\\x") != string::npos) {
+		string stmp = svalue;
 		string stmp2 = LEFT_PARENTHESIS ID_WRAP_LEFT;
 		int x_id = CALCULATOR->addId(new MathStructure(mvalue), true);
 		stmp2 += i2s(x_id);
@@ -384,20 +387,21 @@ MathStructure &AliasUnit::firstBaseValue(MathStructure &mvalue, MathStructure &m
 		CALCULATOR->delId(y_id);
 	} else {
 		MathStructure *mstruct = new MathStructure();
-		CALCULATOR->parse(mstruct, value, po);
+		CALCULATOR->parse(mstruct, svalue, po);
 		if(!mexp.isOne()) mstruct->raise(mexp);
 		mvalue.multiply_nocopy(mstruct, true);
 	}
 	if(precision() > 0 && (mvalue.precision() < 1 || precision() < mvalue.precision())) mvalue.setPrecision(precision());
-	if(isApproximate()) mvalue.setApproximate();	
+	if(isApproximate()) mvalue.setApproximate();
+	if(i_exp != 1) mexp.multiply(i_exp);
 	return mvalue;
 }
-void AliasUnit::setExponent(int exp_) {
-	exp = exp_;
+void AliasUnit::setExponent(int exp) {
+	i_exp = exp;
 	setChanged(true);
 }
-int AliasUnit::firstBaseExp() const {
-	return exp;
+int AliasUnit::firstBaseExponent() const {
+	return i_exp;
 }
 int AliasUnit::subtype() const {
 	return SUBTYPE_ALIAS_UNIT;
@@ -425,7 +429,7 @@ bool AliasUnit::isParentOf(Unit *u) const {
 	return false;
 }
 bool AliasUnit::hasComplexExpression() const {
-	return value.find("\\x") != string::npos;
+	return svalue.find("\\x") != string::npos;
 }
 bool AliasUnit::hasComplexRelationTo(Unit *u) const {
 	if(u == this || u->baseUnit() != baseUnit()) return false;
@@ -451,7 +455,7 @@ bool AliasUnit::hasComplexRelationTo(Unit *u) const {
 	}
 }
 
-AliasUnit_Composite::AliasUnit_Composite(Unit *alias, int exp_, Prefix *prefix_) : AliasUnit("", alias->name(), alias->plural(false), alias->singular(false), "", alias, "", exp_, "") {
+AliasUnit_Composite::AliasUnit_Composite(Unit *alias, int exp, Prefix *prefix_) : AliasUnit("", alias->name(), alias->plural(false), alias->singular(false), "", alias, "", exp, "") {
 	prefixv = (Prefix*) prefix_;
 }
 AliasUnit_Composite::AliasUnit_Composite(const AliasUnit_Composite *unit) {
@@ -489,15 +493,27 @@ int AliasUnit_Composite::prefixExponent() const {
 	if(prefixv && prefixv->type() == PREFIX_BINARY) return ((BinaryPrefix*) prefixv)->exponent();
 	return 0;
 }
-void AliasUnit_Composite::set(Unit *u, int exp_, Prefix *prefix_) {
+void AliasUnit_Composite::set(Unit *u, int exp, Prefix *prefix_) {
 	setBaseUnit(u);
-	setExponent(exp_);
+	setExponent(exp);
 	prefixv = (Prefix*) prefix_;
 }
-MathStructure &AliasUnit_Composite::firstBaseValue(MathStructure &mvalue, MathStructure&) const {
+MathStructure &AliasUnit_Composite::convertToFirstBaseUnit(MathStructure &mvalue, MathStructure &mexp) const {
+	if(prefixv) {
+		MathStructure *mstruct = new MathStructure(prefixv->value());
+		if(!mexp.isOne()) mstruct->raise(mexp);
+		mvalue.multiply_nocopy(mstruct, true);
+	}
+	if(i_exp != 1) mexp.multiply(i_exp);
 	return mvalue;
 }
-MathStructure &AliasUnit_Composite::convertToFirstBase(MathStructure &mvalue, MathStructure&) const {
+MathStructure &AliasUnit_Composite::convertFromFirstBaseUnit(MathStructure &mvalue, MathStructure &mexp) const {
+	if(i_exp != 1) mexp /= i_exp;
+	if(prefixv) {
+		MathStructure *mstruct = new MathStructure(prefixv->value());
+		if(!mexp.isOne()) mstruct->raise(mexp);
+		mvalue.divide_nocopy(mstruct, true);
+	}
 	return mvalue;
 }
 
@@ -529,34 +545,34 @@ void CompositeUnit::set(const ExpressionItem *item) {
 		ExpressionItem::set(item);
 	}
 }
-void CompositeUnit::add(Unit *u, int exp_, Prefix *prefix) {
+void CompositeUnit::add(Unit *u, int exp, Prefix *prefix) {
 	bool b = false;
 	for(size_t i = 0; i < units.size(); i++) {
-		if(exp_ > units[i]->firstBaseExp()) {
-			units.insert(units.begin() + i, new AliasUnit_Composite(u, exp_, prefix));
+		if(exp > units[i]->firstBaseExponent()) {
+			units.insert(units.begin() + i, new AliasUnit_Composite(u, exp, prefix));
 			b = true;
 			break;
 		}
 	}
 	if(!b) {
-		units.push_back(new AliasUnit_Composite(u, exp_, prefix));
+		units.push_back(new AliasUnit_Composite(u, exp, prefix));
 	}
 }
-Unit *CompositeUnit::get(size_t index, int *exp_, Prefix **prefix) const {
+Unit *CompositeUnit::get(size_t index, int *exp, Prefix **prefix) const {
 	if(index > 0 && index <= units.size()) {
-		if(exp_) *exp_ = units[index - 1]->firstBaseExp();
+		if(exp) *exp = units[index - 1]->firstBaseExponent();
 		if(prefix) *prefix = (Prefix*) units[index - 1]->prefix();
 		return (Unit*) units[index - 1]->firstBaseUnit();
 	}
 	return NULL;
 }
-void CompositeUnit::setExponent(size_t index, int exp_) {
+void CompositeUnit::setExponent(size_t index, int exp) {
 	if(index > 0 && index <= units.size()) {
-		bool b = exp_ > units[index - 1]->firstBaseExp();
-		units[index - 1]->setExponent(exp_);
+		bool b = exp > units[index - 1]->firstBaseExponent();
+		units[index - 1]->setExponent(exp);
 		if(b) {
 			for(size_t i = 0; i < index - 1; i++) {
-				if(exp_ > units[i]->firstBaseExp()) {
+				if(exp > units[i]->firstBaseExponent()) {
 					AliasUnit_Composite *u = units[index - 1];
 					units.erase(units.begin() + (index - 1));
 					units.insert(units.begin() + i, u);
@@ -565,7 +581,7 @@ void CompositeUnit::setExponent(size_t index, int exp_) {
 			}
 		} else {
 			for(size_t i = units.size() - 1; i > index - 1; i--) {
-				if(exp_ < units[i]->firstBaseExp()) {
+				if(exp < units[i]->firstBaseExponent()) {
 					AliasUnit_Composite *u = units[index - 1];
 					units.insert(units.begin() + i, u);
 					units.erase(units.begin() + (index - 1));
@@ -577,7 +593,7 @@ void CompositeUnit::setExponent(size_t index, int exp_) {
 }
 void CompositeUnit::setPrefix(size_t index, Prefix *prefix) {
 	if(index > 0 && index <= units.size()) {
-		units[index - 1]->set(units[index - 1]->firstBaseUnit(), units[index - 1]->firstBaseExp(), prefix);
+		units[index - 1]->set(units[index - 1]->firstBaseUnit(), units[index - 1]->firstBaseExponent(), prefix);
 	}
 }
 size_t CompositeUnit::countUnits() const {
@@ -601,8 +617,8 @@ string CompositeUnit::print(bool plural_, bool short_, bool use_unicode, bool (*
 	string str = "";
 	bool b = false, b2 = false;
 	for(size_t i = 0; i < units.size(); i++) {
-		if(units[i]->firstBaseExp() != 0) {
-			if(!b && units[i]->firstBaseExp() < 0 && i > 0) {
+		if(units[i]->firstBaseExponent() != 0) {
+			if(!b && units[i]->firstBaseExponent() < 0 && i > 0) {
 				str += "/";
 				b = true;
 				if(i < units.size() - 1) {
@@ -613,20 +629,20 @@ string CompositeUnit::print(bool plural_, bool short_, bool use_unicode, bool (*
 //				if(i > 0) str += "*";
 				if(i > 0) str += " ";
 			}
-			if(plural_ && i == 0 && units[i]->firstBaseExp() > 0) {
+			if(plural_ && i == 0 && units[i]->firstBaseExponent() > 0) {
 				str += units[i]->print(true, short_, use_unicode, can_display_unicode_string_function, can_display_unicode_string_arg);
 			} else {
 				str += units[i]->print(false, short_, use_unicode, can_display_unicode_string_function, can_display_unicode_string_arg);
 			}
 			if(b) {
-				if(units[i]->firstBaseExp() != -1) {
+				if(units[i]->firstBaseExponent() != -1) {
 					str += "^";
-					str += i2s(-units[i]->firstBaseExp());
+					str += i2s(-units[i]->firstBaseExponent());
 				}
 			} else {
-				if(units[i]->firstBaseExp() != 1) {
+				if(units[i]->firstBaseExponent() != 1) {
 					str += "^";
-					str += i2s(units[i]->firstBaseExp());
+					str += i2s(units[i]->firstBaseExponent());
 				}
 			}
 		}
@@ -673,21 +689,21 @@ MathStructure CompositeUnit::generateMathStructure(bool make_division) const {
 		} else {				
 			mstruct2.set(units[i]->firstBaseUnit(), CALCULATOR->decimal_null_prefix);
 		}
-		if(make_division && units[i]->firstBaseExp() < 0) {
-			if(units[i]->firstBaseExp() != -1) {
-				mstruct2 ^= -units[i]->firstBaseExp();
+		if(make_division && units[i]->firstBaseExponent() < 0) {
+			if(units[i]->firstBaseExponent() != -1) {
+				mstruct2 ^= -units[i]->firstBaseExponent();
 			}
-		} else if(units[i]->firstBaseExp() != 1) {			
-			mstruct2 ^= units[i]->firstBaseExp();
+		} else if(units[i]->firstBaseExponent() != 1) {
+			mstruct2 ^= units[i]->firstBaseExponent();
 		}
 		if(i == 0) {
-			if(make_division && units[i]->firstBaseExp() < 0) {
+			if(make_division && units[i]->firstBaseExponent() < 0) {
 				mstruct = 1;
 				mden = mstruct2;
 			} else {
 				mstruct = mstruct2;
 			}
-		} else if(make_division && units[i]->firstBaseExp() < 0) {
+		} else if(make_division && units[i]->firstBaseExponent() < 0) {
 			if(mden.isZero()) {
 				mden = mstruct2;
 			} else {

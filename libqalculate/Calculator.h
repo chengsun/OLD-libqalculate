@@ -242,6 +242,9 @@ class Calculator {
 	size_t per_str_len, times_str_len, plus_str_len, minus_str_len, and_str_len, AND_str_len, or_str_len, OR_str_len, XOR_str_len;
 
 	vector<MathStructure*> rpn_stack;
+
+	bool calculateRPN(MathStructure *mstruct, int command, size_t index, int msecs, const EvaluationOptions &eo);
+	bool calculateRPN(string str, int command, size_t index, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division);
 	
   public:
 
@@ -268,6 +271,7 @@ class Calculator {
 	MathFunction *f_genvector, *f_for, *f_sum, *f_product, *f_process, *f_process_matrix, *f_csum, *f_if, *f_function, *f_select;
 	MathFunction *f_diff, *f_integrate, *f_solve, *f_multisolve;
 	MathFunction *f_error, *f_warning, *f_message, *f_save, *f_load, *f_export, *f_title;
+	MathFunction *f_register, *f_stack;
 	Unit *u_rad, *u_gra, *u_deg, *u_euro;
 	DecimalPrefix *decimal_null_prefix;
 	BinaryPrefix *binary_null_prefix;
@@ -280,7 +284,10 @@ class Calculator {
 	EvaluationOptions tmp_evaluationoptions;
 	MathStructure *tmp_parsedstruct;
 	MathStructure *tmp_tostruct;
+	MathStructure *tmp_rpn_mstruct;
 	bool tmp_maketodivision;
+	int tmp_proc_command;
+	size_t tmp_rpnindex;
 	
 	PrintOptions save_printoptions;	
   

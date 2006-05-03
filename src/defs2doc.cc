@@ -517,9 +517,9 @@ void print_unit(Unit *u) {
 			case SUBTYPE_ALIAS_UNIT: {
 				AliasUnit *au = (AliasUnit*) u;
 				base_unit = au->firstBaseUnit()->preferredDisplayName(printops.abbreviate_names, printops.use_unicode_signs).name;
-				if(au->firstBaseExp() != 1) {
+				if(au->firstBaseExponent() != 1) {
 					base_unit += POWER;
-					base_unit += i2s(au->firstBaseExp());
+					base_unit += i2s(au->firstBaseExponent());
 				}
 				if(au->firstBaseUnit() == CALCULATOR->u_euro && au->isBuiltin()) {
 					relation = "exchange rate";

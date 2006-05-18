@@ -277,6 +277,8 @@ class Calculator {
 	BinaryPrefix *binary_null_prefix;
 
   	bool place_currency_code_before, place_currency_sign_before;
+	bool place_currency_code_before_negative, place_currency_sign_before_negative;
+	bool default_dot_as_separator;
   
   	bool b_busy, calculate_thread_stopped, print_thread_stopped;
 	string expression_to_calculate, tmp_print_result;
@@ -474,7 +476,7 @@ class Calculator {
 	* @param mstruct Value.
 	* @param eval If true, the the mathematical structure will be evaluated first.
 	*/
-	void RPNStackEnter(MathStructure *mstruct, bool eval = false);
+	void RPNStackEnter(MathStructure *mstruct, bool eval = false, const EvaluationOptions &eo = default_evaluation_options);
 	/** Calculates an expression adds the result first on the RPN stack. The expression should be unlocalized first with unlocalizeExpression().
 	*
 	* @param str Expression.
@@ -486,7 +488,7 @@ class Calculator {
 	void RPNStackEnter(string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
 	bool setRPNRegister(size_t index, MathStructure *mstruct, int msecs, const EvaluationOptions &eo = default_evaluation_options);
 	bool setRPNRegister(size_t index, string str, int msecs, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
-	void setRPNRegister(size_t index, MathStructure *mstruct, bool eval = false);
+	void setRPNRegister(size_t index, MathStructure *mstruct, bool eval = false, const EvaluationOptions &eo = default_evaluation_options);
 	void setRPNRegister(size_t index, string str, const EvaluationOptions &eo = default_evaluation_options, MathStructure *parsed_struct = NULL, MathStructure *to_struct = NULL, bool make_to_division = true);
 	void deleteRPNRegister(size_t index);
 	MathStructure *getRPNRegister(size_t index = 1) const;
@@ -979,6 +981,8 @@ class Calculator {
 	const string &getComma() const;	
 	/** Sets argument separator and decimal sign from the current locale. Mainly for internal use. */
 	void setLocale();
+	void useDecimalComma();
+	void useDecimalPoint();
 	/** Resets argument separator and decimal sign. Mainly for internal use. */
 	void unsetLocale();
 	/** Returns the translated text string used in expressions for converting to a specific unit expression (ex "5 meters to feet.*/

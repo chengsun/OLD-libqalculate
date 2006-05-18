@@ -1,3 +1,12 @@
+2006-05-18 Niklas Knutsson  <nq@altern.org>
+
+	* Fix libqalculate.so unresolved symbols with patch from 
+	  Thomas de Grenier de Latour, add GLIB_LIBS to LIBADD
+
+2006-05-09 Niklas Knutsson  <nq@altern.org>
+
+	* Add additional localization options for use in KDE GUI
+
 2006-05-03 Niklas Knutsson  <nq@altern.org>
 
 	* Update API documentation

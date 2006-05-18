@@ -1,4 +1,4 @@
-I am thankful for every possible translation and are willing to answer any questions or help with any problems you may have as a translator. Please read through this document before starting the translation.
+The Qalculate! developer(s) are thankful for every possible translation and willing to answer any questions or help with any problems you may have as a translator. Please read through this document before starting the translation.
 
 Qalculate! is split up in one library package (libqalculate, which also includes the text interface) and five GUI packages -- qalculate-kde for KDE, qalculate-gtk for GTK+, and the other for small GTK+ utilities (with only a total of 46 messages).
 

@@ -356,6 +356,19 @@ void set_option(string str) {
 			}
 		}
 		if(v == 0) {
+			if((index = svalue.find_first_of(SPACES)) != string::npos) {
+				str = svalue;
+				svalue = str.substr(index + 1, str.length() - (index + 1));
+				remove_blank_ends(svalue);
+				svar += " ";
+				str = str.substr(0, index);
+				remove_blank_ends(str);
+				svar += str;
+				gsub("_", " ", svar);
+				if(EQUALS_IGNORECASE_AND_LOCAL(svar, "base display", _("base display"))) {
+					goto set_option_place;
+				}
+			}
 			PUTS_UNICODE(_("Illegal base."));
 		} else if(b_in) {
 			evalops.parse_options.base = v;
@@ -394,7 +407,21 @@ void set_option(string str) {
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "short multiplication", _("short multiplication"))) SET_BOOL_D(printops.short_multiplication)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "lowercase e", _("lowercase e"))) SET_BOOL_D(printops.lower_case_e)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "lowercase numbers", _("lowercase numbers"))) SET_BOOL_D(printops.lower_case_numbers)
-	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "spell out logical", _("spell out logical"))) SET_BOOL_D(printops.spell_out_logical_operators)
+	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "base display", _("base display"))) {
+		int v = -1;
+		if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "none", _("none"))) v = BASE_DISPLAY_NONE;
+		if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "normal", _("normal"))) v = BASE_DISPLAY_NORMAL;
+		if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "alternative", _("alternative"))) v = BASE_DISPLAY_ALTERNATIVE;
+		else if(svalue.find_first_not_of(SPACES NUMBERS) == string::npos) {
+			v = s2i(svalue);
+		}
+		if(v < 0 || v > 2) {
+			PUTS_UNICODE(_("Illegal value."));
+		} else {
+			printops.base_display = (BaseDisplay) v;
+			result_display_updated();
+		}
+	} else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "spell out logical", _("spell out logical"))) SET_BOOL_D(printops.spell_out_logical_operators)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "dot as separator", _("dot as separator"))) SET_BOOL_E(evalops.parse_options.dot_as_separator)
 	else if(EQUALS_IGNORECASE_AND_LOCAL(svar, "limit implicit multiplication", _("limit implicit multiplication"))) {
 		int v = s2b(svalue); if(v < 0) {PUTS_UNICODE(_("Illegal value"));} else {printops.limit_implicit_multiplication = v; evalops.parse_options.limit_implicit_multiplication = v; expression_format_updated();}
@@ -1129,6 +1156,13 @@ int main (int argc, char *argv[]) {
 				default: {printf("%i\n", printops.base);}
 			}
 			CHECK_IF_SCREEN_FILLED
+			PRINT_AND_COLON_TABS(_("base display"));
+			switch(printops.base_display) {
+				case BASE_DISPLAY_NONE: {PUTS_UNICODE(_("none")); break;}
+				case BASE_DISPLAY_NORMAL: {PUTS_UNICODE(_("normal")); break;}
+				case BASE_DISPLAY_ALTERNATIVE: {PUTS_UNICODE(_("alternative")); break;}
+			}
+			CHECK_IF_SCREEN_FILLED
 			PRINT_AND_COLON_TABS(_("calculate functions")); PUTS_UNICODE(b2oo(evalops.calculate_functions, false)); CHECK_IF_SCREEN_FILLED
 			PRINT_AND_COLON_TABS(_("calculate variables")); PUTS_UNICODE(b2oo(evalops.calculate_variables, false)); CHECK_IF_SCREEN_FILLED
 			PRINT_AND_COLON_TABS(_("complex numbers")); PUTS_UNICODE(b2oo(evalops.allow_complex, false)); CHECK_IF_SCREEN_FILLED			
@@ -1349,7 +1383,14 @@ int main (int argc, char *argv[]) {
 								}
 								if(i2 > f->minargs()) {
 									str2 += " (";
+									//optional argument, in description
 									str2 += _("optional");
+									if(!f->getDefaultValue(i2).empty()) {
+										str2 += ", ";
+										//argument default, in description
+										str2 += _("default: ");
+										str2 += f->getDefaultValue(i2);
+									}
 									str2 += ")";
 								}
 								str += str2;
@@ -1551,11 +1592,11 @@ int main (int argc, char *argv[]) {
 			remove_blank_ends(str);
 			if(EQUALS_IGNORECASE_AND_LOCAL(str, "factor", _("factor"))) {
 				puts("");
-				PUTS_UNICODE(_("Factorize the current result."));
+				PUTS_UNICODE(_("Factorizes the current result."));
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "simplify", _("simplify"))) {
 				puts("");
-				PUTS_UNICODE(_("Simplify the current result."));
+				PUTS_UNICODE(_("Simplifies the current result."));
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "set", _("set"))) {
 				INIT_SCREEN_CHECK
@@ -1576,6 +1617,7 @@ int main (int argc, char *argv[]) {
 				STR_AND_TABS(_("assumptions")); str += "("; str += _("unknown"); str += ", "; str += _("non-zero"); str += ", "; str += _("positive"); str += ", "; str += _("negative"); str += ", "; str += _("non-positive"); str += ", "; str += _("non-negative"); str += " / "; str += _("unknown"); str += ", "; str += _("number"); str += ", "; str += _("complex"); str += ", "; str += _("real"); str += ", "; str += _("rational"); str += ", "; str += _("integer"); str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("autoconversion")); str += "(0 = "; str += _("none"); str += ", 1 = "; str += _("best"); str += ", 2 = "; str += _("base");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("base")); str += "(2 - 36"; str += ", "; str += _("bin"); str += ", "; str += _("oct"); str += ", "; str += _("dec"); str += ", "; str += _("hex"); str += ", "; str += _("sex"); str += ", "; str += _("time"); str += ", "; str += _("roman"); str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
+				STR_AND_TABS(_("base display")); str += "(0 = "; str += _("none"); str += ", 1 = "; str += _("normal"); str += ", 2 = "; str += _("alternative");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("calculate functions")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("calculate variables")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("complex numbers")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
@@ -1633,7 +1675,7 @@ int main (int argc, char *argv[]) {
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "mode", _("mode"))) {
 				puts("");
-				PUTS_UNICODE(_("Display the current mode."));
+				PUTS_UNICODE(_("Displays the current mode."));
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "info", _("info"))) {
 				puts("");
@@ -1764,6 +1806,7 @@ void *view_proc(void *pipe) {
 			po.show_ending_zeroes = true;
 			po.lower_case_e = printops.lower_case_e;
 			po.lower_case_numbers = printops.lower_case_numbers;
+			po.base_display = printops.base_display;
 			po.abbreviate_names = false;
 			po.use_unicode_signs = printops.use_unicode_signs;
 			po.multiplication_sign = printops.multiplication_sign;
@@ -2324,6 +2367,7 @@ void load_preferences() {
 	printops.allow_non_usable = false;
 	printops.lower_case_numbers = false;
 	printops.lower_case_e = false;
+	printops.base_display = BASE_DISPLAY_NORMAL;
 	printops.division_sign = DIVISION_SIGN_SLASH;
 	printops.multiplication_sign = MULTIPLICATION_SIGN_ASTERISK;
 	printops.allow_factorization = false;
@@ -2342,7 +2386,7 @@ void load_preferences() {
 	evalops.assume_denominators_nonzero = true;
 	evalops.warn_about_denominators_assumed_nonzero = true;
 	evalops.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
-	evalops.parse_options.dot_as_separator = false;
+	evalops.parse_options.dot_as_separator = CALCULATOR->default_dot_as_separator;
 
 	rpn_mode = false;
 	
@@ -2492,14 +2536,16 @@ void load_preferences() {
 					printops.lower_case_numbers = v;
 				} else if(svar == "lower_case_e") {
 					printops.lower_case_e = v;
+				} else if(svar == "base_display") {
+					if(v >= BASE_DISPLAY_NONE && v <= BASE_DISPLAY_ALTERNATIVE) printops.base_display = (BaseDisplay) v;
 				} else if(svar == "spell_out_logical_operators") {
 						printops.spell_out_logical_operators = v;
 				} else if(svar == "dot_as_separator") {
 					evalops.parse_options.dot_as_separator = v;
 				} else if(svar == "multiplication_sign") {
-					printops.multiplication_sign = (MultiplicationSign) v;
+					if(v >= MULTIPLICATION_SIGN_ASTERISK && v <= MULTIPLICATION_SIGN_X) printops.multiplication_sign = (MultiplicationSign) v;
 				} else if(svar == "division_sign") {
-					printops.division_sign = (DivisionSign) v;
+					if(v >= DIVISION_SIGN_SLASH && v <= DIVISION_SIGN_DIVISION) printops.division_sign = (DivisionSign) v;
 				} else if(svar == "indicate_infinite_series") {
 					printops.indicate_infinite_series = v;
 				} else if(svar == "show_ending_zeroes") {
@@ -2570,6 +2616,7 @@ bool save_preferences(bool mode)
 	fprintf(file, "use_unicode_signs=%i\n", printops.use_unicode_signs);
 	fprintf(file, "lower_case_numbers=%i\n", printops.lower_case_numbers);
 	fprintf(file, "lower_case_e=%i\n", printops.lower_case_e);
+	fprintf(file, "base_display=%i\n", printops.base_display);
 	fprintf(file, "spell_out_logical_operators=%i\n", printops.spell_out_logical_operators);
 	fprintf(file, "dot_as_separator=%i\n", evalops.parse_options.dot_as_separator);
 	fprintf(file, "multiplication_sign=%i\n", printops.multiplication_sign);

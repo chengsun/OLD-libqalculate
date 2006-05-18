@@ -37,7 +37,7 @@ void cln::cl_abort() {
 	}
 }
 
-string printCL_I(cl_I integ, int base = 10, bool display_sign = true, bool display_base_indicator = true, bool lower_case = false) {
+string printCL_I(cl_I integ, int base = 10, bool display_sign = true, BaseDisplay base_display = BASE_DISPLAY_NORMAL, bool lower_case = false) {
 	if(base == BASE_ROMAN_NUMERALS) {
 		if(!zerop(integ) && integ < 10000 && integ > -10000) {
 			string str;
@@ -146,28 +146,38 @@ string printCL_I(cl_I integ, int base = 10, bool display_sign = true, bool displ
 	if(cl_str[cl_str.length() - 1] == '.') {
 		cl_str.erase(cl_str.length() - 1, 1);
 	}
+	if(base == 2 && base_display != BASE_DISPLAY_NONE) {
+		int i2 = cl_str.length() % 4;
+		if(i2 != 0) i2 = 4 - i2;
+		if(base_display == BASE_DISPLAY_NORMAL) {
+			for(int i = (int) cl_str.length() - 4; i > 0; i -= 4) {
+				cl_str.insert(i, 1, ' ');
+			}
+		}
+		for(; i2 > 0; i2--) {
+			cl_str.insert(cl_str.begin(), 1, '0');
+		}
+	}
 	string str = "";
-	if(display_base_indicator) {
+	if(minusp(integ) && display_sign) {
+		str += '-';
+	}
+	if(base_display == BASE_DISPLAY_NORMAL) {
 		if(base == 16) {
 			str += "0x";
 		} else if(base == 8) {
 			str += "0";
+		}
+	} else if(base_display == BASE_DISPLAY_ALTERNATIVE) {
+		if(base == 16) {
+			str += "0x0";
+		} else if(base == 8) {
+			str += "0";
+		} else if(base == 2) {
+			str += "0b00";
 		} 
 	}
 	str += cl_str;
-	if(base == 2 && display_base_indicator) {
-		int i2 = str.length() % 4;
-		if(i2 != 0) i2 = 4 - i2;
-		for(int i = (int) str.length() - 4; i > 0; i -= 4) {
-			str.insert(i, 1, ' ');
-		} 
-		for(; i2 > 0; i2--) {
-			str.insert(str.begin(), 1, '0');
-		}
-	}
-	if(minusp(integ) && display_sign) {
-		str.insert(str.begin(), 1, '-');
-	}		
 	return str;
 }
 
@@ -2209,17 +2219,17 @@ bool Number::add(const Number &o, MathOperation op) {
 	}
 	return false;	
 }
-string Number::printNumerator(int base, bool display_sign, bool display_base_indicator, bool lower_case) const {
-	return printCL_I(cln::numerator(cln::rational(cln::realpart(value))), base, display_sign, display_base_indicator, lower_case);
+string Number::printNumerator(int base, bool display_sign, BaseDisplay base_display, bool lower_case) const {
+	return printCL_I(cln::numerator(cln::rational(cln::realpart(value))), base, display_sign, base_display, lower_case);
 }
-string Number::printDenominator(int base, bool display_sign, bool display_base_indicator, bool lower_case) const {
-	return printCL_I(cln::denominator(cln::rational(cln::realpart(value))), base, display_sign, display_base_indicator, lower_case);
+string Number::printDenominator(int base, bool display_sign, BaseDisplay base_display, bool lower_case) const {
+	return printCL_I(cln::denominator(cln::rational(cln::realpart(value))), base, display_sign, base_display, lower_case);
 }
-string Number::printImaginaryNumerator(int base, bool display_sign, bool display_base_indicator, bool lower_case) const {
-	return printCL_I(cln::numerator(cln::rational(cln::imagpart(value))), base, display_sign, display_base_indicator, lower_case);
+string Number::printImaginaryNumerator(int base, bool display_sign, BaseDisplay base_display, bool lower_case) const {
+	return printCL_I(cln::numerator(cln::rational(cln::imagpart(value))), base, display_sign, base_display, lower_case);
 }
-string Number::printImaginaryDenominator(int base, bool display_sign, bool display_base_indicator, bool lower_case) const {
-	return printCL_I(cln::denominator(cln::rational(cln::imagpart(value))), base, display_sign, display_base_indicator, lower_case);
+string Number::printImaginaryDenominator(int base, bool display_sign, BaseDisplay base_display, bool lower_case) const {
+	return printCL_I(cln::denominator(cln::rational(cln::imagpart(value))), base, display_sign, base_display, lower_case);
 }
 
 string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) const {
@@ -2367,7 +2377,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 		
 		integer_rerun:
 		
-		mpz_str = printCL_I(ivalue, base, false, true, po.lower_case_numbers);
+		mpz_str = printCL_I(ivalue, base, false, po.base_display, po.lower_case_numbers);
 
 		int expo = 0;
 		if(base == 10) {
@@ -2583,7 +2593,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			int expo = 0;
 			int precision2 = precision;
 			if(!cln::zerop(num)) {
-				str = printCL_I(num, base, true, false);
+				str = printCL_I(num, base, true, BASE_DISPLAY_NONE);
 				if(base != 10) {
 					expo = 0;
 				} else {
@@ -2697,7 +2707,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 				}
 				if(po.is_approximate) *po.is_approximate = true;
 			}
-			str = printCL_I(num, base, true, false, po.lower_case_numbers);
+			str = printCL_I(num, base, true, BASE_DISPLAY_NONE, po.lower_case_numbers);
 			if(base == 10) {
 				expo = str.length() - l10 - 1;
 				if(po.min_exp < 0) {
@@ -2739,7 +2749,7 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			}
 
 			if(str.empty()) {
-				str = "0";			
+				str = "0";
 			}
 			if(min_decimals > decimals) {
 				if(decimals <= 0) {
@@ -2782,11 +2792,27 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 					str += i2s(expo);
 				}
 			}
-			if(base == 16) {
-				str.insert(0, "0x");
-			} else if(base == 8) {
-				str.insert(0, "0");
-			} 
+			switch(po.base_display) {
+				case BASE_DISPLAY_NORMAL: {
+					if(base == 16) {
+						str.insert(0, "0x");
+					} else if(base == 8) {
+						str.insert(0, "0");
+					}
+					break;
+				}
+				case BASE_DISPLAY_ALTERNATIVE: {
+					if(base == 16) {
+						str.insert(0, "0x0");
+					} else if(base == 8) {
+						str.insert(0, "0");
+					} else if(base == 2) {
+						str.insert(0, "0b00");
+					}
+					break;
+				}
+				default: {}
+			}
 			if(ips.minus) {
 				*ips.minus = neg;
 			} else if(neg) {

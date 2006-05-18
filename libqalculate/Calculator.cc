@@ -156,6 +156,18 @@ enum {
 	PROC_NO_COMMAND
 };
 
+void autoConvert(const MathStructure &morig, MathStructure &mconv, const EvaluationOptions &eo) {
+	switch(eo.auto_post_conversion) {
+		case POST_CONVERSION_BEST: {
+			mconv.set(CALCULATOR->convertToBestUnit(morig, eo));
+		}
+		case POST_CONVERSION_BASE: {
+			mconv.set(CALCULATOR->convertToBaseUnits(morig, eo));
+		}
+		default: {}
+	}
+}
+
 void *calculate_proc(void *pipe) {
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
@@ -175,7 +187,8 @@ void *calculate_proc(void *pipe) {
 			MathStructure meval(*mstruct);
 			mstruct->set(_("aborted"));
 			meval.eval(CALCULATOR->tmp_evaluationoptions);
-			mstruct->set(meval);
+			if(CALCULATOR->tmp_evaluationoptions.auto_post_conversion == POST_CONVERSION_NONE) mstruct->set(meval);
+			else autoConvert(meval, *mstruct, CALCULATOR->tmp_evaluationoptions);
 		}
 		switch(CALCULATOR->tmp_proc_command) {
 			case PROC_RPN_ADD: {
@@ -283,7 +296,10 @@ Calculator::Calculator() {
 	saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
 	struct lconv *lc = localeconv();
 	place_currency_code_before = lc->int_p_cs_precedes;
+	place_currency_code_before_negative = lc->int_n_cs_precedes;
 	place_currency_sign_before = lc->p_cs_precedes;
+	place_currency_sign_before_negative = lc->n_cs_precedes;
+	default_dot_as_separator = strcmp(lc->thousands_sep, ".") == 0;
 	if(strcmp(lc->decimal_point, ",") == 0) {
 		DOT_STR = ",";
 		DOT_S = ".,";	
@@ -1036,6 +1052,18 @@ void Calculator::setLocale() {
 		COMMA_S = ",;";		
 	}
 	setlocale(LC_NUMERIC, "C");
+}
+void Calculator::useDecimalComma() {
+	DOT_STR = ",";
+	DOT_S = ".,";
+	COMMA_STR = ";";
+	COMMA_S = ";";
+}
+void Calculator::useDecimalPoint() {
+	DOT_STR = ".";	
+	DOT_S = ".";
+	COMMA_STR = ",";
+	COMMA_S = ",;";
 }
 void Calculator::unsetLocale() {
 	COMMA_STR = ",";
@@ -1870,6 +1898,7 @@ MathStructure *Calculator::calculateRPN(MathOperation op, const EvaluationOption
 		mstruct->add(*rpn_stack.back(), op);
 	}
 	mstruct->eval(eo);
+	autoConvert(*mstruct, *mstruct, eo);
 	if(rpn_stack.size() > 1) {
 		rpn_stack.back()->unref();
 		rpn_stack.erase(rpn_stack.begin() + (rpn_stack.size() - 1));
@@ -1908,6 +1937,7 @@ MathStructure *Calculator::calculateRPN(MathFunction *f, const EvaluationOptions
 	}
 	if(parsed_struct) parsed_struct->set(*mstruct);
 	mstruct->eval(eo);
+	autoConvert(*mstruct, *mstruct, eo);
 	if(rpn_stack.size() == 0) {
 		rpn_stack.push_back(mstruct);
 	} else {
@@ -1927,6 +1957,7 @@ MathStructure *Calculator::calculateRPNBitwiseNot(const EvaluationOptions &eo, M
 	}
 	if(parsed_struct) parsed_struct->set(*mstruct);
 	mstruct->eval(eo);
+	autoConvert(*mstruct, *mstruct, eo);
 	if(rpn_stack.size() == 0) {
 		rpn_stack.push_back(mstruct);
 	} else {
@@ -1946,6 +1977,7 @@ MathStructure *Calculator::calculateRPNLogicalNot(const EvaluationOptions &eo, M
 	}
 	if(parsed_struct) parsed_struct->set(*mstruct);
 	mstruct->eval(eo);
+	autoConvert(*mstruct, *mstruct, eo);
 	if(rpn_stack.size() == 0) {
 		rpn_stack.push_back(mstruct);
 	} else {
@@ -1960,8 +1992,11 @@ bool Calculator::RPNStackEnter(MathStructure *mstruct, int msecs, const Evaluati
 bool Calculator::RPNStackEnter(string str, int msecs, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
 	return calculateRPN(str, PROC_RPN_ADD, 0, msecs, eo, parsed_struct, to_struct, make_to_division);
 }
-void Calculator::RPNStackEnter(MathStructure *mstruct, bool eval) {
-	if(eval) mstruct->eval();
+void Calculator::RPNStackEnter(MathStructure *mstruct, bool eval, const EvaluationOptions &eo) {
+	if(eval) {
+		mstruct->eval();
+		autoConvert(*mstruct, *mstruct, eo);
+	}
 	rpn_stack.push_back(mstruct);
 }
 void Calculator::RPNStackEnter(string str, const EvaluationOptions &eo, MathStructure *parsed_struct, MathStructure *to_struct, bool make_to_division) {
@@ -1979,12 +2014,15 @@ bool Calculator::setRPNRegister(size_t index, string str, int msecs, const Evalu
 	if(index <= 0 || index > rpn_stack.size()) return false;
 	return calculateRPN(str, PROC_RPN_OPERATION_2, index, msecs, eo, parsed_struct, to_struct, make_to_division);
 }
-void Calculator::setRPNRegister(size_t index, MathStructure *mstruct, bool eval) {
+void Calculator::setRPNRegister(size_t index, MathStructure *mstruct, bool eval, const EvaluationOptions &eo) {
 	if(mstruct == NULL) {
 		deleteRPNRegister(index);
 		return;
 	}
-	if(eval) mstruct->eval();
+	if(eval) {
+		mstruct->eval();
+		autoConvert(*mstruct, *mstruct, eo);
+	}
 	if(index <= 0 || index > rpn_stack.size()) return;
 	index = rpn_stack.size() - index;
 	rpn_stack[index]->unref();
@@ -2163,7 +2201,6 @@ MathStructure Calculator::calculate(string str, const EvaluationOptions &eo, Mat
 			default: {}
 		}
 	}
-	//clearBuffers();
 	return mstruct;
 }
 string Calculator::printMathStructureTimeOut(const MathStructure &mstruct, int msecs, const PrintOptions &po) {

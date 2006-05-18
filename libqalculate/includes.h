@@ -281,11 +281,19 @@ typedef enum {
 	DIVISION_SIGN_DIVISION
 } DivisionSign;
 
+typedef enum {
+	BASE_DISPLAY_NONE,
+	BASE_DISPLAY_NORMAL,
+	BASE_DISPLAY_ALTERNATIVE
+} BaseDisplay;
+
 /// Options for formatting and display of mathematical structures/results.
 static const struct PrintOptions {
 	int min_exp;
 	/// Number base for displaying numbers. Default: 10
 	int base;
+	/// How prefixes for numbers in non-decimal bases will be displayed
+	BaseDisplay base_display;
 	/// Use lower case for non-numeric characters for bases > 10. Default: false
 	bool lower_case_numbers;
 	/// Use lower case e for base-10 exponent (ex. 1.2e8 instead of 1.2E8). Default: false

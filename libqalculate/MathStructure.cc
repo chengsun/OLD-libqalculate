@@ -5895,7 +5895,6 @@ void MathStructure::sort(const PrintOptions &po, bool recursive) {
 			CHILD(i).sort(po);
 		}
 	}
-	//if(m_type != STRUCT_ADDITION && m_type != STRUCT_MULTIPLICATION && m_type != STRUCT_LOGICAL_AND && m_type != STRUCT_LOGICAL_OR && m_type != STRUCT_LOGICAL_XOR && m_type != STRUCT_BITWISE_AND && m_type != STRUCT_BITWISE_OR && m_type != STRUCT_BITWISE_XOR) return;
 	if(m_type != STRUCT_ADDITION && m_type != STRUCT_MULTIPLICATION && m_type != STRUCT_BITWISE_AND && m_type != STRUCT_BITWISE_OR && m_type != STRUCT_BITWISE_XOR) return;
 	vector<size_t> sorted;
 	bool b;
@@ -10007,7 +10006,7 @@ void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure*, size
 	}
 }
 void MathStructure::prefixCurrencies() {
-	if(isMultiplication()) {
+	if(isMultiplication() && (!hasNegativeSign() || CALCULATOR->place_currency_code_before_negative)) {
 		int index = -1;
 		for(size_t i = 0; i < SIZE; i++) {
 			if(CHILD(i).isUnit_exp()) {

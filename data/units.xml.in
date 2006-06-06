@@ -2235,12 +2235,36 @@
           <exponent>-2</exponent>
         </part>
       </unit>
+      <unit type="composite">
+        <_title>Pound-force per Square Inch</_title>
+        <hidden>true</hidden>
+        <names>r:lbf_p_sqin</names>
+        <part>
+          <unit>lbf</unit>
+          <prefix>0</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>in</unit>
+          <prefix>0</prefix>
+          <exponent>-2</exponent>
+        </part>
+      </unit>
       <unit type="alias">
         <system>SI</system>
         <_title>Pascal</_title>
         <_names>ar:Pa,pascal,p:pascals</_names>
         <base>
           <unit>N_p_sqm</unit>
+          <relation>1</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
+      <unit type="alias">
+        <_title>Pound-force per Square Inch (psi)</_title>
+        <_names>a-cr:psi</_names>
+        <base>
+          <unit>lbf_p_sqin</unit>
           <relation>1</relation>
           <exponent>1</exponent>
         </base>

@@ -11,12 +11,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: libqalculate-defs.po_[QZ8UBa]\n"
+"Project-Id-Version: libqalculate-defs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-04 09:00+0200\n"
-"PO-Revision-Date: 2006-04-13 13:23\n"
+"POT-Creation-Date: 2006-05-31 22:14+0200\n"
+"PO-Revision-Date: 20.05.YYYY 17:35\n"
 "Last-Translator: Jaap Woldringh <jjh.woldringh@planet.nl>\n"
-"Language-Team: Nederlands <kde-i18n-nl@kde.org.>\n"
+"Language-Team:  <kde-i18n-nl@kde.org.>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -229,97 +229,95 @@ msgstr "Yuan Renmimbi (PR China)"
 
 #: ../data/currencies.xml.in.h:52
 msgid "a:$,ar:USD,dollar,p:dollars"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:53
 msgid "ar:ATS,schilling"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:54
 msgid "ar:AUD"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:55
 msgid "ar:BEF"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:56
 msgid "ar:CAD"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:57
 msgid "ar:CHF"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:58
 msgid "ar:CNY"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:59
 msgid "ar:CYP"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:60
 msgid "ar:CZK"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:61
 msgid "ar:DEM,mark"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:62
 msgid "ar:DKK"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:63
 msgid "ar:EEK"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:64
-#, fuzzy
 msgid "ar:ESP,peseta,p:pesetas"
-msgstr "-"
+msgstr "ar:ESP,peseta,p:pesetas"
 
 #: ../data/currencies.xml.in.h:65
-#, fuzzy
 msgid "ar:EUR,au:&#x20AC;,euro,p:euros"
-msgstr "-"
+msgstr "ar:EUR,au:&#x20AC;,euro,p:euros"
 
 #: ../data/currencies.xml.in.h:66
 msgid "ar:FIM,markka"
-msgstr "-"
+msgstr "ar:FIM,markka"
 
 #: ../data/currencies.xml.in.h:67
 msgid "ar:FRF,franc"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:68
 msgid "ar:GBP,au:&#xA3;"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:69
 msgid "ar:GRD"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:70
 msgid "ar:HKD"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:71
 msgid "ar:HRK"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:72
 msgid "ar:IDR"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:73
 msgid "ar:IEP"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:74
 msgid "ar:ISK"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:75
 msgid "ar:ITL,lira"
@@ -327,23 +325,23 @@ msgstr "a:ITL,lire"
 
 #: ../data/currencies.xml.in.h:76
 msgid "ar:JPY,au:&#xA5;,yen"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:77
 msgid "ar:KRW"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:78
 msgid "ar:LUF"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:79
 msgid "ar:MTL"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:80
 msgid "ar:MYR"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:81
 msgid "ar:NLG,guilder"
@@ -351,19 +349,19 @@ msgstr "a:NLG,gulden"
 
 #: ../data/currencies.xml.in.h:82
 msgid "ar:NOK"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:83
 msgid "ar:NZD"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:84
 msgid "ar:PHP"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:85
 msgid "ar:PTE,escudo"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:86
 msgid "ar:RUB,ruble"
@@ -371,27 +369,27 @@ msgstr "a:RUB,roebel"
 
 #: ../data/currencies.xml.in.h:87
 msgid "ar:SEK"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:88
 msgid "ar:SGD"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:89
 msgid "ar:SKK"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:90
 msgid "ar:THB"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:91
 msgid "ar:TRY"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:92
 msgid "ar:ZAR"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:93
 msgid "au:&#xA2;,r:cent,p:cents"
@@ -399,23 +397,23 @@ msgstr "au:&#xA2;,cent,p:centen"
 
 #: ../data/currencies.xml.in.h:94
 msgid "forint,ar:HUF"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:95
 msgid "lat,ar:LVL"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:96
 msgid "leu,ar:RON"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:97
 msgid "lev,ar:BGN"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:98
 msgid "lit,ar:LTL"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:99
 msgid "r:eurocent,p:eurocents"
@@ -423,23 +421,21 @@ msgstr "eurocent,p:eurocenten"
 
 #: ../data/currencies.xml.in.h:100
 msgid "tolar,ar:SIT"
-msgstr "-"
+msgstr ""
 
 #: ../data/currencies.xml.in.h:101
 msgid "zloty,ar:PLN"
-msgstr "-"
+msgstr ""
 
 #. Object argument for chemical elements data set
 #: ../data/datasets.xml.in.h:2
-#, fuzzy
 msgid "!datasets!Element"
-msgstr "Laatste element"
+msgstr "Element"
 
 #. Data set for chemical elements
 #: ../data/datasets.xml.in.h:4
-#, fuzzy
 msgid "!datasets!Elements"
-msgstr "Laatste element"
+msgstr "Elementen"
 
 #. Planet mass
 #: ../data/datasets.xml.in.h:6
@@ -449,17 +445,17 @@ msgstr "Massa"
 #. Chemical elements number
 #: ../data/datasets.xml.in.h:8
 msgid "!datasets!Number"
-msgstr "Nummer"
+msgstr "Getal"
 
 #. Surface area of planet
 #: ../data/datasets.xml.in.h:10
 msgid "!datasets!r:area"
-msgstr "r:area"
+msgstr "r:oppervlak"
 
 #. Chemical elements number
 #: ../data/datasets.xml.in.h:12
 msgid "!datasets!r:number"
-msgstr "r:nummer"
+msgstr "r:getal"
 
 #. Orbital period for planet
 #: ../data/datasets.xml.in.h:14
@@ -608,11 +604,11 @@ msgstr "gewicht,massa"
 
 #: ../data/datasets.xml.in.h:48
 msgid "r:x_pos"
-msgstr "-"
+msgstr ""
 
 #: ../data/datasets.xml.in.h:49
 msgid "r:y_pos"
-msgstr "-"
+msgstr ""
 
 #. Chemical element
 #: ../data/elements.xml.in.h:2
@@ -1089,7 +1085,7 @@ msgstr "Zirconium"
 
 #: ../data/functions.xml.in.h:1
 msgid "-r:bmi"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:2
 msgid "10 raised the to power X"
@@ -1132,9 +1128,8 @@ msgid "Add"
 msgstr "Optellen"
 
 #: ../data/functions.xml.in.h:12
-#, fuzzy
 msgid "Adjugate (Adjoint)"
-msgstr "Nevenstaand"
+msgstr "Aangrenzend"
 
 #: ../data/functions.xml.in.h:13
 msgid "Algebra"
@@ -1277,7 +1272,6 @@ msgstr ""
 "van een termijn en 0 (standaard) voor betalen aan het eind van een termijn."
 
 #: ../data/functions.xml.in.h:43
-#, fuzzy
 msgid ""
 "Calculates the Body Mass Index. The resulting BMI-value is sometimes "
 "interpreted as follows (although varies with age, sex, etc.):&#10;&#10;"
@@ -1286,15 +1280,15 @@ msgid ""
 "you must use units for weight (ex. 59kg) and length (ex. 174cm)."
 msgstr ""
 "Berekent de zg. Body Mass Index (index voor de lichaamsmassa). De berekende "
-"BMI wordt als volgt beoordeeld: &#10;&#10;Te laag gewicht&#9;&#9;&lt; "
-"18.5&#10;Normaal gewicht&#9;&#9;18.5-25&#10;Te hoog gewicht&#9;&#9;25-30&#10;"
-"Zwaarlijvigheid&#9;&#9;&#9;&gt; 30&#10;&#10;Let er opdat u eenheden gebruikt "
-"voor gewicht (bv. 59kg) en lengte (bv. 174cm)."
+"BMI wordt als volgt beoordeeld (hoewel dit varieert met leeftijd, geslacht, "
+"enz): &#10;&#10;Te laag gewicht&#9;&#9;&lt; 18.5&#10;Normaal gewicht&#9;"
+"&#9;18.5-25&#10;Te hoog gewicht&#9;&#9;25-30&#10;Zwaarlijvigheid&#9;&#9;&#9;"
+"&gt; 30&#10;&#10;Let er opdat u eenheden gebruikt voor gewicht (bv. 59kg) en "
+"lengte (bv. 174cm)."
 
 #: ../data/functions.xml.in.h:44
-#, fuzzy
 msgid "Calculates the adjugate or adjoint of a matrix."
-msgstr "Retourneert de geadjungeerde matrix."
+msgstr "Berekent de geadjungeerde matrix."
 
 #: ../data/functions.xml.in.h:45
 msgid ""
@@ -1331,16 +1325,18 @@ msgid ""
 "Calculates the area of a four-sided figure whose opposite sides are both "
 "parallel and equal in length."
 msgstr ""
+"Berekent de oppervlakte van een figuur met vier zijden waarvan de "
+"overstaande zijden zowel evenwijdig als even lang zijn."
 
 #: ../data/functions.xml.in.h:50
-#, fuzzy
 msgid "Calculates the area of a four-sided figure with two parallel sides."
-msgstr "Berekent met de straal het oppervlak van een cirkel"
+msgstr ""
+"Berekent de oppervlakte van een figuur met vier zijden waarvan twee zijden "
+"evenwijdig zijn."
 
 #: ../data/functions.xml.in.h:51
-#, fuzzy
 msgid "Calculates the cofactor of the element at specified position."
-msgstr "Retourneert de cofactor van het element op de opgegeven positie."
+msgstr "Berekent de cofactor van het element op de opgegeven positie."
 
 #: ../data/functions.xml.in.h:52
 msgid ""
@@ -1375,6 +1371,9 @@ msgid ""
 "as a number followed by two exclamation marks.&#10;&#10;ex. factorial2(5) = "
 "5!! = 5 * 3 * 1 = 15"
 msgstr ""
+"Berekent de dubbelfaculteit van een positief geheel getal n: (n(n-2)(n-4)... "
+"Kan ook worden ingevoerd als een positief geheel getal, gevolgd door twee "
+"uitroeptekens.&#10;&#10;bv. factorial2(5) = 5!! = 5 * 3 * 1 = 15"
 
 #: ../data/functions.xml.in.h:57
 msgid "Calculates the duration of a security."
@@ -1391,6 +1390,9 @@ msgid ""
 "followed by one exclamation mark.&#10;&#10;ex. factorial(5) = 5! = 5 * 4 * 3 "
 "* 2 * 1 = 120"
 msgstr ""
+"Berekent de faculteit van een positief geheel getal n: (n(n-1)(n-2)... "
+"*2*1.  Kan ook worden ingevoerd als een positief geheel getal, gevolgd door "
+"een uitroepteken.&#10;&#10;bv. factorial(5) = 5! = 5 * 4 * 3 * 2 * 1 = 120"
 
 #: ../data/functions.xml.in.h:60
 msgid ""
@@ -1398,17 +1400,22 @@ msgid ""
 "by itself with every lesser positive integer raised by themselves (1^1 * "
 "2^2 ... n^n). &#10;&#10;ex. hyperfactorial(3) = (3^3) * (2^2) * (1^1) = 108"
 msgstr ""
+"Berekent de hyperfaculteit van een positief geheel getal n: (n^n*(n-1)^(n-"
+"1)...*2^2*1^1. &#10;&#10;bv. hyperfactorial(3) = (3^3) * (2^2) * (1^1) = "
+"27*4*1 = 108"
 
 #: ../data/functions.xml.in.h:61
 msgid "Calculates the interest paid on a given period of an investment."
 msgstr "Berekent de betaalde rente over de opgegeven investeringstermijn."
 
 #: ../data/functions.xml.in.h:62
-#, fuzzy
 msgid ""
 "Calculates the inverse of a matrix. The inverse is the matrix that "
 "multiplied by the original matrix equals the identity matrix (AB = BA = I)."
-msgstr "Retourneert de inverse van een matrix."
+msgstr ""
+"Retourneert de inverse van een matrix. De inverse matrix is de matrix die, "
+"vermenigvuldigd met de originele matrix, de eenheidsmatrix geeft (AB = BA = "
+"E)."
 
 #: ../data/functions.xml.in.h:63
 msgid ""
@@ -1417,6 +1424,10 @@ msgid ""
 "number followed by three or more exclamation marks.&#10;&#10;ex. "
 "multifactorial(18, 4) = 18!!!! = 18 * 14 * 10 * 6 * 2 = 30 240"
 msgstr ""
+"Berekent de multifaculteit van een positief geheel getal n: (n(n-x)(n-"
+"2x)...). Kan ook worden ingevoerd als een positief geheel getal gevolgd door "
+"drie of meer uitroeptekens.&#10;&#10;bv. multifactorial(18, 4) = 18!!!! = 18 "
+"* 14 * 10 * 6 * 2 = 30 240"
 
 #: ../data/functions.xml.in.h:64
 msgid ""
@@ -1435,14 +1446,18 @@ msgid ""
 "Calculates the perimeter of a four-sided figure whose opposite sides are "
 "both parallel and equal in length."
 msgstr ""
+"Berekent de omtrek van een figuur met vier zijden waarvan de overstaande "
+"zijden zowel evenwijdig als even lang zijn."
 
 #: ../data/functions.xml.in.h:67
-#, fuzzy
 msgid ""
 "Calculates the permanent of a matrix. The permanent differs from a "
 "determinant in that all signs in the expansion by minors are taken as "
 "positive."
-msgstr "Berekent de permanent van een matrix."
+msgstr ""
+"Berekent de permanent van een matrix. Het verschil met de determinant is dat "
+"alle subdeterminanten met +1 worden vermenigvuldigd, en bij de determinant "
+"om en om met +1 en met -1."
 
 #: ../data/functions.xml.in.h:68
 msgid ""
@@ -1473,13 +1488,15 @@ msgstr ""
 msgid ""
 "Calculates the superfactorial of an integer. Mulitplies the factorial of the "
 "argument with the factorial of every lesser positive integer (1! * 2! ... "
-"n^n). &#10;&#10;ex. superfactorial(5) = 5! * 4! * 3! * 2! * 1! = 34 560"
+"n!). &#10;&#10;ex. superfactorial(5) = 5! * 4! * 3! * 2! * 1! = 34 560"
 msgstr ""
+"Berekent de superfaculteit van een positief geheel getal n: (n!*(n-1)!...*2!"
+"*1! &#10;&#10;bv. superfactorial(5) = 5! * 4! * 3! * 2! * 1! = 120 * 24 * 6 "
+"* 2 * 1 =34 560"
 
 #: ../data/functions.xml.in.h:71
-#, fuzzy
 msgid "Calculates the surface area of a prism with rectangular base."
-msgstr "Berekent met de straal het oppervlak van een cirkel"
+msgstr "Berekent de oppervlakte van een prisma met een rechthoekig basisvlak."
 
 #: ../data/functions.xml.in.h:72
 msgid "Calculates the value of a level-coupon bond."
@@ -1494,16 +1511,16 @@ msgid ""
 "Calculates the volume of a 3-dimensional shape standing on a rectangular "
 "base and terminating in a point at the top."
 msgstr ""
+"Berekent de inhoud van een 3-dimensionaal lichaam met een rechthoekig "
+"basisvlak en een top in de vorm van een punt."
 
 #: ../data/functions.xml.in.h:75
-#, fuzzy
 msgid "Calculates the volume of a prism with rectangular base."
-msgstr "Berekent de waarde van een obligatie met gelijkblijvende coupons."
+msgstr "Berekent de inhoud van een prisma met een rechthoekig basisvlak."
 
 #: ../data/functions.xml.in.h:76
-#, fuzzy
 msgid "Calculates the volume of a prism with triangular base."
-msgstr "Berekent met de straal het oppervlak van een cirkel"
+msgstr "Berekent de inhoud van een prisma met een driehoekig basisvlak."
 
 #: ../data/functions.xml.in.h:77
 msgid "Calculus"
@@ -1962,9 +1979,8 @@ msgid "Export To CSV File"
 msgstr "Exporteren naar CSV-bestand"
 
 #: ../data/functions.xml.in.h:184
-#, fuzzy
 msgid "Exports a matrix to a CSV data file."
-msgstr "Importeert een CSV-gegevensbestand als een matrix."
+msgstr "Exporteert een matrix naar een CSV-gegevensbestand."
 
 #: ../data/functions.xml.in.h:185
 msgid "Expression"
@@ -2067,7 +2083,6 @@ msgstr "Dollar als breuk"
 
 #. Reccurance
 #: ../data/functions.xml.in.h:210
-#, fuzzy
 msgid "Frequency"
 msgstr "Frequentie"
 
@@ -2121,11 +2136,11 @@ msgstr "Hoogte"
 
 #: ../data/functions.xml.in.h:222
 msgid "Height of Regular Tetrahedron"
-msgstr ""
+msgstr " Hoogte van een regelmatig viervlak (tetraëder)"
 
 #: ../data/functions.xml.in.h:223
 msgid "Height of Square Pyramid"
-msgstr ""
+msgstr "Hoogte van een vierkante piramide"
 
 #: ../data/functions.xml.in.h:224
 msgid "Hexadecimal"
@@ -2374,9 +2389,8 @@ msgid "Matrix or rows/columns"
 msgstr "Matrix of rijen/kolommen"
 
 #: ../data/functions.xml.in.h:285
-#, fuzzy
 msgid "Matrix or vector"
-msgstr "Matrix/vector"
+msgstr "Matrix of vector"
 
 #: ../data/functions.xml.in.h:286
 msgid "Matrix variable"
@@ -2504,9 +2518,8 @@ msgid "Number Theory"
 msgstr "Getallentheorie"
 
 #: ../data/functions.xml.in.h:319
-#, fuzzy
 msgid "Number of Samples"
-msgstr "Aantal satellieten"
+msgstr "Aantal monsters"
 
 #: ../data/functions.xml.in.h:320
 msgid "Number of coupons to be paid"
@@ -2638,9 +2651,8 @@ msgid "Polynomial"
 msgstr "Polynoom"
 
 #: ../data/functions.xml.in.h:353
-#, fuzzy
 msgid "Polynomial Degree"
-msgstr "Polynoom"
+msgstr "Graad van polynoom"
 
 #: ../data/functions.xml.in.h:354
 msgid "Polynomials"
@@ -2738,11 +2750,11 @@ msgstr "Kwartiel"
 
 #: ../data/functions.xml.in.h:377
 msgid "RPN Stack Register"
-msgstr ""
+msgstr "RPN-register in stapelgeheugen"
 
 #: ../data/functions.xml.in.h:378
 msgid "RPN Stack Vector"
-msgstr ""
+msgstr "RPN-vector in stapelgeheugen"
 
 #: ../data/functions.xml.in.h:379
 msgid "Radians"
@@ -2825,6 +2837,8 @@ msgid ""
 "Removes all units from an expression. The expression is calculated before "
 "the removal."
 msgstr ""
+"Verwijdert alle eenheden uit een expressie. De expressie wordt hierbij eerst "
+"berekend."
 
 #: ../data/functions.xml.in.h:399
 msgid "Replace"
@@ -2835,6 +2849,8 @@ msgid ""
 "Replaces a certain value in an expression with a new value. The expression "
 "is calculated before the replacement if the fourth argument is true."
 msgstr ""
+"Vervangt een waarde in een expressie door een nieuwe waarde. Eerst wordt de "
+"expressie berekend indien het vierde argument waar (true) is."
 
 #: ../data/functions.xml.in.h:401
 msgid "Return on continuously compounded interest"
@@ -2864,9 +2880,8 @@ msgid "Returns a decimal value from a hexadecimal number"
 msgstr "Converteert een hexadecimaal getal naar een decimaal getal"
 
 #: ../data/functions.xml.in.h:407
-#, fuzzy
 msgid "Returns a matrix imported from a CSV data file."
-msgstr "Converteert een octaal getal naar een decimaal getal"
+msgstr "Retourneert een matrix, geïmporteerd uit een CSV-gegevensbestand."
 
 #: ../data/functions.xml.in.h:408
 msgid ""
@@ -2881,18 +2896,17 @@ msgid "Returns a part of a matrix."
 msgstr "Retourneert een deel van een matrix."
 
 #: ../data/functions.xml.in.h:410
-#, fuzzy
 msgid "Returns a part of a vector between two positions."
-msgstr "Retourneert een deel van een vector."
+msgstr "Retourneert een deel van een vector tussen twee posities."
 
 #: ../data/functions.xml.in.h:411
 msgid "Returns a row in a matrix as a vector."
 msgstr "Retourneert een rij in een matrix als een vector."
 
 #: ../data/functions.xml.in.h:412
-#, fuzzy
 msgid "Returns a sorted vector.&#10;&#10;ex. sort([6, 1, 4])=[1, 4, 6]"
-msgstr "Retourneert een gesorteerde vector."
+msgstr ""
+"Retourneert een gesorteerde vector.&#10;&#10;bv. sort([6, 1, 4])=[1, 4, 6]"
 
 #: ../data/functions.xml.in.h:413
 msgid ""
@@ -2911,18 +2925,17 @@ msgid "Returns a vector with listed elements."
 msgstr "Retourneert een vector met de opgegeven elementen."
 
 #: ../data/functions.xml.in.h:415
-#, fuzzy
 msgid "Returns a vector with the elements from two vectors."
-msgstr "Retourneert een vector met de opgegeven elementen."
+msgstr "Retourneert een vector met de elementen van twee vectoren."
 
 #: ../data/functions.xml.in.h:416
-#, fuzzy
 msgid ""
 "Returns a vector with values of elements replaced with their mutual ranks."
 "&#10;&#10;ex. rank([6, 1, 4]) = [3, 1, 2]"
 msgstr ""
 "Retourneert een vector waarin de elementen zijn vervangen door hun "
-"onderlinge rangorde."
+"onderlinge rangorde.&#10;&#10;bv. rank([6, 1, 4]) = [3, 1, 2] (6 staat op de "
+"3de plaats in de gesorteerde vector, 1 op de 1ste en 4 op de 2de plaats)"
 
 #: ../data/functions.xml.in.h:417
 msgid ""
@@ -2942,9 +2955,8 @@ msgid "Returns an integer between (including) bottom and top."
 msgstr "Retourneert een geheel getal tussen onder- en bovengrens (inclusief)."
 
 #: ../data/functions.xml.in.h:419
-#, fuzzy
 msgid "Returns the RPN stack as a vector."
-msgstr "Retourneert een rij in een matrix als een vector."
+msgstr "Retourneert de inhoud van het RPN-stapelgeheugen als een vector."
 
 #: ../data/functions.xml.in.h:420
 msgid ""
@@ -3006,11 +3018,12 @@ msgstr ""
 "30/360."
 
 #: ../data/functions.xml.in.h:426
-#, fuzzy
 msgid ""
 "Returns the element at specified position in a matrix (row and column) or "
 "vector (index)."
-msgstr "Retourneert het element op de opgegeven positie in een matrix."
+msgstr ""
+"Retourneert het element op de opgegeven positie in een matrix (rij en kolom) "
+"of vector (index)."
 
 #: ../data/functions.xml.in.h:427
 msgid "Returns the highest value."
@@ -3075,9 +3088,8 @@ msgstr ""
 "30/360."
 
 #: ../data/functions.xml.in.h:436
-#, fuzzy
 msgid "Returns the number of elements in a matrix or vector."
-msgstr "Retourneert het aantal elementen in een matrix."
+msgstr "Retourneert het aantal elementen in een matrix of vector."
 
 #: ../data/functions.xml.in.h:437
 msgid "Returns the number of elements in a vector."
@@ -3099,6 +3111,11 @@ msgid ""
 "2], [2, 1], [1, 3], [3, 1], [2, 3] and [3, 2], and thus the number of "
 "permutations is 6."
 msgstr ""
+"Retourneert op hoeveel manieren een bepaald aantal objecten op een geordende "
+"manier kunnen worden gekozen uit een verzameling van (verschillende) "
+"objecten. Stel er zijn drie objecten (1, 2, en 3) waarvan er twee moeten "
+"worden gekozen in een geordende lijst, dan zijn de mogelijkheden [1, 2], [2, "
+"1], [1, 3], [3, 1], [2, 3] en [3, 2], en is het aantal permutaties dus 6."
 
 #: ../data/functions.xml.in.h:440
 msgid ""
@@ -3107,6 +3124,11 @@ msgid ""
 "(1, 2 and 3) that is put in a list with place for two, the alternatives are "
 "[1, 2], [1, 3], and [2, 3], and thus the number of combinations is 3."
 msgstr ""
+"Retourneert op hoeveel manieren een bepaald aantal objecten op een niet "
+"geordende manier kunnen worden gekozen uit een verzameling van "
+"(verschillende) objecten. Stel er zijn drie objecten (1, 2, en 3) waarvan er "
+"twee moeten worden gekozen in een niet geordende lijst, dan zijn de "
+"mogelijkheden [1, 2], [1, 3] en [2, 3], en is het aantal combinaties dus 6."
 
 #: ../data/functions.xml.in.h:441
 msgid ""
@@ -3115,6 +3137,11 @@ msgid ""
 "the original list is [1, 2, 3], the possible derangements is [2, 3, 1] and "
 "[3, 1, 2], and thus the number of derangements is 2."
 msgstr ""
+"Retourneert op hoeveel manieren een geordende lijst van objecten zo kan "
+"worden herschikt dat geen der objecten op zijn oorspronkelijke posite "
+"terecht komt. Indien de oorspronkelijke lijst [1, 2, 3] is, zijn de "
+"mogelijke herschikkingen [2, 3, 1] en [3, 1, 2], en is het aantal mogelijke "
+"herschikkingen dus 2."
 
 #: ../data/functions.xml.in.h:442
 msgid "Returns the number of rows in a matrix."
@@ -3188,9 +3215,8 @@ msgid "Returns the transpose of a matrix."
 msgstr "Retourneert de getransponeerde van een matrix."
 
 #: ../data/functions.xml.in.h:452
-#, fuzzy
 msgid "Returns the value of a RPN stack register."
-msgstr "Retourneert de inverse van een matrix."
+msgstr "Retourneert de waarde in een register van het RPN-stapelgeheugen."
 
 #: ../data/functions.xml.in.h:453
 msgid ""
@@ -3458,18 +3484,16 @@ msgid "Surface Area of Rectangular Prism"
 msgstr "Oppervlaktegrootte van rechthoekig prisma"
 
 #: ../data/functions.xml.in.h:517
-#, fuzzy
 msgid "Surface Area of Regular Tetrahedron"
-msgstr "Oppervlaktegrootte van rechthoekig prisma"
+msgstr "Oppervlaktegrootte van regelmatig viervlak (tetraëder)"
 
 #: ../data/functions.xml.in.h:518
 msgid "Surface Area of Sphere"
 msgstr "Oppervlaktegrootte van bol"
 
 #: ../data/functions.xml.in.h:519
-#, fuzzy
 msgid "Surface Area of Square Pyramid"
-msgstr "Oppervlaktegrootte van bol"
+msgstr "Oppervlaktegrootte van vierkante piramide"
 
 #: ../data/functions.xml.in.h:520
 msgid "Tangent"
@@ -3662,21 +3686,19 @@ msgstr "Vectorvariabele"
 
 #: ../data/functions.xml.in.h:567
 msgid "Volume of Rectangular Prism"
-msgstr "Volume van rechthoekig prisma"
+msgstr "Inhoud van rechthoekig prisma"
 
 #: ../data/functions.xml.in.h:568
-#, fuzzy
 msgid "Volume of Regular Tetrahedron"
-msgstr "Volume van rechthoekig prisma"
+msgstr "Inhoud van regelmatig viervlak (tetraëder)"
 
 #: ../data/functions.xml.in.h:569
-#, fuzzy
 msgid "Volume of Square Pyramid"
-msgstr "Volume van driehoekig prisma"
+msgstr "Inhoud van vierkant prisma"
 
 #: ../data/functions.xml.in.h:570
 msgid "Volume of Triangular Prism"
-msgstr "Volume van driehoekig prisma"
+msgstr "Inhoud van driehoekig prisma"
 
 #: ../data/functions.xml.in.h:571
 msgid "Week begins on Sunday"
@@ -3699,7 +3721,6 @@ msgid "Width"
 msgstr "Breedte"
 
 #: ../data/functions.xml.in.h:577
-#, fuzzy
 msgid "Width of base"
 msgstr "Basislengte"
 
@@ -3741,11 +3762,11 @@ msgstr "Zonder coupons"
 
 #: ../data/functions.xml.in.h:587
 msgid "au:&#x221A;,r:sqrt"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:588
 msgid "au:&#x3A0;,r:product"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:589
 msgid "au:&#x3A3;,r:sum"
@@ -3753,39 +3774,39 @@ msgstr "au:&#x3A3;,som"
 
 #: ../data/functions.xml.in.h:590
 msgid "r:abs"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:591
 msgid "r:accrint"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:592
 msgid "r:accrintm"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:593
 msgid "r:acos"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:594
 msgid "r:acosh"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:595
 msgid "r:acot"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:596
 msgid "r:acoth"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:597
 msgid "r:acsc"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:598
 msgid "r:acsch"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:599
 msgid "r:add"
@@ -3793,7 +3814,7 @@ msgstr "optellen"
 
 #: ../data/functions.xml.in.h:600
 msgid "r:adj"
-msgstr "-"
+msgstr ""
 
 #. Matrix area
 #: ../data/functions.xml.in.h:602
@@ -3802,27 +3823,27 @@ msgstr "oppervlak"
 
 #: ../data/functions.xml.in.h:603
 msgid "r:asec"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:604
 msgid "r:asech"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:605
 msgid "r:asin"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:606
 msgid "r:asinh"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:607
 msgid "r:atan"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:608
 msgid "r:atanh"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:609
 msgid "r:base"
@@ -3830,11 +3851,11 @@ msgstr "grondtal"
 
 #: ../data/functions.xml.in.h:610
 msgid "r:beta"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:611
 msgid "r:bin"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:612
 msgid "r:binomial"
@@ -3842,19 +3863,19 @@ msgstr "binomiaal"
 
 #: ../data/functions.xml.in.h:613
 msgid "r:bitxor"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:614
 msgid "r:cbrt"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:615
 msgid "r:ceil"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:616
 msgid "r:char"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:617
 msgid "r:circle"
@@ -3866,19 +3887,19 @@ msgstr "cirkelomtrek"
 
 #: ../data/functions.xml.in.h:619
 msgid "r:cis"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:620
 msgid "r:code"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:621
 msgid "r:coeff"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:622
 msgid "r:cofactor"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:623
 msgid "r:column"
@@ -3889,7 +3910,6 @@ msgid "r:columns"
 msgstr "kolommen"
 
 #: ../data/functions.xml.in.h:625
-#, fuzzy
 msgid "r:comb"
 msgstr "kam"
 
@@ -3915,39 +3935,39 @@ msgstr "continu"
 
 #: ../data/functions.xml.in.h:631
 msgid "r:cor"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:632
 msgid "r:cos"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:633
 msgid "r:cosh"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:634
 msgid "r:cot"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:635
 msgid "r:coth"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:636
 msgid "r:coupnum"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:637
 msgid "r:cov,r:covar"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:638
 msgid "r:csc"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:639
 msgid "r:csch"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:640
 msgid "r:csum"
@@ -3955,7 +3975,7 @@ msgstr "csom"
 
 #: ../data/functions.xml.in.h:641
 msgid "r:csurplus"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:642
 msgid "r:cube"
@@ -3999,11 +4019,11 @@ msgstr "derangementen"
 
 #: ../data/functions.xml.in.h:652
 msgid "r:det"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:653
 msgid "r:diff"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:654
 msgid "r:dimension"
@@ -4019,11 +4039,11 @@ msgstr "delen"
 
 #: ../data/functions.xml.in.h:657
 msgid "r:dollarde"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:658
 msgid "r:dollarfr"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:659
 msgid "r:duration"
@@ -4031,11 +4051,11 @@ msgstr "tijdsduur"
 
 #: ../data/functions.xml.in.h:660
 msgid "r:durbinwatson"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:661
 msgid "r:effect"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:662
 msgid "r:elasticity"
@@ -4043,7 +4063,7 @@ msgstr "elasticiteit"
 
 #: ../data/functions.xml.in.h:663
 msgid "r:element"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:664
 msgid "r:elements"
@@ -4055,11 +4075,11 @@ msgstr "fout"
 
 #: ../data/functions.xml.in.h:666
 msgid "r:even"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:667
 msgid "r:exp"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:668
 msgid "r:export"
@@ -4079,15 +4099,15 @@ msgstr "faculteit2"
 
 #: ../data/functions.xml.in.h:672
 msgid "r:floor"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:673
 msgid "r:for"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:674
 msgid "r:frac"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:675
 msgid "r:function"
@@ -4095,7 +4115,7 @@ msgstr "functie"
 
 #: ../data/functions.xml.in.h:676
 msgid "r:fv"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:677
 msgid "r:g_duration"
@@ -4103,7 +4123,7 @@ msgstr "g_duur"
 
 #: ../data/functions.xml.in.h:678
 msgid "r:gamma"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:679
 msgid "r:gcd"
@@ -4111,7 +4131,7 @@ msgstr "ggd"
 
 #: ../data/functions.xml.in.h:680
 msgid "r:genvector"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:681
 msgid "r:geomean"
@@ -4123,7 +4143,7 @@ msgstr "harmgem"
 
 #: ../data/functions.xml.in.h:683
 msgid "r:hex"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:684
 msgid "r:hyperfactorial"
@@ -4131,7 +4151,7 @@ msgstr "hyperfaculteit"
 
 #: ../data/functions.xml.in.h:685
 msgid "r:hypot"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:686
 msgid "r:identity"
@@ -4139,15 +4159,15 @@ msgstr "identiteit"
 
 #: ../data/functions.xml.in.h:687
 msgid "r:if"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:688
 msgid "r:im"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:689
 msgid "r:int"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:690
 msgid "r:integrate"
@@ -4159,27 +4179,27 @@ msgstr "renteperc"
 
 #: ../data/functions.xml.in.h:692
 msgid "r:inv"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:693
 msgid "r:inverse"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:694
 msgid "r:ipmt"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:695
 msgid "r:iqr"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:696
 msgid "r:isodate"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:697
 msgid "r:ispmt"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:698
 msgid "r:lcm"
@@ -4187,7 +4207,7 @@ msgstr "kgv"
 
 #: ../data/functions.xml.in.h:699
 msgid "r:lcoeff"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:700
 msgid "r:ldegree"
@@ -4195,7 +4215,7 @@ msgstr "lgraad"
 
 #: ../data/functions.xml.in.h:701
 msgid "r:len"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:702
 msgid "r:level_coupon"
@@ -4211,7 +4231,7 @@ msgstr "lineairefunctie"
 
 #: ../data/functions.xml.in.h:705
 msgid "r:ln"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:706
 msgid "r:load"
@@ -4223,7 +4243,7 @@ msgstr "lokaledatum"
 
 #: ../data/functions.xml.in.h:708
 msgid "r:log"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:709
 msgid "r:logistic"
@@ -4231,15 +4251,15 @@ msgstr "logistisch"
 
 #: ../data/functions.xml.in.h:710
 msgid "r:matrix"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:711
 msgid "r:matrix2vector"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:712
 msgid "r:max"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:713
 msgid "r:mean,average"
@@ -4263,7 +4283,7 @@ msgstr "bericht"
 
 #: ../data/functions.xml.in.h:718
 msgid "r:min"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:719
 msgid "r:mod"
@@ -4299,7 +4319,7 @@ msgstr "nominaal"
 
 #: ../data/functions.xml.in.h:727
 msgid "r:norm"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:728
 msgid "r:nounit,strip_units"
@@ -4311,9 +4331,8 @@ msgstr "nterm"
 
 #. Number of samples
 #: ../data/functions.xml.in.h:731
-#, fuzzy
 msgid "r:number"
-msgstr "nummer"
+msgstr "getal"
 
 #: ../data/functions.xml.in.h:732
 msgid "r:numerator"
@@ -4321,7 +4340,7 @@ msgstr "noemer"
 
 #: ../data/functions.xml.in.h:733
 msgid "r:oct"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:734
 msgid "r:odd"
@@ -4337,7 +4356,7 @@ msgstr "parallellogram_omtrek"
 
 #: ../data/functions.xml.in.h:737
 msgid "r:pareto"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:738
 msgid "r:pcontent"
@@ -4345,7 +4364,7 @@ msgstr "pinhoud"
 
 #: ../data/functions.xml.in.h:739
 msgid "r:pearson,r:correl"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:740
 msgid "r:percentile"
@@ -4353,19 +4372,19 @@ msgstr "percentiel"
 
 #: ../data/functions.xml.in.h:741
 msgid "r:perm"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:742
 msgid "r:permanent"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:743
 msgid "r:pmt"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:744
 msgid "r:poolvar"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:745
 msgid "r:pow"
@@ -4373,7 +4392,7 @@ msgstr "macht"
 
 #: ../data/functions.xml.in.h:746
 msgid "r:ppmt"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:747
 msgid "r:pricedisc"
@@ -4385,7 +4404,7 @@ msgstr "prijsmat"
 
 #: ../data/functions.xml.in.h:749
 msgid "r:primpart"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:750
 msgid "r:process"
@@ -4393,15 +4412,15 @@ msgstr "verwerken"
 
 #: ../data/functions.xml.in.h:751
 msgid "r:processm"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:752
 msgid "r:psurplus"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:753
 msgid "r:pttest"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:754
 msgid "r:punit"
@@ -4409,7 +4428,7 @@ msgstr "peenheid"
 
 #: ../data/functions.xml.in.h:755
 msgid "r:pv"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:756
 msgid "r:pyramid"
@@ -4445,7 +4464,7 @@ msgstr "rangorde"
 
 #: ../data/functions.xml.in.h:764
 msgid "r:rayleigh"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:765
 msgid "r:rayleightail"
@@ -4453,7 +4472,7 @@ msgstr "rayleighstaart"
 
 #: ../data/functions.xml.in.h:766
 msgid "r:re"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:767
 msgid "r:received"
@@ -4461,7 +4480,7 @@ msgstr "ontvangen"
 
 #: ../data/functions.xml.in.h:768
 msgid "r:rect"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:769
 msgid "r:rect_perimeter"
@@ -4476,13 +4495,12 @@ msgid "r:rectprism_sa"
 msgstr "rectprisma_opp"
 
 #: ../data/functions.xml.in.h:772
-#, fuzzy
 msgid "r:register"
-msgstr "machtverheffen"
+msgstr ""
 
 #: ../data/functions.xml.in.h:773
 msgid "r:rem"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:774
 msgid "r:replace"
@@ -4490,7 +4508,7 @@ msgstr "vervangen"
 
 #: ../data/functions.xml.in.h:775
 msgid "r:rms"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:776
 msgid "r:roman"
@@ -4518,11 +4536,11 @@ msgstr "opslaan"
 
 #: ../data/functions.xml.in.h:782
 msgid "r:sec"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:783
 msgid "r:sech"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:784
 msgid "r:select"
@@ -4530,23 +4548,23 @@ msgstr "selecteer"
 
 #: ../data/functions.xml.in.h:785
 msgid "r:sgn"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:786
 msgid "r:shift"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:787
 msgid "r:sin"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:788
 msgid "r:sinh"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:789
 msgid "r:sln"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:790
 msgid "r:solve"
@@ -4562,7 +4580,7 @@ msgstr "sorteren"
 
 #: ../data/functions.xml.in.h:793
 msgid "r:spearman"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:794
 msgid "r:sphere"
@@ -4574,26 +4592,23 @@ msgstr "bol_oppervlak"
 
 #: ../data/functions.xml.in.h:796
 msgid "r:sq"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:797
-#, fuzzy
 msgid "r:sqpyramid"
-msgstr "piramide"
+msgstr "vierkpiramide"
 
 #: ../data/functions.xml.in.h:798
-#, fuzzy
 msgid "r:sqpyramid_height"
-msgstr "piramide"
+msgstr "midhoogte_vierkpiramide"
 
 #: ../data/functions.xml.in.h:799
-#, fuzzy
 msgid "r:sqpyramid_sa"
-msgstr "piramide"
+msgstr "vierkpiramide_opp"
 
 #: ../data/functions.xml.in.h:800
 msgid "r:sqrtpi"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:801
 msgid "r:square"
@@ -4604,9 +4619,8 @@ msgid "r:square_perimeter"
 msgstr "vierkant_omtrek"
 
 #: ../data/functions.xml.in.h:803
-#, fuzzy
 msgid "r:stack"
-msgstr "aftrekken"
+msgstr "stapelgeheugen"
 
 #: ../data/functions.xml.in.h:804
 msgid "r:stamptodate"
@@ -4614,15 +4628,15 @@ msgstr "stampnaardatum"
 
 #: ../data/functions.xml.in.h:805
 msgid "r:stderr"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:806
 msgid "r:stdev"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:807
 msgid "r:stdevp"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:808
 msgid "r:subtract"
@@ -4634,44 +4648,43 @@ msgstr "superfaculteit"
 
 #: ../data/functions.xml.in.h:810
 msgid "r:syd"
-msgstr "sjc"
+msgstr ""
 
 #: ../data/functions.xml.in.h:811
 msgid "r:tan"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:812
 msgid "r:tanh"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:813
 msgid "r:tbilleq"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:814
 msgid "r:tbillprice"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:815
 msgid "r:tbillyield"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:816
 msgid "r:tcoeff"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:817
-#, fuzzy
 msgid "r:tetrahedron"
-msgstr "fout"
+msgstr "tetraëder"
 
 #: ../data/functions.xml.in.h:818
 msgid "r:tetrahedron_height"
-msgstr ""
+msgstr "tetraëder_hoogte"
 
 #: ../data/functions.xml.in.h:819
 msgid "r:tetrahedron_sa"
-msgstr ""
+msgstr "tetraëder_opp"
 
 #: ../data/functions.xml.in.h:820
 msgid "r:time"
@@ -4679,7 +4692,7 @@ msgstr "tijd"
 
 #: ../data/functions.xml.in.h:821
 msgid "r:timestamp"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:822
 msgid "r:title"
@@ -4719,19 +4732,19 @@ msgstr "afkap"
 
 #: ../data/functions.xml.in.h:831
 msgid "r:ttest"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:832
 msgid "r:var"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:833
 msgid "r:varp"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:834
 msgid "r:vector"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:835
 msgid "r:warning"
@@ -4739,7 +4752,7 @@ msgstr "waarschuwing"
 
 #: ../data/functions.xml.in.h:836
 msgid "r:week"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:837
 msgid "r:weekday"
@@ -4755,7 +4768,7 @@ msgstr "winsorgemidd"
 
 #: ../data/functions.xml.in.h:840
 msgid "r:xor"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:841
 msgid "r:year"
@@ -4775,39 +4788,39 @@ msgstr "geen_coupon"
 
 #: ../data/functions.xml.in.h:845
 msgid "r:zeta"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:846
 msgid "rs:exp10"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:847
 msgid "rs:exp2"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:848
 msgid "rs:log10"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:849
 msgid "rs:log2"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:850
 msgid "x1"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:851
 msgid "x2"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:852
 msgid "y1"
-msgstr "-"
+msgstr ""
 
 #: ../data/functions.xml.in.h:853
 msgid "y2"
-msgstr "-"
+msgstr ""
 
 #. Planet
 #: ../data/planets.xml.in.h:2
@@ -4849,11 +4862,10 @@ msgstr "Venus"
 #. Unit category
 #: ../data/units.xml.in.h:2
 msgid "!units!Angle"
-msgstr ""
+msgstr "Hoek"
 
 #. Unit category
 #: ../data/units.xml.in.h:4
-#, fuzzy
 msgid "!units!Frequency"
 msgstr "Frequentie"
 
@@ -5808,1030 +5820,1040 @@ msgid "Pound-force"
 msgstr "Pound-force"
 
 #: ../data/units.xml.in.h:244
+msgid "Pound-force per Square Inch"
+msgstr "Pound-force per inch kwadraat"
+
+#: ../data/units.xml.in.h:245
+msgid "Pound-force per Square Inch (psi)"
+msgstr "Pound-force per inch kwadraat (psi)"
+
+#: ../data/units.xml.in.h:246
 msgid "Poundal"
 msgstr "Poundal"
 
-#: ../data/units.xml.in.h:245
+#: ../data/units.xml.in.h:247
 msgid "Power"
 msgstr "Vermogen"
 
-#: ../data/units.xml.in.h:246
+#: ../data/units.xml.in.h:248
 msgid "Pressure"
 msgstr "Druk"
 
-#: ../data/units.xml.in.h:247
+#: ../data/units.xml.in.h:249
 msgid "Rad"
 msgstr "Rad"
 
-#: ../data/units.xml.in.h:248
+#: ../data/units.xml.in.h:250
 msgid "Radian"
 msgstr "Radiaal"
 
-#: ../data/units.xml.in.h:249
+#: ../data/units.xml.in.h:251
 msgid "Radiance"
 msgstr "Radiantie"
 
-#: ../data/units.xml.in.h:250
+#: ../data/units.xml.in.h:252
 msgid "Radians per Second"
 msgstr "Radialen per seconde"
 
-#: ../data/units.xml.in.h:251
+#: ../data/units.xml.in.h:253
 msgid "Radians per Second Squared"
 msgstr "Radialen per seconde kwadraat"
 
-#: ../data/units.xml.in.h:252
+#: ../data/units.xml.in.h:254
 msgid "Radiant Intensity"
 msgstr "Stralingsintensiteit"
 
-#: ../data/units.xml.in.h:253
+#: ../data/units.xml.in.h:255
 msgid "Radioactivity"
 msgstr "Radioactiviteit"
 
-#: ../data/units.xml.in.h:254
+#: ../data/units.xml.in.h:256
 msgid "Ratio"
 msgstr "Verhouding"
 
-#: ../data/units.xml.in.h:255
+#: ../data/units.xml.in.h:257
 msgid "Reciprocal Meter"
 msgstr "Omgekeerde meter"
 
-#: ../data/units.xml.in.h:256
+#: ../data/units.xml.in.h:258
 msgid "Reciprocal Seconds Mole"
 msgstr "Omgekeerde seconden mol"
 
-#: ../data/units.xml.in.h:257
+#: ../data/units.xml.in.h:259
 msgid "Rem"
 msgstr "Rem"
 
-#: ../data/units.xml.in.h:258
+#: ../data/units.xml.in.h:260
 msgid "Rod (pole/perch)"
 msgstr "Rod (pole/perch)"
 
-#: ../data/units.xml.in.h:259
+#: ../data/units.xml.in.h:261
 msgid "Roentgen"
 msgstr "Roentgen"
 
-#: ../data/units.xml.in.h:260
+#: ../data/units.xml.in.h:262
 msgid "Rood"
 msgstr "Rood"
 
-#: ../data/units.xml.in.h:261
+#: ../data/units.xml.in.h:263
 msgid "Second"
 msgstr "Seconde"
 
-#: ../data/units.xml.in.h:262
+#: ../data/units.xml.in.h:264
 msgid "Second Ampere"
 msgstr "Seconde ampere"
 
-#: ../data/units.xml.in.h:263
+#: ../data/units.xml.in.h:265
 msgid "Section"
 msgstr "Sectie"
 
-#: ../data/units.xml.in.h:264
+#: ../data/units.xml.in.h:266
 msgid "Short Hundredweight"
 msgstr "Short hundredweight"
 
-#: ../data/units.xml.in.h:265
+#: ../data/units.xml.in.h:267
 msgid "Short Ton"
 msgstr "Short ton"
 
-#: ../data/units.xml.in.h:266
+#: ../data/units.xml.in.h:268
 msgid "Siemens"
 msgstr "Siemens"
 
-#: ../data/units.xml.in.h:267
+#: ../data/units.xml.in.h:269
 msgid "Sievert"
 msgstr "Sievert"
 
-#: ../data/units.xml.in.h:268
+#: ../data/units.xml.in.h:270
 msgid "Solid Angle"
 msgstr "Ruimtehoek"
 
-#: ../data/units.xml.in.h:269
+#: ../data/units.xml.in.h:271
 msgid "Specific Energy"
 msgstr "Soortelijke energie"
 
-#: ../data/units.xml.in.h:270
+#: ../data/units.xml.in.h:272
 msgid "Specific Entropy"
 msgstr "Soortelijke entropie"
 
-#: ../data/units.xml.in.h:271
+#: ../data/units.xml.in.h:273
 msgid "Specific Volume"
 msgstr "Soortelijk volume"
 
-#: ../data/units.xml.in.h:272
+#: ../data/units.xml.in.h:274
 msgid "Speed"
 msgstr "Snelheid"
 
-#: ../data/units.xml.in.h:273
+#: ../data/units.xml.in.h:275
 msgid "Square Foot"
 msgstr "Vierkante voet"
 
-#: ../data/units.xml.in.h:274
+#: ../data/units.xml.in.h:276
 msgid "Square Inch"
 msgstr "Vierkante inch"
 
-#: ../data/units.xml.in.h:275
+#: ../data/units.xml.in.h:277
 msgid "Square Kilometer"
 msgstr "Vierkante kilometer"
 
-#: ../data/units.xml.in.h:276
+#: ../data/units.xml.in.h:278
 msgid "Square Meter"
 msgstr "Vierkante meter"
 
-#: ../data/units.xml.in.h:277
+#: ../data/units.xml.in.h:279
 msgid "Square Meter per Second"
 msgstr "Vierkante meter per seconde"
 
-#: ../data/units.xml.in.h:278
+#: ../data/units.xml.in.h:280
 msgid "Square Meter per Square Meter"
 msgstr "Vierkante meter per vierkante meter"
 
-#: ../data/units.xml.in.h:279
+#: ../data/units.xml.in.h:281
 msgid "Square Mile"
 msgstr "Vierkante mijl"
 
-#: ../data/units.xml.in.h:280
+#: ../data/units.xml.in.h:282
 msgid "Statcoloumb (Franklin)"
 msgstr "Statcoloumb (Franklin)"
 
-#: ../data/units.xml.in.h:281
+#: ../data/units.xml.in.h:283
 msgid "Statohm"
 msgstr "Statohm"
 
-#: ../data/units.xml.in.h:282
+#: ../data/units.xml.in.h:284
 msgid "Statvolt"
 msgstr "Statvolt"
 
-#: ../data/units.xml.in.h:283
+#: ../data/units.xml.in.h:285
 msgid "Steradian"
 msgstr "Steradiaal"
 
-#: ../data/units.xml.in.h:284
+#: ../data/units.xml.in.h:286
 msgid "Stilb"
 msgstr "Stilb"
 
-#: ../data/units.xml.in.h:285
+#: ../data/units.xml.in.h:287
 msgid "Stokes"
 msgstr "Stokes"
 
-#: ../data/units.xml.in.h:286
+#: ../data/units.xml.in.h:288
 msgid "Stone"
 msgstr "Stone"
 
-#: ../data/units.xml.in.h:287
+#: ../data/units.xml.in.h:289
 msgid "Substance"
 msgstr "Stofhoeveelheid"
 
-#: ../data/units.xml.in.h:288
+#: ../data/units.xml.in.h:290
 msgid "Substance Concentration"
 msgstr "Concentratie van stof"
 
-#: ../data/units.xml.in.h:289
+#: ../data/units.xml.in.h:291
 msgid "Surface Tension"
 msgstr "Oppervlaktespanning"
 
-#: ../data/units.xml.in.h:290
+#: ../data/units.xml.in.h:292
 msgid "Tablespoon"
 msgstr "Eetlepel"
 
-#: ../data/units.xml.in.h:291
+#: ../data/units.xml.in.h:293
 msgid "Teaspoon"
 msgstr "Theelepel"
 
-#: ../data/units.xml.in.h:292
+#: ../data/units.xml.in.h:294
 msgid "Temperature"
 msgstr "Temperatuur"
 
-#: ../data/units.xml.in.h:293
+#: ../data/units.xml.in.h:295
 msgid "Terabit"
 msgstr "Terabit"
 
-#: ../data/units.xml.in.h:294
+#: ../data/units.xml.in.h:296
 msgid "Terabyte"
 msgstr "Terabyte"
 
-#: ../data/units.xml.in.h:295
+#: ../data/units.xml.in.h:297
 msgid "Tesla"
 msgstr "Tesla"
 
-#: ../data/units.xml.in.h:296
+#: ../data/units.xml.in.h:298
 msgid "Thermal Conductivity"
 msgstr "Thermisch geleidingsvermogen"
 
-#: ../data/units.xml.in.h:297
+#: ../data/units.xml.in.h:299
 msgid "Time"
 msgstr "Tijd"
 
-#: ../data/units.xml.in.h:298
+#: ../data/units.xml.in.h:300
 msgid "Torr"
 msgstr "Torr"
 
-#: ../data/units.xml.in.h:299
+#: ../data/units.xml.in.h:301
 msgid "Township"
 msgstr "Township"
 
-#: ../data/units.xml.in.h:300
+#: ../data/units.xml.in.h:302
 msgid "Tribble"
 msgstr "Tribble"
 
-#: ../data/units.xml.in.h:301
+#: ../data/units.xml.in.h:303
 msgid "Turn"
 msgstr "Slag"
 
-#: ../data/units.xml.in.h:302
+#: ../data/units.xml.in.h:304
 msgid "U.S. Barrell (oil)"
 msgstr "U.S. Barrell (olie)"
 
-#: ../data/units.xml.in.h:303
+#: ../data/units.xml.in.h:305
 msgid "U.S. Bushel"
 msgstr "U.S. Bushel"
 
-#: ../data/units.xml.in.h:304
+#: ../data/units.xml.in.h:306
 msgid "U.S. Capacity"
 msgstr "U.S. Capacity"
 
-#: ../data/units.xml.in.h:305
+#: ../data/units.xml.in.h:307
 msgid "U.S. Dry Pint"
 msgstr "U.S. Dry Pint"
 
-#: ../data/units.xml.in.h:306
+#: ../data/units.xml.in.h:308
 msgid "U.S. Dry Quart"
 msgstr "U.S. Dry Quart"
 
-#: ../data/units.xml.in.h:307
+#: ../data/units.xml.in.h:309
 msgid "U.S. Fluid Drachm"
 msgstr "U.S. Fluid Drachm"
 
-#: ../data/units.xml.in.h:308
+#: ../data/units.xml.in.h:310
 msgid "U.S. Fluid Ounce"
 msgstr "U.S. Fluid Ounce"
 
-#: ../data/units.xml.in.h:309
+#: ../data/units.xml.in.h:311
 msgid "U.S. Gallon"
 msgstr "U.S. Gallon"
 
-#: ../data/units.xml.in.h:310
+#: ../data/units.xml.in.h:312
 msgid "U.S. Gill"
 msgstr "U.S. Gill"
 
-#: ../data/units.xml.in.h:311
+#: ../data/units.xml.in.h:313
 msgid "U.S. Liquid Pints"
 msgstr "U.S. Liquid Pints"
 
-#: ../data/units.xml.in.h:312
+#: ../data/units.xml.in.h:314
 msgid "U.S. Liquid Quarts"
 msgstr "U.S. Liquid Quarts"
 
-#: ../data/units.xml.in.h:313
+#: ../data/units.xml.in.h:315
 msgid "U.S. Minim"
 msgstr "U.S. Minim"
 
-#: ../data/units.xml.in.h:314
+#: ../data/units.xml.in.h:316
 msgid "U.S. Peck"
 msgstr "U.S. Peck"
 
-#: ../data/units.xml.in.h:315
+#: ../data/units.xml.in.h:317
 msgid "U.S. Survey Foot"
 msgstr "U.S. Survey Foot"
 
-#: ../data/units.xml.in.h:316
+#: ../data/units.xml.in.h:318
 msgid "U.S. Survey Inch"
 msgstr "U.S. Survey Inch"
 
-#: ../data/units.xml.in.h:317
+#: ../data/units.xml.in.h:319
 msgid "U.S. Survey Mile"
 msgstr "U.S. Survey Mile"
 
-#: ../data/units.xml.in.h:318
+#: ../data/units.xml.in.h:320
 msgid "Volt"
 msgstr "Volt"
 
-#: ../data/units.xml.in.h:319
+#: ../data/units.xml.in.h:321
 msgid "Volt Seconds"
 msgstr "Volt seconden"
 
-#: ../data/units.xml.in.h:320
+#: ../data/units.xml.in.h:322
 msgid "Volt per Ampere"
 msgstr "Volt per ampere"
 
-#: ../data/units.xml.in.h:321
+#: ../data/units.xml.in.h:323
 msgid "Volt per Meter"
 msgstr "Volt per meter"
 
-#: ../data/units.xml.in.h:322
+#: ../data/units.xml.in.h:324
 msgid "Volume"
 msgstr "Volume"
 
-#: ../data/units.xml.in.h:323
+#: ../data/units.xml.in.h:325
 msgid "Watt"
 msgstr "Watt"
 
-#: ../data/units.xml.in.h:324
+#: ../data/units.xml.in.h:326
 msgid "Watt Hour"
 msgstr "Wattuur"
 
-#: ../data/units.xml.in.h:325
+#: ../data/units.xml.in.h:327
 msgid "Watt per Ampere"
 msgstr "Watt per ampere"
 
-#: ../data/units.xml.in.h:326
+#: ../data/units.xml.in.h:328
 msgid "Watt per Meter Kelvin"
 msgstr "Watt per meter Kelvin"
 
-#: ../data/units.xml.in.h:327
+#: ../data/units.xml.in.h:329
 msgid "Watt per Meter Squared"
 msgstr "Watt per meter kwadraat"
 
-#: ../data/units.xml.in.h:328
+#: ../data/units.xml.in.h:330
 msgid "Watt per Square Meter Steradian"
 msgstr "Watt per vierkante meter per steradiaal"
 
-#: ../data/units.xml.in.h:329
+#: ../data/units.xml.in.h:331
 msgid "Watt per Steradian"
 msgstr "Watt per steradiaal"
 
-#: ../data/units.xml.in.h:330
+#: ../data/units.xml.in.h:332
 msgid "Wave Number"
 msgstr "Golfgetal"
 
-#: ../data/units.xml.in.h:331
+#: ../data/units.xml.in.h:333
 msgid "Weber"
 msgstr "Weber"
 
-#: ../data/units.xml.in.h:332
+#: ../data/units.xml.in.h:334
 msgid "Weber per Ampere"
 msgstr "Weber per ampere"
 
-#: ../data/units.xml.in.h:333
+#: ../data/units.xml.in.h:335
 msgid "Weber per Meter Squared"
 msgstr "Weber per meter kwadraat"
 
-#: ../data/units.xml.in.h:334
+#: ../data/units.xml.in.h:336
 msgid "Week"
 msgstr "Week"
 
-#: ../data/units.xml.in.h:335
+#: ../data/units.xml.in.h:337
 msgid "Word (16-bit)"
 msgstr "Word (16-bit)"
 
-#: ../data/units.xml.in.h:336
+#: ../data/units.xml.in.h:338
 msgid "Yard"
 msgstr "Yard"
 
-#: ../data/units.xml.in.h:337
+#: ../data/units.xml.in.h:339
 msgid "Zentner"
 msgstr "Zentner"
 
-#: ../data/units.xml.in.h:338
-msgid "a-cr:mpg"
-msgstr "-"
-
-#: ../data/units.xml.in.h:339
-msgid "a-cr:mph"
-msgstr "-"
-
 #: ../data/units.xml.in.h:340
+msgid "a-cr:mpg"
+msgstr ""
+
+#: ../data/units.xml.in.h:341
+msgid "a-cr:mph"
+msgstr ""
+
+#: ../data/units.xml.in.h:342
+msgid "a-cr:psi"
+msgstr ""
+
+#: ../data/units.xml.in.h:343
 msgid "ais:cal_IT,ar:cal,c:calorie,cp:calories"
 msgstr "ais:cal_IT,a:cal,c:calorie,cp:calorieën"
 
-#: ../data/units.xml.in.h:341
+#: ../data/units.xml.in.h:344
 msgid "ar:A,ampere,p:amperes"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:342
+#: ../data/units.xml.in.h:345
 msgid "ar:AU,astronomical_unit,p:astronomical_units"
 msgstr "a:AU,astronomische_eenheid,p:astronomische_eenheden"
 
-#: ../data/units.xml.in.h:343
-msgid "ar:B,bel,p:bels"
-msgstr "-"
-
-#: ../data/units.xml.in.h:344
-msgid "ar:Bq,becquerel,p:becquerels"
-msgstr "-"
-
-#: ../data/units.xml.in.h:345
-msgid "ar:Btu"
-msgstr "-"
-
 #: ../data/units.xml.in.h:346
-msgid "ar:C,coulomb,p:coulombs"
-msgstr "-"
+msgid "ar:B,bel,p:bels"
+msgstr ""
 
 #: ../data/units.xml.in.h:347
-msgid "ar:Ci,curie,p:curies"
-msgstr "-"
+msgid "ar:Bq,becquerel,p:becquerels"
+msgstr ""
 
 #: ../data/units.xml.in.h:348
-msgid "ar:F,farad,p:farads"
-msgstr "-"
+msgid "ar:Btu"
+msgstr ""
 
 #: ../data/units.xml.in.h:349
-msgid "ar:Gal,galileo,p:galileos"
-msgstr "-"
+msgid "ar:C,coulomb,p:coulombs"
+msgstr ""
 
 #: ../data/units.xml.in.h:350
-msgid "ar:Gy,gray,p:grays"
-msgstr "-"
+msgid "ar:Ci,curie,p:curies"
+msgstr ""
 
 #: ../data/units.xml.in.h:351
-msgid "ar:H,henry,p:henrys"
-msgstr "-"
+msgid "ar:F,farad,p:farads"
+msgstr ""
 
 #: ../data/units.xml.in.h:352
-msgid "ar:Hz,hertz"
-msgstr "-"
+msgid "ar:Gal,galileo,p:galileos"
+msgstr ""
 
 #: ../data/units.xml.in.h:353
-msgid "ar:J,joule,p:joules"
-msgstr "-"
+msgid "ar:Gy,gray,p:grays"
+msgstr ""
 
 #: ../data/units.xml.in.h:354
-msgid "ar:K,kelvin,p:kelvins"
-msgstr "-"
+msgid "ar:H,henry,p:henrys"
+msgstr ""
 
 #: ../data/units.xml.in.h:355
+msgid "ar:Hz,hertz"
+msgstr ""
+
+#: ../data/units.xml.in.h:356
+msgid "ar:J,joule,p:joules"
+msgstr ""
+
+#: ../data/units.xml.in.h:357
+msgid "ar:K,kelvin,p:kelvins"
+msgstr ""
+
+#: ../data/units.xml.in.h:358
 msgid "ar:L,a:l,liter,p:liters,litre,p:litres"
 msgstr "a:L,a:l,liter,p:liters"
 
-#: ../data/units.xml.in.h:356
-msgid "ar:Mx,maxwell,p:maxwells"
-msgstr "-"
-
-#: ../data/units.xml.in.h:357
-msgid "ar:N,newton,p:newtons"
-msgstr "-"
-
-#: ../data/units.xml.in.h:358
-msgid "ar:Np,neper,p:nepers"
-msgstr "-"
-
 #: ../data/units.xml.in.h:359
+msgid "ar:Mx,maxwell,p:maxwells"
+msgstr ""
+
+#: ../data/units.xml.in.h:360
+msgid "ar:N,newton,p:newtons"
+msgstr ""
+
+#: ../data/units.xml.in.h:361
+msgid "ar:Np,neper,p:nepers"
+msgstr ""
+
+#: ../data/units.xml.in.h:362
 msgid "ar:Oe,oersted,p:oersteds"
 msgstr "ar:Oe,oersted"
 
-#: ../data/units.xml.in.h:360
+#: ../data/units.xml.in.h:363
 msgid "ar:P,poise,p:poises"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:361
+#: ../data/units.xml.in.h:364
 msgid "ar:PS,u:pferdest&#xE4;rke"
 msgstr "a:pk,paardekracht,p:paardekrachten"
 
-#: ../data/units.xml.in.h:362
-msgid "ar:Pa,pascal,p:pascals"
-msgstr "-"
-
-#: ../data/units.xml.in.h:363
-msgid "ar:R,roentgen,p:roentgens"
-msgstr "-"
-
-#: ../data/units.xml.in.h:364
-msgid "ar:S,siemens"
-msgstr "-"
-
 #: ../data/units.xml.in.h:365
-msgid "ar:St,stokes"
-msgstr "-"
+msgid "ar:Pa,pascal,p:pascals"
+msgstr ""
 
 #: ../data/units.xml.in.h:366
-msgid "ar:Sv,sievert,p:sieverts"
-msgstr "-"
+msgid "ar:R,roentgen,p:roentgens"
+msgstr ""
 
 #: ../data/units.xml.in.h:367
-msgid "ar:T,tesla,p:teslas"
-msgstr "-"
+msgid "ar:S,siemens"
+msgstr ""
 
 #: ../data/units.xml.in.h:368
-msgid "ar:UK_bu,imperial_bushel,p:imperial_bushels"
-msgstr "-"
+msgid "ar:St,stokes"
+msgstr ""
 
 #: ../data/units.xml.in.h:369
-msgid "ar:UK_fl_dr,imperial_fluid_drachm,p:imperial_fluid_drachms"
-msgstr "-"
+msgid "ar:Sv,sievert,p:sieverts"
+msgstr ""
 
 #: ../data/units.xml.in.h:370
-msgid "ar:UK_fl_oz,imperial_fluid_ounce,p:imperial_fluid_ounces"
-msgstr "-"
+msgid "ar:T,tesla,p:teslas"
+msgstr ""
 
 #: ../data/units.xml.in.h:371
-msgid "ar:UK_gal,imperial_gallon,p:imperial_gallons"
-msgstr "-"
+msgid "ar:UK_bu,imperial_bushel,p:imperial_bushels"
+msgstr ""
 
 #: ../data/units.xml.in.h:372
-msgid "ar:UK_gi,imperial_gill,p:imperial_gills"
-msgstr "-"
+msgid "ar:UK_fl_dr,imperial_fluid_drachm,p:imperial_fluid_drachms"
+msgstr ""
 
 #: ../data/units.xml.in.h:373
-msgid "ar:UK_pt,imperial_pint,p:imperial_pints"
-msgstr "-"
+msgid "ar:UK_fl_oz,imperial_fluid_ounce,p:imperial_fluid_ounces"
+msgstr ""
 
 #: ../data/units.xml.in.h:374
-msgid "ar:UK_qt,imperial_quart,p:imperial_quarts"
-msgstr "-"
+msgid "ar:UK_gal,imperial_gallon,p:imperial_gallons"
+msgstr ""
 
 #: ../data/units.xml.in.h:375
-msgid "ar:US_ft,US_foot,p:US_feet"
-msgstr "-"
+msgid "ar:UK_gi,imperial_gill,p:imperial_gills"
+msgstr ""
 
 #: ../data/units.xml.in.h:376
-msgid "ar:US_in,US_inch,p:US_inches"
-msgstr "-"
+msgid "ar:UK_pt,imperial_pint,p:imperial_pints"
+msgstr ""
 
 #: ../data/units.xml.in.h:377
-msgid "ar:US_mi,US_mile,p:US_miles"
-msgstr "-"
+msgid "ar:UK_qt,imperial_quart,p:imperial_quarts"
+msgstr ""
 
 #: ../data/units.xml.in.h:378
-msgid "ar:V,volt,p:volts"
-msgstr "-"
+msgid "ar:US_ft,US_foot,p:US_feet"
+msgstr ""
 
 #: ../data/units.xml.in.h:379
-msgid "ar:W,watt,p:watts"
-msgstr "-"
+msgid "ar:US_in,US_inch,p:US_inches"
+msgstr ""
 
 #: ../data/units.xml.in.h:380
-msgid "ar:Wb,weber,p:webers"
-msgstr "-"
+msgid "ar:US_mi,US_mile,p:US_miles"
+msgstr ""
 
 #: ../data/units.xml.in.h:381
-msgid "ar:a,are,p:ares"
-msgstr "-"
+msgid "ar:V,volt,p:volts"
+msgstr ""
 
 #: ../data/units.xml.in.h:382
+msgid "ar:W,watt,p:watts"
+msgstr ""
+
+#: ../data/units.xml.in.h:383
+msgid "ar:Wb,weber,p:webers"
+msgstr ""
+
+#: ../data/units.xml.in.h:384
+msgid "ar:a,are,p:ares"
+msgstr ""
+
+#: ../data/units.xml.in.h:385
 msgid "ar:atm,atmosphere,p:atmospheres"
 msgstr "a:atm,atmosfeer"
 
-#: ../data/units.xml.in.h:383
-msgid "ar:b,barn,p:barns"
-msgstr "-"
-
-#: ../data/units.xml.in.h:384
-msgid "ar:bbl,barrell,p:barrells"
-msgstr "-"
-
-#: ../data/units.xml.in.h:385
-msgid "ar:bu,bushel,p:bushels"
-msgstr "-"
-
 #: ../data/units.xml.in.h:386
-msgid "ar:cd,candela,p:candelas"
-msgstr "-"
+msgid "ar:b,barn,p:barns"
+msgstr ""
 
 #: ../data/units.xml.in.h:387
-msgid "ar:ch,chain,p:chains"
-msgstr "-"
+msgid "ar:bbl,barrell,p:barrells"
+msgstr ""
 
 #: ../data/units.xml.in.h:388
-msgid "ar:cwt,hundredweight,p:hundredweights"
-msgstr "-"
+msgid "ar:bu,bushel,p:bushels"
+msgstr ""
 
 #: ../data/units.xml.in.h:389
+msgid "ar:cd,candela,p:candelas"
+msgstr ""
+
+#: ../data/units.xml.in.h:390
+msgid "ar:ch,chain,p:chains"
+msgstr ""
+
+#: ../data/units.xml.in.h:391
+msgid "ar:cwt,hundredweight,p:hundredweights"
+msgstr ""
+
+#: ../data/units.xml.in.h:392
 msgid "ar:d,day,p:days"
 msgstr "a:d,dag,p:dagen"
 
-#: ../data/units.xml.in.h:390
+#: ../data/units.xml.in.h:393
 msgid "ar:deg,au:&#xB0;,degree,p:degrees"
 msgstr "a:deg,au:&#xB0;,graad,p:graden"
 
-#: ../data/units.xml.in.h:391
-msgid "ar:dr,dram,p:drams"
-msgstr "-"
-
-#: ../data/units.xml.in.h:392
-msgid "ar:dry_pt,dry_pint,p:dry_pints"
-msgstr "-"
-
-#: ../data/units.xml.in.h:393
-msgid "ar:dry_qt,dry_quart,p:dry_quarts"
-msgstr "-"
-
 #: ../data/units.xml.in.h:394
-msgid "ar:dyn,dyne,p:dynes"
-msgstr "-"
+msgid "ar:dr,dram,p:drams"
+msgstr ""
 
 #: ../data/units.xml.in.h:395
-msgid "ar:eV,electron_volt,p:electron_volts"
-msgstr "-"
+msgid "ar:dry_pt,dry_pint,p:dry_pints"
+msgstr ""
 
 #: ../data/units.xml.in.h:396
+msgid "ar:dry_qt,dry_quart,p:dry_quarts"
+msgstr ""
+
+#: ../data/units.xml.in.h:397
+msgid "ar:dyn,dyne,p:dynes"
+msgstr ""
+
+#: ../data/units.xml.in.h:398
+msgid "ar:eV,electron_volt,p:electron_volts"
+msgstr ""
+
+#: ../data/units.xml.in.h:399
 msgid "ar:fc,footcandle,p:footcandles"
 msgstr "a:fc,voetcandela"
 
-#: ../data/units.xml.in.h:397
+#: ../data/units.xml.in.h:400
 msgid "ar:fl_dr,fluid_drachm,p:fluid_drachms"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:398
+#: ../data/units.xml.in.h:401
 msgid "ar:fl_oz,fluid_ounce,p:fluid_ounces"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:399
+#: ../data/units.xml.in.h:402
 msgid "ar:ft,foot,p:feet"
 msgstr "a:ft,voet"
 
-#: ../data/units.xml.in.h:400
+#: ../data/units.xml.in.h:403
 msgid "ar:fur,furlong,p:furlongs"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:401
+#: ../data/units.xml.in.h:404
 msgid "ar:g,gram,p:grams"
 msgstr "a:g,gram"
 
-#: ../data/units.xml.in.h:402
-msgid "ar:gal,gallon,p:gallons"
-msgstr "-"
-
-#: ../data/units.xml.in.h:403
-msgid "ar:gi,gill,p:gills"
-msgstr "-"
-
-#: ../data/units.xml.in.h:404
-msgid "ar:gr,grain,p:grains"
-msgstr "-"
-
 #: ../data/units.xml.in.h:405
+msgid "ar:gal,gallon,p:gallons"
+msgstr ""
+
+#: ../data/units.xml.in.h:406
+msgid "ar:gi,gill,p:gills"
+msgstr ""
+
+#: ../data/units.xml.in.h:407
+msgid "ar:gr,grain,p:grains"
+msgstr ""
+
+#: ../data/units.xml.in.h:408
 msgid "ar:gra,gradian,p:gradians,gon,p:gons"
 msgstr "r:gra,grad,p:grads,gon,p:gons"
 
-#: ../data/units.xml.in.h:406
+#: ../data/units.xml.in.h:409
 msgid "ar:h,hour,p:hours"
 msgstr "a:u,uur,p:uren"
 
-#: ../data/units.xml.in.h:407
-msgid "ar:hp,horsepower,p:horsepowers"
-msgstr "-"
-
-#: ../data/units.xml.in.h:408
-msgid "ar:in,inch,p:inches"
-msgstr "-"
-
-#: ../data/units.xml.in.h:409
-msgid "ar:kat,katal,p:katals"
-msgstr "-"
-
 #: ../data/units.xml.in.h:410
-msgid "ar:l_cwt,long_hundredweight,p:long_hundredweights"
-msgstr "-"
+msgid "ar:hp,horsepower,p:horsepowers"
+msgstr ""
 
 #: ../data/units.xml.in.h:411
-msgid "ar:l_ton,long_ton,p:long_tons"
-msgstr "-"
+msgid "ar:in,inch,p:inches"
+msgstr ""
 
 #: ../data/units.xml.in.h:412
-msgid "ar:lb,pound,p:pounds"
-msgstr "-"
+msgid "ar:kat,katal,p:katals"
+msgstr ""
 
 #: ../data/units.xml.in.h:413
-msgid "ar:lb_t,troy_pound,p:troy_pounds"
-msgstr "-"
+msgid "ar:l_cwt,long_hundredweight,p:long_hundredweights"
+msgstr ""
 
 #: ../data/units.xml.in.h:414
-msgid "ar:lbf,pound_force"
-msgstr "-"
+msgid "ar:l_ton,long_ton,p:long_tons"
+msgstr ""
 
 #: ../data/units.xml.in.h:415
-msgid "ar:li,link,p:links"
-msgstr "-"
+msgid "ar:lb,pound,p:pounds"
+msgstr ""
 
 #: ../data/units.xml.in.h:416
-msgid "ar:liq_pt,liquid_pint,p:liquid_pints"
-msgstr "-"
+msgid "ar:lb_t,troy_pound,p:troy_pounds"
+msgstr ""
 
 #: ../data/units.xml.in.h:417
-msgid "ar:liq_qt,liquid_quart,p:liquid_quarts"
-msgstr "-"
+msgid "ar:lbf,pound_force"
+msgstr ""
 
 #: ../data/units.xml.in.h:418
+msgid "ar:li,link,p:links"
+msgstr ""
+
+#: ../data/units.xml.in.h:419
+msgid "ar:liq_pt,liquid_pint,p:liquid_pints"
+msgstr ""
+
+#: ../data/units.xml.in.h:420
+msgid "ar:liq_qt,liquid_quart,p:liquid_quarts"
+msgstr ""
+
+#: ../data/units.xml.in.h:421
 msgid "ar:lm,lumen,p:lumens"
 msgstr "a:lm,lumen"
 
-#: ../data/units.xml.in.h:419
+#: ../data/units.xml.in.h:422
 msgid "ar:lx,lux"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:420
+#: ../data/units.xml.in.h:423
 msgid "ar:ly,lightyear,p:lightyears"
 msgstr "a:lj,lichtjaar,p:lichtjaren"
 
-#: ../data/units.xml.in.h:421
+#: ../data/units.xml.in.h:424
 msgid "ar:m,meter,p:meters,metre,p:metres"
 msgstr "a:m,meter,p:meters"
 
-#: ../data/units.xml.in.h:422
+#: ../data/units.xml.in.h:425
 msgid "ar:mi,mile,p:miles"
 msgstr "a:mi,mijl,p:mijlen"
 
-#: ../data/units.xml.in.h:423
+#: ../data/units.xml.in.h:426
 msgid "ar:min,minute,p:minutes"
 msgstr "a:min,minuut,p:minuten"
 
-#: ../data/units.xml.in.h:424
+#: ../data/units.xml.in.h:427
 msgid "ar:mmHg"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:425
+#: ../data/units.xml.in.h:428
 msgid "ar:mol,mole,p:moles"
 msgstr "mol,p:mols"
 
-#: ../data/units.xml.in.h:426
-msgid "ar:oC,au:&#xB0;C,r:celcius"
-msgstr "-"
-
-#: ../data/units.xml.in.h:427
-msgid "ar:oF,au:&#xB0;F,r:fahrenheit"
-msgstr "-"
-
-#: ../data/units.xml.in.h:428
-msgid "ar:oR,au:&#xB0;R,r:rankine"
-msgstr "-"
-
 #: ../data/units.xml.in.h:429
-msgid "ar:oz,ounce,p:ounces"
-msgstr "-"
+msgid "ar:oC,au:&#xB0;C,r:celcius"
+msgstr ""
 
 #: ../data/units.xml.in.h:430
-msgid "ar:oz_t,troy_ounce,p:troy_ounces"
-msgstr "-"
+msgid "ar:oF,au:&#xB0;F,r:fahrenheit"
+msgstr ""
 
 #: ../data/units.xml.in.h:431
-msgid "ar:pc,parsec,p:parsecs"
-msgstr "-"
+msgid "ar:oR,au:&#xB0;R,r:rankine"
+msgstr ""
 
 #: ../data/units.xml.in.h:432
-msgid "ar:ph,phot,p:phots"
-msgstr "-"
+msgid "ar:oz,ounce,p:ounces"
+msgstr ""
 
 #: ../data/units.xml.in.h:433
-msgid "ar:pk,peck,p:pecks"
-msgstr "-"
+msgid "ar:oz_t,troy_ounce,p:troy_ounces"
+msgstr ""
 
 #: ../data/units.xml.in.h:434
-msgid "ar:pwt,pennyweight,p:pennyweights"
-msgstr "-"
+msgid "ar:pc,parsec,p:parsecs"
+msgstr ""
 
 #: ../data/units.xml.in.h:435
+msgid "ar:ph,phot,p:phots"
+msgstr ""
+
+#: ../data/units.xml.in.h:436
+msgid "ar:pk,peck,p:pecks"
+msgstr ""
+
+#: ../data/units.xml.in.h:437
+msgid "ar:pwt,pennyweight,p:pennyweights"
+msgstr ""
+
+#: ../data/units.xml.in.h:438
 msgid "ar:rad,radian,p:radians"
 msgstr "a:rad,radiaal,p:radialen"
 
-#: ../data/units.xml.in.h:436
+#: ../data/units.xml.in.h:439
 msgid "ar:rd,rod,p:rods"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:437
+#: ../data/units.xml.in.h:440
 msgid "ar:s,second,p:seconds"
 msgstr "a:s,seconde,p:seconden"
 
-#: ../data/units.xml.in.h:438
+#: ../data/units.xml.in.h:441
 msgid "ar:s_ton,short_ton,p:short_tons"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:439
+#: ../data/units.xml.in.h:442
 msgid "ar:sb,stilb,p:stilbs"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:440
+#: ../data/units.xml.in.h:443
 msgid "ar:sr,steradian,p:steradians"
 msgstr "a:sr,steradiaal,p:steradialen"
 
-#: ../data/units.xml.in.h:441
+#: ../data/units.xml.in.h:444
 msgid "ar:t,tonne,p:tonnes,ton,p:tons"
 msgstr "a:t,ton,p:tonnen"
 
-#: ../data/units.xml.in.h:442
+#: ../data/units.xml.in.h:445
 msgid "ar:u,atomic_mass_unit,p:atomic_mass_units"
 msgstr "a:u,atomaire_massa_eenheid,p:atomaire_massa_eenheden"
 
-#: ../data/units.xml.in.h:443
+#: ../data/units.xml.in.h:446
 msgid "ar:yd,yard,p:yards"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:444
-#, fuzzy
+#: ../data/units.xml.in.h:447
 msgid "ars:cal_fifteen"
-msgstr "calorie_fifteen"
+msgstr "cal_fifteen"
 
-#: ../data/units.xml.in.h:445
+#: ../data/units.xml.in.h:448
 msgid "ars:cal_mean"
 msgstr "cal_gemiddeld"
 
-#: ../data/units.xml.in.h:446
-#, fuzzy
+#: ../data/units.xml.in.h:449
 msgid "ars:cal_th"
 msgstr "cal_th"
 
-#: ../data/units.xml.in.h:447
+#: ../data/units.xml.in.h:450
 msgid "aru:&#xC5;,u:&#xE5;ngstr&#xF6;m,angstrom"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:448
+#: ../data/units.xml.in.h:451
 msgid "au:&#x3A9;,r:ohm,p:ohms"
 msgstr "au:&#x3A9;,ohm"
 
-#: ../data/units.xml.in.h:449
+#: ../data/units.xml.in.h:452
 msgid "cr:Calorie,cp:Calories"
 msgstr "c:Calorie,cp:Calorieën"
 
-#: ../data/units.xml.in.h:450
+#: ../data/units.xml.in.h:453
 msgid "r:abampere,a:abA,a:aA,p:abamperes"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:451
+#: ../data/units.xml.in.h:454
 msgid "r:abcoulomb,p:abcoulombs,a:abC,a:aC"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:452
+#: ../data/units.xml.in.h:455
 msgid "r:abohm,p:abohms,au:ab&#x3A9;"
 msgstr "abohm,au:ab&#x3A9;"
 
-#: ../data/units.xml.in.h:453
+#: ../data/units.xml.in.h:456
 msgid "r:abvolt,p:abvolts,a:abV"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:454
+#: ../data/units.xml.in.h:457
 msgid "r:acre,p:acres"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:455
+#: ../data/units.xml.in.h:458
 msgid "r:arcminute,p:arcminutes"
 msgstr "boogminuut,p:boogminuten"
 
-#: ../data/units.xml.in.h:456
+#: ../data/units.xml.in.h:459
 msgid "r:arcsecond,p:arcseconds"
 msgstr "boogseconde,p:boogseconden"
 
-#: ../data/units.xml.in.h:457
+#: ../data/units.xml.in.h:460
 msgid "r:bar,p:bars"
 msgstr "bar"
 
-#: ../data/units.xml.in.h:458
+#: ../data/units.xml.in.h:461
 msgid "r:bit,p:bits"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:459
+#: ../data/units.xml.in.h:462
 msgid "r:byte,p:bytes,octet,p:octets"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:460
+#: ../data/units.xml.in.h:463
 msgid "r:carat,p:carats"
 msgstr "karaat"
 
-#: ../data/units.xml.in.h:461
+#: ../data/units.xml.in.h:464
 msgid "r:cental,p:centals"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:462
+#: ../data/units.xml.in.h:465
 msgid "r:cup,p:cups"
 msgstr "kop,p:koppen"
 
-#: ../data/units.xml.in.h:463
+#: ../data/units.xml.in.h:466
 msgid "r:dessertspoon,p:dessertspoons"
 msgstr "dessertlepel,p:dessertlepels"
 
-#: ../data/units.xml.in.h:464
+#: ../data/units.xml.in.h:467
 msgid "r:einstein,p:einsteins"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:465
+#: ../data/units.xml.in.h:468
 msgid "r:erg,p:ergs"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:466
+#: ../data/units.xml.in.h:469
 msgid "r:fathom,p:fathoms"
 msgstr "vadem,p:vadems"
 
-#: ../data/units.xml.in.h:467
-msgid "r:foe,p:foes"
-msgstr "-"
-
-#: ../data/units.xml.in.h:468
-msgid "r:fortnight,p:fortnights"
-msgstr "-"
-
-#: ../data/units.xml.in.h:469
-msgid "r:gauss"
-msgstr "-"
-
 #: ../data/units.xml.in.h:470
-msgid "r:gee,p:gees"
-msgstr "-"
+msgid "r:foe,p:foes"
+msgstr ""
 
 #: ../data/units.xml.in.h:471
-msgid "r:hand,p:hands"
-msgstr "-"
+msgid "r:fortnight,p:fortnights"
+msgstr ""
 
 #: ../data/units.xml.in.h:472
-msgid "r:imperial_fluid_scuple,p:imperial_fluid_scuples"
-msgstr "-"
+msgid "r:gauss"
+msgstr ""
 
 #: ../data/units.xml.in.h:473
-msgid "r:imperial_minim,p:imperial_minims"
-msgstr "-"
+msgid "r:gee,p:gees"
+msgstr ""
 
 #: ../data/units.xml.in.h:474
+msgid "r:hand,p:hands"
+msgstr ""
+
+#: ../data/units.xml.in.h:475
+msgid "r:imperial_fluid_scuple,p:imperial_fluid_scuples"
+msgstr ""
+
+#: ../data/units.xml.in.h:476
+msgid "r:imperial_minim,p:imperial_minims"
+msgstr ""
+
+#: ../data/units.xml.in.h:477
 msgid "r:knot,p:knots"
 msgstr "knoop,p:knopen"
 
-#: ../data/units.xml.in.h:475
+#: ../data/units.xml.in.h:478
 msgid "r:mil,p:mils"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:476
+#: ../data/units.xml.in.h:479
 msgid "r:minim,p:minims"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:477
+#: ../data/units.xml.in.h:480
 msgid "r:nautical_mile,p:nautical_miles"
 msgstr "nautische_mijl,p:nautische_mijlen"
 
-#: ../data/units.xml.in.h:478
+#: ../data/units.xml.in.h:481
 msgid "r:nibble,p:nibbles,nybble,p:nybbles,semioctet,p:semioctets"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:479
+#: ../data/units.xml.in.h:482
 msgid "r:pfund"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:480
+#: ../data/units.xml.in.h:483
 msgid "r:pond,p:ponds,a:gf"
 msgstr "pond,p:ponden,a:gf"
 
-#: ../data/units.xml.in.h:481
-msgid "r:poundal,p:poundals,a:pdl"
-msgstr "-"
-
-#: ../data/units.xml.in.h:482
-msgid "r:rad_radioactivity"
-msgstr "-"
-
-#: ../data/units.xml.in.h:483
-msgid "r:rem_radioactivity"
-msgstr "-"
-
 #: ../data/units.xml.in.h:484
-msgid "r:rood,p:roods"
-msgstr "-"
+msgid "r:poundal,p:poundals,a:pdl"
+msgstr ""
 
 #: ../data/units.xml.in.h:485
+msgid "r:rad_radioactivity"
+msgstr ""
+
+#: ../data/units.xml.in.h:486
+msgid "r:rem_radioactivity"
+msgstr ""
+
+#: ../data/units.xml.in.h:487
+msgid "r:rood,p:roods"
+msgstr ""
+
+#: ../data/units.xml.in.h:488
 msgid "r:section,p:sections"
 msgstr "sectie,p:secties"
 
-#: ../data/units.xml.in.h:486
+#: ../data/units.xml.in.h:489
 msgid "r:statcoulomb,p:statcoulombs,a:statC,franklin,a:Fr,p:franklins"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:487
+#: ../data/units.xml.in.h:490
 msgid "r:statohm,p:statohms,au:stat&#x3A9;"
 msgstr "r:statohm,au:stat&#x3A9;"
 
-#: ../data/units.xml.in.h:488
+#: ../data/units.xml.in.h:491
 msgid "r:statvolt,p:statvolts,a:statV"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:489
+#: ../data/units.xml.in.h:492
 msgid "r:stone,p:stones"
-msgstr "-"
+msgstr ""
 
-#: ../data/units.xml.in.h:490
+#: ../data/units.xml.in.h:493
 msgid "r:tablespoon,p:tablespoons"
 msgstr "eetlepel,p:eetlepels"
 
-#: ../data/units.xml.in.h:491
+#: ../data/units.xml.in.h:494
 msgid "r:teaspoon,p:teaspoons"
 msgstr "theelepel,p:theelepels"
 
-#: ../data/units.xml.in.h:492
-msgid "r:torr,p:torrs"
-msgstr "-"
-
-#: ../data/units.xml.in.h:493
-msgid "r:township,p:townships"
-msgstr "-"
-
-#: ../data/units.xml.in.h:494
-msgid "r:tribble,p:tribbles"
-msgstr "-"
-
 #: ../data/units.xml.in.h:495
+msgid "r:torr,p:torrs"
+msgstr ""
+
+#: ../data/units.xml.in.h:496
+msgid "r:township,p:townships"
+msgstr ""
+
+#: ../data/units.xml.in.h:497
+msgid "r:tribble,p:tribbles"
+msgstr ""
+
+#: ../data/units.xml.in.h:498
 msgid "r:turn,p:turns"
 msgstr "slag,p:slagen"
 
-#: ../data/units.xml.in.h:496
+#: ../data/units.xml.in.h:499
 msgid "r:week,p:weeks"
 msgstr "week,p:weken"
 
-#: ../data/units.xml.in.h:497
+#: ../data/units.xml.in.h:500
 msgid "r:word,p:words"
 msgstr "woord,p:woorden"
 
-#: ../data/units.xml.in.h:498
+#: ../data/units.xml.in.h:501
 msgid "r:year,p:years"
 msgstr "jaar,p:jaren"
 
-#: ../data/units.xml.in.h:499
+#: ../data/units.xml.in.h:502
 msgid "r:zentner"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:1
 msgid "-r:billion"
@@ -7272,7 +7294,7 @@ msgstr "Deciljard"
 #: ../data/variables.xml.in.h:111
 #, no-c-format
 msgid "a:%,r:procent"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:112
 msgid "ar:c,speed_of_light"
@@ -7280,11 +7302,11 @@ msgstr "a:c,licht_snelheid"
 
 #: ../data/variables.xml.in.h:113
 msgid "au:&#x3B3;,r:euler"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:114
 msgid "au:&#x3C0;,r:pi"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:115
 msgid "r:alpha_particle_mass,aisu:m_&#x3B1;"
@@ -7292,7 +7314,7 @@ msgstr "alfa_deeltje_massa,aisu:m_&#x3B1;"
 
 #: ../data/variables.xml.in.h:116
 msgid "r:apery"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:117
 msgid "r:atomic_mass,ais:m_u"
@@ -7300,23 +7322,23 @@ msgstr "atoommassa,ais:m_u"
 
 #: ../data/variables.xml.in.h:118
 msgid "r:avogadro,ais:N_A"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:119
 msgid "r:bohr_magneton,aisu:&#x3BC;_B"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:120
 msgid "r:bohr_radius,ais:a_o"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:121
 msgid "r:boltzmann"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:122
 msgid "r:catalan"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:123
 msgid "r:characteristic_impedance,ais:Z_0"
@@ -7336,7 +7358,7 @@ msgstr "geleidings_kwantum,ais:G_0"
 
 #: ../data/variables.xml.in.h:127
 msgid "r:e"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:128
 msgid "r:electric_constant,aisu:&#x3B5;_0"
@@ -7356,7 +7378,7 @@ msgstr "onwaar,nee"
 
 #: ../data/variables.xml.in.h:132
 msgid "r:faraday"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:133
 msgid "r:first_radiation,ais:c_1"
@@ -7368,11 +7390,11 @@ msgstr "gouden,au:&#x3C6;"
 
 #: ../data/variables.xml.in.h:135
 msgid "r:googol"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:136
 msgid "r:googolplex"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:137
 msgid "r:helion_mass,ais:m_h"
@@ -7392,11 +7414,11 @@ msgstr "oneindig"
 
 #: ../data/variables.xml.in.h:141
 msgid "r:josephson,ais:K_J"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:142
 msgid "r:klitzing,ais:R_K"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:143
 msgid "r:magnetic_constant,aisu:&#x3BC;_0"
@@ -7424,19 +7446,19 @@ msgstr "nucleaire_magneton,aisu:&#x3BC;_N"
 
 #: ../data/variables.xml.in.h:149
 msgid "r:permille,au:&#x2030;"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:150
 msgid "r:permyriad,au:&#x2031;"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:151
 msgid "r:planck"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:152
 msgid "r:planck2pi"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:153
 msgid "r:planck_length,ais:l_P"
@@ -7464,11 +7486,11 @@ msgstr "proton_massa,ais:m_p"
 
 #: ../data/variables.xml.in.h:159
 msgid "r:pythagoras"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:160
 msgid "r:rydberg,aisu:R_&#x221E;"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:161
 msgid "r:second_radiation,ais:c_2"
@@ -7488,1684 +7510,16 @@ msgstr "ongedefinieerd"
 
 #: ../data/variables.xml.in.h:165
 msgid "r:x"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:166
 msgid "r:y"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:167
 msgid "r:z"
-msgstr "-"
+msgstr ""
 
 #: ../data/variables.xml.in.h:168
 msgid "von Klitzing Constant"
 msgstr "von Klitzing constante"
-
-#~ msgid "Salvage Value"
-#~ msgstr "Restwaarde"
-
-#~ msgid "ar:cal_mean,mean_calorie,p:mean_calories"
-#~ msgstr "a:cal_gemiddeld,gemiddelde_calorie,p:gemiddelde_calorieën"
-
-#~ msgid "ar:cal_th,thermo_calorie,p:thermo_calories"
-#~ msgstr "a:cal_th,thermo_calorie,p:thermo_calorieën"
-
-#~ msgid "r:calorie_fifteen,p:calories_fifteen"
-#~ msgstr "calorie_fifteen,p:calorieën_fifteen"
-
-#~ msgid "Mass"
-#~ msgstr "Massa"
-
-#~ msgid "Atomic Weight"
-#~ msgstr "Atoomgewicht"
-
-#~ msgid "Element Info"
-#~ msgstr "Element-info"
-
-#~ msgid "Element Number"
-#~ msgstr "Elementnummer"
-
-#~ msgid "Name of Element"
-#~ msgstr "Naam van element"
-
-#~ msgid "Symbol of Element"
-#~ msgstr "Symbool voor element"
-
-#~ msgid "r:atomic_name"
-#~ msgstr "atooomnaam"
-
-#~ msgid "r:atomic_number"
-#~ msgstr "atoomnummer"
-
-#~ msgid "r:atomic_symbol"
-#~ msgstr "atoomsymbool"
-
-#~ msgid "r:atomic_weight,atomic_mass"
-#~ msgstr "atoomgewicht,atoommassa"
-
-#~ msgid "area"
-#~ msgstr "oppervlak (2D)"
-
-#~ msgid "atom"
-#~ msgstr "atoom"
-
-#~ msgid "number"
-#~ msgstr "nummer"
-
-#~ msgid "year"
-#~ msgstr "jaar"
-
-#~ msgid "$"
-#~ msgstr "$"
-
-#~ msgid "&#x20AC;"
-#~ msgstr "&#x20AC;"
-
-#~ msgid "&#xA2;"
-#~ msgstr "&#xA2;"
-
-#~ msgid "&#xA3;"
-#~ msgstr "&#xA3;"
-
-#~ msgid "&#xA5;"
-#~ msgstr "&#xA5;"
-
-#~ msgid "ATS"
-#~ msgstr "ATS"
-
-#~ msgid "BGN"
-#~ msgstr "BGN"
-
-#~ msgid "DEM"
-#~ msgstr "DEM"
-
-#~ msgid "ESP"
-#~ msgstr "ESP"
-
-#~ msgid "EUR"
-#~ msgstr "EUR"
-
-#~ msgid "FIM"
-#~ msgstr "FIM"
-
-#~ msgid "FRF"
-#~ msgstr "FRF"
-
-#~ msgid "GBP"
-#~ msgstr "GBP"
-
-#~ msgid "HUF"
-#~ msgstr "HUF"
-
-#~ msgid "ITL"
-#~ msgstr "ITL"
-
-#~ msgid "JPY"
-#~ msgstr "JPY"
-
-#~ msgid "LTL"
-#~ msgstr "LTL"
-
-#~ msgid "LVL"
-#~ msgstr "LVL"
-
-#~ msgid "NLG"
-#~ msgstr "NLG"
-
-#~ msgid "PLN"
-#~ msgstr "PLN"
-
-#~ msgid "PTE"
-#~ msgstr "PTE"
-
-#~ msgid "ROL"
-#~ msgstr "ROL"
-
-#~ msgid "RUB"
-#~ msgstr "RUB"
-
-#~ msgid "SIT"
-#~ msgstr "SIT"
-
-#~ msgid "USD"
-#~ msgstr "USD"
-
-#~ msgid "cent"
-#~ msgstr "cent"
-
-#~ msgid "cents"
-#~ msgstr "centen"
-
-#~ msgid "dollar"
-#~ msgstr "dollar"
-
-#~ msgid "dollars"
-#~ msgstr "dollars"
-
-#~ msgid "euro"
-#~ msgstr "euro"
-
-#~ msgid "eurocent"
-#~ msgstr "eurocent"
-
-#~ msgid "eurocents"
-#~ msgstr "eurocenten"
-
-#~ msgid "euros"
-#~ msgstr "euros"
-
-#~ msgid "franc"
-#~ msgstr "franc"
-
-#~ msgid "lat"
-#~ msgstr "lat"
-
-#~ msgid "leu"
-#~ msgstr "leu"
-
-#~ msgid "lev"
-#~ msgstr "lev"
-
-#~ msgid "lira"
-#~ msgstr "lire"
-
-#~ msgid "lit"
-#~ msgstr "lit"
-
-#~ msgid "mark"
-#~ msgstr "mark"
-
-#~ msgid "peseta"
-#~ msgstr "peseta"
-
-#~ msgid "pesetas"
-#~ msgstr "pesetas"
-
-#~ msgid "ruble"
-#~ msgstr "roebel"
-
-#~ msgid "tolar"
-#~ msgstr "tolar"
-
-#~ msgid "yen"
-#~ msgstr "yen"
-
-#~ msgid "zloty"
-#~ msgstr "zloty"
-
-#~ msgid "&#x3A0;"
-#~ msgstr "&#x3A0;"
-
-#~ msgid "Adjoint"
-#~ msgstr "Nevenstaand"
-
-#~ msgid "Calculates the permanent of a matrix."
-#~ msgstr "Berekent de permanent van een matrix."
-
-#~ msgid "Component"
-#~ msgstr "Element"
-
-#~ msgid "Component Index"
-#~ msgstr "Index van element"
-
-#~ msgid "Component Variable"
-#~ msgstr "Elementvariabele"
-
-#~ msgid "Components"
-#~ msgstr "Elementen"
-
-#~ msgid "Last Component"
-#~ msgstr "Laatste element"
-
-#~ msgid "Returns a sorted vector."
-#~ msgstr "Retourneert een gesorteerde vector."
-
-#~ msgid "Returns the adjoint of a matrix."
-#~ msgstr "Retourneert de geadjungeerde matrix."
-
-#~ msgid "Returns the component at specified position in a vector."
-#~ msgstr "Retourneert het element op de opgegeven positie in een vector."
-
-#~ msgid "atomic_mass"
-#~ msgstr "atoommassa"
-
-#~ msgid "component"
-#~ msgstr "component"
-
-#~ msgid "components"
-#~ msgstr "componenten"
-
-#~ msgid "correl"
-#~ msgstr "correl"
-
-#~ msgid "covar"
-#~ msgstr "covar"
-
-#~ msgid "mean"
-#~ msgstr "gemiddelde"
-
-#~ msgid "nounit"
-#~ msgstr "geeneenheid"
-
-#~ msgid "pearson"
-#~ msgstr "pearson"
-
-#~ msgid "product"
-#~ msgstr "product"
-
-#~ msgid "sqrt"
-#~ msgstr "sqrt"
-
-#~ msgid "sum"
-#~ msgstr "som"
-
-#~ msgid "&#x3A9;"
-#~ msgstr "&#x3A9;"
-
-#~ msgid "&#xB0;"
-#~ msgstr "&#xB0;"
-
-#~ msgid "&#xB0;C"
-#~ msgstr "&#xB0;C"
-
-#~ msgid "&#xB0;F"
-#~ msgstr "&#xB0;F"
-
-#~ msgid "&#xB0;R"
-#~ msgstr "&#xB0;R"
-
-#~ msgid "&#xC5;"
-#~ msgstr "&#xC5;"
-
-#~ msgid "&#xE5;ngstr&#xF6;m"
-#~ msgstr "&#xE5;ngstr&#xF6;m"
-
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgid "AU"
-#~ msgstr "AU"
-
-#~ msgid "B"
-#~ msgstr "B"
-
-#~ msgid "Bq"
-#~ msgstr "Bq"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "Calorie"
-#~ msgstr "Calorie"
-
-#~ msgid "Calories"
-#~ msgstr "Calorieën"
-
-#~ msgid "Ci"
-#~ msgstr "Ci"
-
-#~ msgid "F"
-#~ msgstr "F"
-
-#~ msgid "Fr"
-#~ msgstr "Fr"
-
-#~ msgid "Gal"
-#~ msgstr "Gal"
-
-#~ msgid "Gy"
-#~ msgstr "Gy"
-
-#~ msgid "H"
-#~ msgstr "H"
-
-#~ msgid "Hz"
-#~ msgstr "Hz"
-
-#~ msgid "J"
-#~ msgstr "J"
-
-#~ msgid "K"
-#~ msgstr "K"
-
-#~ msgid "L"
-#~ msgstr "L"
-
-#~ msgid "Mx"
-#~ msgstr "Mx"
-
-#~ msgid "N"
-#~ msgstr "N"
-
-#~ msgid "Np"
-#~ msgstr "Np"
-
-#~ msgid "Oe"
-#~ msgstr "Oe"
-
-#~ msgid "P"
-#~ msgstr "P"
-
-#~ msgid "PS"
-#~ msgstr "PS"
-
-#~ msgid "Pa"
-#~ msgstr "Pa"
-
-#~ msgid "R"
-#~ msgstr "R"
-
-#~ msgid "S"
-#~ msgstr "S"
-
-#~ msgid "St"
-#~ msgstr "St"
-
-#~ msgid "Sv"
-#~ msgstr "Sv"
-
-#~ msgid "T"
-#~ msgstr "T"
-
-#~ msgid "UK_bu"
-#~ msgstr "UK_bu"
-
-#~ msgid "UK_fl_dr"
-#~ msgstr "UK_fl_dr"
-
-#~ msgid "UK_fl_oz"
-#~ msgstr "UK_fl_oz"
-
-#~ msgid "UK_gal"
-#~ msgstr "UK_gal"
-
-#~ msgid "UK_pt"
-#~ msgstr "UK_pt"
-
-#~ msgid "UK_qt"
-#~ msgstr "UK_qt"
-
-#~ msgid "US_feet"
-#~ msgstr "US_feet"
-
-#~ msgid "US_foot"
-#~ msgstr "US_foot"
-
-#~ msgid "US_ft"
-#~ msgstr "US_ft"
-
-#~ msgid "US_in"
-#~ msgstr "US_in"
-
-#~ msgid "US_inch"
-#~ msgstr "US_inch"
-
-#~ msgid "US_inches"
-#~ msgstr "US_inches"
-
-#~ msgid "US_mi"
-#~ msgstr "US_mi"
-
-#~ msgid "US_mile"
-#~ msgstr "US_mile"
-
-#~ msgid "US_miles"
-#~ msgstr "US_miles"
-
-#~ msgid "V"
-#~ msgstr "V"
-
-#~ msgid "W"
-#~ msgstr "W"
-
-#~ msgid "Wb"
-#~ msgstr "Wb"
-
-#~ msgid "a"
-#~ msgstr "a"
-
-#~ msgid "aA"
-#~ msgstr "aA"
-
-#~ msgid "aC"
-#~ msgstr "aC"
-
-#~ msgid "ab&#x3A9;"
-#~ msgstr "ab&#x3A9;"
-
-#~ msgid "abA"
-#~ msgstr "abA"
-
-#~ msgid "abC"
-#~ msgstr "abC"
-
-#~ msgid "abV"
-#~ msgstr "abV"
-
-#~ msgid "abampere"
-#~ msgstr "abampere"
-
-#~ msgid "abamperes"
-#~ msgstr "abamperes"
-
-#~ msgid "abcoulomb"
-#~ msgstr "abcoulomb"
-
-#~ msgid "abohm"
-#~ msgstr "abohm"
-
-#~ msgid "abohms"
-#~ msgstr "abohms"
-
-#~ msgid "abvolt"
-#~ msgstr "abvolt"
-
-#~ msgid "abvolts"
-#~ msgstr "abvolts"
-
-#~ msgid "acre"
-#~ msgstr "acre"
-
-#~ msgid "acres"
-#~ msgstr "acres"
-
-#~ msgid "ampere"
-#~ msgstr "ampere"
-
-#~ msgid "amperes"
-#~ msgstr "amperes"
-
-#~ msgid "angstrom"
-#~ msgstr "angstrom"
-
-#~ msgid "arcminute"
-#~ msgstr "boogminuut"
-
-#~ msgid "arcminutes"
-#~ msgstr "boogminuten"
-
-#~ msgid "arcsecond"
-#~ msgstr "boogseconde"
-
-#~ msgid "are"
-#~ msgstr "are"
-
-#~ msgid "ares"
-#~ msgstr "ares"
-
-#~ msgid "astronomical_unit"
-#~ msgstr "astronomische_eenheid"
-
-#~ msgid "astronomical_units"
-#~ msgstr "astronomische_eenheden"
-
-#~ msgid "atm"
-#~ msgstr "atm"
-
-#~ msgid "atmosphere"
-#~ msgstr "atmosfeer"
-
-#~ msgid "atmospheres"
-#~ msgstr "atmosfeer"
-
-#~ msgid "atomic_mass_units"
-#~ msgstr "atomaire_massa_eenheden"
-
-#~ msgid "b"
-#~ msgstr "b"
-
-#~ msgid "bar"
-#~ msgstr "bar"
-
-#~ msgid "barn"
-#~ msgstr "barn"
-
-#~ msgid "barns"
-#~ msgstr "barns"
-
-#~ msgid "barrell"
-#~ msgstr "barrell"
-
-#~ msgid "barrells"
-#~ msgstr "barrells"
-
-#~ msgid "bars"
-#~ msgstr "bar"
-
-#~ msgid "bbl"
-#~ msgstr "bbl"
-
-#~ msgid "becquerel"
-#~ msgstr "becquerel"
-
-#~ msgid "becquerels"
-#~ msgstr "becquerels"
-
-#~ msgid "bel"
-#~ msgstr "bel"
-
-#~ msgid "bels"
-#~ msgstr "bels"
-
-#~ msgid "bit"
-#~ msgstr "bit"
-
-#~ msgid "bits"
-#~ msgstr "bits"
-
-#~ msgid "bu"
-#~ msgstr "bu"
-
-#~ msgid "bushel"
-#~ msgstr "bushel"
-
-#~ msgid "bushels"
-#~ msgstr "bushels"
-
-#~ msgid "byte"
-#~ msgstr "byte"
-
-#~ msgid "bytes"
-#~ msgstr "bytes"
-
-#~ msgid "cal"
-#~ msgstr "cal"
-
-#~ msgid "calorie"
-#~ msgstr "calorie"
-
-#~ msgid "calories"
-#~ msgstr "calorieën"
-
-#~ msgid "candela"
-#~ msgstr "candela"
-
-#~ msgid "candelas"
-#~ msgstr "candelas"
-
-#~ msgid "carat"
-#~ msgstr "karaat"
-
-#~ msgid "carats"
-#~ msgstr "karaat"
-
-#~ msgid "cd"
-#~ msgstr "cd"
-
-#~ msgid "celcius"
-#~ msgstr "celcius"
-
-#~ msgid "cental"
-#~ msgstr "cental"
-
-#~ msgid "centals"
-#~ msgstr "centals"
-
-#~ msgid "ch"
-#~ msgstr "ch"
-
-#~ msgid "chain"
-#~ msgstr "chain"
-
-#~ msgid "chains"
-#~ msgstr "chains"
-
-#~ msgid "coulomb"
-#~ msgstr "coulomb"
-
-#~ msgid "coulombs"
-#~ msgstr "coulombs"
-
-#~ msgid "cup"
-#~ msgstr "kop"
-
-#~ msgid "cups"
-#~ msgstr "koppen"
-
-#~ msgid "curie"
-#~ msgstr "curie"
-
-#~ msgid "curies"
-#~ msgstr "curies"
-
-#~ msgid "cwt"
-#~ msgstr "cwt"
-
-#~ msgid "d"
-#~ msgstr "d"
-
-#~ msgid "deg"
-#~ msgstr "deg"
-
-#~ msgid "degrees"
-#~ msgstr "graden"
-
-#~ msgid "dessertspoon"
-#~ msgstr "dessertlepel"
-
-#~ msgid "dr"
-#~ msgstr "dr"
-
-#~ msgid "dram"
-#~ msgstr "dram"
-
-#~ msgid "drams"
-#~ msgstr "drams"
-
-#~ msgid "dry_pint"
-#~ msgstr "dry_pint"
-
-#~ msgid "dry_pints"
-#~ msgstr "dry_pints"
-
-#~ msgid "dry_pt"
-#~ msgstr "dry_pt"
-
-#~ msgid "dry_qt"
-#~ msgstr "dry_qt"
-
-#~ msgid "dry_quart"
-#~ msgstr "dry_quart"
-
-#~ msgid "dry_quarts"
-#~ msgstr "dry_quarts"
-
-#~ msgid "dyn"
-#~ msgstr "dyn"
-
-#~ msgid "dyne"
-#~ msgstr "dyne"
-
-#~ msgid "dynes"
-#~ msgstr "dynes"
-
-#~ msgid "eV"
-#~ msgstr "eV"
-
-#~ msgid "einstein"
-#~ msgstr "einstein"
-
-#~ msgid "einsteins"
-#~ msgstr "einsteins"
-
-#~ msgid "electron_volt"
-#~ msgstr "electron_volt"
-
-#~ msgid "electron_volts"
-#~ msgstr "electron_volts"
-
-#~ msgid "erg"
-#~ msgstr "erg"
-
-#~ msgid "ergs"
-#~ msgstr "ergs"
-
-#~ msgid "fahrenheit"
-#~ msgstr "fahrenheit"
-
-#~ msgid "farad"
-#~ msgstr "farad"
-
-#~ msgid "farads"
-#~ msgstr "farads"
-
-#~ msgid "fathom"
-#~ msgstr "vadem"
-
-#~ msgid "fathoms"
-#~ msgstr "vadems"
-
-#~ msgid "fc"
-#~ msgstr "fc"
-
-#~ msgid "feet"
-#~ msgstr "voet"
-
-#~ msgid "fl_dr"
-#~ msgstr "fl_dr"
-
-#~ msgid "fl_oz"
-#~ msgstr "fl_oz"
-
-#~ msgid "fluid_drachm"
-#~ msgstr "fluid_drachm"
-
-#~ msgid "fluid_drachms"
-#~ msgstr "fluid_drachms"
-
-#~ msgid "fluid_ounce"
-#~ msgstr "fluid_ounce"
-
-#~ msgid "fluid_ounces"
-#~ msgstr "fluid_ounces"
-
-#~ msgid "foe"
-#~ msgstr "foe"
-
-#~ msgid "foes"
-#~ msgstr "foes"
-
-#~ msgid "foot"
-#~ msgstr "voet"
-
-#~ msgid "footcandle"
-#~ msgstr "voetcandela"
-
-#~ msgid "fortnight"
-#~ msgstr "fortnight"
-
-#~ msgid "fortnights"
-#~ msgstr "fortnights"
-
-#~ msgid "franklin"
-#~ msgstr "franklin"
-
-#~ msgid "ft"
-#~ msgstr "ft"
-
-#~ msgid "fur"
-#~ msgstr "fur"
-
-#~ msgid "furlong"
-#~ msgstr "furlong"
-
-#~ msgid "furlongs"
-#~ msgstr "furlongs"
-
-#~ msgid "g"
-#~ msgstr "g"
-
-#~ msgid "gal"
-#~ msgstr "gal"
-
-#~ msgid "galileo"
-#~ msgstr "galileo"
-
-#~ msgid "galileos"
-#~ msgstr "galileos"
-
-#~ msgid "gallon"
-#~ msgstr "gallon"
-
-#~ msgid "gallons"
-#~ msgstr "gallons"
-
-#~ msgid "gee"
-#~ msgstr "gee"
-
-#~ msgid "gees"
-#~ msgstr "gees"
-
-#~ msgid "gf"
-#~ msgstr "gf"
-
-#~ msgid "gi"
-#~ msgstr "gi"
-
-#~ msgid "gill"
-#~ msgstr "gill"
-
-#~ msgid "gills"
-#~ msgstr "gills"
-
-#~ msgid "gon"
-#~ msgstr "gon"
-
-#~ msgid "gons"
-#~ msgstr "gons"
-
-#~ msgid "gr"
-#~ msgstr "gr"
-
-#~ msgid "gra"
-#~ msgstr "gra"
-
-#~ msgid "gradian"
-#~ msgstr "grad"
-
-#~ msgid "gradians"
-#~ msgstr "grads"
-
-#~ msgid "grain"
-#~ msgstr "grain"
-
-#~ msgid "grains"
-#~ msgstr "grains"
-
-#~ msgid "gram"
-#~ msgstr "gram"
-
-#~ msgid "grams"
-#~ msgstr "gram"
-
-#~ msgid "gray"
-#~ msgstr "gray"
-
-#~ msgid "grays"
-#~ msgstr "grays"
-
-#~ msgid "h"
-#~ msgstr "u"
-
-#~ msgid "hand"
-#~ msgstr "hand"
-
-#~ msgid "hands"
-#~ msgstr "hands"
-
-#~ msgid "henry"
-#~ msgstr "henry"
-
-#~ msgid "henrys"
-#~ msgstr "henrys"
-
-#~ msgid "hertz"
-#~ msgstr "hertz"
-
-#~ msgid "horsepower"
-#~ msgstr "paardekracht"
-
-#~ msgid "horsepowers"
-#~ msgstr "paardekrachten"
-
-#~ msgid "hour"
-#~ msgstr "uur"
-
-#~ msgid "hours"
-#~ msgstr "uren"
-
-#~ msgid "hp"
-#~ msgstr "pkb"
-
-#~ msgid "hundredweight"
-#~ msgstr "hundredweight"
-
-#~ msgid "hundredweights"
-#~ msgstr "hundredweights"
-
-#~ msgid "imperial_bushel"
-#~ msgstr "imperial_bushel"
-
-#~ msgid "imperial_bushels"
-#~ msgstr "imperial_bushels"
-
-#~ msgid "imperial_fluid_drachm"
-#~ msgstr "imperial_fluid_drachm"
-
-#~ msgid "imperial_fluid_drachms"
-#~ msgstr "imperial_fluid_drachms"
-
-#~ msgid "imperial_fluid_ounce"
-#~ msgstr "imperial_fluid_ounce"
-
-#~ msgid "imperial_fluid_ounces"
-#~ msgstr "imperial_fluid_ounces"
-
-#~ msgid "imperial_fluid_scuple"
-#~ msgstr "imperial_fluid_scuple"
-
-#~ msgid "imperial_gallon"
-#~ msgstr "imperial_gallon"
-
-#~ msgid "imperial_gallons"
-#~ msgstr "imperial_gallons"
-
-#~ msgid "imperial_gill"
-#~ msgstr "imperial_gill"
-
-#~ msgid "imperial_gills"
-#~ msgstr "imperial_gills"
-
-#~ msgid "imperial_minim"
-#~ msgstr "imperial_minim"
-
-#~ msgid "imperial_pint"
-#~ msgstr "imperial_pint"
-
-#~ msgid "imperial_pints"
-#~ msgstr "imperial_pints"
-
-#~ msgid "imperial_quart"
-#~ msgstr "imperial_quart"
-
-#~ msgid "imperial_quarts"
-#~ msgstr "imperial_quarts"
-
-#~ msgid "in"
-#~ msgstr "in"
-
-#~ msgid "inch"
-#~ msgstr "inch"
-
-#~ msgid "inches"
-#~ msgstr "inches"
-
-#~ msgid "joule"
-#~ msgstr "joule"
-
-#~ msgid "joules"
-#~ msgstr "joules"
-
-#~ msgid "kat"
-#~ msgstr "kat"
-
-#~ msgid "katal"
-#~ msgstr "katal"
-
-#~ msgid "katals"
-#~ msgstr "katals"
-
-#~ msgid "kelvin"
-#~ msgstr "kelvin"
-
-#~ msgid "kelvins"
-#~ msgstr "kelvins"
-
-#~ msgid "km_p_l"
-#~ msgstr "km_p_l"
-
-#~ msgid "knot"
-#~ msgstr "knoop"
-
-#~ msgid "knots"
-#~ msgstr "knopen"
-
-#~ msgid "l"
-#~ msgstr "l"
-
-#~ msgid "l_cwt"
-#~ msgstr "l_cwt"
-
-#~ msgid "l_p_km"
-#~ msgstr "l_p_km"
-
-#~ msgid "l_ton"
-#~ msgstr "l_ton"
-
-#~ msgid "lb"
-#~ msgstr "lb"
-
-#~ msgid "lb_t"
-#~ msgstr "lb_t"
-
-#~ msgid "lbf"
-#~ msgstr "lbf"
-
-#~ msgid "li"
-#~ msgstr "lj"
-
-#~ msgid "lightyear"
-#~ msgstr "lichtjaar"
-
-#~ msgid "lightyears"
-#~ msgstr "lichtjaren"
-
-#~ msgid "link"
-#~ msgstr "link"
-
-#~ msgid "links"
-#~ msgstr "links"
-
-#~ msgid "liq_pt"
-#~ msgstr "liq_pt"
-
-#~ msgid "liq_qt"
-#~ msgstr "liq_qt"
-
-#~ msgid "liquid_pints"
-#~ msgstr "liquid_pints"
-
-#~ msgid "liquid_quart"
-#~ msgstr "liquid_quart"
-
-#~ msgid "liquid_quarts"
-#~ msgstr "liquid_quarts"
-
-#~ msgid "liter"
-#~ msgstr "liter"
-
-#~ msgid "liters"
-#~ msgstr "liters"
-
-#~ msgid "litre"
-#~ msgstr "liter"
-
-#~ msgid "litres"
-#~ msgstr "liters"
-
-#~ msgid "lm"
-#~ msgstr "lm"
-
-#~ msgid "long_hundredweight"
-#~ msgstr "long_hundredweight"
-
-#~ msgid "long_hundredweights"
-#~ msgstr "long_hundredweights"
-
-#~ msgid "long_ton"
-#~ msgstr "long_ton"
-
-#~ msgid "long_tons"
-#~ msgstr "long_tons"
-
-#~ msgid "lumen"
-#~ msgstr "lumen"
-
-#~ msgid "lumens"
-#~ msgstr "lumen"
-
-#~ msgid "luquid_pint"
-#~ msgstr "liquid_pint"
-
-#~ msgid "lux"
-#~ msgstr "lux"
-
-#~ msgid "lx"
-#~ msgstr "lx"
-
-#~ msgid "ly"
-#~ msgstr "lj"
-
-#~ msgid "m"
-#~ msgstr "m"
-
-#~ msgid "maxwell"
-#~ msgstr "maxwell"
-
-#~ msgid "maxwells"
-#~ msgstr "maxwells"
-
-#~ msgid "mean_calorie"
-#~ msgstr "gemiddelde_calorie"
-
-#~ msgid "mean_calories"
-#~ msgstr "gemiddelde_calorieën"
-
-#~ msgid "meter"
-#~ msgstr "meter"
-
-#~ msgid "meters"
-#~ msgstr "meters"
-
-#~ msgid "metre"
-#~ msgstr "meter"
-
-#~ msgid "metres"
-#~ msgstr "meters"
-
-#~ msgid "mi"
-#~ msgstr "mi"
-
-#~ msgid "mil"
-#~ msgstr "mil"
-
-#~ msgid "mile"
-#~ msgstr "mijl"
-
-#~ msgid "mile_p_gal"
-#~ msgstr "mile_p_gal"
-
-#~ msgid "mile_p_h"
-#~ msgstr "mile_p_h"
-
-#~ msgid "miles"
-#~ msgstr "mijlen"
-
-#~ msgid "mils"
-#~ msgstr "mils"
-
-#~ msgid "minim"
-#~ msgstr "minim"
-
-#~ msgid "minims"
-#~ msgstr "minims"
-
-#~ msgid "minute"
-#~ msgstr "minuut"
-
-#~ msgid "minutes"
-#~ msgstr "minuten"
-
-#~ msgid "mol"
-#~ msgstr "mol"
-
-#~ msgid "mole"
-#~ msgstr "mol"
-
-#~ msgid "moles"
-#~ msgstr "mols"
-
-#~ msgid "mpg"
-#~ msgstr "mpg"
-
-#~ msgid "mph"
-#~ msgstr "mph"
-
-#~ msgid "nautical_mile"
-#~ msgstr "nautische_mijl"
-
-#~ msgid "neper"
-#~ msgstr "neper"
-
-#~ msgid "nepers"
-#~ msgstr "nepers"
-
-#~ msgid "newton"
-#~ msgstr "newton"
-
-#~ msgid "newtons"
-#~ msgstr "newtons"
-
-#~ msgid "nibble"
-#~ msgstr "nibble"
-
-#~ msgid "nibbles"
-#~ msgstr "nibbles"
-
-#~ msgid "nybble"
-#~ msgstr "nybble"
-
-#~ msgid "nybbles"
-#~ msgstr "nybbles"
-
-#~ msgid "oC"
-#~ msgstr "oC"
-
-#~ msgid "oF"
-#~ msgstr "oF"
-
-#~ msgid "oR"
-#~ msgstr "oR"
-
-#~ msgid "octet"
-#~ msgstr "octet"
-
-#~ msgid "octets"
-#~ msgstr "octets"
-
-#~ msgid "oersted"
-#~ msgstr "oersted"
-
-#~ msgid "oersteds"
-#~ msgstr "oersted"
-
-#~ msgid "ohm"
-#~ msgstr "ohm"
-
-#~ msgid "ohms"
-#~ msgstr "ohm"
-
-#~ msgid "ounce"
-#~ msgstr "ounce"
-
-#~ msgid "ounces"
-#~ msgstr "ounces"
-
-#~ msgid "oz"
-#~ msgstr "oz"
-
-#~ msgid "oz_t"
-#~ msgstr "oz_t"
-
-#~ msgid "parsec"
-#~ msgstr "parsec"
-
-#~ msgid "parsecs"
-#~ msgstr "parsecs"
-
-#~ msgid "pascal"
-#~ msgstr "pascal"
-
-#~ msgid "pascals"
-#~ msgstr "pascals"
-
-#~ msgid "pc"
-#~ msgstr "pc"
-
-#~ msgid "pdl"
-#~ msgstr "pdl"
-
-#~ msgid "peck"
-#~ msgstr "peck"
-
-#~ msgid "pecks"
-#~ msgstr "pecks"
-
-#~ msgid "pennyweight"
-#~ msgstr "pennyweight"
-
-#~ msgid "pennyweights"
-#~ msgstr "pennyweights"
-
-#~ msgid "pferdest&#xE4;rke"
-#~ msgstr "pkm"
-
-#~ msgid "ph"
-#~ msgstr "ph"
-
-#~ msgid "phot"
-#~ msgstr "phot"
-
-#~ msgid "phots"
-#~ msgstr "phots"
-
-#~ msgid "pk"
-#~ msgstr "pk"
-
-#~ msgid "poise"
-#~ msgstr "poise"
-
-#~ msgid "poises"
-#~ msgstr "poises"
-
-#~ msgid "pond"
-#~ msgstr "pond"
-
-#~ msgid "ponds"
-#~ msgstr "ponden"
-
-#~ msgid "pound"
-#~ msgstr "pound"
-
-#~ msgid "poundal"
-#~ msgstr "poundal"
-
-#~ msgid "poundals"
-#~ msgstr "poundals"
-
-#~ msgid "pounds"
-#~ msgstr "pounds"
-
-#~ msgid "pwt"
-#~ msgstr "pwt"
-
-#~ msgid "rad"
-#~ msgstr "rad"
-
-#~ msgid "radian"
-#~ msgstr "radiaal"
-
-#~ msgid "radians"
-#~ msgstr "radialen"
-
-#~ msgid "rankine"
-#~ msgstr "rankine"
-
-#~ msgid "rd"
-#~ msgstr "rd"
-
-#~ msgid "rod"
-#~ msgstr "rod"
-
-#~ msgid "rods"
-#~ msgstr "rods"
-
-#~ msgid "roentgen"
-#~ msgstr "roentgen"
-
-#~ msgid "roentgens"
-#~ msgstr "roentgens"
-
-#~ msgid "rood"
-#~ msgstr "rood"
-
-#~ msgid "roods"
-#~ msgstr "roods"
-
-#~ msgid "s"
-#~ msgstr "s"
-
-#~ msgid "s_ton"
-#~ msgstr "s_ton"
-
-#~ msgid "sb"
-#~ msgstr "sb"
-
-#~ msgid "second"
-#~ msgstr "seconde"
-
-#~ msgid "seconds"
-#~ msgstr "seconden"
-
-#~ msgid "section"
-#~ msgstr "sectie"
-
-#~ msgid "sections"
-#~ msgstr "secties"
-
-#~ msgid "semioctet"
-#~ msgstr "semioctet"
-
-#~ msgid "semioctets"
-#~ msgstr "semioctets"
-
-#~ msgid "short_ton"
-#~ msgstr "short_ton"
-
-#~ msgid "short_tons"
-#~ msgstr "short_tons"
-
-#~ msgid "sievert"
-#~ msgstr "sievert"
-
-#~ msgid "sieverts"
-#~ msgstr "sieverts"
-
-#~ msgid "sr"
-#~ msgstr "sr"
-
-#~ msgid "stat&#x3A9;"
-#~ msgstr "stat&#x3A9;"
-
-#~ msgid "statC"
-#~ msgstr "statC"
-
-#~ msgid "statV"
-#~ msgstr "statV"
-
-#~ msgid "statcoulomb"
-#~ msgstr "statcoulomb"
-
-#~ msgid "statcoulombs"
-#~ msgstr "statcoulombs"
-
-#~ msgid "statohm"
-#~ msgstr "statohm"
-
-#~ msgid "statohms"
-#~ msgstr "statohms"
-
-#~ msgid "statvolt"
-#~ msgstr "statvolt"
-
-#~ msgid "statvolts"
-#~ msgstr "statvolts"
-
-#~ msgid "steradian"
-#~ msgstr "steradiaal"
-
-#~ msgid "steradians"
-#~ msgstr "steradialen"
-
-#~ msgid "stilb"
-#~ msgstr "stilb"
-
-#~ msgid "stilbs"
-#~ msgstr "stilbs"
-
-#~ msgid "stone"
-#~ msgstr "stone"
-
-#~ msgid "stones"
-#~ msgstr "stones"
-
-#~ msgid "t"
-#~ msgstr "t"
-
-#~ msgid "tablespoon"
-#~ msgstr "eetlepel"
-
-#~ msgid "tablespoons"
-#~ msgstr "eetlepels"
-
-#~ msgid "teaspoon"
-#~ msgstr "theelepel"
-
-#~ msgid "teaspoons"
-#~ msgstr "theelepels"
-
-#~ msgid "tesla"
-#~ msgstr "tesla"
-
-#~ msgid "teslas"
-#~ msgstr "teslas"
-
-#~ msgid "thermo_calorie"
-#~ msgstr "thermo_calorie"
-
-#~ msgid "thermo_calories"
-#~ msgstr "thermo_calorieën"
-
-#~ msgid "ton"
-#~ msgstr "ton"
-
-#~ msgid "tonne"
-#~ msgstr "ton"
-
-#~ msgid "tonnes"
-#~ msgstr "tonnen"
-
-#~ msgid "tons"
-#~ msgstr "tonnen"
-
-#~ msgid "torr"
-#~ msgstr "torr"
-
-#~ msgid "torrs"
-#~ msgstr "torrs"
-
-#~ msgid "township"
-#~ msgstr "township"
-
-#~ msgid "townships"
-#~ msgstr "townships"
-
-#~ msgid "tribble"
-#~ msgstr "tribble"
-
-#~ msgid "tribbles"
-#~ msgstr "tribbles"
-
-#~ msgid "troy_ounce"
-#~ msgstr "troy_ounce"
-
-#~ msgid "troy_ounces"
-#~ msgstr "troy_ounces"
-
-#~ msgid "troy_pound"
-#~ msgstr "troy_pound"
-
-#~ msgid "troy_pounds"
-#~ msgstr "troy_pounds"
-
-#~ msgid "turn"
-#~ msgstr "slag"
-
-#~ msgid "turns"
-#~ msgstr "slagen"
-
-#~ msgid "u"
-#~ msgstr "u"
-
-#~ msgid "volt"
-#~ msgstr "volt"
-
-#~ msgid "volts"
-#~ msgstr "volts"
-
-#~ msgid "watt"
-#~ msgstr "watt"
-
-#~ msgid "watts"
-#~ msgstr "watts"
-
-#~ msgid "weber"
-#~ msgstr "weber"
-
-#~ msgid "webers"
-#~ msgstr "webers"
-
-#~ msgid "weeks"
-#~ msgstr "weken"
-
-#~ msgid "word"
-#~ msgstr "woord"
-
-#~ msgid "words"
-#~ msgstr "woorden"
-
-#~ msgid "yard"
-#~ msgstr "yard"
-
-#~ msgid "yards"
-#~ msgstr "yards"
-
-#~ msgid "yd"
-#~ msgstr "yd"
-
-#~ msgid "years"
-#~ msgstr "jaren"
-
-#~ msgid "%"
-#~ msgstr "%"
-
-#~ msgid "&#x2030;"
-#~ msgstr "&#x2030;"
-
-#~ msgid "&#x2031;"
-#~ msgstr "&#x2031;"
-
-#~ msgid "&#x3A6;_0"
-#~ msgstr "&#x3A6;_0"
-
-#~ msgid "&#x3B3;"
-#~ msgstr "&#x3B3;"
-
-#~ msgid "&#x3B5;_0"
-#~ msgstr "&#x3B5;_0"
-
-#~ msgid "&#x3BB;_C"
-#~ msgstr "&#x3BB;_C"
-
-#~ msgid "&#x3BC;_0"
-#~ msgstr "&#x3BC;_0"
-
-#~ msgid "&#x3BC;_B"
-#~ msgstr "&#x3BC;_B"
-
-#~ msgid "&#x3BC;_N"
-#~ msgstr "&#x3BC;_N"
-
-#~ msgid "&#x3C6;"
-#~ msgstr "&#x3C6;"
-
-#~ msgid "G"
-#~ msgstr "G"
-
-#~ msgid "G_0"
-#~ msgstr "G_0"
-
-#~ msgid "K_J"
-#~ msgstr "K_J"
-
-#~ msgid "N_A"
-#~ msgstr "N_A"
-
-#~ msgid "R_&#x221E;"
-#~ msgstr "R_&#x221E;"
-
-#~ msgid "R_K"
-#~ msgstr "R_K"
-
-#~ msgid "T_P"
-#~ msgstr "T_P"
-
-#~ msgid "Z_0"
-#~ msgstr "Z_0"
-
-#~ msgid "a_o"
-#~ msgstr "a_o"
-
-#~ msgid "c"
-#~ msgstr "c"
-
-#~ msgid "c_1"
-#~ msgstr "c_1"
-
-#~ msgid "c_2"
-#~ msgstr "c_2"
-
-#~ msgid "e"
-#~ msgstr "e"
-
-#~ msgid "e_charge"
-#~ msgstr "e_lading"
-
-#~ msgid "euler"
-#~ msgstr "euler"
-
-#~ msgid "false"
-#~ msgstr "onwaar"
-
-#~ msgid "golden"
-#~ msgstr "gouden"
-
-#~ msgid "i"
-#~ msgstr "i"
-
-#~ msgid "l_P"
-#~ msgstr "l_P"
-
-#~ msgid "m_&#x3B1;"
-#~ msgstr "m_&#x3B1;"
-
-#~ msgid "m_&#x3C4;"
-#~ msgstr "m_&#x3C4;"
-
-#~ msgid "m_P"
-#~ msgstr "m_P"
-
-#~ msgid "m_e"
-#~ msgstr "m_e"
-
-#~ msgid "m_h"
-#~ msgstr "m_h"
-
-#~ msgid "m_n"
-#~ msgstr "m_n"
-
-#~ msgid "m_p"
-#~ msgstr "m_p"
-
-#~ msgid "m_u"
-#~ msgstr "m_u"
-
-#~ msgid "no"
-#~ msgstr "nr"
-
-#~ msgid "permille"
-#~ msgstr "permille"
-
-#~ msgid "permyriad"
-#~ msgstr "permyriad"
-
-#~ msgid "pi"
-#~ msgstr "pi"
-
-#~ msgid "r_e"
-#~ msgstr "r_e"
-
-#~ msgid "rydberg"
-#~ msgstr "rydberg"
-
-#~ msgid "t_P"
-#~ msgstr "t_P"
-
-#~ msgid "tau_mass"
-#~ msgstr "tau_massa"
-
-#~ msgid "true"
-#~ msgstr "waar"
-
-#~ msgid "x"
-#~ msgstr "x"
-
-#~ msgid "y"
-#~ msgstr "y"
-
-#~ msgid "yes"
-#~ msgstr "ja"
-
-#~ msgid "z"
-#~ msgstr "z"

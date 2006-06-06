@@ -1,7 +1,7 @@
 /*
     Qalculate    
 
-    Copyright (C) 2003  Niklas Knutsson (nq@altern.org)
+    Copyright (C) 2003-2006  Niklas Knutsson (nq@altern.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -2188,7 +2188,7 @@ MathStructure Calculator::calculate(string str, const EvaluationOptions &eo, Mat
 		}
 		CompositeUnit cu("", "temporary_composite_convert", "", str2);
 		if(to_struct) to_struct->set(cu.generateMathStructure(make_to_division));
-		return convertToCompositeUnit(mstruct, &cu, eo);
+		if(cu.countUnits() > 0)	return convertToCompositeUnit(mstruct, &cu, eo);
 	} else {
 		if(to_struct) to_struct->setUndefined();
 		switch(eo.auto_post_conversion) {
@@ -2625,6 +2625,7 @@ MathStructure Calculator::convertToBestUnit(const MathStructure &mstruct, const 
 	return mstruct;
 }
 MathStructure Calculator::convertToCompositeUnit(const MathStructure &mstruct, CompositeUnit *cu, const EvaluationOptions &eo, bool always_convert) {
+	if(cu->countUnits() == 0) return mstruct;
 	MathStructure mstruct_cu(cu->generateMathStructure());
 	MathStructure mstruct_new(mstruct);
 	if(mstruct_new.isAddition()) {

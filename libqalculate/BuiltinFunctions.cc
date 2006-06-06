@@ -1,7 +1,7 @@
 /*
     Qalculate    
 
-    Copyright (C) 2003  Niklas Knutsson (nq@altern.org)
+    Copyright (C) 2003-2006  Niklas Knutsson (nq@altern.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1176,13 +1176,13 @@ int LognFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 			mstruct = mstruct2;
 			return 1;
 		}
-	} else if(vargs[0].isNumber() && vargs[1].isNumber()) {
+	} else if(mstruct.isNumber() && mstructv2.isNumber()) {
 		Number nr(mstruct.number());
-		if(nr.log(vargs[1].number()) && !(eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) && !(!eo.allow_complex && nr.isComplex() && !mstruct.number().isComplex()) && !(!eo.allow_infinite && nr.isInfinite() && !mstruct.number().isInfinite())) {
+		if(nr.log(mstructv2.number()) && !(eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) && !(!eo.allow_complex && nr.isComplex() && !mstruct.number().isComplex()) && !(!eo.allow_infinite && nr.isInfinite() && !mstruct.number().isInfinite())) {
 			mstruct.set(nr, true);
 			return 1;
 		}
-	} 
+	}
 	mstruct.set(CALCULATOR->f_ln, &vargs[0], NULL);
 	mstruct.divide_nocopy(new MathStructure(CALCULATOR->f_ln, &vargs[1], NULL));
 	return 1;

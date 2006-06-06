@@ -1,3 +1,12 @@
+2006-06-06 Niklas Knutsson  <nq@altern.org>
+
+	* Unevaluated arguments were used when checking for numerical arguments in 
+	   logn(), which caused log2(16/2) to first be evaluated to ln(16/2)/ln(2).
+
+2006-06-01 Niklas Knutsson  <nq@altern.org>
+
+	* Polishing before 0.9.4 release
+
 2006-05-18 Niklas Knutsson  <nq@altern.org>
 
 	* Fix libqalculate.so unresolved symbols with patch from 

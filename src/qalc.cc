@@ -1,7 +1,7 @@
 /*
     Qalculate    
 
-    Copyright (C) 2004  Niklas Knutsson (nq@altern.org)
+    Copyright (C) 2004-2006  Niklas Knutsson (nq@altern.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1283,7 +1283,7 @@ int main (int argc, char *argv[]) {
 			FPUTS_UNICODE(_("quit"), stdout); fputs("/", stdout); PUTS_UNICODE(_("exit"));
 			puts("");
 			PUTS_UNICODE(_("Type help COMMAND for more help (example: help save)."));
-			PUTS_UNICODE(_("Type help NAME for info about a function, variable or unit (example: help sin)."));
+			PUTS_UNICODE(_("Type info NAME for info about a function, variable or unit (example: info sin)."));
 			puts("");
 		} else if(EQUALS_IGNORECASE_AND_LOCAL(scom, "info", _("info"))) {
 			int pctl;
@@ -1698,6 +1698,21 @@ int main (int argc, char *argv[]) {
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "stack", _("stack"))) {
 				puts("");
 				PUTS_UNICODE(_("Displays the RPN stack."));
+				puts("");
+			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "base", _("base"))) {
+				puts("");
+				//PUTS_UNICODE(_("Sets the result base (equivalent to set base)."));
+				str = "= "; str += _("set"); str += " "; str += _("base"); str += " "; str += "(2 - 36"; str += ", "; str += _("bin"); str += ", "; str += _("oct"); str += ", "; str += _("dec"); str += ", "; str += _("hex"); str += ", "; str += _("sex"); str += ", "; str += _("time"); str += ", "; str += _("roman"); str += ")"; PUTS_UNICODE(str.c_str());
+				puts("");
+			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "exact", _("exact"))) {
+				puts("");
+				//PUTS_UNICODE(_("Equivalent to set approximation exact."));
+				str = "= "; str += _("set"); str += " "; str += _("approximation"); str += " "; str += _("exact"); PUTS_UNICODE(str.c_str());
+				puts("");
+			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "approximate", _("approximate"))) {
+				puts("");
+				//PUTS_UNICODE(_("Equivalent to set approximation try exact."));
+				str = "= "; str += _("set"); str += " "; str += _("approximation"); str += " "; str += _("try exact"); PUTS_UNICODE(str.c_str());
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "convert", _("convert")) || EQUALS_IGNORECASE_AND_LOCAL(str, "to", _("to"))) {
 				puts("");

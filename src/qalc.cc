@@ -556,6 +556,7 @@ void set_option(string str) {
 		else if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "auto", _("auto"))) v = EXP_PRECISION;
 		else if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "pure", _("pure"))) v = EXP_PURE;
 		else if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "scientific", _("scientific"))) v = EXP_SCIENTIFIC;
+		else if(EQUALS_IGNORECASE_AND_LOCAL(svalue, "engineering", _("engineering"))) v = EXP_BASE_3;
 		else if(svalue.find_first_not_of(SPACES NUMBERS) == string::npos) {
 			v = s2i(svalue);
 			if(v < 0) v = -2;
@@ -1182,6 +1183,7 @@ int main (int argc, char *argv[]) {
 				case EXP_PRECISION: {PUTS_UNICODE(_("auto")); break;}
 				case EXP_PURE: {PUTS_UNICODE(_("pure")); break;}
 				case EXP_SCIENTIFIC: {PUTS_UNICODE(_("scientific")); break;}
+				case EXP_BASE_3: {PUTS_UNICODE(_("engineering")); break;}
 				default: {printf("%i\n", printops.min_exp); break;}
 			}
 			CHECK_IF_SCREEN_FILLED
@@ -1626,7 +1628,7 @@ int main (int argc, char *argv[]) {
 				STR_AND_TABS(_("dot as separator")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("exact")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("excessive parenthesis")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
-				STR_AND_TABS(_("exp mode")); str += "("; str += _("off"); str += ", "; str += _("auto"); str += ", "; str += _("pure"); str += ", "; str += _("scientific"); str += ", >= 0)"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
+				STR_AND_TABS(_("exp mode")); str += "("; str += _("off"); str += ", "; str += _("auto"); str += ", "; str += _("engineering"); str += ", "; str += _("pure"); str += ", "; str += _("scientific"); str += ", >= 0)"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("fractions")); str += "(0 = "; str += _("off"); str += ", 1 = "; str += _("exact"); str += ", 2 = "; str += _("on"); str += ", 3 = "; str += _("combined"); str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("functions")); str += "("; str += _("on"); str += ", "; str += _("off");  str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
 				STR_AND_TABS(_("input base")); str += "(2 - 36"; str += ", "; str += _("bin"); str += ", "; str += _("oct"); str += ", "; str += _("dec"); str += ", "; str += _("hex"); str += ", "; str += _("roman"); str += ")"; CHECK_IF_SCREEN_FILLED_PUTS(str.c_str());
@@ -1701,18 +1703,15 @@ int main (int argc, char *argv[]) {
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "base", _("base"))) {
 				puts("");
-				//PUTS_UNICODE(_("Sets the result base (equivalent to set base)."));
-				str = "= "; str += _("set"); str += " "; str += _("base"); str += " "; str += "(2 - 36"; str += ", "; str += _("bin"); str += ", "; str += _("oct"); str += ", "; str += _("dec"); str += ", "; str += _("hex"); str += ", "; str += _("sex"); str += ", "; str += _("time"); str += ", "; str += _("roman"); str += ")"; PUTS_UNICODE(str.c_str());
+				PUTS_UNICODE(_("Sets the result base (equivalent to set base)."));
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "exact", _("exact"))) {
 				puts("");
-				//PUTS_UNICODE(_("Equivalent to set approximation exact."));
-				str = "= "; str += _("set"); str += " "; str += _("approximation"); str += " "; str += _("exact"); PUTS_UNICODE(str.c_str());
+				PUTS_UNICODE(_("Equivalent to set approximation exact."));
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "approximate", _("approximate"))) {
 				puts("");
-				//PUTS_UNICODE(_("Equivalent to set approximation try exact."));
-				str = "= "; str += _("set"); str += " "; str += _("approximation"); str += " "; str += _("try exact"); PUTS_UNICODE(str.c_str());
+				PUTS_UNICODE(_("Equivalent to set approximation try exact."));
 				puts("");
 			} else if(EQUALS_IGNORECASE_AND_LOCAL(str, "convert", _("convert")) || EQUALS_IGNORECASE_AND_LOCAL(str, "to", _("to"))) {
 				puts("");

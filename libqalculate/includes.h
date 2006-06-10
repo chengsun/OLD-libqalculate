@@ -244,6 +244,7 @@ typedef enum {
 #define BASE_HEXADECIMAL	16
 #define BASE_SEXAGESIMAL	60
 
+#define EXP_BASE_3		-3
 #define EXP_PRECISION		-1
 #define EXP_NONE		0
 #define EXP_PURE		1

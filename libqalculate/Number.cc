@@ -2393,10 +2393,12 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			}
 		}
 
-		if(po.min_exp < 0) {
+		if(po.min_exp == EXP_PRECISION) {
 			if((expo > -precision && expo < precision) || (expo < 3 && expo > -3 && PRECISION >= 3)) { 
 				expo = 0;
 			}
+		} else if(po.min_exp == EXP_BASE_3) {
+			expo -= expo % 3;
 		} else if(po.min_exp != 0) {
 			if(expo > -po.min_exp && expo < po.min_exp) { 
 				expo = 0;
@@ -2598,10 +2600,12 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 					expo = 0;
 				} else {
 					expo = str.length() - 1;
-					if(po.min_exp < 0) {
+					if(po.min_exp == EXP_PRECISION) {
 						if((expo > -precision && expo < precision) || (expo < 3 && expo > -3 && PRECISION >= 3)) { 
 							expo = 0;
 						}
+					} else if(po.min_exp == EXP_BASE_3) {
+						expo -= expo % 3;
 					} else if(po.min_exp != 0) {
 						if(expo > -po.min_exp && expo < po.min_exp) { 
 							expo = 0;
@@ -2710,10 +2714,12 @@ string Number::print(const PrintOptions &po, const InternalPrintStruct &ips) con
 			str = printCL_I(num, base, true, BASE_DISPLAY_NONE, po.lower_case_numbers);
 			if(base == 10) {
 				expo = str.length() - l10 - 1;
-				if(po.min_exp < 0) {
+				if(po.min_exp == EXP_PRECISION) {
 					if((expo > -precision && expo < precision) || (expo < 3 && expo > -3 && PRECISION >= 3)) { 
 						expo = 0;
 					}
+				} else if(po.min_exp == EXP_BASE_3) {
+					expo -= expo % 3;
 				} else if(po.min_exp != 0) {
 					if(expo > -po.min_exp && expo < po.min_exp) { 
 						expo = 0;

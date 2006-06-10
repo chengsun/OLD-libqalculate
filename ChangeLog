@@ -1,3 +1,8 @@
+2006-06-10 Niklas Knutsson  <nq@altern.org>
+
+	* Add base 3 exponent mode
+	* Add "Engineering" display mode
+
 2006-06-06 Niklas Knutsson  <nq@altern.org>
 
 	* Unevaluated arguments were used when checking for numerical arguments in 

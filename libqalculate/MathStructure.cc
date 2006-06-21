@@ -6533,18 +6533,20 @@ MathStructure &MathStructure::eval(const EvaluationOptions &eo) {
 	return *this;
 }
 
-bool factorize_find_multiplier(const MathStructure &mstruct, MathStructure &mnew, MathStructure &factor_mstruct) {
+bool factorize_find_multiplier(const MathStructure &mstruct, MathStructure &mnew, MathStructure &factor_mstruct, bool only_units = false) {
 	factor_mstruct.set(m_one);
 	switch(mstruct.type()) {
 		case STRUCT_ADDITION: {
-			bool bfrac = false, bint = true;
-			idm1(mstruct, bfrac, bint);
-			if(bfrac || bint) {
-				Number gcd(1, 1);
-				idm2(mstruct, bfrac, bint, gcd);
-				if((bint || bfrac) && !gcd.isOne()) {		
-					if(bfrac) gcd.recip();
-					factor_mstruct.set(gcd);
+			if(!only_units) {
+				bool bfrac = false, bint = true;
+				idm1(mstruct, bfrac, bint);
+				if(bfrac || bint) {
+					Number gcd(1, 1);
+					idm2(mstruct, bfrac, bint, gcd);
+					if((bint || bfrac) && !gcd.isOne()) {		
+						if(bfrac) gcd.recip();
+						factor_mstruct.set(gcd);
+					}
 				}
 			}
 			if(mstruct.size() > 0) {
@@ -6559,7 +6561,7 @@ bool factorize_find_multiplier(const MathStructure &mstruct, MathStructure &mnew
 					} else {
 						cur_mstruct = &mstruct[0];
 					}
-					if(!cur_mstruct->isNumber()) {
+					if(!cur_mstruct->isNumber() && (!only_units || cur_mstruct->isUnit_exp())) {
 						const MathStructure *exp = NULL;
 						const MathStructure *bas;
 						if(cur_mstruct->isPower() && IS_REAL((*cur_mstruct)[1])) {
@@ -8722,7 +8724,7 @@ bool MathStructure::factorize(const EvaluationOptions &eo) {
 				factor_mstruct->unref();
 				return true;
 			}
-			factor_mstruct->unref();			
+			factor_mstruct->unref();
 			if(SIZE > 1 && CHILD(SIZE - 1).isNumber() && CHILD(SIZE - 1).number().isInteger()) {
 				MathStructure *xvar = NULL;
 				Number qnr(1, 1);
@@ -9871,6 +9873,8 @@ void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure*, size
 						}
 					}
 					bool do_plural = po.short_multiplication;
+					CHILD(0).postFormatUnits(po, this, 1);
+					CHILD_UPDATED(0);
 					switch(CHILD(0).type()) {
 						case STRUCT_NUMBER: {
 							if(CHILD(0).isZero() || CHILD(0).number().isOne() || CHILD(0).number().isMinusOne() || CHILD(0).number().isFraction()) {
@@ -10005,6 +10009,39 @@ void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure*, size
 		}
 	}
 }
+bool MathStructure::factorizeUnits() {
+	switch(m_type) {
+		case STRUCT_ADDITION: {
+			MathStructure *factor_mstruct = new MathStructure(1, 1);
+			MathStructure mnew;
+			if(factorize_find_multiplier(*this, mnew, *factor_mstruct, true)) {
+				set(mnew, true);
+				if(factor_mstruct->isMultiplication()) {
+					for(size_t i = 0; i < factor_mstruct->size(); i++) {
+						multiply_nocopy(factor_mstruct->getChild(i + 1), true);
+						factor_mstruct->getChild(i + 1)->ref();
+					}
+					factor_mstruct->unref();
+				} else {
+					multiply_nocopy(factor_mstruct);
+				}
+				return true;
+			} else {
+				factor_mstruct->unref();
+			}
+		}
+		default: {
+			bool b = false;
+			for(size_t i = 0; i < SIZE; i++) {
+				if(CHILD(i).factorizeUnits()) {
+					CHILD_UPDATED(i);
+					b = true;
+				}
+			}
+			return b;
+		}
+	}
+}
 void MathStructure::prefixCurrencies() {
 	if(isMultiplication() && (!hasNegativeSign() || CALCULATOR->place_currency_code_before_negative)) {
 		int index = -1;
@@ -10034,6 +10071,9 @@ void MathStructure::prefixCurrencies() {
 }
 void MathStructure::format(const PrintOptions &po) {
 	if(!po.preserve_format) {
+		if(po.place_units_separately) {
+			factorizeUnits();
+		}
 		sort(po);
 		if(po.improve_division_multipliers) {
 			if(improve_division_multipliers(po)) sort(po);
@@ -10714,7 +10754,18 @@ int MathStructure::neededMultiplicationSign(const PrintOptions &po, const Intern
 	if(!po.short_multiplication) return MULTIPLICATION_SIGN_OPERATOR;
 	if(index <= 1) return MULTIPLICATION_SIGN_NONE;
 	if(par_prev && par) return MULTIPLICATION_SIGN_NONE;
-	if(par_prev) return MULTIPLICATION_SIGN_OPERATOR;
+	if(par_prev) {
+		if(isUnit_exp()) return MULTIPLICATION_SIGN_SPACE;
+		if(isMultiplication() || isDivision()) {
+			for(size_t i = 0; i < SIZE; i++) {
+				if(!CHILD(i).isUnit_exp()) {
+					return MULTIPLICATION_SIGN_OPERATOR;
+				}
+			}
+			return MULTIPLICATION_SIGN_SPACE;
+		}
+		return MULTIPLICATION_SIGN_OPERATOR;
+	}
 	int t = parent[index - 2].type();
 	if(flat_power && t == STRUCT_POWER) return MULTIPLICATION_SIGN_OPERATOR;
 	if(par && t == STRUCT_POWER) return MULTIPLICATION_SIGN_SPACE;

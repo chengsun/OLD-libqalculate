@@ -1,3 +1,12 @@
+2006-06-21 Niklas Knutsson  <nq@altern.org>
+
+	* Fix parsing of "x!)!"
+	* Use Julian year for light-year value
+
+2006-06-20 Niklas Knutsson  <nq@altern.org>
+
+	* Use "Display units separately" also for quantities with multiple terms
+
 2006-06-10 Niklas Knutsson  <nq@altern.org>
 
 	* Add base 3 exponent mode

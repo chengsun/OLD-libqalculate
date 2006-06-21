@@ -682,6 +682,7 @@ class MathStructure {
 		void format(const PrintOptions &po = default_print_options);
 		void formatsub(const PrintOptions &po = default_print_options, MathStructure *parent = NULL, size_t pindex = 0, bool recursive = true);
 		void postFormatUnits(const PrintOptions &po = default_print_options, MathStructure *parent = NULL, size_t pindex = 0);
+		bool factorizeUnits();
 		void unformat(const EvaluationOptions &eo = default_evaluation_options);
 		bool needsParenthesis(const PrintOptions &po, const InternalPrintStruct &ips, const MathStructure &parent, size_t index, bool flat_division = true, bool flat_power = true) const;
 

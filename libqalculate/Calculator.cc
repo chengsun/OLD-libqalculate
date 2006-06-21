@@ -3471,6 +3471,10 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 									break;
 								}
 							}
+							if(i3 == 0) {
+								stmp2 = str.substr(0, i5 + 1);
+								break;
+							}
 							i3--;
 						}
 					}

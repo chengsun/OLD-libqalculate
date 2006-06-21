@@ -202,7 +202,7 @@
       <_names>ar:ly,lightyear,p:lightyears</_names>
       <base>
         <unit>m</unit>
-        <relation>9460536207068016</relation>
+        <relation>9460730472580800</relation>
         <exponent>1</exponent>
       </base>
     </unit>

@@ -2972,9 +2972,11 @@ int DeriveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs
 	}
 	return 1;
 }
-IntegrateFunction::IntegrateFunction() : MathFunction("integrate", 1, 2) {
+IntegrateFunction::IntegrateFunction() : MathFunction("integrate", 1, 4) {
 	setArgumentDefinition(2, new SymbolicArgument());
 	setDefaultValue(2, "x");
+	setDefaultValue(3, "undefined");
+	setDefaultValue(4, "undefined");
 }
 int IntegrateFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
 	mstruct = vargs[0];
@@ -2989,6 +2991,16 @@ int IntegrateFunction::calculate(MathStructure &mstruct, const MathStructure &va
 			mstruct = mstruct2;
 			return -1;
 		}
+	}
+	if(vargs[2] != CALCULATOR->v_undef) {
+		if(vargs[3] == CALCULATOR->v_undef) {
+			CALCULATOR->error(true, _("Both the lower and upper limit must be set to get the definite integral."), NULL);
+			return 0;
+		}
+		MathStructure mstruct_lower(mstruct);
+		mstruct_lower.replace(vargs[1], vargs[2]);
+		mstruct.replace(vargs[1], vargs[3]);
+		mstruct -= mstruct_lower;
 	}
 	return 1;
 }

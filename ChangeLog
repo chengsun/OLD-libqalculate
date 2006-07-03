@@ -1,3 +1,11 @@
+2006-07-03 Niklas Knutsson  <nq@altern.org>
+
+	* Add optional upper and lower limit arguments to integrate() for definite integrals
+	* Add cross() function
+	* Handle powers with multiplication as base when setting prefixes
+	* Split powers with units when placing units separately
+	* Increment version number
+
 2006-06-21 Niklas Knutsson  <nq@altern.org>
 
 	* Fix parsing of "x!)!"

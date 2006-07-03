@@ -6378,7 +6378,7 @@ bool MathStructure::simplify(const EvaluationOptions &eo, bool unfactorize) {
 			set_nocopy(mnum);
 			return true;
 		}
-		if(mnum.countTotalChildren() + mden.countTotalChildren() + 2 < countTotalChildren()) {
+		 if(mnum.countTotalChildren() + mden.countTotalChildren() + 2 < countTotalChildren()) {
 			MathStructure mtest(mnum);
 			mtest.divide(mden);
 			mtest.calculatesub(eo2, eo2);
@@ -9424,6 +9424,28 @@ void idm3(MathStructure &mnum, Number &nr, bool expand) {
 	}
 }
 
+bool is_unit_multiexp(const MathStructure &mstruct) {
+	if(mstruct.isUnit_exp()) return true;
+	if(mstruct.isMultiplication()) {
+		for(size_t i3 = 0; i3 < mstruct.size(); i3++) {
+			if(!mstruct[i3].isUnit_exp()) {
+				return false;
+				break;
+			}
+		}
+		return true;
+	}
+	if(mstruct.isPower() && mstruct[0].isMultiplication()) {
+		for(size_t i3 = 0; i3 < mstruct[0].size(); i3++) {
+			if(!mstruct[0][i3].isUnit_exp()) {
+				return false;
+				break;
+			}
+		}
+		return true;
+	}
+	return false;
+}
 bool MathStructure::improve_division_multipliers(const PrintOptions &po) {
 	switch(m_type) {
 		case STRUCT_MULTIPLICATION: {
@@ -9433,7 +9455,7 @@ bool MathStructure::improve_division_multipliers(const PrintOptions &po) {
 			bool dofrac = !po.negative_exponents;
 			for(size_t i2 = 0; i2 < SIZE; i2++) {
 				if(CHILD(i2).isPower() && CHILD(i2)[1].isMinusOne()) {
-					if(!po.place_units_separately || !CHILD(i2)[0].isUnit()) {
+					if(!po.place_units_separately || !is_unit_multiexp(CHILD(i2)[0])) {
 						if(iden == 0) index1 = i2;
 						iden++;
 						bdiv = true;
@@ -9443,13 +9465,13 @@ bool MathStructure::improve_division_multipliers(const PrintOptions &po) {
 						}
 					}
 				} else if(!bdiv && !po.negative_exponents && CHILD(i2).isPower() && CHILD(i2)[1].hasNegativeSign()) {
-					if(!po.place_units_separately || !CHILD(i2)[0].isUnit()) {
+					if(!po.place_units_separately || !is_unit_multiexp(CHILD(i2)[0])) {
 						if(!bdiv) index1 = i2;
 						bdiv = true;
 						if(!CHILD(i2)[0].isUnit()) bnonunitdiv = true;
 					}
 				} else {
-					if(!po.place_units_separately || !CHILD(i2).isUnit_exp()) {
+					if(!po.place_units_separately || !is_unit_multiexp(CHILD(i2))) {
 						if(inum == 0) index2 = i2;
 						inum++;
 					}
@@ -9574,7 +9596,8 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 	switch(m_type) {
 		case STRUCT_MULTIPLICATION: {
 			bool b = false;
-			size_t i = SIZE;
+			size_t i = SIZE, im = 0;
+			bool b_im = false;
 			for(size_t i2 = 0; i2 < SIZE; i2++) {
 				if(CHILD(i2).isUnit_exp()) {
 					if((CHILD(i2).isUnit() && CHILD(i2).prefix()) || (CHILD(i2).isPower() && CHILD(i2)[0].prefix())) {
@@ -9583,74 +9606,154 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 					}
 					if(po.use_prefixes_for_currencies || (CHILD(i2).isPower() && !CHILD(i2)[0].unit()->isCurrency()) || (CHILD(i2).isUnit() && !CHILD(i2).unit()->isCurrency())) {
 						b = true;
-						if(i > i2) i = i2;
+						if(i > i2) {i = i2; b_im = false;}
 						break;
 					} else if(i < i2) {
 						i = i2;
+						b_im = false;
 					}
+				} else if(CHILD(i2).isPower() && CHILD(i2)[0].isMultiplication()) {
+					for(size_t i3 = 0; i3 < SIZE; i3++) {
+						if(CHILD(i2)[0][i3].isUnit_exp()) {
+							if((CHILD(i2)[0][i3].isUnit() && CHILD(i2)[0][i3].prefix()) || (CHILD(i2)[0][i3].isPower() && CHILD(i2)[0][i3][0].prefix())) {
+								b = false;
+								return;
+							}
+							if(po.use_prefixes_for_currencies || (CHILD(i2)[0][i3].isPower() && !CHILD(i2)[0][i3][0].unit()->isCurrency()) || (CHILD(i2)[0][i3].isUnit() && !CHILD(i2)[0][i3].unit()->isCurrency())) {
+								b = true;
+								if(i > i2) {
+									i = i2;
+									im = i3;
+									b_im = true;
+								}
+								break;
+							} else if(i < i2 || (i == i2 && im < i3)) {
+								i = i2;
+								im = i3;
+								b_im = true;
+							}
+						}
+					}
+					if(b) break;
 				}
 			}
 			if(b) {
 				Number exp(1, 1);
 				Number exp2(1, 1);
 				bool b2 = false;
-				size_t i2 = i;
+				MathStructure *munit = NULL, *munit2 = NULL;
+				if(b_im) munit = &CHILD(i)[0][im];
+				else munit = &CHILD(i);
 				if(CHILD(i).isPower()) {
 					if(CHILD(i)[1].isNumber() && CHILD(i)[1].number().isInteger()) {
-						exp = CHILD(i)[1].number();
+						if(b_im && munit->isPower()) {
+							if((*munit)[1].isNumber() && (*munit)[1].number().isInteger()) {
+								exp = CHILD(i)[1].number();
+								exp *= (*munit)[1].number();
+							} else {
+								b = false;
+							}
+						} else {
+							exp = CHILD(i)[1].number();
+						}
 					} else {
 						b = false;
 					}
 				}
 				if(po.use_denominator_prefix && !exp.isNegative()) {
-					for(; i2 < SIZE; i2++) {
-						if(CHILD(i2).isPower() && CHILD(i2)[0].isUnit() && CHILD(i2)[1].isNumber() && CHILD(i2)[1].number().isNegative()) {
-							if(CHILD(i2)[1].prefix() || !CHILD(i2)[1].number().isInteger()) {
+					for(size_t i2 = i + 1; i2 < SIZE; i2++) {
+						if(CHILD(i2).isPower() && CHILD(i2)[1].isNumber() && CHILD(i2)[1].number().isNegative()) {
+							if(CHILD(i2)[0].isUnit()) {
+								munit2 = &CHILD(i2)[0];
+								if(munit2->prefix() || !CHILD(i2)[1].number().isInteger()) {
+									break;
+								}
+								if(!b) {
+									b = true;
+									exp = CHILD(i2)[1].number();
+									munit = munit2;
+								} else {
+									b2 = true;
+									exp2 = CHILD(i2)[1].number();
+								}
 								break;
+							} else if(CHILD(i2)[0].isMultiplication()) {
+								for(size_t im2 = 0; im2 < SIZE; im2++) {
+									if(CHILD(i2)[0][im2].isUnit_exp() && (CHILD(i2)[0][im2].isUnit() || CHILD(i2)[0][im2][1].isNumber() && CHILD(i2)[0][im2][1].number().isNegative() && CHILD(i2)[0][im2][1].number().isInteger())) {
+										Number exp_multi(1);
+										if(CHILD(i2)[0][im2].isUnit()) {
+											munit2 = &CHILD(i2)[0][im2];
+										} else {
+											munit2 = &CHILD(i2)[0][im2][0];
+											exp_multi = CHILD(i2)[0][im2][1].number();
+										}
+										if(munit2->prefix() || !CHILD(i2)[1].number().isInteger()) {
+											break;
+										}
+										if(!b) {
+											b = true;
+											exp = CHILD(i2)[1].number();
+											exp *= exp_multi;
+											i = i2;
+										} else {
+											b2 = true;
+											exp2 = CHILD(i2)[1].number();
+											exp2 *= exp_multi;
+										}
+										break;
+									}
+								}
 							}
-							if(!b) {
-								b = true;
-								exp = CHILD(i2)[1].number();
-								i = i2;
-							} else {
-								b2 = true;
-								exp2 = CHILD(i2)[1].number();
-							}
-							break;
 						}
 					}
 				} else if(exp.isNegative() && b) {
-					for(; i2 < SIZE; i2++) {
-						if(CHILD(i2).isPower() && CHILD(i2)[0].isUnit() && !(CHILD(i2)[1].isNumber() && CHILD(i2)[1].number().isNegative())) {
-							if(CHILD(i2)[1].prefix() || !CHILD(i2)[1].number().isInteger()) {
-								if(!po.use_denominator_prefix) {
-									b = false;
+					for(size_t i2 = i + 1; i2 < SIZE; i2++) {
+						bool b3 = false;
+						if(CHILD(i2).isPower() && !(CHILD(i2)[1].isNumber() && CHILD(i2)[1].number().isNegative())) {
+							if(CHILD(i2)[0].isUnit()) {
+								exp2 = exp;
+								exp = CHILD(i2)[1].number();
+								munit2 = &CHILD(i2);
+							} else if(CHILD(i2)[0].isMultiplication()) {
+								for(size_t im2 = 0; im2 < SIZE; im2++) {
+									if(CHILD(i2)[0][im2].isUnit_exp() && (CHILD(i2)[0][im2].isUnit() || CHILD(i2)[0][im2][1].isNumber() && CHILD(i2)[0][im2][1].number().isNegative() && CHILD(i2)[0][im2][1].number().isInteger())) {
+										exp2 = exp;
+										Number exp_multi(1);
+										if(CHILD(i2)[0][im2].isUnit()) {
+											munit2 = &CHILD(i2)[0][im2];
+										} else {
+											munit2 = &CHILD(i2)[0][im2][0];
+											exp_multi = CHILD(i2)[0][im2][1].number();
+										}
+										exp = CHILD(i2)[1].number();
+										exp *= exp_multi;
+										break;
+									}
 								}
-								break;
 							}
-							if(po.use_denominator_prefix) {
-								b2 = true;
-								exp2 = exp;
-								exp = CHILD(i2)[1].number();
-								size_t i3 = i;
-								i = i2;
-								i2 = i3;
-							} else {
-								i = i2;
-								exp = CHILD(i2)[1].number();
+							if(munit2) {
+								if(munit2->prefix() || !CHILD(i2)[1].number().isInteger()) {
+									if(!po.use_denominator_prefix) {
+										b = false;
+									}
+									break;
+								}
+								b3 = true;
 							}
-							break;
 						} else if(CHILD(i2).isUnit()) {
+							exp2 = exp;
+							exp.set(1, 1);
+							b3 = true;
+							munit2 = &CHILD(i2);
+						}
+						if(b3) {
 							if(po.use_denominator_prefix) {
 								b2 = true;
-								exp2 = exp;
-								exp.set(1, 1);
-								size_t i3 = i;
-								i = i2;
-								i2 = i3;
+								MathStructure *munit3 = munit;
+								munit = munit2;
+								munit2 = munit3;
 							} else {
-								i = i2;
-								exp.set(1, 1);
+								munit = munit2;
 							}
 							break;
 						}
@@ -9660,8 +9763,8 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 				if(b) {
 					if(po.prefix) {
 						if(po.prefix != CALCULATOR->decimal_null_prefix && po.prefix != CALCULATOR->binary_null_prefix) {
-							if(CHILD(i).isUnit()) CHILD(i).setPrefix(po.prefix);
-							else CHILD(i)[0].setPrefix(po.prefix);
+							if(munit->isUnit()) munit->setPrefix(po.prefix);
+							else (*munit)[0].setPrefix(po.prefix);
 							if(CHILD(0).isNumber()) {
 								CHILD(0).number() /= po.prefix->value(exp);
 							} else {
@@ -9686,21 +9789,21 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 							Number e2(3, 1);
 							e2 *= exp2;
 							e2.setNegative(false);
-							int i = 0;
+							int i4 = 0;
 							while(true) {
 								tmp_exp -= e1;
 								if(!tmp_exp.isPositive()) {
 									break;
 								}
-								if(exp10.isNegative()) i++;
+								if(exp10.isNegative()) i4++;
 								tmp_exp -= e2;
 								if(tmp_exp.isNegative()) {
 									break;
 								}
-								if(!exp10.isNegative())	i++;
+								if(!exp10.isNegative())	i4++;
 							}
 							e2.setNegative(exp10.isNegative());
-							e2 *= i;
+							e2 *= i4;
 							exp10 -= e2;
 						}
 						DecimalPrefix *p = CALCULATOR->getBestDecimalPrefix(exp10, exp, po.use_all_prefixes);
@@ -9710,8 +9813,8 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 							if(test_exp.isInteger()) {
 								if((exp10.isPositive() && exp10.compare(test_exp) == COMPARISON_RESULT_LESS) || (exp10.isNegative() && exp10.compare(test_exp) == COMPARISON_RESULT_GREATER)) {
 									CHILD(0).number() /= p->value(exp);
-									if(CHILD(i).isUnit()) CHILD(i).setPrefix(p);
-									else CHILD(i)[0].setPrefix(p);
+									if(munit->isUnit()) munit->setPrefix(p);
+									else (*munit)[0].setPrefix(p);
 								}
 							}
 						}
@@ -9727,7 +9830,8 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 							if(test_exp.isInteger()) {
 								if((exp10.isPositive() && exp10.compare(test_exp) == COMPARISON_RESULT_LESS) || (exp10.isNegative() && exp10.compare(test_exp) == COMPARISON_RESULT_GREATER)) {
 									CHILD(0).number() /= p->value(exp2);
-									CHILD(i2)[0].setPrefix(p);
+									if(munit2->isUnit()) munit2->setPrefix(p);
+									else (*munit2)[0].setPrefix(p);
 								}
 							}
 						}
@@ -9760,6 +9864,31 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 			}
 		}
 	}
+}
+bool split_unit_powers(MathStructure &mstruct);
+bool split_unit_powers(MathStructure &mstruct) {
+	bool b = false;
+	for(size_t i = 0; i < mstruct.size(); i++) {
+		if(split_unit_powers(mstruct[i])) {
+			mstruct.childUpdated(i + 1);
+			b = true;
+		}
+	}
+	if(mstruct.isPower() && mstruct[0].isMultiplication()) {
+		bool b2 = mstruct[1].isNumber();
+		for(size_t i = 0; i < mstruct[0].size(); i++) {
+			if(mstruct[0][i].isPower() && (!b2 || !mstruct[0][i][1].isNumber())) return b;
+		}
+		MathStructure mpower(mstruct[1]);
+		mstruct.setToChild(1);
+		for(size_t i = 0; i < mstruct.size(); i++) {
+			if(mstruct[i].isPower()) mstruct[i][1].number() *= mpower.number();
+			else mstruct[i].raise(mpower);
+		}
+		mstruct.childrenUpdated();
+		return true;
+	}
+	return b;
 }
 void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure*, size_t) {
 	switch(m_type) {
@@ -9898,6 +10027,7 @@ void MathStructure::postFormatUnits(const PrintOptions &po, MathStructure*, size
 						}
 						default: {}
 					}
+					split_unit_powers(CHILD(1));
 					switch(CHILD(1).type()) {
 						case STRUCT_UNIT: {
 							CHILD(1).setPlural(do_plural);
@@ -10292,7 +10422,7 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 				}
 				case STRUCT_UNIT: {
 					if(index == 0) {
-						if(!parent || (!parent->isDivision() || pindex != 2)) {
+						if(!parent || (!parent->isPower() && !parent->isMultiplication() && !parent->isInverse() && (!parent->isDivision() || pindex != 2))) {
 							PREPEND(m_one);
 						}
 					}
@@ -10307,12 +10437,11 @@ void MathStructure::formatsub(const PrintOptions &po, MathStructure *parent, siz
 					}
 				}
 			}
-
 			break;
 		}
 		case STRUCT_UNIT: {
 			if(po.preserve_format) break;
-			if(!parent || (!parent->isPower() && !parent->isMultiplication() && !parent->isInverse() && !(parent->isDivision() && pindex == 2))) {				
+			if(!parent || (!parent->isPower() && !parent->isMultiplication() && !parent->isInverse() && !(parent->isDivision() && pindex == 2))) {
 				multiply(m_one);
 				SWAP_CHILDREN(0, 1);
 			}

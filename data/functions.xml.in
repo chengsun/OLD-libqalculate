@@ -2060,10 +2060,10 @@
       <function>
         <_title>Circle Circumference</_title>
         <_names>r:circumference</_names>
-        <_description>Calculates the area of a circle using the diameter</_description>
-        <expression>\x*pi</expression>
+        <_description>Calculates the area of a circle using the radius</_description>
+        <expression>\x*2*pi</expression>
         <argument type="free" index="1">
-          <_title>Diameter</_title>
+          <_title>Radius</_title>
         </argument>
       </function>
     </category>

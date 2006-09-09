@@ -1,3 +1,9 @@
+2006-09-05 Niklas Knutsson  <nq@altern.org>
+
+	* Integer factorization
+	* Heaviside Step Function, Rectangular Function, Triangular Function, and Ramp Function
+	* Kronecker Delta, Sigmoid, and Logit Transformation
+
 2006-08-18 Niklas Knutsson  <nq@altern.org>
 
 	* Generate API docs from autogen.sh

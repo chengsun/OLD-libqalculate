@@ -8516,7 +8516,18 @@ void sqrfree(MathStructure &mpoly, const vector<MathStructure> &symbols, const E
 
 }
 
-
+bool MathStructure::integerFactorize() {
+	if(!isNumber()) return false;
+	vector<Number> factors;
+	if(!o_number.factorize(factors)) return false;
+	if(factors.size() == 1) return true;
+	clear(true);	
+	for(size_t i = 0; i < factors.size(); i++) {
+		APPEND(factors[i]);
+	}
+	m_type = STRUCT_MULTIPLICATION;
+	return true;
+}
 bool MathStructure::factorize(const EvaluationOptions &eo) {
 
 	MathStructure mden, mnum;

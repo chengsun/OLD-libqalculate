@@ -2022,7 +2022,9 @@ void *command_proc(void *pipe) {
 		fread(&x, sizeof(void*), 1, command_pipe);
 		switch(command_type) {
 			case COMMAND_FACTORIZE: {
-				((MathStructure*) x)->factorize(evalops);
+				if(!((MathStructure*) x)->integerFactorize()) {
+					((MathStructure*) x)->factorize(evalops);
+				}
 				break;
 			}
 			case COMMAND_SIMPLIFY: {

@@ -726,6 +726,86 @@
     </category>
   </category>
   <category>
+    <_title>Step Functions</_title>
+    <function>
+      <_title>Heaviside Step Function</_title>
+      <_names>r:heaviside</_names>
+      <_description>Discontinuous function also known as "unit step function". Returns 0 if x &lt; 0, 1 if x &gt; 0, and 1/2 if x = 0.</_description>
+      <expression>(1/2)*(1+sgn(\x))</expression>
+      <argument type="number" index="1">
+        <_title>Value</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+    </function>
+    <function>
+      <_title>Ramp Function</_title>
+      <_names>r:ramp</_names>
+      <expression>(\x+abs(\x))/2</expression>
+      <argument type="number" index="1">
+        <_title>Value</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+    </function>
+    <function>
+      <_title>Rectangular Function</_title>
+      <_names>r:rectangular</_names>
+      <expression>heaviside(\x+(1/2))-heaviside(\x-(1/2))</expression>
+      <argument type="number" index="1">
+        <_title>Value</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+    </function>
+    <function>
+      <_title>Sigmoid Function</_title>
+      <_names>r:sigmoid</_names>
+      <expression>1/(1+e^(-\x))</expression>
+      <argument type="number" index="1">
+        <_title>Value</_title>
+        <test>false</test>
+      </argument>
+    </function>
+    <function>
+      <_title>Logit Transformation</_title>
+      <_names>r:logit</_names>
+      <expression>ln(\x/(1-\x))</expression>
+      <argument type="number" index="1">
+        <_title>Value</_title>
+      </argument>
+    </function>
+    <function>
+      <_title>Triangular Function</_title>
+      <_names>r:triangular</_names>
+      <expression>if(abs(\x)&lt;1,1-abs(\x),0)</expression>
+      <argument type="number" index="1">
+        <_title>Value</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+    </function>
+  </category>
+  <category>
+    <_title>Differential Geometry</_title>
+    <function>
+      <_title>Kronecker Delta</_title>
+      <_names>r:kronecker</_names>
+      <_description>Returns 0 if i != j and 1 if i = j.</_description>
+      <expression>\x=\Y{0}</expression>
+      <argument type="number" index="1">
+        <_title>Value 1 (i)</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+      <argument type="number" index="2">
+        <_title>Value 2 (j)</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+    </function>
+  </category>
+  <category>
     <_title>Analysis</_title>
     <builtin_function name="re">
       <_title>Real Part</_title>

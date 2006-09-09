@@ -370,6 +370,7 @@ class Number {
 		bool multiFactorial(const Number &o);
 		bool doubleFactorial();
 		bool binomial(const Number &m, const Number &k);
+		bool factorize(vector<Number> &factors);
 	
 		bool add(const Number &o, MathOperation op); 
 

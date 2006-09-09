@@ -2069,6 +2069,55 @@ bool Number::binomial(const Number &m, const Number &k) {
 	return true;
 }
 
+bool Number::factorize(vector<Number> &factors) {
+	if(isZero() || !isInteger()) return false;
+	cl_I inr = cln::numerator(cln::rational(cln::realpart(value)));
+	if(minusp(inr)) {
+		inr = -inr;
+		factors.push_back(Number(-1, 1));
+	}
+	size_t prime_index = 0;
+	cl_I last_prime = 0;
+	bool b = true;
+	while(b) {
+		b = false;
+		cl_I facmax = cln::floor1(cln::sqrt(inr));
+		for(; prime_index < NR_OF_PRIMES && PRIMES[prime_index] <= facmax; prime_index++) {
+			if(cln::zerop(cln::mod(inr, PRIMES[prime_index]))) {
+				inr = cln::exquo(inr, PRIMES[prime_index]);
+				Number fac;
+				fac.setInternal(PRIMES[prime_index]);
+				factors.push_back(fac);
+				b = true;
+				break;
+			}
+		}
+		if(prime_index == NR_OF_PRIMES) {
+			last_prime = PRIMES[NR_OF_PRIMES - 1] + 2;
+			prime_index++;
+		}
+		if(!b && prime_index > NR_OF_PRIMES) {
+			while(!b && last_prime <= facmax) {
+				if(cln::zerop(cln::mod(inr, last_prime))) {
+					inr = cln::exquo(inr, last_prime);
+					b = true;
+					Number fac;
+					fac.setInternal(last_prime);
+					factors.push_back(fac);
+					break;
+				}
+				last_prime = last_prime + 2;
+			}
+		}
+	}
+	if(inr != 1) {
+		Number fac;
+		fac.setInternal(inr);
+		factors.push_back(fac);
+	}
+	return true;
+}
+
 bool Number::add(const Number &o, MathOperation op) {
 	switch(op) {
 		case OPERATION_SUBTRACT: {

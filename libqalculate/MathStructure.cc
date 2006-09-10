@@ -8521,9 +8521,20 @@ bool MathStructure::integerFactorize() {
 	vector<Number> factors;
 	if(!o_number.factorize(factors)) return false;
 	if(factors.size() == 1) return true;
-	clear(true);	
+	clear(true);
+	bool b_pow = false;
+	Number *lastnr = NULL;
 	for(size_t i = 0; i < factors.size(); i++) {
-		APPEND(factors[i]);
+		if(lastnr && factors[i] == *lastnr) {
+			if(!b_pow) {
+				LAST.raise(m_one);
+				b_pow = true;
+			}
+			LAST[1].number()++;
+		} else {
+			APPEND(factors[i]);
+		}
+		lastnr = &factors[i];
 	}
 	m_type = STRUCT_MULTIPLICATION;
 	return true;

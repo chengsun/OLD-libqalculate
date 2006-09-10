@@ -43,6 +43,8 @@ string expression_str;
 bool expression_executed = false;
 bool rpn_mode;
 
+bool result_only;
+
 fd_set in_set;
 struct timeval timeout;
 
@@ -656,6 +658,9 @@ int main (int argc, char *argv[]) {
 	string command_file;
 	cfile = NULL;
 	bool batch = false;
+	result_only = false;
+	bool load_units = true, load_functions = true, load_variables = true, load_currencies = true, load_datasets = true;
+	load_global_defs = true;
 	printops.use_unicode_signs = false;
 	for(int i = 1; i < argc; i++) {
 		if(calc_arg_begun) {
@@ -671,6 +676,20 @@ int main (int argc, char *argv[]) {
 			fputs("\t", stdout); PUTS_UNICODE(_("as set command in interactive program session (ex. -set \"base 16\")"));
 			fputs("\n\t-f, -file", stdout); fputs(" ", stdout); FPUTS_UNICODE(_("FILE"), stdout); fputs("\n", stdout);
 			fputs("\t", stdout); PUTS_UNICODE(_("executes commands from a file first"));
+			fputs("\n\t-t, -terse\n", stdout);
+			fputs("\t", stdout); PUTS_UNICODE(_("reduces output to just the result of the input expression"));
+			fputs("\n\t-nodefs\n", stdout);
+			fputs("\t", stdout); PUTS_UNICODE(_("do not load any functions, units, or variables from file"));
+			fputs("\n\t-nocurrencies\n", stdout);
+			fputs("\t", stdout); PUTS_UNICODE(_("do not load any global currencies from file"));
+			fputs("\n\t-nodatasets\n", stdout);
+			fputs("\t", stdout); PUTS_UNICODE(_("do not load any global data sets from file"));
+			fputs("\n\t-nofunctions\n", stdout);
+			fputs("\t", stdout); PUTS_UNICODE(_("do not load any global functions from file"));
+			fputs("\n\t-nounits\n", stdout);
+			fputs("\t", stdout); PUTS_UNICODE(_("do not load any global units from file"));
+			fputs("\n\t-novariables\n", stdout);
+			fputs("\t", stdout); PUTS_UNICODE(_("do not load any global variables from file"));
 			puts("");
 			PUTS_UNICODE(_("The program will start in interactive mode if no expression is specified."));
 			puts("");
@@ -679,6 +698,20 @@ int main (int argc, char *argv[]) {
 			enable_unicode = 1;
 		} else if(!calc_arg_begun && strcmp(argv[i], "+u8") == 0) {
 			enable_unicode = 0;
+		} else if(!calc_arg_begun && (strcmp(argv[i], "-terse") == 0 || strcmp(argv[i], "--terse") == 0 || strcmp(argv[i], "-t") == 0)) {
+			result_only = true;
+		} else if(!calc_arg_begun && strcmp(argv[i], "-nounits") == 0) {
+			load_units = false;
+		} else if(!calc_arg_begun && strcmp(argv[i], "-nocurrencies") == 0) {
+			load_currencies = false;
+		} else if(!calc_arg_begun && strcmp(argv[i], "-nofunctions") == 0) {
+			load_functions = false;
+		} else if(!calc_arg_begun && strcmp(argv[i], "-novariables") == 0) {
+			load_variables = false;
+		} else if(!calc_arg_begun && strcmp(argv[i], "-nodatasets") == 0) {
+			load_datasets = false;
+		} else if(!calc_arg_begun && strcmp(argv[i], "-nodefs") == 0) {
+			load_global_defs = false;
 		} else if(!calc_arg_begun && (strcmp(argv[i], "-set") == 0 || strcmp(argv[i], "--set") == 0)) {
 			i++;
 			if(i < argc) {
@@ -742,15 +775,16 @@ int main (int argc, char *argv[]) {
 #endif
 
 	//exchange rates
-	if(first_qalculate_run && canfetch && command_file.empty()) {
-		if(ask_question(_("You need the download exchange rates to be able to convert between different currencies.\nYou can later get current exchange rates with the \"exchange rates\" command.\nDo you want to fetch exchange rates now from the Internet (default yes)?"))) {
+	if(load_global_defs && load_currencies) {
+		if(first_qalculate_run && canfetch && command_file.empty()) {
+			if(ask_question(_("You need the download exchange rates to be able to convert between different currencies.\nYou can later get current exchange rates with the \"exchange rates\" command.\nDo you want to fetch exchange rates now from the Internet (default yes)?"))) {
+				CALCULATOR->fetchExchangeRates(5);
+			}
+		} else if(fetch_exchange_rates_at_startup && canfetch) {
 			CALCULATOR->fetchExchangeRates(5);
 		}
-	} else if(fetch_exchange_rates_at_startup && canfetch) {
-		CALCULATOR->fetchExchangeRates(5);
+		CALCULATOR->loadExchangeRates();
 	}
-
-	CALCULATOR->loadExchangeRates();
 
 	string ans_str = _("ans");
 	vans[0] = (KnownVariable*) CALCULATOR->addVariable(new KnownVariable(_("Temporary"), ans_str, m_undefined, _("Last Answer"), false));
@@ -762,17 +796,19 @@ int main (int argc, char *argv[]) {
 	vans[4] = (KnownVariable*) CALCULATOR->addVariable(new KnownVariable(_("Temporary"), ans_str + "5", m_undefined, _("Answer 5"), false));
 
 	//load global definitions
-	if(load_global_defs && !CALCULATOR->loadGlobalDefinitions()) {
-		PUTS_UNICODE(_("Failed to load global definitions!"));
+	if(load_global_defs) {
+		bool b = true;
+		if(load_units && !CALCULATOR->loadGlobalPrefixes()) b = false;
+		if(load_units && !CALCULATOR->loadGlobalUnits()) b = false;
+		else if(load_currencies && !CALCULATOR->loadGlobalCurrencies()) b = false;
+		if(load_functions && !CALCULATOR->loadGlobalFunctions()) b = false;
+		if(load_datasets && !CALCULATOR->loadGlobalDataSets()) b = false;
+		if(load_variables && !CALCULATOR->loadGlobalVariables()) b = false;
+		if(!b) PUTS_UNICODE(_("Failed to load global definitions!"));
 	}
 
-	//CALCULATOR->savePrefixes("prefixes.xml.new", true);
-	//CALCULATOR->saveUnits("units.xml.new", true);
-	//CALCULATOR->saveVariables("variables.xml.new", true);
-	//CALCULATOR->saveFunctions("functions.xml.new", true);
-	
 	//load local definitions
-	CALCULATOR->loadLocalDefinitions();
+	if(load_global_defs) CALCULATOR->loadLocalDefinitions();
 
 	//reset
 	result_text = "0";
@@ -1907,9 +1943,11 @@ void setResult(Prefix *prefix = NULL, bool update_parse = false, bool goto_input
 	i = 0;
 	
 	if(b_busy && !cfile) {
-		FPUTS_UNICODE(_("Processing (press Enter to abort)"), stdout);
-		has_printed = true;
-		fflush(stdout);
+		if(!result_only) { 
+			FPUTS_UNICODE(_("Processing (press Enter to abort)"), stdout);
+			has_printed = true;
+			fflush(stdout);
+		}
 	}
 #ifdef HAVE_LIBREADLINE	
 	int c = 0;
@@ -1933,8 +1971,10 @@ void setResult(Prefix *prefix = NULL, bool update_parse = false, bool goto_input
 					on_abort_display();
 				}
 			} else {
-				printf(".");
-				fflush(stdout);
+				if(!result_only) {
+					printf(".");
+					fflush(stdout);
+				}
 				nanosleep(&rtime, NULL);
 			}
 		}
@@ -1950,23 +1990,25 @@ void setResult(Prefix *prefix = NULL, bool update_parse = false, bool goto_input
 		parsed_text = result_text;
 	}
 	
-	if(display_errors(goto_input) && goto_input) printf("  ");
+	if(!result_only && display_errors(goto_input) && goto_input) printf("  ");
 
 	if(stack_index != 0) {
 		RPNRegisterChanged(result_text, stack_index);
 	} else {
-		if(update_parse) {
-			FPUTS_UNICODE(parsed_text.c_str(), stdout);
-		} else {
-			FPUTS_UNICODE(prev_result_text.c_str(), stdout);
-		}
-		if(!(*printops.is_approximate) && !mstruct->isApproximate()) {
-			printf(" = ");	
-		} else {
-			if(printops.use_unicode_signs) {
-				printf(" " SIGN_ALMOST_EQUAL " ");
+		if(!result_only) {
+			if(update_parse) {
+				FPUTS_UNICODE(parsed_text.c_str(), stdout);
 			} else {
-				printf(" = %s ", _("approx."));
+				FPUTS_UNICODE(prev_result_text.c_str(), stdout);
+			}
+			if(!(*printops.is_approximate) && !mstruct->isApproximate()) {
+				printf(" = ");	
+			} else {
+				if(printops.use_unicode_signs) {
+					printf(" " SIGN_ALMOST_EQUAL " ");
+				} else {
+					printf(" = %s ", _("approx."));
+				}
 			}
 		}
 		PUTS_UNICODE(result_text.c_str());
@@ -2068,18 +2110,20 @@ void execute_command(int command_type) {
 	i = 0;
 	
 	if(b_busy && !cfile) {
-		switch(command_type) {
-			case COMMAND_FACTORIZE: {
-				FPUTS_UNICODE(_("Factorizing (press Enter to abort)"), stdout);
-				break;
+		if(!result_only) {
+			switch(command_type) {
+				case COMMAND_FACTORIZE: {				
+					FPUTS_UNICODE(_("Factorizing (press Enter to abort)"), stdout);
+					break;
+				}
+				case COMMAND_SIMPLIFY: {
+					FPUTS_UNICODE(_("Simplifying (press Enter to abort)"), stdout);
+					break;
+				}
 			}
-			case COMMAND_SIMPLIFY: {
-				FPUTS_UNICODE(_("Simplifying (press Enter to abort)"), stdout);
-				break;
-			}
+			has_printed = true;
+			fflush(stdout);
 		}
-		has_printed = true;
-		fflush(stdout);
 	}
 #ifdef HAVE_LIBREADLINE	
 	int c = 0;
@@ -2103,8 +2147,10 @@ void execute_command(int command_type) {
 					on_abort_command();
 				}
 			} else {
-				printf(".");
-				fflush(stdout);
+				if(!result_only) {
+					printf(".");
+					fflush(stdout);
+				}
 				nanosleep(&rtime, NULL);
 			}
 		}
@@ -2265,9 +2311,11 @@ void execute_expression(bool goto_input, bool do_mathoperation, MathOperation op
 	i = 0;
 	bool has_printed = false;
 	if(CALCULATOR->busy() && !cfile) {
-		FPUTS_UNICODE(_("Calculating (press Enter to abort)"), stdout);
-		fflush(stdout);
-		has_printed = true;
+		if(!result_only) {
+			FPUTS_UNICODE(_("Calculating (press Enter to abort)"), stdout);
+			fflush(stdout);
+			has_printed = true;
+		}
 	}
 #ifdef HAVE_LIBREADLINE		
 	int c = 0;
@@ -2291,8 +2339,10 @@ void execute_expression(bool goto_input, bool do_mathoperation, MathOperation op
 					CALCULATOR->abort();
 				}
 			} else {
-				printf(".");
-				fflush(stdout);
+				if(!result_only) {
+					printf(".");
+					fflush(stdout);
+				}
 				nanosleep(&rtime, NULL);
 			}
 		}
@@ -2407,8 +2457,7 @@ void load_preferences() {
 	rpn_mode = false;
 	
 	save_mode_on_exit = true;
-	save_defs_on_exit = true;
-	load_global_defs = true;
+	save_defs_on_exit = true;	
 	fetch_exchange_rates_at_startup = false;
 	first_time = false;
 	string filename = getLocalDir();
@@ -2624,7 +2673,6 @@ bool save_preferences(bool mode)
 	fprintf(file, "version=%s\n", VERSION);	
 	fprintf(file, "save_mode_on_exit=%i\n", save_mode_on_exit);
 	fprintf(file, "save_definitions_on_exit=%i\n", save_defs_on_exit);
-	fprintf(file, "load_global_definitions=%i\n", load_global_defs);
 	fprintf(file, "fetch_exchange_rates_at_startup=%i\n", fetch_exchange_rates_at_startup);
 	fprintf(file, "spacious=%i\n", printops.spacious);
 	fprintf(file, "excessive_parenthesis=%i\n", printops.excessive_parenthesis);

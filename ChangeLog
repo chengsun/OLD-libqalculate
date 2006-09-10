@@ -1,3 +1,7 @@
+2006-09-10 Niklas Knutsson  <nq@altern.org>
+
+	* Group integer factors in powers
+
 2006-09-05 Niklas Knutsson  <nq@altern.org>
 
 	* Integer factorization

@@ -678,7 +678,7 @@ int main (int argc, char *argv[]) {
 			fputs("\t", stdout); PUTS_UNICODE(_("executes commands from a file first"));
 			fputs("\n\t-t, -terse\n", stdout);
 			fputs("\t", stdout); PUTS_UNICODE(_("reduces output to just the result of the input expression"));
-			fputs("\n\t-nodefs\n", stdout);
+			fputs("\n\t-n, -nodefs\n", stdout);
 			fputs("\t", stdout); PUTS_UNICODE(_("do not load any functions, units, or variables from file"));
 			fputs("\n\t-nocurrencies\n", stdout);
 			fputs("\t", stdout); PUTS_UNICODE(_("do not load any global currencies from file"));
@@ -710,7 +710,7 @@ int main (int argc, char *argv[]) {
 			load_variables = false;
 		} else if(!calc_arg_begun && strcmp(argv[i], "-nodatasets") == 0) {
 			load_datasets = false;
-		} else if(!calc_arg_begun && strcmp(argv[i], "-nodefs") == 0) {
+		} else if(!calc_arg_begun && (strcmp(argv[i], "-nodefs") == 0 || strcmp(argv[i], "-n") == 0)) {
 			load_global_defs = false;
 		} else if(!calc_arg_begun && (strcmp(argv[i], "-set") == 0 || strcmp(argv[i], "--set") == 0)) {
 			i++;

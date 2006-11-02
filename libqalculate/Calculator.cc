@@ -3393,6 +3393,17 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 
 	parseSigns(str);
 
+	size_t isave = 0;
+	if((isave = str.find(":=", 1)) != string::npos) {
+		string name = str.substr(0, isave);
+		string value = str.substr(isave + 2, str.length() - (isave + 2));
+		str = value;
+		str += COMMA;
+		str += name;
+		f_save->parse(*mstruct, str, po);
+		return;
+	}
+
 	for(size_t str_index = 0; str_index < str.length(); str_index++) {		
 		if(str[str_index] == LEFT_VECTOR_WRAP_CH) {
 			int i4 = 1;

@@ -1,3 +1,8 @@
+2006-11-02 Niklas Knutsson  <nq@altern.org>
+
+	* Use "name := value" as shortcut for save(value; name)
+	* Return value in save()
+
 2006-09-10 Niklas Knutsson  <nq@altern.org>
 
 	* Group integer factors in powers
@@ -15,7 +20,7 @@
 
 2006-07-21 Niklas Knutsson  <nq@altern.org>
 
-	* Interpret 0x[0-9,a-f] as hexadecimal number (do not require first digit to be 0-9
+	* Interpret 0x[0-9,a-f] as hexadecimal number (do not require first digit to be 0-9)
 
 2006-07-03 Niklas Knutsson  <nq@altern.org>
 
@@ -41,7 +46,7 @@
 
 2006-06-06 Niklas Knutsson  <nq@altern.org>
 
-	* Unevaluated arguments were used when checking for numerical arguments in 
+	* Unevaluated arguments were used when checking for numerical arguments in
 	   logn(), which caused log2(16/2) to first be evaluated to ln(16/2)/ln(2).
 
 2006-06-01 Niklas Knutsson  <nq@altern.org>

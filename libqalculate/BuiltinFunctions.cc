@@ -2925,8 +2925,10 @@ SaveFunction::SaveFunction() : MathFunction("save", 2, 4) {
 	setDefaultValue(3, "Temporary");
 	setDefaultValue(4, "");	
 }
-int SaveFunction::calculate(MathStructure&, const MathStructure &vargs, const EvaluationOptions&) {
-	CALCULATOR->addVariable(new KnownVariable(vargs[2].symbol(), vargs[1].symbol(), vargs[0], vargs[3].symbol()));
+int SaveFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	mstruct = vargs[0];
+	mstruct.eval(eo);
+	CALCULATOR->addVariable(new KnownVariable(vargs[2].symbol(), vargs[1].symbol(), mstruct, vargs[3].symbol()));
 	CALCULATOR->saveFunctionCalled();
 	return 1;
 }

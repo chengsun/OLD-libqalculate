@@ -1,3 +1,11 @@
+2006-11-18 Niklas Knutsson  <nq@altern.org>
+
+	* Update Swedish translation
+
+2006-11-07 Niklas Knutsson  <nq@altern.org>
+
+	* Update Dutch translation (Jaap Woldringh <jjh.woldringh@planet.nl>)
+
 2006-11-02 Niklas Knutsson  <nq@altern.org>
 
 	* Use "name := value" as shortcut for save(value; name)

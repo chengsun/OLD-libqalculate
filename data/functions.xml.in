@@ -787,25 +787,6 @@
     </function>
   </category>
   <category>
-    <_title>Differential Geometry</_title>
-    <function>
-      <_title>Kronecker Delta</_title>
-      <_names>r:kronecker</_names>
-      <_description>Returns 0 if i != j and 1 if i = j.</_description>
-      <expression>\x=\Y{0}</expression>
-      <argument type="number" index="1">
-        <_title>Value 1 (i)</_title>
-	<complex_allowed>false</complex_allowed>
-        <test>false</test>
-      </argument>
-      <argument type="number" index="2">
-        <_title>Value 2 (j)</_title>
-	<complex_allowed>false</complex_allowed>
-        <test>false</test>
-      </argument>
-    </function>
-  </category>
-  <category>
     <_title>Analysis</_title>
     <builtin_function name="re">
       <_title>Real Part</_title>
@@ -1125,6 +1106,22 @@
         <_title>Roman number</_title>
       </argument>
     </builtin_function>
+    <function>
+      <_title>Kronecker Delta</_title>
+      <_names>r:kronecker</_names>
+      <_description>Returns 0 if i != j and 1 if i = j.</_description>
+      <expression>\x=\Y{0}</expression>
+      <argument type="number" index="1">
+        <_title>Value 1 (i)</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+      <argument type="number" index="2">
+        <_title>Value 2 (j)</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+    </function>
   </category>
   <category>
     <_title>Statistics</_title>

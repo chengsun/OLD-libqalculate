@@ -8257,7 +8257,7 @@ bool Calculator::plotVectors(PlotParameters *param, const vector<MathStructure> 
 		if(param->font.empty()) {
 			commandline_extra += " -font \"-*-helvetica-bold-r-*-*-14-*-*-*-*-*-*-*\"";
 		}
-		plot += "set terminal x11\n";
+		plot += "set terminal pop\n";
 	} else {
 		persistent = true;
 		if(param->filetype == PLOT_FILETYPE_AUTO) {

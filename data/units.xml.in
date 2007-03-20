@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<QALCULATE version="0.9.4">
+<QALCULATE version="0.9.5">
   <category>
     <!-- Unit category -->
     <_title>!units!Length</_title>
@@ -212,6 +212,42 @@
       <base>
         <unit>AU</unit>
         <relation>648000/pi</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Pied du roi (French Royal Foot)</_title>
+      <_names>r:pied_du_roi</_names>
+      <base>
+        <unit>m</unit>
+        <relation>9000/27706</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Pouce (French Royal Inch)</_title>
+      <_names>r:pouce</_names>
+      <base>
+        <unit>pied_du_roi</unit>
+        <relation>1/12</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Ligne</_title>
+      <_names>r:ligne</_names>
+      <base>
+        <unit>pouce</unit>
+        <relation>1/12</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Toise</_title>
+      <_names>r:toise</_names>
+      <base>
+        <unit>pied_du_roi</unit>
+        <relation>6</relation>
         <exponent>1</exponent>
       </base>
     </unit>
@@ -537,7 +573,7 @@
       </base>
     </unit>
     <category>
-      <_title>Density</_title>
+      <_title>Atomic Density</_title>
       <unit type="composite">
         <_title>Gram per Mole</_title>
         <names>r:g_p_mol</names>
@@ -2305,6 +2341,15 @@
           <exponent>1</exponent>
         </base>
       </unit>
+      <unit type="alias">
+        <_title>Inch of Mercury</_title>
+	<_names>ar:inHg</_names>
+        <base>
+          <unit>mmHg</unit>
+          <relation>25.4</relation>
+          <exponent>1</exponent>
+        </base>
+      </unit>
     </category>
     <category>
       <_title>Dynamic Viscosity</_title>
@@ -3007,6 +3052,72 @@
         <prefix>12</prefix>
         <exponent>1</exponent>
       </part>
+    </unit>
+  </category>
+  <category>
+    <_title>Typography</_title>
+    <unit type="alias">
+      <_title>PostScript Point</_title>
+      <_names>ar:pt,a:pts,point,p:points</_names>
+      <base>
+        <unit>in</unit>
+        <relation>1/72</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>PostScript Pica</_title>
+      <_names>r:pica,p:picas</_names>
+      <base>
+        <unit>pt</unit>
+        <relation>12</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>ATA Pica</_title>
+      <_names>r:ata_pica,p:ata_picas</_names>
+      <base>
+        <unit>in</unit>
+        <relation>0.166</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>ATA Point</_title>
+      <_names>r:ata_point,a:ata_pt,p:ata_points</_names>
+      <base>
+        <unit>ata_pica</unit>
+        <relation>1/12</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>New Didot Point</_title>
+      <_names>r:new_didot</_names>
+      <base>
+        <unit>m</unit>
+        <relation>0.000375</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Didot Point</_title>
+      <_names>r:didot,a:dd</_names>
+      <base>
+        <unit>pouce</unit>
+        <relation>1/72</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Cicero</_title>
+      <_names>r:cicero</_names>
+      <base>
+        <unit>didot</unit>
+        <relation>12</relation>
+        <exponent>1</exponent>
+      </base>
     </unit>
   </category>
 </QALCULATE>

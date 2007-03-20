@@ -9635,7 +9635,7 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 						b_im = false;
 					}
 				} else if(CHILD(i2).isPower() && CHILD(i2)[0].isMultiplication()) {
-					for(size_t i3 = 0; i3 < SIZE; i3++) {
+					for(size_t i3 = 0; i3 < CHILD(i2)[0].size(); i3++) {
 						if(CHILD(i2)[0][i3].isUnit_exp()) {
 							if((CHILD(i2)[0][i3].isUnit() && CHILD(i2)[0][i3].prefix()) || (CHILD(i2)[0][i3].isPower() && CHILD(i2)[0][i3][0].prefix())) {
 								b = false;
@@ -9700,7 +9700,7 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 								}
 								break;
 							} else if(CHILD(i2)[0].isMultiplication()) {
-								for(size_t im2 = 0; im2 < SIZE; im2++) {
+								for(size_t im2 = 0; im2 < CHILD(i2)[0].size(); im2++) {
 									if(CHILD(i2)[0][im2].isUnit_exp() && (CHILD(i2)[0][im2].isUnit() || CHILD(i2)[0][im2][1].isNumber() && CHILD(i2)[0][im2][1].number().isNegative() && CHILD(i2)[0][im2][1].number().isInteger())) {
 										Number exp_multi(1);
 										if(CHILD(i2)[0][im2].isUnit()) {
@@ -9737,7 +9737,7 @@ void MathStructure::setPrefixes(const PrintOptions &po, MathStructure *parent, s
 								exp = CHILD(i2)[1].number();
 								munit2 = &CHILD(i2);
 							} else if(CHILD(i2)[0].isMultiplication()) {
-								for(size_t im2 = 0; im2 < SIZE; im2++) {
+								for(size_t im2 = 0; im2 < CHILD(i2)[0].size(); im2++) {
 									if(CHILD(i2)[0][im2].isUnit_exp() && (CHILD(i2)[0][im2].isUnit() || CHILD(i2)[0][im2][1].isNumber() && CHILD(i2)[0][im2][1].number().isNegative() && CHILD(i2)[0][im2][1].number().isInteger())) {
 										exp2 = exp;
 										Number exp_multi(1);
@@ -13583,7 +13583,7 @@ bool MathStructure::isolate_x_sub(const EvaluationOptions &eo, EvaluationOptions
 			MathStructure *mcheckmulti = NULL, *mtryzero = NULL, *mchecknegative = NULL, *mchecknonzeropow = NULL;
 			MathStructure mchild2(CHILD(1));
 			ComparisonType ct_orig = ct_comp;
-			for(size_t i = 0; i < CHILD(0).size(); i++) {				
+			for(size_t i = 0; i < CHILD(0).size(); i++) {			
 				if(!CHILD(0)[i].contains(x_var)) {
 					bool nonzero = false;
 					if(CHILD(0)[i].isPower() && !CHILD(0)[i][1].representsNonNegative(true) && !CHILD(0)[i][0].representsNonZero(true)) {
@@ -13825,7 +13825,6 @@ bool MathStructure::isolate_x_sub(const EvaluationOptions &eo, EvaluationOptions
 					}
 					return true;
 				} else if(CHILD(0).size() >= 2) {
-				
 					MathStructure mless1(CHILD(0)[0]);
 					MathStructure mless2;
 					if(CHILD(0).size() == 2) {

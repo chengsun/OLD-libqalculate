@@ -1,3 +1,11 @@
+2007-03-20 Niklas Knutsson  <nq@altern.org>
+
+	* Fix clumsy mistakes in setPrefixes() leading to crashes
+	* Add typographic units
+	* Add some old french length units
+	* Add alternative name "variations" for permutations
+	* Fix atomic mass unit being put in second density category
+
 2006-12-16 Niklas Knutsson  <nq@altern.org>
 
 	* New French translation (Nicolas Laug <Nicolas.Laug@polymtl.ca>)

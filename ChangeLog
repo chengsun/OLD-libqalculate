@@ -1,3 +1,7 @@
+2007-03-29 Niklas Knutsson  <nq@altern.org>
+
+	* Fix parsing of unit expressions (when converting) such as W/(m K)
+
 2007-03-20 Niklas Knutsson  <nq@altern.org>
 
 	* Fix clumsy mistakes in setPrefixes() leading to crashes

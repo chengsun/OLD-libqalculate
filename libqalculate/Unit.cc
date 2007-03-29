@@ -724,11 +724,12 @@ void CompositeUnit::setBaseExpression(string base_expression_) {
 		setChanged(true);
 		return;
 	}
-	//fix!
 	EvaluationOptions eo;
 	eo.approximation = APPROXIMATION_EXACT;
 	eo.sync_units = false;
 	eo.keep_prefixes = true;
+	eo.structuring = STRUCTURING_NONE;
+	eo.reduce_divisions = false;
 	ParseOptions po;
 	po.variables_enabled = false;
 	po.functions_enabled = false;

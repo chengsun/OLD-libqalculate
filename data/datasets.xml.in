@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<QALCULATE version="0.9.4">
+<QALCULATE version="0.9.5">
   <category>
     <_title>Data Sets</_title>
     <dataset>
@@ -44,6 +44,42 @@
 	<unit>u</unit>
 	<approximate>true</approximate>
         <_names>r:weight,mass</_names>
+      </property>
+      <property>
+        <_title>Boiling Point</_title>
+	<type>number</type>
+	<unit>K</unit>
+	<approximate>true</approximate>
+        <_names>r:boiling</_names>
+      </property>
+      <property>
+        <_title>Melting Point</_title>
+	<type>number</type>
+	<unit>K</unit>
+	<approximate>true</approximate>
+        <_names>r:melting</_names>
+      </property>
+      <property>
+        <_title>Density</_title>
+	<_description>Density at 295K</_description>
+	<type>number</type>
+	<unit>g/cm^3</unit>
+	<approximate>true</approximate>
+        <_names>r:density</_names>
+      </property>
+      <property>
+        <_title>Ionization Potential</_title>
+	<type>number</type>
+	<unit>eV</unit>
+	<approximate>true</approximate>
+        <_names>r:ionization</_names>
+      </property>
+      <property>
+        <_title>Covalent Radius</_title>
+	<type>number</type>
+	<unit>&#xC5;</unit>
+	<approximate>true</approximate>
+        <_names>r:covalent</_names>
       </property>
       <property>
         <_title>X Position</_title>

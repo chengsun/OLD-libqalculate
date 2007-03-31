@@ -296,7 +296,7 @@
     <function>
       <_title>Cross Product</_title>
       <_names>r:cross</_names>
-      <_description>Calculates the cross product of a 3-dimensional vector.</_description>
+      <_description>Calculates the cross product of two 3-dimensional vectors.</_description>
       <expression>[(element(\x,2)*element(\y,3))-(element(\x,3)*element(\y,2)),(element(\x,3)*element(\y,1))-(element(\x,1)*element(\y,3)),(element(\x,1)*element(\y,2))-(element(\x,2)*element(\y,1))]</expression>
       <argument type="vector" index="1">
         <_title>Vector 1</_title>
@@ -674,7 +674,7 @@
       <builtin_function name="base">
         <_title>Number Base</_title>
         <_names>r:base</_names>
-        <_description>Returns a decimal integer from a number of specified base between 2 and 36</_description>
+        <_description>Returns an integer from a number of specified base between 2 and 36</_description>
         <argument index="1">
           <_title>Number</_title>
         </argument>
@@ -685,7 +685,7 @@
       <builtin_function name="bin">
         <_title>Binary</_title>
         <_names>r:bin</_names>
-        <_description>Returns a decimal integer from a binary number</_description>
+        <_description>Returns an integer from a binary number</_description>
         <argument index="1">
           <_title>Binary number</_title>
         </argument>
@@ -693,7 +693,7 @@
       <builtin_function name="oct">
         <_title>Octal</_title>
         <_names>r:oct</_names>
-        <_description>Returns a decimal integer from an octal number</_description>
+        <_description>Returns an integer from an octal number</_description>
         <argument index="1">
           <_title>Octal number</_title>
         </argument>
@@ -701,7 +701,7 @@
       <builtin_function name="hex">
         <_title>Hexadecimal</_title>
         <_names>r:hex</_names>
-        <_description>Returns a decimal value from a hexadecimal number</_description>
+        <_description>Returns a value from a hexadecimal number</_description>
         <argument index="1">
           <_title>Hexadecimal number</_title>
         </argument>
@@ -1102,6 +1102,7 @@
     <builtin_function name="roman">
       <_title>Roman Number</_title>
       <_names>r:roman</_names>
+      <_description>Returns the value of a roman number.</_description>
       <argument index="1">
         <_title>Roman number</_title>
       </argument>

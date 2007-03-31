@@ -1,6 +1,11 @@
+2007-03-31 Niklas Knutsson  <nq@altern.org>
+
+	* Add grams of TNT (gTNT/gramTNT) and tons of TNT (tTNT/tonTNT) units
+
 2007-03-29 Niklas Knutsson  <nq@altern.org>
 
 	* Fix parsing of unit expressions (when converting) such as W/(m K)
+	* Expand data on elements
 
 2007-03-20 Niklas Knutsson  <nq@altern.org>
 

@@ -2493,6 +2493,24 @@
       </base>
     </unit>
     <unit type="alias">
+      <_title>Gram of TNT</_title>
+      <_names>a-cr:gTNT,gramTNT</_names>
+      <base>
+        <unit>cal_th</unit>
+        <relation>1000</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
+      <_title>Ton of TNT</_title>
+      <_names>a-cr:tTNT,tonTNT</_names>
+      <base>
+        <unit>gTNT</unit>
+        <relation>1000000</relation>
+        <exponent>1</exponent>
+      </base>
+    </unit>
+    <unit type="alias">
       <_title>Calorie (15 degrees Celcius)</_title>
       <_names>ars:cal_fifteen</_names>
       <base>

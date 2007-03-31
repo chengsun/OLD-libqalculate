@@ -2123,7 +2123,7 @@ int ModeFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 }
 RandFunction::RandFunction() : MathFunction("rand", 0, 1) {
 	setArgumentDefinition(1, new IntegerArgument());
-	setDefaultValue(1, "-1"); 
+	setDefaultValue(1, "0"); 
 }
 int RandFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
 	if(vargs[0].number().isZero() || vargs[0].number().isNegative()) {

@@ -573,32 +573,6 @@
       </base>
     </unit>
     <category>
-      <_title>Atomic Density</_title>
-      <unit type="composite">
-        <_title>Gram per Mole</_title>
-        <names>r:g_p_mol</names>
-        <part>
-          <unit>g</unit>
-          <prefix>0</prefix>
-          <exponent>1</exponent>
-        </part>
-        <part>
-          <unit>mol</unit>
-          <prefix>0</prefix>
-          <exponent>-1</exponent>
-        </part>
-      </unit>
-      <unit type="alias">
-        <_title>Atomic Mass Unit</_title>
-        <_names>ar:u,atomic_mass_unit,p:atomic_mass_units</_names>
-        <base>
-          <unit>g_p_mol</unit>
-          <relation>1</relation>
-          <exponent>1</exponent>
-        </base>
-      </unit>
-    </category>
-    <category>
       <_title>Density</_title>
       <unit type="composite">
         <system>SI</system>
@@ -643,7 +617,30 @@
           <exponent>-3</exponent>
         </part>
       </unit>
+      <unit type="composite">
+        <_title>Gram per Mole</_title>
+        <names>r:g_p_mol</names>
+        <part>
+          <unit>g</unit>
+          <prefix>0</prefix>
+          <exponent>1</exponent>
+        </part>
+        <part>
+          <unit>mol</unit>
+          <prefix>0</prefix>
+          <exponent>-1</exponent>
+        </part>
+      </unit>
     </category>
+    <unit type="alias">
+        <_title>Atomic Mass Unit</_title>
+        <_names>ar:u,a:AMU,atomic_mass_unit,p:atomic_mass_units</_names>
+        <base>
+          <unit>g_p_mol</unit>
+          <relation>1</relation>
+          <exponent>1</exponent>
+        </base>
+    </unit>
     <category>
       <_title>Mass Fraction</_title>
       <unit type="composite">

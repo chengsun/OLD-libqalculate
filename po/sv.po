@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-18 19:49+0100\n"
+"POT-Creation-Date: 2007-04-02 10:59+0200\n"
 "PO-Revision-Date: 2006-05-04 12:29+0200\n"
 "Last-Translator: Niklas Knutsson <nq@altern.org>\n"
 "Language-Team: Swedish\n"
@@ -1858,7 +1858,7 @@ msgstr ""
 msgid "infinity"
 msgstr "oändlighet"
 
-#: ../libqalculate/Unit.cc:759
+#: ../libqalculate/Unit.cc:760
 msgid "Error(s) in unitexpression."
 msgstr "Fel i enhetsuttryck."
 

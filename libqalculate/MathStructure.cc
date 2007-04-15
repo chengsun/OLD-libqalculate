@@ -2496,14 +2496,14 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 				case STRUCT_VECTOR: {
 					return 0;
 				}
-				case STRUCT_ADDITION: {
+				case STRUCT_ADDITION: {					
 					if(eo.expand) {
 						MathStructure msave(*this);
 						CLEAR;
 						for(size_t i = 0; i < mstruct.size(); i++) {
 							APPEND(msave);
 							mstruct[i].ref();
-							LAST.multiply_nocopy(&mstruct[i], true);
+							LAST.multiply_nocopy(&mstruct[i], true);							
 							if(reversed) {
 								LAST.swapChildren(1, LAST.size());
 								LAST.calculateMultiplyIndex(0, eo, true, this, SIZE - 1);
@@ -2745,6 +2745,7 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 						}
 						if(b) {
 							b = false;
+							bool b2test = false;
 							if(IS_REAL(mstruct[1]) && IS_REAL(CHILD(1))) {
 								if(mstruct[1].number().isPositive() == CHILD(1).number().isPositive()) {
 									b2 = true;
@@ -2752,9 +2753,10 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 								} else if(!mstruct[1].number().isMinusOne() && !CHILD(1).number().isMinusOne()) {
 									b2 = (mstruct[1].number() + CHILD(1).number()).isNegative();
 									b = true;
+									if(!b2) b2test = true;
 								}								
 							}
-							if(!b) {
+							if(!b || b2test) {
 								b = (!eo.warn_about_denominators_assumed_nonzero && eo.assume_denominators_nonzero && !CHILD(0).representsZero(true)) 
 								|| CHILD(0).representsNonZero(true) 
 								|| (CHILD(1).representsPositive() && mstruct[1].representsPositive()) 
@@ -2762,6 +2764,10 @@ int MathStructure::merge_multiplication(MathStructure &mstruct, const Evaluation
 								if(!b && eo.warn_about_denominators_assumed_nonzero && eo.assume_denominators_nonzero && !CHILD(0).representsZero(true)) {
 									b = true;
 									b_warn = true;
+								}
+								if(b2test) {
+									b2 = b;
+									b = true;
 								}
 							}
 						}
@@ -6431,6 +6437,7 @@ void clean_multiplications(MathStructure &mstruct) {
 }
 
 MathStructure &MathStructure::eval(const EvaluationOptions &eo) {
+
 	unformat(eo);
 	bool found_complex_relations = false;
 	if(eo.sync_units && syncUnits(false, &found_complex_relations, false)) {
@@ -7842,14 +7849,12 @@ void get_symbol_stats(const MathStructure &m1, const MathStructure &m2, sym_desc
 }
 
 bool MathStructure::gcd(const MathStructure &m1, const MathStructure &m2, MathStructure &mresult, const EvaluationOptions &eo, MathStructure *ca, MathStructure *cb, bool check_args) {
-
 	if(m1.isOne() || m2.isOne()) {
 		if(ca) *ca = m1;
 		if(cb) *cb = m2;
 		mresult.set(1, 1);
 		return true;
 	}
-
 	if(m1.isNumber() && m2.isNumber()) {
 		mresult = m1;
 		if(!mresult.number().gcd(m2.number())) mresult.set(1, 1);
@@ -7888,11 +7893,9 @@ bool MathStructure::gcd(const MathStructure &m1, const MathStructure &m2, MathSt
 		mresult = m1;
 		return true;
 	}
-	
 	if(check_args && (!m1.isRationalPolynomial() || !m2.isRationalPolynomial())) {
 		return false;
 	}
-
 	if(m1.isMultiplication()) {
 		if(m2.isMultiplication() && m2.size() > m1.size())
 			goto factored_2;
@@ -7940,7 +7943,6 @@ factored_2:
 		}
 		return true;
 	}
-
 	if(m1.isPower()) {
 		MathStructure p(m1[0]);
 		if(m2.isPower()) {
@@ -8067,7 +8069,6 @@ factored_2:
 			return b;
 		}
 	}
-	
 	if(IS_A_SYMBOL(m1) || m1.isUnit()) {
 		MathStructure bex(m2);
 		bex.calculateReplace(m1, m_zero, eo);
@@ -8104,7 +8105,7 @@ factored_2:
 	} else {
 		min_ldeg = ldeg_b;
 	}
-	
+
 	if(min_ldeg.isPositive()) {
 		MathStructure aex(m1), bex(m2);
 		MathStructure common(xvar);
@@ -8115,7 +8116,6 @@ factored_2:
 		mresult.calculateMultiply(common, eo);
 		return true;
 	}
-
 	if(var->deg_a.isZero()) {
 		if(cb) {
 			MathStructure c, mprim;
@@ -8149,7 +8149,6 @@ factored_2:
 		}
 		return true;
 	}
-
 	if(!heur_gcd(m1, m2, mresult, eo, ca, cb, var)) {
 		sr_gcd(m1, m2, mresult, var, eo);
 		if(mresult.isOne()) {

@@ -1252,7 +1252,16 @@ int SinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 		mstruct.eval(eo);
 	}
 	bool b = false;
-	if(mstruct.isVariable() && mstruct.variable() == CALCULATOR->v_pi) {
+	if(mstruct.isNumber() && eo.approximation == APPROXIMATION_APPROXIMATE) {
+		Number nr(mstruct.number());
+		nr /= CALCULATOR->v_pi->get().number();
+		nr.frac();
+		nr.setNegative(false);
+		if(nr.isZero()) {
+			mstruct.clear(true);
+			b = true;
+		}
+	} else if(mstruct.isVariable() && mstruct.variable() == CALCULATOR->v_pi) {
 		mstruct.clear();
 		b = true;
 	} else if(mstruct.isFunction() && mstruct.size() == 1) {
@@ -1266,39 +1275,31 @@ int SinFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 			mstruct.clear();
 			b = true;
 		} else if(!mstruct[0].number().isComplex() && !mstruct[0].number().isInfinite()) {
-			if(mstruct[0].number().equals(Number(1, 2))) {
-				mstruct = 1;
+			Number nr(mstruct[0].number());
+			nr.frac();
+			Number nr_int(mstruct[0].number());
+			nr_int.floor();
+			bool b_even = nr_int.isEven();
+			nr.setNegative(false);
+			if(nr.equals(Number(1, 2))) {				
+				if(b_even) mstruct = 1;
+				else mstruct = -1;
 				b = true;
-			} else if(mstruct[0].number().equals(Number(-1, 2))) {
-				mstruct = -1;
-				b = true;
-			} else if(mstruct[0].number().equals(Number(1, 4))) {
+			} else if(nr.equals(Number(1, 4)) || nr.equals(Number(3, 4))) {
 				mstruct.set(2, 1);
 				mstruct.raise_nocopy(new MathStructure(1, 2));
 				mstruct.divide_nocopy(new MathStructure(2, 1));
+				if(!b_even) mstruct.negate();
 				b = true;
-			} else if(mstruct[0].number().equals(Number(-1, 4))) {
-				mstruct.set(2, 1);
-				mstruct.raise_nocopy(new MathStructure(1, 2));
-				mstruct.divide_nocopy(new MathStructure(2, 1));
-				mstruct.negate();
-				b = true;
-			} else if(mstruct[0].number().equals(Number(1, 3))) {
+			} else if(nr.equals(Number(1, 3)) || nr.equals(Number(2, 3))) {
 				mstruct.set(3, 1);
 				mstruct.raise_nocopy(new MathStructure(1, 2));
 				mstruct.divide_nocopy(new MathStructure(2, 1));
+				if(!b_even) mstruct.negate();
 				b = true;
-			} else if(mstruct[0].number().equals(Number(-1, 3))) {
-				mstruct.set(3, 1);
-				mstruct.raise_nocopy(new MathStructure(1, 2));
-				mstruct.divide_nocopy(new MathStructure(2, 1));
-				mstruct.negate();
-				b = true;
-			} else if(mstruct[0].number().equals(Number(1, 6))) {
-				mstruct.set(1, 2);
-				b = true;
-			} else if(mstruct[0].number().equals(Number(-1, 6))) {
-				mstruct.set(-1, 2);
+			} else if(nr.equals(Number(1, 6)) || nr.equals(Number(5, 6))) {
+				if(b_even) mstruct.set(1, 2);
+				else mstruct.set(-1, 2);
 				b = true;
 			}
 		}
@@ -1391,7 +1392,17 @@ int CosFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 		mstruct.eval(eo);
 	}
 	bool b = false;
-	if(mstruct.isVariable() && mstruct.variable() == CALCULATOR->v_pi) {
+	if(mstruct.isNumber() && eo.approximation == APPROXIMATION_APPROXIMATE) {
+		Number nr(mstruct.number());
+		nr /= CALCULATOR->v_pi->get().number();
+		nr.frac();
+		nr.setNegative(false);
+		nr -= Number(1, 2);
+		if(nr.isZero()) {
+			mstruct.clear(true);
+			b = true;
+		}
+	} else if(mstruct.isVariable() && mstruct.variable() == CALCULATOR->v_pi) {
 		mstruct = -1;
 		b = true;
 	} else if(mstruct.isFunction() && mstruct.size() == 1) {
@@ -1410,22 +1421,45 @@ int CosFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, c
 			b = true;
 		} else if(!mstruct[0].number().isComplex() && !mstruct[0].number().isInfinite()) {
 			Number nr(mstruct[0].number());
+			nr.frac();
+			Number nr_int(mstruct[0].number());
+			nr_int.trunc();
+			bool b_even = nr_int.isEven();
 			nr.setNegative(false);
-			if(mstruct[0].number().equals(Number(1, 2))) {
+			if(nr.equals(Number(1, 2))) {
 				mstruct.clear();
 				b = true;
-			} else if(mstruct[0].number().equals(Number(1, 4))) {
+			} else if(nr.equals(Number(1, 4))) {
 				mstruct.set(2, 1);
 				mstruct.raise_nocopy(new MathStructure(1, 2));
 				mstruct.divide_nocopy(new MathStructure(2, 1));
+				if(!b_even) mstruct.negate();
 				b = true;
-			} else if(mstruct[0].number().equals(Number(1, 6))) {
+			} else if(nr.equals(Number(3, 4))) {
+				mstruct.set(2, 1);
+				mstruct.raise_nocopy(new MathStructure(1, 2));
+				mstruct.divide_nocopy(new MathStructure(2, 1));
+				if(b_even) mstruct.negate();
+				b = true;
+			} else if(nr.equals(Number(1, 3))) {
+				if(b_even) mstruct.set(1, 2);
+				else mstruct.set(-1, 2);
+				b = true;
+			} else if(nr.equals(Number(2, 3))) {
+				if(b_even) mstruct.set(-1, 2);
+				else mstruct.set(1, 2);
+				b = true;
+			} else if(nr.equals(Number(1, 6))) {
 				mstruct.set(3, 1);
 				mstruct.raise_nocopy(new MathStructure(1, 2));
 				mstruct.divide_nocopy(new MathStructure(2, 1));
+				if(!b_even) mstruct.negate();
 				b = true;
-			} else if(mstruct[0].number().equals(Number(1, 3))) {
-				mstruct.set(1, 2);
+			} else if(nr.equals(Number(5, 6))) {
+				mstruct.set(3, 1);
+				mstruct.raise_nocopy(new MathStructure(1, 2));
+				mstruct.divide_nocopy(new MathStructure(2, 1));
+				if(b_even) mstruct.negate();
 				b = true;
 			}
 		}

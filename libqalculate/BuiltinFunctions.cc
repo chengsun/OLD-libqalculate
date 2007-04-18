@@ -1188,6 +1188,24 @@ int LognFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 	return 1;
 }
 
+LambertWFunction::LambertWFunction() : MathFunction("lambertw", 1) {
+	NumberArgument *arg = new NumberArgument();
+	arg->setComplexAllowed(false);	
+	setArgumentDefinition(1, arg);
+}
+int LambertWFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	Number nr(vargs[0].number()); 
+	if(!nr.lambertW()) {
+		CALCULATOR->error(false, _("Argument for %s() must be a real number greater than 1/e."), preferredDisplayName().name.c_str(), NULL);
+		return 0;
+	} else if((eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) || (!eo.allow_complex && nr.isComplex() && !vargs[0].number().isComplex()) || (!eo.allow_infinite && nr.isInfinite() && !vargs[0].number().isInfinite())) {
+		return 0;
+	} else {
+		mstruct.set(nr); 
+		return 1;
+	}
+}
+
 bool is_real_angle_value(const MathStructure &mstruct) {
 	if(mstruct.isUnit()) {
 		return mstruct.unit() == CALCULATOR->getRadUnit() || mstruct.unit() == CALCULATOR->getDegUnit() || mstruct.unit() == CALCULATOR->getGraUnit() ;

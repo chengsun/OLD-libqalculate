@@ -1265,6 +1265,8 @@ void Calculator::addBuiltinFunctions() {
 	f_ln = addFunction(new LogFunction());
 	f_logn = addFunction(new LognFunction());
 
+	f_lambert_w = addFunction(new LambertWFunction());
+
 	f_sin = addFunction(new SinFunction());
 	f_cos = addFunction(new CosFunction());
 	f_tan = addFunction(new TanFunction());

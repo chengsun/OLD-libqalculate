@@ -363,6 +363,7 @@ class Number {
 		bool ln();	
 		bool log(const Number &o);
 		bool exp();
+		bool lambertW();
 		bool gcd(const Number &o);
 		bool lcm(const Number &o);
 		

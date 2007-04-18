@@ -260,6 +260,7 @@ class Calculator {
   	MathFunction *f_sqrt, *f_sq;
 	MathFunction *f_exp;
 	MathFunction *f_ln, *f_logn;
+	MathFunction *f_lambert_w;
 	MathFunction *f_sin, *f_cos, *f_tan, *f_asin, *f_acos, *f_atan, *f_sinh, *f_cosh, *f_tanh, *f_asinh, *f_acosh, *f_atanh, *f_radians_to_default_angle_unit;
 	MathFunction *f_zeta, *f_gamma, *f_beta;
 	MathFunction *f_total, *f_percentile, *f_min, *f_max, *f_mode, *f_rand;

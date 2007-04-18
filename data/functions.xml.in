@@ -851,6 +851,14 @@
         <_title>Base</_title>
       </argument>
     </builtin_function>
+    <builtin_function name="lambertw">
+      <_title>Lambert W Function (Omega function, product log)</_title>
+      <_names>r:lambertw,omega,productlog</_names>
+      <_description>Returns the inverse function for mx*e^x as ln() does for e^x.</_description>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
+    </builtin_function>
     <function>
       <_title>Base-2 Logrithm</_title>
       <_names>rs:log2</_names>

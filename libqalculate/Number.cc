@@ -1944,6 +1944,28 @@ bool Number::exp() {
 	testInteger();
 	return true;
 }
+bool Number::lambertW() {
+	if(!isReal()) return false;
+	cln::cl_R x = cln::realpart(value);
+	if(x <= 1 / cln::exp1()) return false;	
+	cln::cl_R w = 0;	
+	cln::cl_RA wPrec = cln::expt(cln::cl_I(10), -(PRECISION + 2));
+	while(true) {
+		cln::cl_R wTimesExpW = w * cln::exp(w);
+		cln::cl_R wPlusOneTimesExpW = (w + 1) * cln::exp(w);
+		if(wPrec > cln::abs((x - wTimesExpW) / wPlusOneTimesExpW)) {
+			value = w;
+			break;
+		}
+		w = w - (wTimesExpW - x) / (wPlusOneTimesExpW - (w + 2) * (wTimesExpW - x) / (2 * w + 2));
+	}
+	if(!b_approx) {
+		i_precision = PRECISION;
+		b_approx = true;
+	}
+	testInteger();
+	return true;
+}
 bool Number::gcd(const Number &o) {
 	if(!isInteger() || !o.isInteger()) {
 		return false;

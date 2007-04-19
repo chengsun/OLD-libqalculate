@@ -1,3 +1,8 @@
+2007-04-19 Niklas Knutsson  <nq@altern.org>
+
+	* Enhance lambertw()
+	* Add the Omega constant
+
 2007-04-18 Niklas Knutsson  <nq@altern.org>
 
 	* Implement the Lambert W function

@@ -339,9 +339,14 @@
   <category>
     <_title>Basic Constants</_title>
     <variable>
-      <_title>The Golden Ratio</_title>
+      <_title>Golden Ratio</_title>
       <_names>r:golden,au:&#x3C6;</_names>
       <value>(1+sqrt(5))/2</value>
+    </variable>
+    <variable>
+      <_title>Omega Constant</_title>
+      <_names>r:omega</_names>
+      <value>lambertw(1)</value>
     </variable>
     <variable>
       <_title>Pythagora's Constant (sqrt 2)</_title>
@@ -354,7 +359,7 @@
       <value>zeta(3)</value>
     </variable>
     <builtin_variable name="e">
-      <_title>The Base of Natural Logarithms (e)</_title>
+      <_title>Base of Natural Logarithms (e)</_title>
       <_names>r:e</_names>
     </builtin_variable>
     <builtin_variable name="pi">

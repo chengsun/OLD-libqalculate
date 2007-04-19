@@ -1189,21 +1189,59 @@ int LognFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 }
 
 LambertWFunction::LambertWFunction() : MathFunction("lambertw", 1) {
-	NumberArgument *arg = new NumberArgument();
+	NumberArgument *arg = new NumberArgument("", ARGUMENT_MIN_MAX_NONE, false);
 	arg->setComplexAllowed(false);	
 	setArgumentDefinition(1, arg);
 }
 int LambertWFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
-	Number nr(vargs[0].number()); 
-	if(!nr.lambertW()) {
-		CALCULATOR->error(false, _("Argument for %s() must be a real number greater than 1/e."), preferredDisplayName().name.c_str(), NULL);
-		return 0;
-	} else if((eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) || (!eo.allow_complex && nr.isComplex() && !vargs[0].number().isComplex()) || (!eo.allow_infinite && nr.isInfinite() && !vargs[0].number().isInfinite())) {
-		return 0;
+
+	mstruct = vargs[0]; 
+
+	int errors = 0;	
+	if(eo.approximation == APPROXIMATION_TRY_EXACT) {
+		EvaluationOptions eo2 = eo;
+		eo2.approximation = APPROXIMATION_EXACT;
+		CALCULATOR->beginTemporaryStopMessages();
+		mstruct.eval(eo2);
+		CALCULATOR->endTemporaryStopMessages(&errors);
 	} else {
-		mstruct.set(nr); 
+		mstruct.eval(eo);
+	}
+	bool b = false;
+	if(mstruct.isZero()) {
+		b = true;
+	} else if(mstruct.isVariable() && mstruct.variable() == CALCULATOR->v_e) {
+		mstruct.set(m_one);
+		b = true;
+	} else if(mstruct.isMultiplication() && mstruct.size() == 2 && mstruct[0].isMinusOne() && mstruct[1].isPower() && mstruct[1][0].isVariable() && mstruct[1][0].variable() == CALCULATOR->v_e && mstruct[1][1].isMinusOne()) {
+		mstruct = -1;
+		b = true;		
+	}
+	if(b) {
+		if(eo.approximation == APPROXIMATION_TRY_EXACT && errors > 0) {
+			EvaluationOptions eo2 = eo;
+			eo2.approximation = APPROXIMATION_EXACT;
+			MathStructure mstruct2 = vargs[0];
+			mstruct2.eval(eo2);
+		}
 		return 1;
 	}
+	if(eo.approximation == APPROXIMATION_TRY_EXACT && !mstruct.isNumber()) {
+		EvaluationOptions eo2 = eo;
+		eo2.approximation = APPROXIMATION_APPROXIMATE;
+		mstruct = vargs[0];
+		mstruct.eval(eo2);
+	}
+	if(mstruct.isNumber()) {
+		Number nr(mstruct.number());
+		if(!nr.lambertW()) {
+			CALCULATOR->error(false, _("Argument for %s() must be a real number greater than or equal to -1/e."), preferredDisplayName().name.c_str(), NULL);
+		} else if(!(eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) && !(!eo.allow_complex && nr.isComplex() && !mstruct.number().isComplex()) && !(!eo.allow_infinite && nr.isInfinite() && !mstruct.number().isInfinite())) {
+			mstruct.set(nr, true);
+			return 1;
+		}
+	}
+	return -1;
 }
 
 bool is_real_angle_value(const MathStructure &mstruct) {

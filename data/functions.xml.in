@@ -852,8 +852,8 @@
       </argument>
     </builtin_function>
     <builtin_function name="lambertw">
-      <_title>Lambert W Function (Omega function, product log)</_title>
-      <_names>r:lambertw,omega,productlog</_names>
+      <_title>Lambert W Function (Omega Function, Product Log)</_title>
+      <_names>r:lambertw,productlog</_names>
       <_description>Returns the inverse function for mx*e^x as ln() does for e^x.</_description>
       <argument index="1">
         <_title>Value</_title>

@@ -1946,9 +1946,22 @@ bool Number::exp() {
 }
 bool Number::lambertW() {
 	if(!isReal()) return false;
+	if(isZero()) return true;
 	cln::cl_R x = cln::realpart(value);
-	if(x <= 1 / cln::exp1()) return false;	
-	cln::cl_R w = 0;	
+	cln::cl_R m1_div_exp1 = -1 / cln::exp1();
+	if(x == m1_div_exp1) {
+		value = -1;
+		if(!b_approx) {
+			i_precision = PRECISION;
+			b_approx = true;
+		}
+		return true;
+	}
+	if(x < m1_div_exp1) return false;	
+	cln::cl_R w = 0;
+	if(x > 10) {
+		w = cln::ln(x) - cln::ln(cln::ln(x));
+	}
 	cln::cl_RA wPrec = cln::expt(cln::cl_I(10), -(PRECISION + 2));
 	while(true) {
 		cln::cl_R wTimesExpW = w * cln::exp(w);

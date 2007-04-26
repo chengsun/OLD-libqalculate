@@ -1671,6 +1671,36 @@
         <_title>Timestamp</_title>
       </argument>
     </builtin_function>
+    <builtin_function name="addDays">
+      <_title>Add Days</_title>
+      <_names>r:addDays</_names>
+      <argument index="1">
+        <_title>Date</_title>
+      </argument>
+      <argument index="2">
+        <_title>Days</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="addMonths">
+      <_title>Add Months</_title>
+      <_names>r:addMonths</_names>
+      <argument index="1">
+        <_title>Date</_title>
+      </argument>
+      <argument index="2">
+        <_title>Months</_title>
+      </argument>
+    <builtin_function name="addYears">
+      <_title>Add Years</_title>
+      <_names>r:addYears</_names>
+      <argument index="1">
+        <_title>Date</_title>
+      </argument>
+      <argument index="2">
+        <_title>Years</_title>
+      </argument>
+    </builtin_function>
+    </builtin_function>
   </category>
   <category>
     <_title>Utilities</_title>

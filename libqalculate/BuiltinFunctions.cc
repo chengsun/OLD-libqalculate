@@ -2322,6 +2322,46 @@ int TimestampToDateFunction::calculate(MathStructure &mstruct, const MathStructu
 	return 1;
 }
 
+AddDaysFunction::AddDaysFunction() : MathFunction("addDays", 2) {
+	setArgumentDefinition(1, new DateArgument());
+	setArgumentDefinition(2, new IntegerArgument());
+}	
+int AddDaysFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {	
+	string str = addDays(vargs[0].symbol(), vargs[1].number().intValue());
+	if(str.empty()) {
+		CALCULATOR->error(true, _("Error in date format for function %s()."), name().c_str(), NULL);
+		return 0;
+	}
+	mstruct.set(str);
+	return 1;
+}
+AddMonthsFunction::AddMonthsFunction() : MathFunction("addMonths", 2) {
+	setArgumentDefinition(1, new DateArgument());
+	setArgumentDefinition(2, new IntegerArgument());
+}	
+int AddMonthsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {	
+	string str = addMonths(vargs[0].symbol(), vargs[1].number().intValue());
+	if(str.empty()) {
+		CALCULATOR->error(true, _("Error in date format for function %s()."), name().c_str(), NULL);
+		return 0;
+	}
+	mstruct.set(str);
+	return 1;
+}
+AddYearsFunction::AddYearsFunction() : MathFunction("addYears", 2) {
+	setArgumentDefinition(1, new DateArgument());
+	setArgumentDefinition(2, new IntegerArgument());
+}	
+int AddYearsFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {	
+	string str = addYears(vargs[0].symbol(), vargs[1].number().intValue());
+	if(str.empty()) {
+		CALCULATOR->error(true, _("Error in date format for function %s()."), name().c_str(), NULL);
+		return 0;
+	}
+	mstruct.set(str);
+	return 1;
+}
+
 DaysFunction::DaysFunction() : MathFunction("days", 2, 4) {
 	setArgumentDefinition(1, new DateArgument());
 	setArgumentDefinition(2, new DateArgument());	

@@ -42,6 +42,15 @@ string date2s(int year, int month, int day) {
 	str += i2s(day);
 	return str;
 }
+bool s2date(string str, GDate *gtime) {
+/*	if(strptime(str.c_str(), "%x", time) || strptime(str.c_str(), "%Ex", time) || strptime(str.c_str(), "%Y-%m-%d", time) || strptime(str.c_str(), "%m/%d/%Y", time) || strptime(str.c_str(), "%m/%d/%y", time)) {
+		return true;
+	}*/
+	//char *date_format = nl_langinfo(D_FMT);
+	g_date_set_parse(gtime, str.c_str());
+	return g_date_valid(gtime);
+}
+
 void now(int &hour, int &min, int &sec) {
 	time_t t = time(NULL);
 	struct tm *lt = localtime(&t);
@@ -57,13 +66,95 @@ void today(int &year, int &month, int &day) {
 	day = g_date_get_day(gtime);
 	g_date_free(gtime);
 }
-bool s2date(string str, GDate *gtime) {
-/*	if(strptime(str.c_str(), "%x", time) || strptime(str.c_str(), "%Ex", time) || strptime(str.c_str(), "%Y-%m-%d", time) || strptime(str.c_str(), "%m/%d/%Y", time) || strptime(str.c_str(), "%m/%d/%y", time)) {
-		return true;
-	}*/
-	//char *date_format = nl_langinfo(D_FMT);
-	g_date_set_parse(gtime, str.c_str());
-	return g_date_valid(gtime);
+bool addDays(GDate *gtime, int days) {
+	if(days < 0) g_date_subtract_days(gtime, (guint) -days);
+	else if(days > 0) g_date_add_days(gtime, (guint) days);
+	if(!g_date_valid(gtime)) return false;
+	return true;
+}
+bool addDays(int &year, int &month, int &day, int days) {
+	GDate *gtime = g_date_new_dmy((GDateDay) day, (GDateMonth) month, (GDateYear) year);
+	if(!addDays(gtime, days)) {
+		g_date_free(gtime); 
+		return false;
+	}
+	year = (int) g_date_year(gtime);
+	month = (int) g_date_month(gtime);
+	day = (int) g_date_day(gtime);
+	g_date_free(gtime);
+	return true;
+}
+string addDays(string str, int days) {
+	GDate *gtime = g_date_new();
+	if(!s2date(str, gtime) || !addDays(gtime, days)) {
+		g_date_free(gtime); 
+		return empty_string;
+	}
+	int y = (int) g_date_year(gtime);
+	int m = (int) g_date_month(gtime);
+	int d = (int) g_date_day(gtime);
+	g_date_free(gtime);
+	return date2s(y, m, d);
+}
+bool addMonths(GDate *gtime, int months) {
+	if(months < 0) g_date_subtract_months(gtime, (guint) -months);
+	else if(months > 0) g_date_add_months(gtime, (guint) months);
+	if(!g_date_valid(gtime)) return false;
+	return true;
+}
+bool addMonths(int &year, int &month, int &day, int months) {
+	GDate *gtime = g_date_new_dmy((GDateDay) day, (GDateMonth) month, (GDateYear) year);
+	if(!addMonths(gtime, months)) {
+		g_date_free(gtime); 
+		return false;
+	}
+	year = (int) g_date_year(gtime);
+	month = (int) g_date_month(gtime);
+	day = (int) g_date_day(gtime);
+	g_date_free(gtime);
+	return true;
+}
+string addMonths(string str, int months) {
+	GDate *gtime = g_date_new();
+	if(!s2date(str, gtime) || !addMonths(gtime, months)) {
+		g_date_free(gtime); 
+		return empty_string;
+	}
+	int y = (int) g_date_year(gtime);
+	int m = (int) g_date_month(gtime);
+	int d = (int) g_date_day(gtime);
+	g_date_free(gtime);
+	return date2s(y, m, d);
+}
+bool addYears(GDate *gtime, int years) {
+	if(years < 0) g_date_subtract_years(gtime, (guint) -years);
+	else if(years > 0) g_date_add_years(gtime, (guint) years);
+	if(!g_date_valid(gtime)) return false;
+	return true;
+}
+bool addYears(int &year, int &month, int &day, int years) {
+	GDate *gtime = g_date_new_dmy((GDateDay) day, (GDateMonth) month, (GDateYear) year);
+	if(!addYears(gtime, years)) {
+		g_date_free(gtime); 
+		return false;
+	}
+	year = (int) g_date_year(gtime);
+	month = (int) g_date_month(gtime);
+	day = (int) g_date_day(gtime);
+	g_date_free(gtime);
+	return true;
+}
+string addYears(string str, int years) {
+	GDate *gtime = g_date_new();
+	if(!s2date(str, gtime) || !addYears(gtime, years)) {
+		g_date_free(gtime); 
+		return empty_string;
+	}
+	int y = (int) g_date_year(gtime);
+	int m = (int) g_date_month(gtime);
+	int d = (int) g_date_day(gtime);
+	g_date_free(gtime);
+	return date2s(y, m, d);
 }
 
 int week(string str, bool start_sunday) {

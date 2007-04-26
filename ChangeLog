@@ -1,3 +1,9 @@
+2007-04-26 Niklas Knutsson  <nq@altern.org>
+
+	* Usr Lambert W to solve equations
+	* Fix infinite loop when solving some equations
+	* New functions: addDays(), addMonths(), addYear()
+
 2007-04-19 Niklas Knutsson  <nq@altern.org>
 
 	* Enhance lambertw()

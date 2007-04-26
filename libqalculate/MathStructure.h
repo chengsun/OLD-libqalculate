@@ -160,7 +160,7 @@ class MathStructure {
 		ComparisonType ct_comp;
 		bool b_protected;
 		
-		bool isolate_x_sub(const EvaluationOptions &eo, EvaluationOptions &eo2, const MathStructure &x_var);
+		bool isolate_x_sub(const EvaluationOptions &eo, EvaluationOptions &eo2, const MathStructure &x_var, MathStructure *morig = NULL);
 		void init();
 	
 	public:

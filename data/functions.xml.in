@@ -1690,6 +1690,7 @@
       <argument index="2">
         <_title>Months</_title>
       </argument>
+    </builtin_function>
     <builtin_function name="addYears">
       <_title>Add Years</_title>
       <_names>r:addYears</_names>
@@ -1700,7 +1701,19 @@
         <_title>Years</_title>
       </argument>
     </builtin_function>
-    </builtin_function>
+    <function>
+      <_title>Add Time</_title>
+      <_names>r:addTime</_names>
+      <_description>Adds a time value to a date. The value can be positive or negative, but must use a unit based on seconds (such day and year). Fractions of days are truncated.</_description>
+      <expression>addDays(\x,trunc(\y/day))</expression>
+      <argument type="date" index="1">
+        <_title>Date</_title>
+      </argument>
+      <argument index="2">
+        <_title>Time</_title>
+	<condition>isNumber(\x/day)</condition>
+      </argument>
+    </function>
   </category>
   <category>
     <_title>Utilities</_title>
@@ -1914,6 +1927,62 @@
       <_title>RPN Stack Vector</_title>
       <_names>r:stack</_names>
       <_description>Returns the RPN stack as a vector.</_description>
+    </builtin_function>
+    <builtin_function name="isNumber">
+      <_title>Is Number</_title>
+      <_names>r:isNumber</_names>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="isReal">
+      <_title>Is Real</_title>
+      <_names>r:isReal</_names>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="isRational">
+      <_title>Is Rational</_title>
+      <_names>r:isRational</_names>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="isInteger">
+      <_title>Is Integer</_title>
+      <_names>r:isInteger</_names>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="representsNumber">
+      <_title>Represents Number</_title>
+      <_names>r:representsNumber</_names>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="representsReal">
+      <_title>Represents Real</_title>
+      <_names>r:representsReal</_names>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="representsRational">
+      <_title>Represents Rational</_title>
+      <_names>r:representsRational</_names>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
+    </builtin_function>
+    <builtin_function name="representsInteger">
+      <_title>Represents Integer</_title>
+      <_names>r:representsInteger</_names>
+      <argument index="1">
+        <_title>Value</_title>
+      </argument>
     </builtin_function>
   </category>
   <category>

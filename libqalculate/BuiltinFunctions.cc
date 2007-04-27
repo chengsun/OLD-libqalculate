@@ -25,6 +25,10 @@
 #define FR_FUNCTION(FUNC)	Number nr(vargs[0].number()); if(!nr.FUNC() || (eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) || (!eo.allow_complex && nr.isComplex() && !vargs[0].number().isComplex()) || (!eo.allow_infinite && nr.isInfinite() && !vargs[0].number().isInfinite())) {return 0;} else {mstruct.set(nr); return 1;}
 #define FR_FUNCTION_2(FUNC)	Number nr(vargs[0].number()); if(!nr.FUNC(vargs[1].number()) || (eo.approximation == APPROXIMATION_EXACT && nr.isApproximate()) || (!eo.allow_complex && nr.isComplex() && !vargs[0].number().isComplex() && !vargs[1].number().isComplex()) || (!eo.allow_infinite && nr.isInfinite() && !vargs[0].number().isInfinite() && !vargs[1].number().isInfinite())) {return 0;} else {mstruct.set(nr); return 1;}
 
+#define REPRESENTS_FUNCTION(x, y) x::x() : MathFunction(#y, 1) {}; int x::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {mstruct = vargs[0]; mstruct.eval(eo); if(mstruct.y()) {mstruct.clear(); mstruct.number().setTrue();} else {mstruct.clear(); mstruct.number().setFalse();} return 1;}
+
+#define IS_NUMBER_FUNCTION(x, y) x::x() : MathFunction(#y, 1) {}; int x::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {mstruct = vargs[0]; if(!mstruct.isNumber()) mstruct.eval(eo); if(mstruct.isNumber() && mstruct.number().y()) {mstruct.number().setTrue();} else {mstruct.clear(); mstruct.number().setFalse();} return 1;}
+
 #define NON_COMPLEX_NUMBER_ARGUMENT(i)				NumberArgument *arg_non_complex##i = new NumberArgument(); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
 #define NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR(i)			NumberArgument *arg_non_complex##i = new NumberArgument("", ARGUMENT_MIN_MAX_NONE, true, false); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
 #define NON_COMPLEX_NUMBER_ARGUMENT_NO_ERROR_NONZERO(i)		NumberArgument *arg_non_complex##i = new NumberArgument("", ARGUMENT_MIN_MAX_NONZERO, true, false); arg_non_complex##i->setComplexAllowed(false); setArgumentDefinition(i, arg_non_complex##i);
@@ -3000,6 +3004,28 @@ int IFFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, co
 	}	
 	return 1;
 }
+
+IsNumberFunction::IsNumberFunction() : MathFunction("isNumber", 1) {
+}
+int IsNumberFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+	mstruct = vargs[0];
+	if(!mstruct.isNumber()) mstruct.eval(eo);
+	if(mstruct.isNumber()) {
+		mstruct.number().setTrue();
+	} else {
+		mstruct.clear();
+		mstruct.number().setFalse();
+	}
+	return 1;
+}
+IS_NUMBER_FUNCTION(IsIntegerFunction, isInteger)
+IS_NUMBER_FUNCTION(IsRealFunction, isReal)
+IS_NUMBER_FUNCTION(IsRationalFunction, isRational)
+REPRESENTS_FUNCTION(RepresentsIntegerFunction, representsInteger)
+REPRESENTS_FUNCTION(RepresentsRealFunction, representsReal)
+REPRESENTS_FUNCTION(RepresentsRationalFunction, representsRational)
+REPRESENTS_FUNCTION(RepresentsNumberFunction, representsNumber)
+
 LoadFunction::LoadFunction() : MathFunction("load", 1, 3) {
 	setArgumentDefinition(1, new FileArgument());
 	setArgumentDefinition(2, new IntegerArgument("", ARGUMENT_MIN_MAX_POSITIVE));

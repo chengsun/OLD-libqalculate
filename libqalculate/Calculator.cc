@@ -1334,7 +1334,15 @@ void Calculator::addBuiltinFunctions() {
 	f_function = addFunction(new FunctionFunction());
 	f_select = addFunction(new SelectFunction());
 	f_title = addFunction(new TitleFunction());
-	f_if = addFunction(new IFFunction());	
+	f_if = addFunction(new IFFunction());
+	f_is_number = addFunction(new IsNumberFunction());
+	f_is_real = addFunction(new IsRealFunction());
+	f_is_rational = addFunction(new IsRationalFunction());
+	f_is_integer = addFunction(new IsIntegerFunction());
+	f_represents_number = addFunction(new RepresentsNumberFunction());
+	f_represents_real = addFunction(new RepresentsRealFunction());
+	f_represents_rational = addFunction(new RepresentsRationalFunction());
+	f_represents_integer = addFunction(new RepresentsIntegerFunction());
 	f_error = addFunction(new ErrorFunction());
 	f_warning = addFunction(new WarningFunction());
 	f_message = addFunction(new MessageFunction());

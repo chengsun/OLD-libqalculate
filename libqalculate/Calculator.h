@@ -1,7 +1,7 @@
 /*
     Qalculate    
 
-    Copyright (C) 2003-2006  Niklas Knutsson (nq@altern.org)
+    Copyright (C) 2003-2007  Niklas Knutsson (nq@altern.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@
 *
 * If the program uses autoconf, put the following in configure.in:
 * \code PKG_CHECK_MODULES(QALCULATE, [
-*	libqalculate >= 0.9.5
+*	libqalculate >= 0.9.6
 *	])
 * AC_SUBST(QALCULATE_CFLAGS)
 * AC_SUBST(QALCULATE_LIBS) \endcode

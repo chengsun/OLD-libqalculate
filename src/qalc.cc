@@ -1,7 +1,7 @@
 /*
     Qalculate    
 
-    Copyright (C) 2004-2006  Niklas Knutsson (nq@altern.org)
+    Copyright (C) 2004-2007  Niklas Knutsson (nq@altern.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -2477,7 +2477,7 @@ void load_preferences() {
 	historyfile += "qalc.history";
 	read_history(historyfile.c_str());
 #endif	
-	int version_numbers[] = {0, 9, 4};
+	int version_numbers[] = {0, 9, 6};
 	FILE *file = NULL;
 	filename += "qalc.cfg";
 	file = fopen(filename.c_str(), "r");

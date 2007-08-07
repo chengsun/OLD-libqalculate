@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<QALCULATE version="0.9.5">
+<QALCULATE version="0.9.6">
   <category>
     <_title>Matrices &amp; Vectors</_title>
     <builtin_function name="vector">
@@ -1704,7 +1704,7 @@
     <function>
       <_title>Add Time</_title>
       <_names>r:addTime</_names>
-      <_description>Adds a time value to a date. The value can be positive or negative, but must use a unit based on seconds (such day and year). Fractions of days are truncated.</_description>
+      <_description>Adds a time value to a date. The value can be positive or negative, but must use a unit based on seconds (such as day and year). Fractions of days are truncated.</_description>
       <expression>addDays(\x,trunc(\y/day))</expression>
       <argument type="date" index="1">
         <_title>Date</_title>
@@ -2551,7 +2551,7 @@
       <function>
         <_title>Elasticity</_title>
         <_names>r:elasticity</_names>
-        <_description>Calculates the demand elesticity. Also works for supply elasticity, income elasticity, cross-price elasticity, etc. Just replace demand, with supply, or price with income...&#10;&#10;Ex. elasticity(100-x^2, 3) calculates the demand elasticity when the price is 3 for the function "Q = 100 - x^2" where x is the default price variable.</_description>
+        <_description>Calculates the demand elasticity. Also works for supply elasticity, income elasticity, cross-price elasticity, etc. Just replace demand, with supply, or price with income...&#10;&#10;Ex. elasticity(100-x^2, 3) calculates the demand elasticity when the price is 3 for the function "Q = 100 - x^2" where x is the default price variable.</_description>
         <expression>replace(diff(\x,\Z{x}),\Z,\y,1)*\y/replace(\x,\Z,\y)</expression>
         <argument type="free" index="1">
           <_title>Demand function</_title>

@@ -1,7 +1,7 @@
 /*
     Qalculate    
 
-    Copyright (C) 2004-2006  Niklas Knutsson (nq@altern.org)
+    Copyright (C) 2004-2007  Niklas Knutsson (nq@altern.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -10636,7 +10636,7 @@ int namelen(const MathStructure &mstruct, const PrintOptions &po, const Internal
 	return str->length();
 }
 
-bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrintStruct&, const MathStructure &parent, size_t index, bool flat_division, bool) const {
+bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrintStruct &ips, const MathStructure &parent, size_t index, bool flat_division, bool) const {
 	switch(parent.type()) {
 		case STRUCT_MULTIPLICATION: {
 			switch(m_type) {
@@ -10727,7 +10727,7 @@ bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrint
 				case STRUCT_INVERSE: {return index == 1 || flat_division || po.excessive_parenthesis;}
 				case STRUCT_ADDITION: {return true;}
 				case STRUCT_POWER: {return true;}
-				case STRUCT_NEGATE: {return index == 1 || po.excessive_parenthesis;}
+				case STRUCT_NEGATE: {return index == 1 || CHILD(0).needsParenthesis(po, ips, parent, index, flat_division);}
 				case STRUCT_BITWISE_AND: {return true;}
 				case STRUCT_BITWISE_OR: {return true;}
 				case STRUCT_BITWISE_XOR: {return true;}

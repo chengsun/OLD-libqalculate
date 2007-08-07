@@ -7,7 +7,7 @@ dnl | initialize autotools |---------------------------------------------------
 dnl  ----------------------
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(libqalculate, 0.9.5)
+AM_INIT_AUTOMAKE(libqalculate, 0.9.6)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
@@ -212,7 +212,7 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[The package name for gettext])
 
 dnl Please keep this in alphabetical order
-ALL_LINGUAS="fr nl sv"
+ALL_LINGUAS="fr nl sv zh_CN"
 AM_GLIB_GNU_GETTEXT
 
 dnl AM_GLIB_GNU_GETTEXT sets $DATADIRNAME

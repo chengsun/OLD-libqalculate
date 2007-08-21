@@ -1,3 +1,7 @@
+2007-08-21 Niklas Knutsson  <nq@altern.org>
+
+	* Fix crash with unsupported operator in RPN syntax (bug 1778267)
+
 2007-08-07 Niklas Knutsson  <nq@altern.org>
 
 	* New Simplified Chinese translation (Roy Qu <royqh1979@gmail.com>)

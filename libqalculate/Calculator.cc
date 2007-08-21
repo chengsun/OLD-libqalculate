@@ -4668,6 +4668,11 @@ bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 									mstack.pop_back(); 
 									break;
 								}
+								default: {
+									error(true, _("RPN syntax error. Operator '%c' not supported."), last_operator, NULL);
+									mstack.pop_back(); 
+									break;
+								}
 							}
 						}
 					}
@@ -4728,6 +4733,11 @@ bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 						}
 						case POWER_CH: {
 							mstack[mstack.size() - 2]->raise_nocopy(mstack.back()); 
+							mstack.pop_back(); 
+							break;
+						}
+						default: {
+							error(true, _("RPN syntax error. Operator '%c' not supported."), str[i], NULL);
 							mstack.pop_back(); 
 							break;
 						}

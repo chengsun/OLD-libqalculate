@@ -461,7 +461,9 @@ static const struct ParseOptions {
 	MathStructure *unended_function;
 	/// Preserve the expression structure as much as possible. Default: false
 	bool preserve_format;
-	ParseOptions() : variables_enabled(true), functions_enabled(true), unknowns_enabled(true), units_enabled(true), rpn(false), base(BASE_DECIMAL), limit_implicit_multiplication(false), read_precision(DONT_READ_PRECISION), dot_as_separator(false), angle_unit(ANGLE_UNIT_NONE), unended_function(NULL), preserve_format(false) {}
+	/// Defaukt dataset. Used for object.property syntax without a preceeding data set. Default: NULL
+	DataSet *default_dataset;
+	ParseOptions() : variables_enabled(true), functions_enabled(true), unknowns_enabled(true), units_enabled(true), rpn(false), base(BASE_DECIMAL), limit_implicit_multiplication(false), read_precision(DONT_READ_PRECISION), dot_as_separator(false), angle_unit(ANGLE_UNIT_NONE), unended_function(NULL), preserve_format(false), default_dataset(NULL) {}
 } default_parse_options;
 
 /// Options for calculation.

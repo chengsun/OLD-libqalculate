@@ -220,7 +220,7 @@ class DataSet : public MathFunction {
 	void setDefaultProperty(string property);
 	const string &defaultProperty() const;
 	
-	int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);
+	virtual int calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo);
 	
 	bool loadObjects(const char *file_name = NULL, bool is_user_defs = true);
 	int saveObjects(const char *file_name = NULL, bool save_global = false);

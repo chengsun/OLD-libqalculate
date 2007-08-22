@@ -3416,6 +3416,30 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 		f_save->parse(*mstruct, str, po);
 		return;
 	}
+	
+	if(po.base >= 2 && po.base <= 10 && po.default_dataset != NULL && str.length() > 1) {
+		size_t str_index = str.find(DOT_CH, 1);
+		while(str_index != string::npos) {
+			if(str_index + 1 < str.length() && ((is_not_in(NUMBERS NOT_IN_NAMES, str[str_index + 1]) && is_not_in(NOT_IN_NAMES, str[str_index - 1])) || (is_not_in(NOT_IN_NAMES, str[str_index + 1]) && is_not_in(NUMBERS NOT_IN_NAMES, str[str_index - 1])))) {
+				size_t dot_index = str.find_first_of(NOT_IN_NAMES DOT, str_index + 1);
+				if(dot_index != string::npos && str[dot_index] == DOT_CH) {
+					str_index = dot_index;
+				} else {
+					size_t property_index = str.find_last_of(NOT_IN_NAMES, str_index - 1);
+					if(property_index == string::npos) {
+						str.insert(0, 1, '.');
+						str.insert(0, po.default_dataset->referenceName());
+						str_index += po.default_dataset->referenceName().length() + 1;
+					} else {
+						str.insert(property_index + 1, 1, '.');
+						str.insert(property_index + 1, po.default_dataset->referenceName());
+						str_index += po.default_dataset->referenceName().length() + 1;
+					}
+				}
+			}
+			str_index = str.find(DOT_CH, str_index + 1);
+		} 
+	}
 
 	for(size_t str_index = 0; str_index < str.length(); str_index++) {		
 		if(str[str_index] == LEFT_VECTOR_WRAP_CH) {
@@ -3847,6 +3871,14 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 							break;
 						}
 						case 'f': {
+							if(((ExpressionItem*) object)->subtype() == SUBTYPE_DATA_SET && str[str_index + name_length] == DOT_CH) {
+								str[str_index + name_length] = LEFT_PARENTHESIS_CH;
+								size_t dot2_index = str.find(DOT_CH, str_index + name_length + 1);
+								str[dot2_index] = COMMA_CH;
+								size_t end_index = str.find_first_of(NOT_IN_NAMES, dot2_index + 1);
+								if(end_index == string::npos) str += RIGHT_PARENTHESIS_CH;
+								else str.insert(end_index, 1, RIGHT_PARENTHESIS_CH);
+							}
 							size_t not_space_index;
 							if((not_space_index = str.find_first_not_of(SPACES, str_index + name_length)) == string::npos || str[not_space_index] != LEFT_PARENTHESIS_CH) {
 								found_function = object;

@@ -1,3 +1,8 @@
+2007-08-22 Niklas Knutsson  <nq@altern.org>
+
+	* Make DataSet::calculate virtual
+	* dataset.object.property and object.property (with parse_options.default_dataset set) syntax
+
 2007-08-21 Niklas Knutsson  <nq@altern.org>
 
 	* Fix crash with unsupported operator in RPN syntax (bug 1778267)

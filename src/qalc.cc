@@ -806,8 +806,6 @@ int main (int argc, char *argv[]) {
 		if(load_variables && !CALCULATOR->loadGlobalVariables()) b = false;
 		if(!b) PUTS_UNICODE(_("Failed to load global definitions!"));
 	}
-	
-	evalops.parse_options.default_dataset = CALCULATOR->getDataSet("atom");
 
 	//load local definitions
 	if(load_global_defs) CALCULATOR->loadLocalDefinitions();

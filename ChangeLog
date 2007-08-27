@@ -1,3 +1,13 @@
+2007-08-27 Niklas Knutsson  <nq@altern.org>
+
+	* Begin work on propagation of uncertainties
+	* Allow parentheses for vectors (a bit stricter parsing)
+	* brackets_as_parentheses parse option
+
+2007-08-23 Niklas Knutsson  <nq@altern.org>
+
+	* 2/5m = 2/(5m); 2/5 m = (2/5)*m
+
 2007-08-22 Niklas Knutsson  <nq@altern.org>
 
 	* Make DataSet::calculate virtual

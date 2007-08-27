@@ -157,6 +157,8 @@ class MathStructure {
 		MathFunction *o_function;
 		MathStructure *function_value;
 		
+		MathStructure *o_uncertainty;
+		
 		ComparisonType ct_comp;
 		bool b_protected;
 		
@@ -364,6 +366,12 @@ class MathStructure {
 		//@{
 		void setVariable(Variable *v);
 		Variable *variable() const;
+		//@}
+		
+		/** @name Functions for statistical uncertainty/error of value */
+		//@{
+		void setUncertainty(const MathStructure &o);
+		const MathStructure *uncertainty() const;
 		//@}
 
 		/** @name Functions for nested structures (power, muliplication, addition, vector, etc) */
@@ -616,11 +624,12 @@ class MathStructure {
 		
 		bool operator != (const MathStructure &o) const;
 
-		//@}
+		//@}		
 		
 		/** @name Functions for calculation/evaluation */
 		//@{
 		MathStructure &eval(const EvaluationOptions &eo = default_evaluation_options);
+		void calculateUncertaintyPropagation(const EvaluationOptions &eo);
 		bool calculateMergeIndex(size_t index, const EvaluationOptions &eo, const EvaluationOptions &feo, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateLogicalOrLast(const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);
 		bool calculateLogicalOrIndex(size_t index, const EvaluationOptions &eo, bool check_size = true, MathStructure *mparent = NULL, size_t index_this = 1);

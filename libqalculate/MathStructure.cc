@@ -189,6 +189,7 @@ inline void MathStructure::init() {
 	i_ref = 1;
 	function_value = NULL;
 	b_protected = false;
+	o_uncertainty = NULL;
 }
 
 MathStructure::MathStructure() {
@@ -298,6 +299,9 @@ void MathStructure::set(const MathStructure &o, bool merge_precision) {
 		b_approx = o.isApproximate();
 		i_precision = o.precision();
 	}
+	if(o.uncertainty()) {
+		o_uncertainty = new MathStructure(*o.uncertainty());
+	}
 	m_type = o.type();
 }
 void MathStructure::set_nocopy(MathStructure &o, bool merge_precision) {
@@ -314,7 +318,10 @@ void MathStructure::set_nocopy(MathStructure &o, bool merge_precision) {
 		}
 		case STRUCT_FUNCTION: {
 			o_function = o.function();
-			if(o.functionValue()) function_value = new MathStructure(*o.functionValue());
+			if(o.functionValue()) {
+				function_value = (MathStructure*) o.functionValue();
+				function_value->ref();
+			}
 			break;
 		}
 		case STRUCT_VARIABLE: {
@@ -342,6 +349,10 @@ void MathStructure::set_nocopy(MathStructure &o, bool merge_precision) {
 	} else {
 		b_approx = o.isApproximate();
 		i_precision = o.precision();
+	}
+	if(o.uncertainty()) {
+		o_uncertainty = (MathStructure*) o.uncertainty();
+		o_uncertainty->ref();
 	}
 	m_type = o.type();
 	o.unref();
@@ -553,6 +564,10 @@ void MathStructure::clear(bool preserve_precision) {
 		function_value->unref();
 		function_value = NULL;
 	}
+	if(o_uncertainty) {
+		o_uncertainty->unref();
+		o_uncertainty = NULL;
+	}
 	o_function = NULL;
 	o_variable = NULL;
 	o_unit = NULL;
@@ -642,6 +657,13 @@ MathFunction *MathStructure::function() const {
 }
 Variable *MathStructure::variable() const {
 	return o_variable;
+}
+void MathStructure::setUncertainty(const MathStructure &o) {
+	if(o_uncertainty) o_uncertainty->set(o);
+	else o_uncertainty = new MathStructure(o);
+}
+const MathStructure *MathStructure::uncertainty() const {
+	return o_uncertainty;
 }
 
 bool MathStructure::isAddition() const {return m_type == STRUCT_ADDITION;}
@@ -1622,6 +1644,8 @@ bool MathStructure::equals(const MathStructure &o) const {
 		}
 		default: {}
 	}
+	if((o_uncertainty == NULL) !=(o.uncertainty() == NULL)) return false;
+	if(o_uncertainty && !o_uncertainty->equals(*o.uncertainty())) return false;
 	if(SIZE < 1) return false;
 	for(size_t i = 0; i < SIZE; i++) {
 		if(!CHILD(i).equals(o[i])) return false;
@@ -6436,18 +6460,45 @@ void clean_multiplications(MathStructure &mstruct) {
 	}
 }
 
+void MathStructure::calculateUncertaintyPropagation(const EvaluationOptions &eo) {
+	if(o_uncertainty) return;	
+	MathStructure *new_uncertainty = NULL;
+	for(size_t i = 0; i < SIZE; i++) {
+		if(CHILD(i).isFunction() && CHILD(i).function() == CALCULATOR->f_uncertainty) {
+			MathStructure mstruct = CHILD(i)[1];
+			CHILD(i).setToChild(1);
+			if(o_uncertainty == NULL) {
+				new_uncertainty = new MathStructure();
+				new_uncertainty->set(CALCULATOR->f_diff, this, &CHILD(i), NULL);
+				new_uncertainty->multiply(mstruct);
+			} else {
+				MathStructure *uncertainty_add = new MathStructure(CALCULATOR->f_diff, this, &CHILD(i), NULL);
+				uncertainty_add->multiply(mstruct);
+				new_uncertainty->add_nocopy(uncertainty_add, true);
+			}
+			new_uncertainty->eval(eo);
+			break;
+		}
+	}
+	o_uncertainty = new_uncertainty;
+}
+
 MathStructure &MathStructure::eval(const EvaluationOptions &eo) {
+
 	unformat(eo);
 	bool found_complex_relations = false;
 	if(eo.sync_units && syncUnits(false, &found_complex_relations, false)) {
 		unformat(eo);
-	}
+	}	
 	EvaluationOptions feo = eo;
 	if(eo.structuring == STRUCTURING_FACTORIZE) feo.structuring = STRUCTURING_SIMPLIFY;
 	EvaluationOptions eo2 = eo;
 	eo2.structuring = STRUCTURING_NONE;
 	eo2.expand = false;
 	eo2.test_comparisons = false;
+
+	calculateUncertaintyPropagation(eo);
+
 	if(eo.calculate_functions && calculateFunctions(feo)) {
 		unformat(eo);
 		if(eo.sync_units && syncUnits(false, &found_complex_relations, true, feo)) {
@@ -10637,6 +10688,7 @@ int namelen(const MathStructure &mstruct, const PrintOptions &po, const Internal
 }
 
 bool MathStructure::needsParenthesis(const PrintOptions &po, const InternalPrintStruct &ips, const MathStructure &parent, size_t index, bool flat_division, bool) const {
+	if(o_uncertainty) return true;
 	switch(parent.type()) {
 		case STRUCT_MULTIPLICATION: {
 			switch(m_type) {
@@ -11368,6 +11420,16 @@ string MathStructure::print(const PrintOptions &po, const InternalPrintStruct &i
 			print_str = _("undefined");
 			break;
 		}
+	}
+	if(o_uncertainty) {
+		if(SIZE > 0) {
+			print_str.insert(0, "(");
+			print_str += ")";
+		}
+		print_str += SIGN_PLUSMINUS;
+		if(o_uncertainty->size() > 0) print_str += "(";
+		print_str += o_uncertainty->print(po);
+		if(o_uncertainty->size() > 0) print_str += ")";
 	}
 	if(ips.wrap) {
 		print_str.insert(0, "(");

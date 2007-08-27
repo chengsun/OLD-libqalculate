@@ -258,4 +258,6 @@ DECLARE_BUILTIN_FUNCTION(IntegrateFunction)
 DECLARE_BUILTIN_FUNCTION(SolveFunction)
 DECLARE_BUILTIN_FUNCTION(SolveMultipleFunction)
 
+DECLARE_BUILTIN_FUNCTION(UncertaintyFunction)
+
 #endif

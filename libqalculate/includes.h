@@ -455,6 +455,8 @@ static const struct ParseOptions {
 	ReadPrecisionMode read_precision;
 	/// If true. dots will ignored if another character is the default decimal sign, to allow dots to be used as thousand separator. Default: false
 	bool dot_as_separator;
+	///Interpret square brackets equally to parentheses (not only for vectors/matrices). Default; false
+	bool brackets_as_parentheses;
 	/// Default angle unit for trigonometric functions. Default: ANGLE_UNIT_NONE
 	AngleUnit angle_unit;
 	/// If non-NULL will be set to unfinished function at the end of the expression (if there is one). Default: NULL
@@ -463,7 +465,7 @@ static const struct ParseOptions {
 	bool preserve_format;
 	/// Defaukt dataset. Used for object.property syntax without a preceeding data set. Default: NULL
 	DataSet *default_dataset;
-	ParseOptions() : variables_enabled(true), functions_enabled(true), unknowns_enabled(true), units_enabled(true), rpn(false), base(BASE_DECIMAL), limit_implicit_multiplication(false), read_precision(DONT_READ_PRECISION), dot_as_separator(false), angle_unit(ANGLE_UNIT_NONE), unended_function(NULL), preserve_format(false), default_dataset(NULL) {}
+	ParseOptions() : variables_enabled(true), functions_enabled(true), unknowns_enabled(true), units_enabled(true), rpn(false), base(BASE_DECIMAL), limit_implicit_multiplication(false), read_precision(DONT_READ_PRECISION), dot_as_separator(false), brackets_as_parentheses(false), angle_unit(ANGLE_UNIT_NONE), unended_function(NULL), preserve_format(false), default_dataset(NULL) {}
 } default_parse_options;
 
 /// Options for calculation.
@@ -556,6 +558,7 @@ extern Calculator *calculator;
 #define SIGN_CAPITAL_GAMMA		"Γ"
 #define SIGN_CAPITAL_BETA		"Β"
 #define SIGN_INFINITY			"∞"
+#define SIGN_PLUSMINUS			"±"
 
 #define ID_WRAP_LEFT_CH		'{'
 #define ID_WRAP_RIGHT_CH	'}'

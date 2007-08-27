@@ -1358,6 +1358,8 @@ void Calculator::addBuiltinFunctions() {
 	f_integrate = addFunction(new IntegrateFunction());
 	f_solve = addFunction(new SolveFunction());
 	f_multisolve = addFunction(new SolveMultipleFunction());
+	
+	f_uncertainty = addFunction(new UncertaintyFunction());
 
 	/*void *plugin = dlopen("/home/nq/Source/qalculate/plugins/pluginfunction.so", RTLD_NOW);
 	if(plugin) {
@@ -3405,6 +3407,11 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 	string stmp, stmp2;
 
 	parseSigns(str);
+	
+	if(po.brackets_as_parentheses) {
+		gsub(LEFT_VECTOR_WRAP, LEFT_PARENTHESIS, str);
+		gsub(RIGHT_VECTOR_WRAP, RIGHT_PARENTHESIS, str);
+	}
 
 	size_t isave = 0;
 	if((isave = str.find(":=", 1)) != string::npos) {
@@ -4159,6 +4166,54 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 			}
 		}
 	}
+	size_t comma_i = str.find(COMMA, 0);
+	while(comma_i != string::npos) {
+		int i3 = 1;
+		size_t left_par_i = comma_i;
+		while(left_par_i > 0) {
+			left_par_i = str.find_last_of(LEFT_PARENTHESIS RIGHT_PARENTHESIS, left_par_i - 1);
+			if(left_par_i == string::npos) break;
+			if(str[left_par_i] == LEFT_PARENTHESIS_CH) {
+				i3--;
+				if(i3 == 0) break;
+			} else if(str[left_par_i] == RIGHT_PARENTHESIS_CH) {
+				i3++;
+			}			
+		}
+		if(i3 > 0) {			
+			str.insert(0, i3, LEFT_PARENTHESIS_CH);
+			comma_i += i3;
+			i3 = 0;
+			left_par_i = 0;
+		}
+		if(i3 == 0) {
+			i3 = 1;
+			size_t right_par_i = comma_i;
+			while(true) {
+				right_par_i = str.find_first_of(LEFT_PARENTHESIS RIGHT_PARENTHESIS, right_par_i + 1);
+				if(right_par_i == string::npos) {
+					for(; i3 > 0; i3--) {
+						str += RIGHT_PARENTHESIS;
+					}
+					right_par_i = str.length() - 1;
+				} else if(str[right_par_i] == LEFT_PARENTHESIS_CH) {
+					i3++;
+				} else if(str[right_par_i] == RIGHT_PARENTHESIS_CH) {
+					i3--;
+				}
+				if(i3 == 0) {
+					stmp2 = str.substr(left_par_i + 1, right_par_i - left_par_i - 1);
+					stmp = LEFT_PARENTHESIS ID_WRAP_LEFT;
+					stmp += i2s(parseAddVectorId(stmp2, po));
+					stmp += ID_WRAP_RIGHT RIGHT_PARENTHESIS;
+					str.replace(left_par_i, right_par_i + 1 - left_par_i, stmp);
+					comma_i = left_par_i + stmp.length() - 1;
+					break;
+				}
+			}			
+		}
+		comma_i = str.find(COMMA, comma_i + 1);		
+	}
 	if(po.rpn) {
 		size_t rpn_i = str.find(SPACE, 0);
 		while(rpn_i != string::npos) {
@@ -4170,6 +4225,18 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 			rpn_i = str.find(SPACE, rpn_i);
 		}
 	} else {
+		size_t space_i = str.find(SPACE, 1);
+		while(space_i != string::npos) {
+			size_t after_space_i = str.find_first_not_of(SPACE, space_i + 1);
+			if(after_space_i == string::npos) break;
+			bool b1 = is_in(ID_WRAP_RIGHT RIGHT_PARENTHESIS, str[space_i - 1]);
+			bool b2 = b1 ? is_not_in(OPERATORS, str[after_space_i]) : is_in(ID_WRAP_LEFT LEFT_PARENTHESIS, str[after_space_i]);
+			if(b2 && !b1) b1 = is_not_in(OPERATORS, str[space_i - 1]);
+			if(b1 && b2) {
+				str[space_i] = MULTIPLICATION_CH;
+			}
+			space_i = str.find(SPACE, after_space_i);
+		}
 		remove_blanks(str);
 	}
 
@@ -8535,26 +8602,35 @@ bool Calculator::plotVectors(PlotParameters *param, const vector<MathStructure> 
 			int non_numerical = 0, non_real = 0;
 			string str = "";
 			for(size_t i = 1; i <= y_vectors[serie].countChildren(); i++) {
-				if(serie < x_vectors.size() && !x_vectors[serie].isUndefined() && x_vectors[serie].countChildren() == y_vectors[serie].countChildren()) {
-					if(!x_vectors[serie].getChild(i)->isNumber()) {
-						non_numerical++;
-						if(non_numerical == 1) str = x_vectors[serie].getChild(i)->print(po);
-					} else if(!x_vectors[serie].getChild(i)->number().isReal()) {
-						non_real++;
-						if(non_numerical + non_real == 1) str = x_vectors[serie].getChild(i)->print(po);
-					}
-					plot_data += x_vectors[serie].getChild(i)->print(po);
-					plot_data += " ";
-				}
+				bool invalid_nr = false;
 				if(!y_vectors[serie].getChild(i)->isNumber()) {
+					invalid_nr = true;
 					non_numerical++;
 					if(non_numerical == 1) str = y_vectors[serie].getChild(i)->print(po);
 				} else if(!y_vectors[serie].getChild(i)->number().isReal()) {
+					invalid_nr = true;
 					non_real++;
 					if(non_numerical + non_real == 1) str = y_vectors[serie].getChild(i)->print(po);
 				}
-				plot_data += y_vectors[serie].getChild(i)->print(po);
-				plot_data += "\n";	
+				if(serie < x_vectors.size() && !x_vectors[serie].isUndefined() && x_vectors[serie].countChildren() == y_vectors[serie].countChildren()) {
+					if(!x_vectors[serie].getChild(i)->isNumber()) {
+						invalid_nr = true;
+						non_numerical++;
+						if(non_numerical == 1) str = x_vectors[serie].getChild(i)->print(po);
+					} else if(!x_vectors[serie].getChild(i)->number().isReal()) {
+						invalid_nr = true;
+						non_real++;
+						if(non_numerical + non_real == 1) str = x_vectors[serie].getChild(i)->print(po);
+					}
+					if(!invalid_nr) {
+						plot_data += x_vectors[serie].getChild(i)->print(po);
+						plot_data += " ";
+					}
+				}	
+				if(!invalid_nr) {			
+					plot_data += y_vectors[serie].getChild(i)->print(po);
+					plot_data += "\n";	
+				}
 			}
 			if(non_numerical > 0 || non_real > 0) {
 				string stitle;

@@ -3671,3 +3671,14 @@ int SolveMultipleFunction::calculate(MathStructure &mstruct, const MathStructure
 	
 }
 
+UncertaintyFunction::UncertaintyFunction() : MathFunction("uncertainty", 2) {
+}
+int UncertaintyFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {
+
+	mstruct = vargs[0];
+	mstruct.setUncertainty(vargs[1]);
+	
+	return 1;
+	
+}
+

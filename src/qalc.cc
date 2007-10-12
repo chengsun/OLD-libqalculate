@@ -1086,7 +1086,7 @@ int main (int argc, char *argv[]) {
 				for(size_t i = 1; i <= CALCULATOR->RPNStackSize(); i++) {
 					m = *CALCULATOR->getRPNRegister(i);
 					m.format(printops);
-					printf("  %i:\t%s\n", i, m.print(printops).c_str());
+					printf("  %i:\t%s\n", (int) i, m.print(printops).c_str());
 				}
 				puts("");
 			}

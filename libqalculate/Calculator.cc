@@ -3464,7 +3464,7 @@ void Calculator::parse(MathStructure *mstruct, string str, const ParseOptions &p
 				} else if(str[i3] == RIGHT_VECTOR_WRAP_CH) {
 					i4--;
 					if(i4 > 0) {
-						unsigned i5 = str.find_first_not_of(SPACE, i3 + 1);
+						size_t i5 = str.find_first_not_of(SPACE, i3 + 1);
 						if(i5 != string::npos && str[i5] == LEFT_VECTOR_WRAP_CH) {
 							str.insert(i5, COMMA);
 						}

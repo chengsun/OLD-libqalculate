@@ -1,3 +1,7 @@
+2008-03-17 Niklas Knutsson  <nq@altern.org>
+
+	* Fix reduction of vector size. Fixes bug 1913388.
+
 2007-08-27 Niklas Knutsson  <nq@altern.org>
 
 	* Begin work on propagation of uncertainties

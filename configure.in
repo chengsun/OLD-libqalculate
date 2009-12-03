@@ -91,19 +91,23 @@ AC_CHECK_LIB(pthread, pthread_create, [LIBS="$LIBS -lpthread"])
 
 AC_LANG([C++])
 
-AC_PATH_CLN(1.1.0, [
-     	LIBS="$LIBS $CLN_LIBS"
-     	CPPFLAGS="$CPPFLAGS $CLN_CPPFLAGS"
-  	AC_DEFINE(HAVE_LIBCLN,1,[If CLN can be used])
-], AC_MSG_ERROR([No suitable installed version of CLN could be found.]))
-
-
 PKG_CHECK_MODULES(GLIB, [
 	glib-2.0
 	libxml-2.0 >= 2.3.8
 	])
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
+
+PKG_CHECK_MODULES(CLN, [ cln >= 1.2 ],
+                  [have_recent_cln=yes], [have_recent_cln=no])
+AC_SUBST(CLN_CPPFLAGS)
+AC_SUBST(CLN_LIBS)
+
+if test "$have_recent_cln" = "yes" ; then
+   AC_DEFINE(HAVE_RECENT_CLN, 1, [Define if CLN can be used])
+   LIBS="$LIBS $CLN_LIBS"
+   CPPFLAGS="$CPPFLAGS $CLN_CPPFLAGS"
+fi
 
 dnl  --------------------------------
 dnl | check for readline            |-----------------------------------------

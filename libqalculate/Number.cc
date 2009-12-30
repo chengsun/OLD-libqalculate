@@ -14,6 +14,7 @@
 #include "Number.h"
 #include "Calculator.h"
 
+#include <limits.h>
 #include <sstream>
 #include "util.h"
 

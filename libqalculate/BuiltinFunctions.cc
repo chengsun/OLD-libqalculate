@@ -3150,8 +3150,9 @@ int IntegrateFunction::calculate(MathStructure &mstruct, const MathStructure &va
 			return -1;
 		}
 	}
-	if(vargs[2] != CALCULATOR->v_undef) {
-		if(vargs[3] == CALCULATOR->v_undef) {
+    
+	if(vargs[2] != CALCULATOR->v_undef && vargs[2].print() != "undefined") {
+		if(vargs[3] == CALCULATOR->v_undef || vargs[3].print() == "undefined") {
 			CALCULATOR->error(true, _("Both the lower and upper limit must be set to get the definite integral."), NULL);
 			return 0;
 		}

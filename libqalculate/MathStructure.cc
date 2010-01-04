@@ -13237,6 +13237,9 @@ bool MathStructure::integrate(const MathStructure &x_var, const EvaluationOption
 					divide(mstruct);
 					break;
 				}
+			} else if(CHILD(0).type() == STRUCT_POWER) {
+			       this->simplify(eo);
+			       return integrate(x_var, eo);
 			} else if(CHILD(0).isVariable() && CHILD(0).variable() == CALCULATOR->v_e) {
 				if(CHILD(1).equals(x_var)) {
 					break;

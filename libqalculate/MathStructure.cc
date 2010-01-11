@@ -12936,11 +12936,11 @@ MathStructure MathStructure::generateVector(MathStructure x_mstruct, const MathS
 	y_vector.clearVector();
 	MathStructure step(max);
 	step.calculateSubtract(min, eo);
-	step.calculateDivide(steps, eo);
+	step.calculateDivide(steps-1, eo);
 	if(!step.isNumber() || step.number().isNegative()) {
 		return y_vector;
 	}
-	for(int i = 0; i <= steps; i++) {
+	for(int i = 0; i < steps; i++) {
 		if(x_vector) {
 			x_vector->addChild(x_value);
 		}

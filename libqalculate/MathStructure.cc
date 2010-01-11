@@ -4596,6 +4596,33 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 			break;
 		}
 		case STRUCT_LOGICAL_OR: {
+            bool isResistance = false;
+            switch (CHILD(0).type()) {
+            case STRUCT_MULTIPLICATION:
+                if (CHILD(0).CHILD(1) != 0 && CHILD(0).CHILD(1).unit() && CHILD(0).CHILD(1).unit()->name().find("ohm") != string::npos) {
+                    isResistance = true;
+                }
+                break;
+            case STRUCT_UNIT:
+                if (CHILD(0).unit() && CHILD(0).unit()->name().find("ohm") != string::npos) {
+                    isResistance = true;
+                }
+                break;
+            }
+            
+            if (isResistance) {
+                MathStructure mstruct;
+                for (size_t i = 0; i < SIZE; i++) {
+                    MathStructure mtemp(CHILD(i));
+                    mtemp.inverse();
+                    mstruct += mtemp;
+                }
+                mstruct.inverse();
+                clear();
+                set(mstruct);
+                break;
+            }
+            
 			if(recursive) {
 				for(size_t i = 0; i < SIZE; i++) {
 					CHILD(i).calculatesub(eo, feo, true, this, i);

@@ -1360,6 +1360,8 @@ void Calculator::addBuiltinFunctions() {
 	f_multisolve = addFunction(new SolveMultipleFunction());
 	
 	f_uncertainty = addFunction(new UncertaintyFunction());
+    
+    f_fib = addFunction(new FibonacciFunction);
 
 	/*void *plugin = dlopen("/home/nq/Source/qalculate/plugins/pluginfunction.so", RTLD_NOW);
 	if(plugin) {

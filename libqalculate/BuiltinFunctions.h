@@ -260,4 +260,6 @@ DECLARE_BUILTIN_FUNCTION(SolveMultipleFunction)
 
 DECLARE_BUILTIN_FUNCTION(UncertaintyFunction)
 
+DECLARE_BUILTIN_FUNCTION(FibonacciFunction)
+
 #endif

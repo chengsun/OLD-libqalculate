@@ -3683,3 +3683,24 @@ int UncertaintyFunction::calculate(MathStructure &mstruct, const MathStructure &
 	
 }
 
+FibonacciFunction::FibonacciFunction(): MathFunction("fibonacci", 1) {
+    setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_NONNEGATIVE, true, true));
+}
+
+int fibonacci(int n)
+{
+    if (n < 0) {
+        return 0;
+    }
+    
+    if (n == 0 || n == 1) {
+        return 1;
+    } else {
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
+}
+
+int FibonacciFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
+    mstruct = fibonacci(vargs[0].number().intValue());
+    return 1;
+}

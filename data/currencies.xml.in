@@ -23,7 +23,7 @@
       <_names>ar:GBP,au:&#xA3;</_names>
     </builtin_unit>
     <builtin_unit name="THB">
-      <_title>Thai Bat</_title>
+      <_title>Thai Baht</_title>
       <_names>ar:THB</_names>
     </builtin_unit>
     <builtin_unit name="SEK">
@@ -51,7 +51,7 @@
       <_names>ar:RUB,ruble</_names>
     </builtin_unit>
     <builtin_unit name="PHP">
-      <_title>Phillipine Peso</_title>
+      <_title>Philippine Peso</_title>
       <_names>ar:PHP</_names>
     </builtin_unit>
     <builtin_unit name="MYR">
@@ -63,7 +63,7 @@
       <_names>ar:HRK</_names>
     </builtin_unit>
     <builtin_unit name="CNY">
-      <_title>Yuan Renmimbi (PR China)</_title>
+      <_title>Yuan Renminbi (PR China)</_title>
       <_names>ar:CNY</_names>
     </builtin_unit>
     <builtin_unit name="IDR">

@@ -2153,7 +2153,7 @@
   <category>
     <_title>Calculus</_title>
     <builtin_function name="diff">
-      <_title>Derive</_title>
+      <_title>Differentiate</_title>
       <_names>r:diff</_names>
       <argument index="1">
         <_title>Function</_title>

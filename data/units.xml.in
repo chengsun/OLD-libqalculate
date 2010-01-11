@@ -1097,8 +1097,8 @@
     </unit>
     <unit type="alias">
       <system>SI</system>
-      <_title>Degree Celcius</_title>
-      <_names>ar:oC,au:&#xB0;C,r:celcius</_names>
+      <_title>Degree Celsius</_title>
+      <_names>ar:oC,au:&#xB0;C,r:celsius</_names>
       <base>
         <unit>K</unit>
         <relation>\x + 273.15</relation>

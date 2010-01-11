@@ -348,7 +348,7 @@ int ZetaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, 
 	} else if(vargs[0].number() == 10) {
 		mstruct.set(CALCULATOR->v_pi);
 		mstruct.raise(10);
-		mstruct.divide(9355);
+		mstruct.divide(93555);
 		mstruct.mergePrecision(vargs[0]);
 		return 1;
 	}

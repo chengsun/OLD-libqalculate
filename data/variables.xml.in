@@ -13,8 +13,8 @@
       <value>1/10000</value>
     </variable>
     <variable>
-      <_title>Procent</_title>
-      <_names>a:%,r:procent</_names>
+      <_title>Percent</_title>
+      <_names>a:%,r:percent</_names>
       <value>1/100</value>
     </variable>
   </category>

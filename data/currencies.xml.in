@@ -219,7 +219,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Deutche Mark</_title>
+      <_title>Deutsche Mark</_title>
       <_names>ar:DEM,mark</_names>
       <base>
         <unit>EUR</unit>

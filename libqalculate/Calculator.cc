@@ -293,7 +293,7 @@ Calculator::Calculator() {
 	XOR_str = "XOR";
 	XOR_str_len = OR_str.length();
 
-	saved_locale = strdup(setlocale(LC_NUMERIC, NULL));
+	saved_locale = strdup(setlocale(LC_NUMERIC, ""));
 	struct lconv *lc = localeconv();
 	place_currency_code_before = lc->int_p_cs_precedes;
 	place_currency_code_before_negative = lc->int_n_cs_precedes;

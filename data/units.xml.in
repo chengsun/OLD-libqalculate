@@ -411,7 +411,7 @@
       </part>
     </unit>
     <unit type="composite">
-      <_title>Hektogram</_title>
+      <_title>Hectogram</_title>
       <names>r:hg_c</names>
       <part>
         <unit>g</unit>
@@ -1874,8 +1874,8 @@
         </base>
       </unit>
       <unit type="alias">
-        <_title>U.S. Barrell (oil)</_title>
-        <_names>ar:bbl,barrell,p:barrells</_names>
+        <_title>U.S. Barrel (oil)</_title>
+        <_names>ar:bbl,barrel,p:barrels</_names>
         <base>
           <unit>gal</unit>
           <relation>42</relation>
@@ -2508,7 +2508,7 @@
       </base>
     </unit>
     <unit type="alias">
-      <_title>Calorie (15 degrees Celcius)</_title>
+      <_title>Calorie (15 degrees Celsius)</_title>
       <_names>ars:cal_fifteen</_names>
       <base>
         <unit>J</unit>

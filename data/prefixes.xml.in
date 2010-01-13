@@ -57,7 +57,7 @@
     <exponent>1</exponent>
   </prefix>
   <prefix type="decimal">
-    <name>hekto</name>
+    <name>hecto</name>
     <abbreviation>h</abbreviation>
     <exponent>2</exponent>
   </prefix>

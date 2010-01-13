@@ -209,7 +209,7 @@
     <category>
       <_title>Electromagnetic Constants</_title>
       <variable>
-        <_title>Borh Magneton</_title>
+        <_title>Bohr Magneton</_title>
         <_names>r:bohr_magneton,aisu:&#x3BC;_B</_names>
         <value approximate="true" precision="6">927.400949E-26*J*T^(-1)</value>
       </variable>
@@ -349,7 +349,7 @@
       <value>lambertw(1)</value>
     </variable>
     <variable>
-      <_title>Pythagora's Constant (sqrt 2)</_title>
+      <_title>Pythagoras' Constant (sqrt 2)</_title>
       <_names>r:pythagoras</_names>
       <value>sqrt(2)</value>
     </variable>
@@ -363,7 +363,7 @@
       <_names>r:e</_names>
     </builtin_variable>
     <builtin_variable name="pi">
-      <_title>Archimede's Constant (pi)</_title>
+      <_title>Archimedes' Constant (pi)</_title>
       <_names>au:&#x3C0;,r:pi</_names>
     </builtin_variable>
     <builtin_variable name="euler">

@@ -1131,6 +1131,17 @@
         <test>false</test>
       </argument>
     </function>
+    <function>
+      <_title>Fibonacci</_title>
+      <_names>r:fibonacci</_names>
+      <_description>Returns the n-th term of the Fibonacci sequence.</_description>
+      <expression>\x=\Y{0}</expression>
+      <argument type="number" index="1">
+        <_title>Value 1 (n)</_title>
+	<complex_allowed>false</complex_allowed>
+        <test>false</test>
+      </argument>
+    </function>
   </category>
   <category>
     <_title>Statistics</_title>

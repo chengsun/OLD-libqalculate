@@ -8385,7 +8385,7 @@ bool Calculator::plotVectors(PlotParameters *param, const vector<MathStructure> 
 	} else {
 		persistent = true;
 		if(param->filetype == PLOT_FILETYPE_AUTO) {
-			size_t i = param->filename.find(".");
+			size_t i = param->filename.rfind(".");
 			if(i == string::npos) {
 				param->filetype = PLOT_FILETYPE_PNG;
 				error(false, _("No extension in file name. Saving as PNG image."), NULL);

@@ -16,7 +16,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <dirent.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <vector>
 #include <glib.h>

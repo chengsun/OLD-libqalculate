@@ -7372,7 +7372,7 @@ int Calculator::saveUnits(const char* file_name, bool save_global) {
 				}
 			}
 			cur = item->node;	
-			if(!save_global && !units[i]->isLocal() && units[i]->hasChanged()) {
+			if(save_global && !units[i]->isLocal() && units[i]->hasChanged()) {
 				if(units[i]->isActive()) {
 					xmlNewTextChild(cur, NULL, (xmlChar*) "activate", (xmlChar*) units[i]->referenceName().c_str());
 				} else {

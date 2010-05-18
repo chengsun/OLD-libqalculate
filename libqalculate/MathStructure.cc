@@ -7190,7 +7190,7 @@ bool sr_gcd(const MathStructure &m1, const MathStructure &m2, MathStructure &mgc
 	c.polynomialContent(xvar, cont_c, eo);
 	d.polynomialContent(xvar, cont_d, eo);
 	MathStructure gamma;
-	MathStructure::gcd(cont_c, cont_d, gamma, eo, false);
+	MathStructure::gcd(cont_c, cont_d, gamma, eo, NULL, NULL, false);
 	if(ddeg.isZero()) {
 		mgcd = gamma;
 		return true;

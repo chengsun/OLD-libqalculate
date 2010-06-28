@@ -4918,12 +4918,6 @@ bool Calculator::parseOperators(MathStructure *mstruct, string str, const ParseO
 				while(i < str.length() && is_in(MULTIPLICATION DIVISION, str[i])) {
 					i++;
 				}
-				if(disable_errors_ref > 0) {
-					stopped_messages_count[disable_errors_ref - 1]++;
-					stopped_warnings_count[disable_errors_ref - 1]++;
-				} else {
-					error(false, _("Misplaced operator(s) \"%s\" ignored"), str.substr(0, i).c_str(), NULL);
-				}
 				str = str.substr(i, str.length() - i);
 				i = str.find_first_of(MULTIPLICATION DIVISION, 0);
 			} else {

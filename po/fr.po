@@ -162,7 +162,7 @@ msgstr "Valeur illégale"
 #: ../src/qalc.cc:1304 ../src/qalc.cc:1656 ../src/qalc.cc:1657
 #: ../src/qalc.cc:1740
 msgid "base"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:344 ../src/qalc.cc:346 ../src/qalc.cc:1235
 #: ../src/qalc.cc:1670
@@ -176,7 +176,7 @@ msgstr "base de la sortie"
 #: ../src/qalc.cc:347 ../src/qalc.cc:1190 ../src/qalc.cc:1237
 #: ../src/qalc.cc:1657 ../src/qalc.cc:1670
 msgid "roman"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:348 ../src/qalc.cc:1192 ../src/qalc.cc:1657
 msgid "time"
@@ -184,7 +184,7 @@ msgstr "temps"
 
 #: ../src/qalc.cc:349 ../src/qalc.cc:1657 ../src/qalc.cc:1670
 msgid "hex"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:349
 msgid "hexadecimal"
@@ -192,7 +192,7 @@ msgstr "hexadécimal"
 
 #: ../src/qalc.cc:350 ../src/qalc.cc:1657 ../src/qalc.cc:1670
 msgid "bin"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:350
 msgid "binary"
@@ -200,15 +200,15 @@ msgstr "binaire"
 
 #: ../src/qalc.cc:351 ../src/qalc.cc:1657 ../src/qalc.cc:1670
 msgid "oct"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:351
 msgid "octal"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:352 ../src/qalc.cc:1657 ../src/qalc.cc:1670
 msgid "dec"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:352
 msgid "decimal"
@@ -216,7 +216,7 @@ msgstr "décimal"
 
 #: ../src/qalc.cc:353 ../src/qalc.cc:1657
 msgid "sex"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:353 ../src/qalc.cc:1191
 msgid "sexagesimal"
@@ -319,11 +319,11 @@ msgstr "nombres en minuscules"
 
 #: ../src/qalc.cc:415 ../src/qalc.cc:1199 ../src/qalc.cc:1658
 msgid "normal"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:416 ../src/qalc.cc:1200 ../src/qalc.cc:1658
 msgid "alternative"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:421 ../src/qalc.cc:450 ../src/qalc.cc:464 ../src/qalc.cc:478
 #: ../src/qalc.cc:492 ../src/qalc.cc:506 ../src/qalc.cc:520 ../src/qalc.cc:567
@@ -349,7 +349,7 @@ msgstr "spacieux"
 
 #: ../src/qalc.cc:431 ../src/qalc.cc:1288 ../src/qalc.cc:1694
 msgid "unicode"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:434 ../src/qalc.cc:1289 ../src/qalc.cc:1695
 msgid "units"
@@ -361,7 +361,7 @@ msgstr "inconnues"
 
 #: ../src/qalc.cc:436 ../src/qalc.cc:1291 ../src/qalc.cc:1697
 msgid "variables"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:437 ../src/qalc.cc:1134 ../src/qalc.cc:1648
 msgid "abbreviations"
@@ -381,15 +381,15 @@ msgstr "unité d'angle"
 
 #: ../src/qalc.cc:442 ../src/qalc.cc:1145 ../src/qalc.cc:1146
 msgid "rad"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:442 ../src/qalc.cc:1651
 msgid "radians"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:443
 msgid "deg"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:443 ../src/qalc.cc:1651
 msgid "degrees"
@@ -421,7 +421,7 @@ msgstr "approximation"
 #: ../src/qalc.cc:1307 ../src/qalc.cc:1652 ../src/qalc.cc:1665
 #: ../src/qalc.cc:1668 ../src/qalc.cc:1744
 msgid "exact"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:486 ../src/qalc.cc:1154 ../src/qalc.cc:1652
 msgid "try exact"
@@ -436,7 +436,7 @@ msgstr "approximer"
 
 #: ../src/qalc.cc:497 ../src/qalc.cc:1181 ../src/qalc.cc:1656
 msgid "autoconversion"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:500 ../src/qalc.cc:1112 ../src/qalc.cc:1184
 #: ../src/qalc.cc:1656
@@ -471,7 +471,7 @@ msgstr "mode exp"
 
 #: ../src/qalc.cc:558 ../src/qalc.cc:1219 ../src/qalc.cc:1667
 msgid "auto"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:559 ../src/qalc.cc:1220 ../src/qalc.cc:1667
 msgid "pure"
@@ -499,7 +499,7 @@ msgstr "décimales min"
 
 #: ../src/qalc.cc:606 ../src/qalc.cc:1226 ../src/qalc.cc:1668
 msgid "fractions"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:611 ../src/qalc.cc:1231 ../src/qalc.cc:1668
 msgid "combined"
@@ -523,7 +523,7 @@ msgstr "Option inconnue"
 
 #: ../src/qalc.cc:670
 msgid "usage: qalc [options] [expression]"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:672
 msgid "where options are:"
@@ -535,7 +535,7 @@ msgstr "activer/désactiver le support de l'unicode"
 
 #: ../src/qalc.cc:675 ../src/qalc.cc:1318
 msgid "OPTION"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:675 ../src/qalc.cc:1318
 msgid "VALUE"
@@ -616,7 +616,7 @@ msgstr ""
 
 #: ../src/qalc.cc:789
 msgid "ans"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:790 ../src/qalc.cc:793 ../src/qalc.cc:794 ../src/qalc.cc:795
 #: ../src/qalc.cc:796 ../src/qalc.cc:1006 ../libqalculate/Calculator.cc:7054
@@ -679,7 +679,7 @@ msgstr "stocker"
 #: ../src/qalc.cc:975 ../src/qalc.cc:1129 ../src/qalc.cc:1315
 #: ../src/qalc.cc:1714
 msgid "mode"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:977
 msgid "mode saved"
@@ -773,7 +773,7 @@ msgstr "HYPOTHÈSES"
 
 #: ../src/qalc.cc:1304
 msgid "BASE"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:1306
 msgid "UNIT"
@@ -787,7 +787,7 @@ msgstr "ARGUMENTS DE WGET"
 #: ../libqalculate/Calculator.cc:7680 ../libqalculate/DataSet.cc:354
 #: ../libqalculate/DataSet.cc:381 ../libqalculate/DataSet.cc:992
 msgid "info"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:1316
 msgid "ON/OFF"
@@ -836,7 +836,7 @@ msgstr "Fonction"
 
 #: ../src/qalc.cc:1371 ../libqalculate/Function.cc:149
 msgid "argument"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:1395
 #, c-format
@@ -850,7 +850,7 @@ msgstr ""
 
 #: ../src/qalc.cc:1408
 msgid "Arguments"
-msgstr "-"
+msgstr ""
 
 #. optional argument, in description
 #: ../src/qalc.cc:1425
@@ -888,7 +888,7 @@ msgstr "Unité de base"
 
 #: ../src/qalc.cc:1512
 msgid "Relation"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:1522
 msgid "Inverse Relation"
@@ -900,7 +900,7 @@ msgstr "Unités de base"
 
 #: ../src/qalc.cc:1549 ../src/qalc.cc:1552
 msgid "Variable"
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:1567
 msgid "a previous result"
@@ -1063,7 +1063,7 @@ msgstr "Calcul en cours (appuyez sur Entrée pour interrompre)"
 
 #: ../src/qalc.cc:2010
 msgid "approx."
-msgstr "-"
+msgstr ""
 
 #: ../src/qalc.cc:2116
 msgid "Factorizing (press Enter to abort)"
@@ -1309,7 +1309,7 @@ msgstr "fois"
 
 #: ../libqalculate/Calculator.cc:281
 msgid "plus"
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Calculator.cc:283
 msgid "minus"
@@ -1689,7 +1689,7 @@ msgstr "ceci remplit la condition :"
 #: ../libqalculate/Function.cc:1120
 #, fuzzy
 msgid "Argument"
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Function.cc:1175
 #, c-format
@@ -1715,19 +1715,19 @@ msgstr "un nombre réel"
 
 #: ../libqalculate/Function.cc:1513 ../libqalculate/Function.cc:1660
 msgid ">="
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Function.cc:1515
 msgid ">"
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Function.cc:1527 ../libqalculate/Function.cc:1670
 msgid "<="
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Function.cc:1529
 msgid "<"
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Function.cc:1657
 msgid "an integer"
@@ -1751,7 +1751,7 @@ msgstr "une chaîne de caractères"
 
 #: ../libqalculate/Function.cc:1718
 msgid "date"
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Function.cc:1719
 msgid "a date"
@@ -1799,7 +1799,7 @@ msgstr "un nom d'unité valide"
 
 #: ../libqalculate/Function.cc:1885
 msgid "variable"
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Function.cc:1886
 msgid "a valid variable name"
@@ -1823,7 +1823,7 @@ msgstr "un booléen (0 ou 1)"
 
 #: ../libqalculate/Function.cc:1924
 msgid "angle"
-msgstr "-"
+msgstr ""
 
 #: ../libqalculate/Function.cc:1925
 msgid "an angle or a number (using the default angle unit)"

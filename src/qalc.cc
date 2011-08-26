@@ -128,7 +128,7 @@ bool equalsIgnoreCaseFirst(const string &str1, const char *str2) {
 	return true;
 }
 
-bool ask_question(const char *question) {
+bool ask_question(const char *question, bool default_answer = false) {
 	FPUTS_UNICODE(question, stdout);
 	while(true) {
 #ifdef HAVE_LIBREADLINE
@@ -145,7 +145,9 @@ bool ask_question(const char *question) {
 			return true;
 		} else if(equalsIgnoreCaseFirst(str, "no") || equalsIgnoreCaseFirst(str, _("no")) || EQUALS_IGNORECASE_AND_LOCAL(str, "no", _("no"))) {	
 			return false;
-		} else {
+		} else if(str.empty()) {
+            return default_answer;
+        } else {
 			FPUTS_UNICODE(_("Please answer yes or no"), stdout);
 			FPUTS_UNICODE(":", stdout);
 		}
@@ -777,7 +779,7 @@ int main (int argc, char *argv[]) {
 	//exchange rates
 	if(load_global_defs && load_currencies) {
 		if(first_qalculate_run && canfetch && command_file.empty()) {
-			if(ask_question(_("You need the download exchange rates to be able to convert between different currencies.\nYou can later get current exchange rates with the \"exchange rates\" command.\nDo you want to fetch exchange rates now from the Internet (default yes)?"))) {
+			if(ask_question(_("You need the download exchange rates to be able to convert between different currencies.\nYou can later get current exchange rates with the \"exchange rates\" command.\nDo you want to fetch exchange rates now from the Internet (default: yes)?"), true)) {
 				CALCULATOR->fetchExchangeRates(5);
 			}
 		} else if(fetch_exchange_rates_at_startup && canfetch) {
@@ -1027,14 +1029,14 @@ int main (int argc, char *argv[]) {
 					name = CALCULATOR->convertToValidVariableName(name);
 					size_t l = name.length() + strlen(_("Illegal name. Save as %s instead?"));
 					char *cstr = (char*) malloc(sizeof(char) * (l + 1));
-					snprintf(cstr, l, _("Illegal name. Save as %s instead?"), name.c_str());
+					snprintf(cstr, l, _("Illegal name. Save as %s instead (default: no)?"), name.c_str());
 					if(!ask_question(cstr)) {
 						b = false;
 					}
 					free(cstr);
 				}
 				if(b && CALCULATOR->variableNameTaken(name)) {
-					if(!ask_question(_("An unit or variable with the same name already exists.\nDo you want to overwrite it?"))) {
+					if(!ask_question(_("An unit or variable with the same name already exists.\nDo you want to overwrite it (default: no)?"))) {
 						b = false;
 					}
 				}

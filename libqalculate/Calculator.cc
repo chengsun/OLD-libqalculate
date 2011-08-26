@@ -8187,7 +8187,7 @@ bool Calculator::loadExchangeRates() {
 }
 bool Calculator::hasGnomeVFS() {
 	if(has_gnomevfs >= 0) return has_gnomevfs > 0;
-	gchar *gstr = g_find_program_in_path("gnomevfs-copy");
+	gchar *gstr = g_find_program_in_path("gvfs-copy");
 	if(gstr) {
 		g_free(gstr);
 		has_gnomevfs = 1;
@@ -8224,7 +8224,7 @@ bool Calculator::fetchExchangeRates(int timeout, string wget_args) {
 	mkdir(homedir.c_str(), S_IRWXU);	
 	string cmdline;
 	if(hasGnomeVFS()) {
-		cmdline = "gnomevfs-copy http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
+		cmdline = "gvfs-copy http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
 		cmdline += " "; cmdline += homedir; cmdline += "eurofxref-daily.xml";
 	} else {	
 		cmdline = "wget";

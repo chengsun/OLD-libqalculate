@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <vector>
 #include <glib.h>
+#include <glib/gstdio.h>
 #ifdef HAVE_LIBREADLINE
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -2659,7 +2660,7 @@ bool save_preferences(bool mode)
 {
 	FILE *file = NULL;
 	string filename = getLocalDir();
-	mkdir(filename.c_str(), S_IRWXU);
+	g_mkdir(filename.c_str(), S_IRWXU);
 #ifdef HAVE_LIBREADLINE			
 	string historyfile = filename;
 	historyfile += "qalc.history";

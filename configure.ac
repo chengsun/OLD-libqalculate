@@ -83,6 +83,7 @@ if test "$qalc_cv_sys_struct_lconv_ok" = "yes"; then
     AC_DEFINE(HAVE_COMPLETE_STRUCT_LCONV, 1, [Define if struct lconv is properly defined])
 fi
 
+
 dnl libtool versioning for libqalculate
 
 dnl increment if the interface has additions, changes, removals.

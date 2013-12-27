@@ -34,6 +34,7 @@
 #include <dirent.h>
 #include <queue>
 #include <glib.h>
+#include <glib/gstdio.h>
 //#include <dlfcn.h>
 
 #include <cln/cln.h>
@@ -7026,9 +7027,9 @@ bool Calculator::saveDefinitions() {
 
 	string filename;
 	string homedir = getLocalDir();
-	mkdir(homedir.c_str(), S_IRWXU);	
+	g_mkdir(homedir.c_str(), S_IRWXU);	
 	homedir += "definitions/";	
-	mkdir(homedir.c_str(), S_IRWXU);
+	g_mkdir(homedir.c_str(), S_IRWXU);
 	filename = homedir;
 	filename += "functions.xml";
 	bool b = true;
@@ -8215,7 +8216,7 @@ bool Calculator::canFetch() {
 }
 string Calculator::getExchangeRatesFileName() {
 	string homedir = getLocalDir();
-	mkdir(homedir.c_str(), S_IRWXU);
+	g_mkdir(homedir.c_str(), S_IRWXU);
 	return homedir + "eurofxref-daily.xml";	
 }
 string Calculator::getExchangeRatesUrl() {
@@ -8224,7 +8225,7 @@ string Calculator::getExchangeRatesUrl() {
 bool Calculator::fetchExchangeRates(int timeout, string wget_args) {
 	int status = 0;
 	string homedir = getLocalDir();
-	mkdir(homedir.c_str(), S_IRWXU);	
+	g_mkdir(homedir.c_str(), S_IRWXU);	
 	string cmdline;
 	if(hasGnomeVFS()) {
 		cmdline = "gvfs-copy http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml";
@@ -8357,9 +8358,9 @@ bool Calculator::plotVectors(PlotParameters *param, const vector<MathStructure> 
 
 	string filename;
 	string homedir = getLocalDir();
-	mkdir(homedir.c_str(), S_IRWXU);	
+	g_mkdir(homedir.c_str(), S_IRWXU);	
 	homedir += "tmp/";	
-	mkdir(homedir.c_str(), S_IRWXU);
+	g_mkdir(homedir.c_str(), S_IRWXU);
 
 	string commandline_extra;
 	string title;

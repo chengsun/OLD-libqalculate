@@ -22,6 +22,8 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <glib.h>
+#include <glib/gstdio.h>
 
 #define XML_GET_STRING_FROM_PROP(node, name, str)	value = xmlGetProp(node, (xmlChar*) name); if(value) {str = (char*) value; remove_blank_ends(str); xmlFree(value);} else str = ""; 
 #define XML_GET_STRING_FROM_TEXT(node, str)		value = xmlNodeListGetString(doc, node->xmlChildrenNode, 1); if(value) {str = (char*) value; remove_blank_ends(str); xmlFree(value);} else str = "";
@@ -698,11 +700,11 @@ int DataSet::saveObjects(const char *file_name, bool save_global) {
 	string str, filename;
 	if(!save_global && !file_name) {
 		filename = getLocalDir();
-		mkdir(filename.c_str(), S_IRWXU);
+		g_mkdir(filename.c_str(), S_IRWXU);
 		filename += "definitions/";
-		mkdir(filename.c_str(), S_IRWXU);
+		g_mkdir(filename.c_str(), S_IRWXU);
 		filename += "datasets/";
-		mkdir(filename.c_str(), S_IRWXU);
+		g_mkdir(filename.c_str(), S_IRWXU);
 		filename += sfile;
 	} else {
 		filename = file_name;

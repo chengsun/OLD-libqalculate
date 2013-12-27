@@ -26,14 +26,12 @@
 #include <locale.h>
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
-#include <pwd.h>
 #include <unistd.h>
 #include <time.h>
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <sys/wait.h>
 #include <queue>
 #include <glib.h>
 //#include <dlfcn.h>

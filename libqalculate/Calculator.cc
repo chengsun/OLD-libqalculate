@@ -293,8 +293,13 @@ Calculator::Calculator() {
 
 	saved_locale = strdup(setlocale(LC_NUMERIC, ""));
 	struct lconv *lc = localeconv();
+#ifdef HAVE_COMPLETE_STRUCT_LCONV
 	place_currency_code_before = lc->int_p_cs_precedes;
 	place_currency_code_before_negative = lc->int_n_cs_precedes;
+#else
+	place_currency_code_before = CHAR_MAX;
+	place_currency_code_before_negative = CHAR_MAX;
+#endif
 	place_currency_sign_before = lc->p_cs_precedes;
 	place_currency_sign_before_negative = lc->n_cs_precedes;
 	default_dot_as_separator = strcmp(lc->thousands_sep, ".") == 0;

@@ -62,7 +62,26 @@ if test "x$GCC" = "xyes"; then
     *) CFLAGS="$CFLAGS -Wall" ;;
   esac
 fi
-changequote([,])dnl
+changequote([,])
+
+dnl check whether struct lconv has int_p_cs_precedes and int_n_cs_precedes
+AC_CACHE_CHECK(
+        [whether struct lconv is properly defined],
+        [qalc_cv_sys_struct_lconv_ok],
+        [AC_COMPILE_IFELSE(
+            [AC_LANG_PROGRAM(
+                [[#include <locale.h>
+                  struct lconv l;
+                  int x = sizeof (l.decimal_point);
+                  int y = sizeof (l.int_p_cs_precedes);
+                  int z = sizeof (l.int_n_cs_precedes);]],
+                [[]])],
+            [qalc_cv_sys_struct_lconv_ok=yes],
+            [qalc_cv_sys_struct_lconv_ok=no])
+        ])
+if test "$qalc_cv_sys_struct_lconv_ok" = "yes"; then
+    AC_DEFINE(HAVE_COMPLETE_STRUCT_LCONV, 1, [Define if struct lconv is properly defined])
+fi
 
 dnl libtool versioning for libqalculate
 

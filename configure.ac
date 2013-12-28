@@ -84,10 +84,15 @@ if test "$qalc_cv_sys_struct_lconv_ok" = "yes"; then
 fi
 
 
+dnl check for threading model
+dnl TODO
+AC_DEFINE([HAVE_PTHREADS],1,
+        [Define if pthreads are present.])
+
 dnl libtool versioning for libqalculate
 
 dnl increment if the interface has additions, changes, removals.
-QALCULATE_CURRENT=5
+QALCULATE_CURRENT=6
 
 dnl increment any time the source changes; set to 
 dnl  0 if you increment CURRENT

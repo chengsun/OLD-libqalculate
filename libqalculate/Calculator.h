@@ -212,10 +212,8 @@ class Calculator {
 	vector<int> stopped_errors_count;
 	vector<int> stopped_warnings_count;
 	vector<int> stopped_messages_count;
-	pthread_t calculate_thread;
-	pthread_attr_t calculate_thread_attr;
-	pthread_t print_thread;
-	pthread_attr_t print_thread_attr;
+	Thread *calculate_thread;
+	Thread *print_thread;
 	bool b_functions_was, b_variables_was, b_units_was, b_unknown_was, b_calcvars_was, b_rpn_was;
 	string NAME_NUMBER_PRE_S, NAME_NUMBER_PRE_STR, DOT_STR, DOT_S, COMMA_S, COMMA_STR, ILLEGAL_IN_NAMES, ILLEGAL_IN_UNITNAMES, ILLEGAL_IN_NAMES_MINUS_SPACE_STR;
 
@@ -226,7 +224,7 @@ class Calculator {
 
 	bool b_gnuplot_open;
 	string gnuplot_cmdline;
-	FILE *gnuplot_pipe, *calculate_pipe_r, *calculate_pipe_w, *print_pipe_r, *print_pipe_w;
+	FILE *gnuplot_pipe;
 	
 	bool local_to;
 	
@@ -284,7 +282,7 @@ class Calculator {
 	bool place_currency_code_before_negative, place_currency_sign_before_negative;
 	bool default_dot_as_separator;
   
-  	bool b_busy, calculate_thread_stopped, print_thread_stopped;
+  	volatile bool b_busy;
 	string expression_to_calculate, tmp_print_result;
 	PrintOptions tmp_printoptions;
 	EvaluationOptions tmp_evaluationoptions;

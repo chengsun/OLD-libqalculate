@@ -78,7 +78,7 @@ bool Unit::isSIUnit() const {
 void Unit::setAsSIUnit() {
 	if(!b_si) {
 		b_si = true;
-		ssystem == "SI";
+		ssystem = "SI";
 		setChanged(true);
 	}
 }

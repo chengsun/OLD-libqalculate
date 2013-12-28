@@ -2011,12 +2011,12 @@ int RadiansToDefaultAngleUnitFunction::calculate(MathStructure &mstruct, const M
 	switch(eo.parse_options.angle_unit) {
 		case ANGLE_UNIT_DEGREES: {
 			mstruct *= 180;
-	    		mstruct /= CALCULATOR->v_pi;
+			mstruct /= CALCULATOR->v_pi;
 			break;
 		}
 		case ANGLE_UNIT_GRADIANS: {
 			mstruct *= 200;
-	    		mstruct /= CALCULATOR->v_pi;
+			mstruct /= CALCULATOR->v_pi;
 			break;
 		}
 		case ANGLE_UNIT_RADIANS: {
@@ -3150,7 +3150,7 @@ int IntegrateFunction::calculate(MathStructure &mstruct, const MathStructure &va
 			return -1;
 		}
 	}
-    
+	
 	if(vargs[2] != CALCULATOR->v_undef && vargs[2].print() != "undefined") {
 		if(vargs[3] == CALCULATOR->v_undef || vargs[3].print() == "undefined") {
 			CALCULATOR->error(true, _("Both the lower and upper limit must be set to get the definite integral."), NULL);
@@ -3684,23 +3684,23 @@ int UncertaintyFunction::calculate(MathStructure &mstruct, const MathStructure &
 }
 
 FibonacciFunction::FibonacciFunction(): MathFunction("fibonacci", 1) {
-    setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_NONNEGATIVE, true, true));
+	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_NONNEGATIVE, true, true));
 }
 
 int fibonacci(int n)
 {
-    if (n < 0) {
-        return 0;
-    }
-    
-    if (n == 0 || n == 1) {
-        return 1;
-    } else {
-        return fibonacci(n-1) + fibonacci(n-2);
-    }
+	if (n < 0) {
+		return 0;
+	}
+	
+	if (n == 0 || n == 1) {
+		return 1;
+	} else {
+		return fibonacci(n-1) + fibonacci(n-2);
+	}
 }
 
 int FibonacciFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-    mstruct = fibonacci(vargs[0].number().intValue());
-    return 1;
+	mstruct = fibonacci(vargs[0].number().intValue());
+	return 1;
 }

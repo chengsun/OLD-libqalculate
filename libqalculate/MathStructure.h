@@ -164,9 +164,9 @@ class MathStructure {
 		
 		bool isolate_x_sub(const EvaluationOptions &eo, EvaluationOptions &eo2, const MathStructure &x_var, MathStructure *morig = NULL);
 		void init();
-        
-        MathStructure& CHILD(size_t v_index) const;
-        
+		
+		MathStructure& CHILD(size_t v_index) const;
+		
 	public:
 
 		/** @name Constructors */

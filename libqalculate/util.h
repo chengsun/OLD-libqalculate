@@ -18,7 +18,7 @@
 
 /// \cond
 struct eqstr {
-    bool operator()(const char *s1, const char *s2) const;	
+	bool operator()(const char *s1, const char *s2) const;
 };
 /// \endcond
 

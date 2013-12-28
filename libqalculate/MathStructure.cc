@@ -38,7 +38,7 @@
 #define PREPEND_REF(o)		v_order.insert(v_order.begin(), v_subs.size()); v_subs.push_back(o); (o)->ref(); if(!b_approx && (o)->isApproximate()) b_approx = true; if((o)->precision() > 0 && (i_precision < 1 || (o)->precision() < i_precision)) i_precision = (o)->precision();
 #define INSERT_REF(o, i)	v_order.insert(v_order.begin() + i, v_subs.size()); v_subs.push_back(o); (o)->ref(); if(!b_approx && (o)->isApproximate()) b_approx = true; if((o)->precision() > 0 && (i_precision < 1 || (o)->precision() < i_precision)) i_precision = (o)->precision();
 #define CLEAR			v_order.clear(); for(size_t i = 0; i < v_subs.size(); i++) {v_subs[i]->unref();} v_subs.clear();
-#define REDUCE(v_size)          {vector<size_t> v_tmp; v_tmp.resize(SIZE, 0); for(size_t v_index = v_size; v_index < v_order.size(); v_index++) {v_subs[v_order[v_index]]->unref(); v_subs[v_order[v_index]] = NULL; v_tmp[v_order[v_index]] = 1;} v_order.resize(v_size); for(vector<MathStructure*>::iterator v_it = v_subs.begin(); v_it != v_subs.end();) {if(*v_it == NULL) v_it = v_subs.erase(v_it); else ++v_it;} size_t i_change = 0; for(size_t v_index = 0; v_index < v_tmp.size(); v_index++) {if(v_tmp[v_index] == 1) i_change++; v_tmp[v_index] = i_change;} for(size_t v_index = 0; v_index < v_order.size(); v_index++) v_order[v_index] -= v_tmp[v_index];}
+#define REDUCE(v_size)		{vector<size_t> v_tmp; v_tmp.resize(SIZE, 0); for(size_t v_index = v_size; v_index < v_order.size(); v_index++) {v_subs[v_order[v_index]]->unref(); v_subs[v_order[v_index]] = NULL; v_tmp[v_order[v_index]] = 1;} v_order.resize(v_size); for(vector<MathStructure*>::iterator v_it = v_subs.begin(); v_it != v_subs.end();) {if(*v_it == NULL) v_it = v_subs.erase(v_it); else ++v_it;} size_t i_change = 0; for(size_t v_index = 0; v_index < v_tmp.size(); v_index++) {if(v_tmp[v_index] == 1) i_change++; v_tmp[v_index] = i_change;} for(size_t v_index = 0; v_index < v_order.size(); v_index++) v_order[v_index] -= v_tmp[v_index];}
 //#define CHILD(v_index)		(*v_subs[v_order[v_index]])
 #define SIZE			v_order.size()
 #define LAST			(*v_subs[v_order[v_order.size() - 1]])
@@ -205,10 +205,10 @@ MathStructure::MathStructure(int num, int den, int exp10) {
 }
 MathStructure::MathStructure(string sym) {
 	init();
-    if (sym == "undefined") {
-        setUndefined(true);
-        return;
-    }
+	if (sym == "undefined") {
+		setUndefined(true);
+		return;
+	}
 	set(sym);
 }
 MathStructure::MathStructure(double float_value) {
@@ -560,12 +560,12 @@ bool MathStructure::operator != (const MathStructure &o) const {return !equals(o
 
 MathStructure& MathStructure::CHILD(size_t v_index) const
 {
-    if(v_index < v_order.size() && v_order[v_index] < v_subs.size())
-        return *v_subs[v_order[v_index]];
-    
-    MathStructure* m = new MathStructure;//(new UnknownVariable("x","x"));
-    m->setUndefined(true);
-    return *m;
+	if(v_index < v_order.size() && v_order[v_index] < v_subs.size())
+		return *v_subs[v_order[v_index]];
+	
+	MathStructure* m = new MathStructure;//(new UnknownVariable("x","x"));
+	m->setUndefined(true);
+	return *m;
 }
 
 const MathStructure &MathStructure::operator [] (size_t index) const {return CHILD(index);}
@@ -4596,33 +4596,33 @@ bool MathStructure::calculatesub(const EvaluationOptions &eo, const EvaluationOp
 			break;
 		}
 		case STRUCT_LOGICAL_OR: {
-            bool isResistance = false;
-            switch (CHILD(0).type()) {
-            case STRUCT_MULTIPLICATION:
-                if (CHILD(0).CHILD(1) != 0 && CHILD(0).CHILD(1).unit() && CHILD(0).CHILD(1).unit()->name().find("ohm") != string::npos) {
-                    isResistance = true;
-                }
-                break;
-            case STRUCT_UNIT:
-                if (CHILD(0).unit() && CHILD(0).unit()->name().find("ohm") != string::npos) {
-                    isResistance = true;
-                }
-                break;
-            }
-            
-            if (isResistance) {
-                MathStructure mstruct;
-                for (size_t i = 0; i < SIZE; i++) {
-                    MathStructure mtemp(CHILD(i));
-                    mtemp.inverse();
-                    mstruct += mtemp;
-                }
-                mstruct.inverse();
-                clear();
-                set(mstruct);
-                break;
-            }
-            
+			bool isResistance = false;
+			switch (CHILD(0).type()) {
+			case STRUCT_MULTIPLICATION:
+				if (CHILD(0).CHILD(1) != 0 && CHILD(0).CHILD(1).unit() && CHILD(0).CHILD(1).unit()->name().find("ohm") != string::npos) {
+					isResistance = true;
+				}
+				break;
+			case STRUCT_UNIT:
+				if (CHILD(0).unit() && CHILD(0).unit()->name().find("ohm") != string::npos) {
+					isResistance = true;
+				}
+				break;
+			}
+			
+			if (isResistance) {
+				MathStructure mstruct;
+				for (size_t i = 0; i < SIZE; i++) {
+					MathStructure mtemp(CHILD(i));
+					mtemp.inverse();
+					mstruct += mtemp;
+				}
+				mstruct.inverse();
+				clear();
+				set(mstruct);
+				break;
+			}
+			
 			if(recursive) {
 				for(size_t i = 0; i < SIZE; i++) {
 					CHILD(i).calculatesub(eo, feo, true, this, i);
@@ -13265,8 +13265,8 @@ bool MathStructure::integrate(const MathStructure &x_var, const EvaluationOption
 					break;
 				}
 			} else if(CHILD(0).type() == STRUCT_POWER) {
-			       this->simplify(eo);
-			       return integrate(x_var, eo);
+				this->simplify(eo);
+				return integrate(x_var, eo);
 			} else if(CHILD(0).isVariable() && CHILD(0).variable() == CALCULATOR->v_e) {
 				if(CHILD(1).equals(x_var)) {
 					break;

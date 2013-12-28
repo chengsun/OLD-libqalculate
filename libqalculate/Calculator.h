@@ -274,7 +274,7 @@ class Calculator {
 	MathFunction *f_error, *f_warning, *f_message, *f_save, *f_load, *f_export, *f_title;
 	MathFunction *f_register, *f_stack;
 	MathFunction *f_uncertainty;
-    MathFunction *f_fib;
+	MathFunction *f_fib;
 	
 	Unit *u_rad, *u_gra, *u_deg, *u_euro;
 	DecimalPrefix *decimal_null_prefix;

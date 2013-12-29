@@ -20,6 +20,10 @@ qalc_LDADD = \
 	@READLINE_LIBS@ \
 	../libqalculate/libqalculate.la
 
+if PLATFORM_WIN32
+qalc_LDADD += -lws2_32
+endif
+
 defs2doc_SOURCES = defs2doc.cc
 
 defs2doc_LDADD = \

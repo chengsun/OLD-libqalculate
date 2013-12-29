@@ -84,10 +84,13 @@ if test "$qalc_cv_sys_struct_lconv_ok" = "yes"; then
 fi
 
 
-dnl check for threading model
-dnl TODO
-AC_DEFINE([HAVE_PTHREADS],1,
-        [Define if pthreads are present.])
+AC_CANONICAL_HOST
+
+if test "$host_os" = "mingw32"; then
+	AC_DEFINE([_WIN32_WINNT], 0x501, [Target Windows version])
+fi
+AM_CONDITIONAL(PLATFORM_LINUX, test "$host_os" = "linux")
+AM_CONDITIONAL(PLATFORM_WIN32, test "$host_os" = "mingw32")
 
 dnl libtool versioning for libqalculate
 

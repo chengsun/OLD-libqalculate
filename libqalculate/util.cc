@@ -783,6 +783,7 @@ void parse_qalculate_version(string qalculate_version, int *qalculate_version_nu
 }
 
 string getLocalDir() {
+#ifdef __unix__
 	string homedir = "";
 	struct passwd *pw = getpwuid(getuid());
 	if(pw) {
@@ -791,6 +792,13 @@ string getLocalDir() {
 	}
 	homedir += ".qalculate/";
 	return homedir;
+#elif defined(_WIN32)
+	char buf[MAX_PATH];
+	SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, buf);
+	string homedir(buf);
+	homedir += "\\Qalculate\\";
+	return homedir;
+#endif
 }
 
 

@@ -1898,7 +1898,7 @@ void setResult(Prefix *prefix = NULL, bool update_parse = false, bool goto_input
 	result_text = "?";
 
 	if(update_parse) {
-		parsed_text = "aborted";
+		parsed_text = _("aborted");
 	}
 
 	if(!rpn_mode) stack_index = 0;

@@ -49,7 +49,7 @@ bool result_only;
 fd_set in_set;
 struct timeval timeout;
 
-char buffer[1000];
+static char buffer[1000];
 
 void *view_proc(void *pipe);
 void *command_proc(void *pipe);

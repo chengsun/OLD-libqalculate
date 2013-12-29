@@ -3687,20 +3687,42 @@ FibonacciFunction::FibonacciFunction(): MathFunction("fibonacci", 1) {
 	setArgumentDefinition(1, new IntegerArgument("", ARGUMENT_MIN_MAX_NONNEGATIVE, true, true));
 }
 
-int fibonacci(int n)
+// logarithmic complexity non-recursive Fibonacci calculation
+// adapted from the CLN example fibonacci.cc:
+// http://www.ginac.de/CLN/cln.git/?p=cln.git;a=blob;f=examples/fibonacci.cc
+static const cln::cl_I fibonacci(int n)
 {
-	if (n < 0) {
+	using namespace cln;
+
+	if (n==0)
 		return 0;
+	cl_I u = 0;
+	cl_I v = 1;
+	cl_I m = n/2; // floor(n/2)
+	for (uintL bit=integer_length(m); bit>0; --bit) {
+		// Since a squaring is cheaper than a multiplication, better use
+		// three squarings instead of one multiplication and two squarings.
+		cl_I u2 = square(u);
+		cl_I v2 = square(v);
+		if (logbitp(bit-1, m)) {
+			v = square(u + v) - u2;
+			u = u2 + v2;
+		} else {
+			u = v2 - square(v - u);
+			v = u2 + v2;
+		}
 	}
-	
-	if (n == 0 || n == 1) {
-		return 1;
-	} else {
-		return fibonacci(n-1) + fibonacci(n-2);
-	}
+	if (n==2*m)
+		// Here we don't use the squaring formula because
+		// one multiplication is cheaper than two squarings.
+		return u * ((v << 1) - u);
+	else
+		return square(u) + square(v);
 }
 
 int FibonacciFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions&) {
-	mstruct = fibonacci(vargs[0].number().intValue());
+	Number nr;
+	nr.setInternal(fibonacci(vargs[0].number().intValue()));
+	mstruct = nr;
 	return 1;
 }

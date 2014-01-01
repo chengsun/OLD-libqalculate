@@ -243,7 +243,7 @@ void PrintThread::run() {
 Calculator::Calculator() {
 
 #ifdef ENABLE_NLS
-	bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+	bindtextdomain (GETTEXT_PACKAGE, getPackageLocaleDir().c_str());
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #endif
 
@@ -5145,47 +5145,19 @@ string Calculator::getName(string name, ExpressionItem *object, bool force, bool
 }
 
 bool Calculator::loadGlobalDefinitions() {
-	string dir = PACKAGE_DATA_DIR;
-	string filename;
-	dir += "/qalculate/";
-	filename = dir;
-	filename += "prefixes.xml";
 	bool b = true;
-	if(!loadDefinitions(filename.c_str(), false)) {
-		b = false;
-	}
-	filename = dir;
-	filename += "currencies.xml";
-	if(!loadDefinitions(filename.c_str(), false)) {
-		b = false;
-	}	
-	filename = dir;
-	filename += "units.xml";
-	if(!loadDefinitions(filename.c_str(), false)) {
-		b = false;
-	}
-	filename = dir;
-	filename += "functions.xml";	
-	if(!loadDefinitions(filename.c_str(), false)) {
-		b = false;
-	}
-	filename = dir;
-	filename += "datasets.xml";	
-	if(!loadDefinitions(filename.c_str(), false)) {
-		b = false;
-	}
-	filename = dir;
-	filename += "variables.xml";
-	if(!loadDefinitions(filename.c_str(), false)) {
-		b = false;
-	}
+	if (!loadGlobalPrefixes())	b = false;
+	if (!loadGlobalUnits())		b = false;
+	if (!loadGlobalFunctions())	b = false;
+	if (!loadGlobalDataSets())	b = false;
+	if (!loadGlobalVariables())	b = false;
 	return b;
 }
 bool Calculator::loadGlobalDefinitions(string filename) {
-	string dir = PACKAGE_DATA_DIR;
-	dir += "/qalculate/";
-	dir += filename;
-	return loadDefinitions(dir.c_str(), false);
+	gchar *dir = g_build_filename(getDataDir().c_str(), "qalculate", filename.c_str(), NULL);
+	bool ret = loadDefinitions(dir, false);
+	g_free(dir);
+	return ret;
 }
 bool Calculator::loadGlobalPrefixes() {
 	return loadGlobalDefinitions("prefixes.xml");

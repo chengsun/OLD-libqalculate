@@ -441,15 +441,12 @@ bool DataSet::loadObjects(const char *file_name, bool is_user_defs) {
 		}
 		return b;
 	} else {
-		filename = PACKAGE_DATA_DIR;
-		filename += "/qalculate/";
-		filename += sfile;
-		bool b = loadObjects(filename.c_str(), false);
-		filename = getLocalDir();
-		filename += "definitions/";
-		filename += "datasets/";
-		filename += sfile;
-		loadObjects(filename.c_str(), true);
+		gchar *package_file = g_build_filename(getDataDir().c_str(), "qalculate", sfile.c_str(), NULL);
+		bool b = loadObjects(package_file, false);
+		g_free(package_file);
+		gchar *local_file = g_build_filename(getLocalDir().c_str(), "definitions", "datasets", sfile.c_str(), NULL);
+		loadObjects(local_file, true);
+		g_free(package_file);
 		return b;
 	}
 	xmlDocPtr doc;

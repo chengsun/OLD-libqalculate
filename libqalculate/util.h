@@ -97,6 +97,8 @@ bool equalsIgnoreCase(const string &str1, const char *str2);
 void parse_qalculate_version(string qalculate_version, int *qalculate_version_numbers);
 
 string getLocalDir();
+string getDataDir();
+string getPackageLocaleDir();
 
 class Thread {
 public:

@@ -314,10 +314,10 @@ int InverseFunction::calculate(MathStructure &mstruct, const MathStructure &varg
 
 ZetaFunction::ZetaFunction() : MathFunction("zeta", 1, 1, SIGN_ZETA) {
 	IntegerArgument *arg = new IntegerArgument();
-	arg->setMin(new Number(1 ,1));
-	Number *nr = new Number();
-	nr->setInternal(long(INT_MAX));
-	arg->setMax(nr);
+	Number nr(1, 1);
+	arg->setMin(&nr);
+	nr.setInternal(long(INT_MAX));
+	arg->setMax(&nr);
 	setArgumentDefinition(1, arg);
 }
 int ZetaFunction::calculate(MathStructure &mstruct, const MathStructure &vargs, const EvaluationOptions &eo) {

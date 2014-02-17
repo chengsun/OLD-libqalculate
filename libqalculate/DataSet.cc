@@ -17,7 +17,6 @@
 #include "Calculator.h"
 #include "MathStructure.h"
 #include "Number.h"
-#include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <errno.h>
 #include <sys/types.h>

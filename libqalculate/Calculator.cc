@@ -24,7 +24,6 @@
 #include "Number.h"
 
 #include <locale.h>
-#include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <unistd.h>
 #include <time.h>

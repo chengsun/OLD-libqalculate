@@ -207,7 +207,6 @@ class Calculator {
 	vector<string> real_signs;
 	vector<string> default_signs;	
 	vector<string> default_real_signs;	
-	char *saved_locale;
 	int disable_errors_ref;
 	vector<int> stopped_errors_count;
 	vector<int> stopped_warnings_count;

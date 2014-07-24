@@ -292,30 +292,25 @@ Calculator::Calculator() {
 	XOR_str = "XOR";
 	XOR_str_len = OR_str.length();
 
-	saved_locale = strdup(setlocale(LC_NUMERIC, ""));
-	struct lconv *lc = localeconv();
-#ifdef HAVE_COMPLETE_STRUCT_LCONV
-	place_currency_code_before = lc->int_p_cs_precedes;
-	place_currency_code_before_negative = lc->int_n_cs_precedes;
-#else
+	qalc_lconv_t lc = qalc_localeconv();
+	place_currency_code_before = lc.int_p_cs_precedes;
+	place_currency_code_before_negative = lc.int_n_cs_precedes;
 	place_currency_code_before = CHAR_MAX;
 	place_currency_code_before_negative = CHAR_MAX;
-#endif
-	place_currency_sign_before = lc->p_cs_precedes;
-	place_currency_sign_before_negative = lc->n_cs_precedes;
-	default_dot_as_separator = strcmp(lc->thousands_sep, ".") == 0;
-	if(strcmp(lc->decimal_point, ",") == 0) {
+	place_currency_sign_before = lc.p_cs_precedes;
+	place_currency_sign_before_negative = lc.n_cs_precedes;
+	default_dot_as_separator = lc.thousands_sep == ".";
+	if(lc.decimal_point == ",") {
 		DOT_STR = ",";
-		DOT_S = ".,";	
+		DOT_S = ".,";
 		COMMA_STR = ";";
-		COMMA_S = ";";		
+		COMMA_S = ";";
 	} else {
-		DOT_STR = ".";	
-		DOT_S = ".";	
+		DOT_STR = ".";
+		DOT_S = ".";
 		COMMA_STR = ",";
-		COMMA_S = ",;";		
-	}	
-	setlocale(LC_NUMERIC, "C");
+		COMMA_S = ",;";
+	}
 
 	NAME_NUMBER_PRE_S = "_#";
 	NAME_NUMBER_PRE_STR = "_";

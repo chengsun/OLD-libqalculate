@@ -782,6 +782,34 @@ void parse_qalculate_version(string qalculate_version, int *qalculate_version_nu
 	}
 }
 
+qalc_lconv_t qalc_localeconv() {
+#ifndef PLATFORM_ANDROID
+	// Windows/Linux
+	setlocale(LC_NUMERIC, "");
+	struct lconv *lc = localeconv();
+
+	qalc_lconv_t ret;
+#	ifdef HAVE_COMPLETE_LCONV_STRUCT
+		ret.int_p_cs_precedes = lc->int_p_cs_precedes;
+		ret.int_n_cs_precedes = lc->int_n_cs_precedes;
+#	else
+		ret.int_p_cs_precedes = CHAR_MAX;
+		ret.int_n_cs_precedes = CHAR_MAX;
+#	endif
+	ret.p_cs_precedes = lc->p_cs_precedes;
+	ret.n_cs_precedes = lc->n_cs_precedes;
+	ret.thousands_sep = lc->thousands_sep;
+	ret.decimal_point = lc->decimal_point;
+
+	setlocale(LC_NUMERIC, "C");
+	return ret;
+
+#else
+	// Android
+	return gAndroidContext.lconv;
+#endif
+}
+
 string getLocalDir() {
 #ifdef __unix__
 	string homedir = "";

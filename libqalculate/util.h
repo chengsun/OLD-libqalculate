@@ -96,6 +96,17 @@ bool equalsIgnoreCase(const string &str1, const char *str2);
 
 void parse_qalculate_version(string qalculate_version, int *qalculate_version_numbers);
 
+struct qalc_lconv_t {
+	char int_p_cs_precedes;
+	char int_n_cs_precedes;
+	char p_cs_precedes;
+	char n_cs_precedes;
+	std::string thousands_sep;
+	std::string decimal_point;
+};
+
+qalc_lconv_t qalc_localeconv();
+
 string getLocalDir();
 string getDataDir();
 string getPackageLocaleDir();
@@ -152,5 +163,12 @@ private:
 	DWORD m_threadID;
 #endif
 };
+
+#ifdef PLATFORM_ANDROID
+struct AndroidContext {
+	std::string internalDir;
+	android_lconv_t lconv;
+} gAndroidContext;
+#endif
 
 #endif

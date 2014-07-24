@@ -342,8 +342,6 @@ class Calculator {
 	//@{
 	/** Aborts the current calculation. */
 	void abort();
-	/** Aborts the current calculation. Used from within the calculation thread. */
-	void abort_this();
 	/** Returns true if the calculate or print thread is busy. */
 	bool busy();
 	/** Saves the state of the calculator. Used internally to be able to restore the state after aborted calculation. */
@@ -981,12 +979,6 @@ class Calculator {
 	const string &getDecimalPoint() const;
 	/** Returns the preferred comma character for separating arguments.*/
 	const string &getComma() const;	
-	/** Sets argument separator and decimal sign from the current locale. Mainly for internal use. */
-	void setLocale();
-	void useDecimalComma();
-	void useDecimalPoint();
-	/** Resets argument separator and decimal sign. Mainly for internal use. */
-	void unsetLocale();
 	/** Returns the translated text string used in expressions for converting to a specific unit expression (ex "5 meters to feet.*/
 	string localToString() const;
 	//@}

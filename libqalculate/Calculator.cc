@@ -1032,40 +1032,6 @@ const string &Calculator::getComma() const {return COMMA_STR;}
 string Calculator::localToString() const {
 	return _(" to ");
 }
-void Calculator::setLocale() {
-	setlocale(LC_NUMERIC, saved_locale);
-	lconv *locale = localeconv();
-	if(strcmp(locale->decimal_point, ",") == 0) {
-		DOT_STR = ",";
-		DOT_S = ".,";	
-		COMMA_STR = ";";
-		COMMA_S = ";";		
-	} else {
-		DOT_STR = ".";	
-		DOT_S = ".";	
-		COMMA_STR = ",";
-		COMMA_S = ",;";		
-	}
-	setlocale(LC_NUMERIC, "C");
-}
-void Calculator::useDecimalComma() {
-	DOT_STR = ",";
-	DOT_S = ".,";
-	COMMA_STR = ";";
-	COMMA_S = ";";
-}
-void Calculator::useDecimalPoint() {
-	DOT_STR = ".";	
-	DOT_S = ".";
-	COMMA_STR = ",";
-	COMMA_S = ",;";
-}
-void Calculator::unsetLocale() {
-	COMMA_STR = ",";
-	COMMA_S = ",;";	
-	DOT_STR = ".";
-	DOT_S = ".";
-}
 
 size_t Calculator::addId(MathStructure *mstruct, bool persistent) {
 	size_t id = 0;
@@ -1561,18 +1527,6 @@ void Calculator::abort() {
 		b_busy = false;
 		calculate_thread->start();
 	}
-}
-void Calculator::abort_this() {
-	restoreState();
-	stopped_messages_count.clear();
-	stopped_warnings_count.clear();
-	stopped_errors_count.clear();
-	disable_errors_ref = 0;
-	clearBuffers();
-	if(tmp_rpn_mstruct) tmp_rpn_mstruct->unref();
-	tmp_rpn_mstruct = NULL;
-	b_busy = false;
-	pthread_exit(PTHREAD_CANCELED);
 }
 bool Calculator::busy() {
 	return b_busy;

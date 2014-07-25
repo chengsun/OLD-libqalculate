@@ -87,10 +87,17 @@ fi
 AC_CANONICAL_HOST
 
 if test "$host_os" = "mingw32"; then
+    AC_DEFINE([PLATFORM_WIN32], [1], [Targeting Windows])
 	AC_DEFINE([_WIN32_WINNT], 0x501, [Target Windows version])
 fi
-AM_CONDITIONAL(PLATFORM_LINUX, test "$host_os" = "linux")
 AM_CONDITIONAL(PLATFORM_WIN32, test "$host_os" = "mingw32")
+
+if test "$host_os" = "linux"; then
+    AC_DEFINE([PLATFORM_LINUX], [1], [Targeting Linux])
+fi
+if test "$host_os" = "linux-androideabi"; then
+    AC_DEFINE([PLATFORM_ANDROID], [1], [Targeting Android])
+fi
 
 dnl libtool versioning for libqalculate
 
@@ -236,11 +243,11 @@ fi
 AC_SUBST(QALCULATE_DEFS2DOC)
 
 AC_MSG_CHECKING(if shared package data paths are absolute)
-if test "$host_os" == "mingw32"; then
-	AC_MSG_RESULT(no)
-else
+if test "$host_os" == "linux"; then
 	AC_DEFINE(USE_ABSOLUTE_PACKAGE_PATHS, 1, [Whether shared package data paths are absolute])
 	AC_MSG_RESULT(yes)
+else
+	AC_MSG_RESULT(no)
 fi
 
 dnl  -------------------------------------

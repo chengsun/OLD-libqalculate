@@ -17,11 +17,11 @@
 
 #include <glib.h>
 #include <time.h>
-#ifdef __unix__
+#ifdef PLATFORM_LINUX
 #	include <sys/types.h>
 #	include <unistd.h>
 #	include <pwd.h>
-#elif defined(_WIN32)
+#elif defined(PLATFORM_WIN32)
 #	include <windows.h>
 #	include <shlobj.h>
 #endif
@@ -811,7 +811,7 @@ qalc_lconv_t qalc_localeconv() {
 }
 
 string getLocalDir() {
-#ifdef __unix__
+#ifdef PLATFORM_LINUX
 	string homedir = "";
 	struct passwd *pw = getpwuid(getuid());
 	if(pw) {
@@ -820,12 +820,18 @@ string getLocalDir() {
 	}
 	homedir += ".qalculate/";
 	return homedir;
-#elif defined(_WIN32)
+#elif defined(PLATFORM_WIN32)
 	char buf[MAX_PATH];
 	SHGetFolderPath(NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, buf);
 	string homedir(buf);
 	homedir += "\\Qalculate\\";
 	return homedir;
+#elif defined(PLATFORM_ANDROID)
+    string homedir(gAndroidContext.internalDir);
+    homedir += "local/";
+    return homedir;
+#else
+#error "Unknown platform"
 #endif
 }
 
@@ -833,7 +839,7 @@ string getDataDir() {
 #ifdef USE_ABSOLUTE_PACKAGE_PATHS
 	string datadir(PACKAGE_DATA_DIR);
 	return datadir;
-#else
+#elif defined(PLATFORM_WIN32)
 	char exepath[MAX_PATH];
 	GetModuleFileName(NULL, exepath, MAX_PATH);
 	string datadir(exepath);
@@ -843,6 +849,12 @@ string getDataDir() {
 	}
 	datadir += "\\share";
 	return datadir;
+#elif defined(PLATFORM_ANDROID)
+    string datadir(gAndroidContext.internalDir);
+    datadir += "share/";
+    return datadir;
+#else
+#error "Unknown platform"
 #endif
 }
 
@@ -850,110 +862,17 @@ string getPackageLocaleDir() {
 #ifdef USE_ABSOLUTE_PACKAGE_PATHS
 	string localedir(PACKAGE_LOCALE_DIR);
 	return localedir;
-#else
+#elif defined(PLATFORM_WIN32)
 	gchar *dir = g_build_filename(getDataDir().c_str(), "locale", NULL);
 	string localeDir(dir);
 	g_free(dir);
 	return localeDir;
+#elif defined(PLATFORM_ANDROID)
+    string localedir(gAndroidContext.internalDir);
+    localedir += "locale/";
+    return localedir;
+#else
+#error "Unknown platform"
 #endif
 }
 
-
-#ifdef __unix__
-
-Thread::Thread() :
-	running(false),
-	m_pipe_r(NULL),
-	m_pipe_w(NULL)
-{
-	pthread_attr_init(&m_thread_attr);
-	int pipe_wr[] = {0, 0};
-	pipe(pipe_wr);
-	m_pipe_r = fdopen(pipe_wr[0], "r");
-	m_pipe_w = fdopen(pipe_wr[1], "w");
-}
-
-Thread::~Thread() {
-	fclose(m_pipe_r);
-	fclose(m_pipe_w);
-	pthread_attr_destroy(&m_thread_attr);
-}
-
-void Thread::doCleanup(void *data) {
-	Thread *thread = (Thread *) data;
-	thread->running = false;
-}
-
-void *Thread::doRun(void *data) {
-	pthread_cleanup_push(&Thread::doCleanup, data);
-
-	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-
-	Thread *thread = (Thread *) data;
-	thread->run();
-
-	pthread_cleanup_pop(1);
-	return NULL;
-}
-
-bool Thread::start() {
-	int ret = pthread_create(&m_thread, &m_thread_attr, &Thread::doRun, this);
-	running = (ret == 0);
-	return running;
-}
-
-bool Thread::cancel() {
-	int ret = pthread_cancel(m_thread);
-	running = (ret != 0);
-	return !running;
-}
-
-#elif defined(_WIN32)
-
-
-Thread::Thread() :
-	running(false),
-	m_thread(NULL),
-	m_threadReadyEvent(NULL),
-	m_threadID(0)
-{
-	m_threadReadyEvent = CreateEvent(NULL, false, false, NULL);
-}
-
-Thread::~Thread() {
-	CloseHandle(m_threadReadyEvent);
-}
-
-DWORD WINAPI Thread::doRun(void *data) {
-	// create thread message queue
-	MSG msg;
-	PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
-
-	Thread *thread = (Thread *) data;
-	SetEvent(thread->m_threadReadyEvent);
-	thread->run();
-	return 0;
-}
-
-bool Thread::start() {
-	m_thread = CreateThread(NULL, 0, Thread::doRun, this, 0, &m_threadID);
-	if (m_thread == NULL) return false;
-	WaitForSingleObject(m_threadReadyEvent, INFINITE);
-	running = (m_thread != NULL);
-	return running;
-}
-
-bool Thread::cancel() {
-	// FIXME: this is dangerous
-	int ret = TerminateThread(m_thread, 0);
-	if (ret == 0) return false;
-	CloseHandle(m_thread);
-	m_thread = NULL;
-	m_threadID = 0;
-	running = false;
-	return true;
-}
-
-
-#endif

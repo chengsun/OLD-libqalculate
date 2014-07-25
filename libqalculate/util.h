@@ -13,19 +13,6 @@
 #define UTIL_H
 
 #include <libqalculate/includes.h>
-/* threads */
-#ifdef __unix__
-#	include <pthread.h>
-#	include <unistd.h>
-#elif defined(_WIN32)
-#	include <windows.h>
-#else
-#	error "No thread support available on this platform"
-#endif
-
-#ifdef _WIN32
-	#define srand48 srand
-#endif
 
 /** @file */
 
@@ -34,6 +21,9 @@ struct eqstr {
 	bool operator()(const char *s1, const char *s2) const;
 };
 /// \endcond
+
+// class declaration in support.h and definition in support.cc
+class Thread;
 
 string& gsub(const string &pattern, const string &sub, string &str);
 string& gsub(const char *pattern, const char *sub, string &str);
@@ -96,79 +86,10 @@ bool equalsIgnoreCase(const string &str1, const char *str2);
 
 void parse_qalculate_version(string qalculate_version, int *qalculate_version_numbers);
 
-struct qalc_lconv_t {
-	char int_p_cs_precedes;
-	char int_n_cs_precedes;
-	char p_cs_precedes;
-	char n_cs_precedes;
-	std::string thousands_sep;
-	std::string decimal_point;
-};
-
 qalc_lconv_t qalc_localeconv();
 
 string getLocalDir();
 string getDataDir();
 string getPackageLocaleDir();
-
-class Thread {
-public:
-	Thread();
-	virtual ~Thread();
-	bool start();
-	bool cancel();
-	template <class T> bool write(T data) {
-#ifdef __unix__
-		fwrite(&data, sizeof(T), 1, m_pipe_w);
-		fflush(m_pipe_w);
-		return true;
-
-#elif defined(_WIN32)
-		int ret = PostThreadMessage(m_threadID, WM_USER, (WPARAM) data, 0);
-		return (ret != 0);
-#endif
-	}
-
-	// FIXME: this is technically wrong -- needs memory barriers (std::atomic?)
-	volatile bool running;
-
-protected:
-	virtual void run() = 0;
-	template <class T> T read() {
-#ifdef __unix__
-		T x;
-		fread(&x, sizeof(T), 1, m_pipe_r);
-		return x;
-
-#elif defined(_WIN32)
-		MSG msg;
-		int ret = GetMessage(&msg, NULL, WM_USER, WM_USER);
-		return (T) msg.wParam;
-#endif
-	}
-
-private:
-#ifdef __unix__
-	static void doCleanup(void *data);
-	static void *doRun(void *data);
-
-	pthread_t m_thread;
-	pthread_attr_t m_thread_attr;
-	FILE *m_pipe_r, *m_pipe_w;
-
-#elif defined(_WIN32)
-	static DWORD WINAPI doRun(void *data);
-
-	HANDLE m_thread, m_threadReadyEvent;
-	DWORD m_threadID;
-#endif
-};
-
-#ifdef PLATFORM_ANDROID
-struct AndroidContext {
-	std::string internalDir;
-	android_lconv_t lconv;
-} gAndroidContext;
-#endif
 
 #endif

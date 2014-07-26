@@ -125,7 +125,27 @@ struct AndroidContext {
 	std::string internalDir;
 	qalc_lconv_t lconv;
 };
+// both instantiated in qalculate-android/jni/main.cpp
 extern AndroidContext gAndroidContext;
+extern pthread_mutex_t gAndroidLogMutex;
+
+#define LOGX(x, ...) do { \
+	int ret; \
+	ret = pthread_mutex_lock(&gAndroidLogMutex); \
+	assert(ret == 0); \
+	__android_log_print(x, "QalculateJNI", __VA_ARGS__) \
+	ret = pthread_mutex_unlock(&gAndroidLogMutex); \
+	assert(ret == 0); \
+} while (0)
+#define LOGD(...) LOGX(ANDROID_LOG_DEBUG, __VA_ARGS__)
+#define LOGW(...) LOGX(ANDROID_LOG_WARN, __VA_ARGS__)
+#define LOGE(...) LOGX(ANDROID_LOG_ERROR, __VA_ARGS__)
+
+#else
+#define LOGD(...)
+#define LOGW(...)
+#define LOGE(...)
+
 #endif
 
 #endif

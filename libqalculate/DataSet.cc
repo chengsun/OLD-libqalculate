@@ -440,7 +440,7 @@ bool DataSet::loadObjects(const char *file_name, bool is_user_defs) {
 		}
 		return b;
 	} else {
-		gchar *package_file = g_build_filename(getDataDir().c_str(), "qalculate", sfile.c_str(), NULL);
+		gchar *package_file = g_build_filename(getDataDir().c_str(), sfile.c_str(), NULL);
 		bool b = loadObjects(package_file, false);
 		g_free(package_file);
 		gchar *local_file = g_build_filename(getLocalDir().c_str(), "definitions", "datasets", sfile.c_str(), NULL);

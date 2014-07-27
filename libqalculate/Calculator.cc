@@ -157,11 +157,13 @@ enum {
 class CalculateThread : public Thread {
 protected:
 	virtual void run();
+	virtual const char *TAG() { return "Calculate"; }
 };
 
 class PrintThread : public Thread {
 protected:
 	virtual void run();
+	virtual const char *TAG() { return "Print"; }
 };
 
 
@@ -1387,8 +1389,13 @@ void Calculator::error(bool critical, const char *TEMPLATE, ...) {
 		}
 	}
 	if(!dup_error) {
-		if(critical) messages.push_back(CalculatorMessage(error_str, MESSAGE_ERROR));
-		else messages.push_back(CalculatorMessage(error_str, MESSAGE_WARNING));
+		if(critical) {
+			LOGE("%s", error_str.c_str());
+			messages.push_back(CalculatorMessage(error_str, MESSAGE_ERROR));
+		} else {
+			LOGW("%s", error_str.c_str());
+			messages.push_back(CalculatorMessage(error_str, MESSAGE_WARNING));
+		}
 	}
 }
 void Calculator::message(MessageType mtype, const char *TEMPLATE, ...) {
@@ -1442,6 +1449,9 @@ void Calculator::message(MessageType mtype, const char *TEMPLATE, ...) {
 		}
 	}
 	if(!dup_error) {
+		if (mtype == MESSAGE_ERROR) LOGE("%s", error_str.c_str());
+		else if (mtype == MESSAGE_WARNING) LOGW("%s", error_str.c_str());
+		else LOGD("%s", error_str.c_str());
 		messages.push_back(CalculatorMessage(error_str, mtype));
 	}
 }
@@ -5102,8 +5112,9 @@ bool Calculator::loadGlobalDefinitions() {
 	return b;
 }
 bool Calculator::loadGlobalDefinitions(string filename) {
-	gchar *dir = g_build_filename(getDataDir().c_str(), "qalculate", filename.c_str(), NULL);
+	gchar *dir = g_build_filename(getDataDir().c_str(), filename.c_str(), NULL);
 	bool ret = loadDefinitions(dir, false);
+	LOGD("%s global definitions from %s", ret ? "Successfully loaded" : "Failed to load", dir);
 	g_free(dir);
 	return ret;
 }
@@ -5130,6 +5141,7 @@ bool Calculator::loadLocalDefinitions() {
 	string filename;
 	string homedir = getLocalDir();
 	homedir += "definitions/";	
+	LOGD("Searching for local definitions in %s", homedir.c_str());
 	list<string> eps;
 	struct dirent *ep;
 	DIR *dp;
@@ -5152,6 +5164,7 @@ bool Calculator::loadLocalDefinitions() {
 	for(list<string>::iterator it = eps.begin(); it != eps.end(); ++it) {
 		filename = homedir;
 		filename += *it;
+		LOGD("Attempting to load local definitions from %s", filename.c_str());
 		loadDefinitions(filename.c_str(), true);
 	}
 	return true;

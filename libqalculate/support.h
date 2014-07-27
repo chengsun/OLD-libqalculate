@@ -16,6 +16,10 @@
 #  include <config.h>
 #endif
 
+#include <cassert>
+#include <string>
+using namespace std;
+
 #if defined(PLATFORM_LINUX) || defined(PLATFORM_ANDROID)
 #	include <cstdio>
 #	include <pthread.h>
@@ -52,6 +56,51 @@
 #  define N_(String) (String)
 #endif
 
+
+struct qalc_lconv_t {
+	bool int_p_cs_precedes;
+	bool int_n_cs_precedes;
+	bool p_cs_precedes;
+	bool n_cs_precedes;
+	string thousands_sep;
+	string decimal_point;
+};
+
+#if defined(PLATFORM_ANDROID)
+// TODO: where do I put this stuff?
+struct AndroidContext {
+	string internalDir;
+	string externalDir;
+	qalc_lconv_t lconv;
+};
+// both instantiated in qalculate-android/jni/main.cpp
+extern AndroidContext gAndroidContext;
+extern pthread_mutex_t gAndroidLogMutex;
+
+#include <android/log.h>
+
+#define LOGX(x, ...) do { \
+	{ \
+		int _logx_ret = pthread_mutex_lock(&gAndroidLogMutex); \
+		assert(_logx_ret == 0); \
+	} \
+	__android_log_print(x, "libqalculate", __VA_ARGS__); \
+	{ \
+		int _logx_ret = pthread_mutex_unlock(&gAndroidLogMutex); \
+		assert(_logx_ret == 0); \
+	} \
+} while (0)
+#define LOGD(...) LOGX(ANDROID_LOG_DEBUG, __VA_ARGS__)
+#define LOGW(...) LOGX(ANDROID_LOG_WARN, __VA_ARGS__)
+#define LOGE(...) LOGX(ANDROID_LOG_ERROR, __VA_ARGS__)
+
+#else
+#define LOGD(...)
+#define LOGW(...)
+#define LOGE(...)
+
+#endif
+
 class Thread {
 public:
 	Thread();
@@ -75,6 +124,8 @@ public:
 
 protected:
 	virtual void run() = 0;
+	virtual const char *TAG() = 0;
+
 	template <class T> T read() {
 #if defined(PLATFORM_LINUX) || defined(PLATFORM_ANDROID)
 		T x;
@@ -107,45 +158,5 @@ private:
 	DWORD m_threadID;
 #endif
 };
-
-
-#include <string>
-
-struct qalc_lconv_t {
-	bool int_p_cs_precedes;
-	bool int_n_cs_precedes;
-	bool p_cs_precedes;
-	bool n_cs_precedes;
-	std::string thousands_sep;
-	std::string decimal_point;
-};
-
-#if defined(PLATFORM_ANDROID)
-struct AndroidContext {
-	std::string internalDir;
-	qalc_lconv_t lconv;
-};
-// both instantiated in qalculate-android/jni/main.cpp
-extern AndroidContext gAndroidContext;
-extern pthread_mutex_t gAndroidLogMutex;
-
-#define LOGX(x, ...) do { \
-	int ret; \
-	ret = pthread_mutex_lock(&gAndroidLogMutex); \
-	assert(ret == 0); \
-	__android_log_print(x, "QalculateJNI", __VA_ARGS__) \
-	ret = pthread_mutex_unlock(&gAndroidLogMutex); \
-	assert(ret == 0); \
-} while (0)
-#define LOGD(...) LOGX(ANDROID_LOG_DEBUG, __VA_ARGS__)
-#define LOGW(...) LOGX(ANDROID_LOG_WARN, __VA_ARGS__)
-#define LOGE(...) LOGX(ANDROID_LOG_ERROR, __VA_ARGS__)
-
-#else
-#define LOGD(...)
-#define LOGW(...)
-#define LOGE(...)
-
-#endif
 
 #endif

@@ -827,7 +827,7 @@ string getLocalDir() {
 	homedir += "\\Qalculate\\";
 	return homedir;
 #elif defined(PLATFORM_ANDROID)
-    string homedir(gAndroidContext.internalDir);
+    string homedir(gAndroidContext.externalDir);
     homedir += "local/";
     return homedir;
 #else
@@ -838,6 +838,7 @@ string getLocalDir() {
 string getDataDir() {
 #ifdef USE_ABSOLUTE_PACKAGE_PATHS
 	string datadir(PACKAGE_DATA_DIR);
+	datadir += "/qalculate";
 	return datadir;
 #elif defined(PLATFORM_WIN32)
 	char exepath[MAX_PATH];

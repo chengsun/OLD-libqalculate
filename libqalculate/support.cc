@@ -27,6 +27,9 @@ void Thread::doCleanup(void *data) {
 }
 
 void *Thread::doRun(void *data) {
+	Thread *thread = (Thread *) data;
+
+	LOGD("Preparing thread '%s' for running", thread->TAG());
 	pthread_cleanup_push(&Thread::doCleanup, data);
 
 #if defined(PLATFORM_LINUX)
@@ -42,10 +45,11 @@ void *Thread::doRun(void *data) {
 	assert(rc == 0);
 #endif
 
-	Thread *thread = (Thread *) data;
+	LOGD("Thread '%s' has started running", thread->TAG());
 	thread->run();
 
 	pthread_cleanup_pop(1);
+	LOGD("Thread '%s' has finished running", thread->TAG());
 	return NULL;
 }
 
@@ -56,18 +60,22 @@ void Thread::doSigHandler(int sig) {
 #endif
 
 bool Thread::start() {
+	LOGD("Starting thread '%s'", TAG());
 	int ret = pthread_create(&m_thread, &m_thread_attr, &Thread::doRun, this);
 	running = (ret == 0);
+	if (!running) LOGW("Thread '%s' couldn't be started", TAG());
 	return running;
 }
 
 bool Thread::cancel() {
+	LOGD("Cancelling thread '%s'", TAG());
 #if defined(PLATFORM_LINUX)
 	int ret = pthread_cancel(m_thread);
 #elif defined(PLATFORM_ANDROID)
     int ret = pthread_kill(m_thread, SIGUSR1);
 #endif
 	running = (ret != 0);
+	if (running) LOGW("Thread '%s' couldn't be stopped", TAG());
 	return !running;
 }
 

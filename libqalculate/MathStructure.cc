@@ -8623,6 +8623,7 @@ bool MathStructure::integerFactorize() {
 			LAST[1].number()++;
 		} else {
 			APPEND(factors[i]);
+			b_pow = false;
 		}
 		lastnr = &factors[i];
 	}
